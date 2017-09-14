@@ -38,6 +38,6 @@ class CreateMensaUser extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('mensa_users');
     }
 }
