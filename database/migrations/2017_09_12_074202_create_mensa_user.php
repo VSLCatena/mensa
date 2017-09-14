@@ -14,13 +14,16 @@ class CreateMensaUser extends Migration
     public function up()
     {
         Schema::create('mensa_users', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('lidnummer')->index();
             $table->integer('mensa_id')->unsigned()->index();
             $table->boolean('cooks');
             $table->boolean('dishwasher');
-            $table->boolean('introduction');
+            $table->boolean('is_intro');
             $table->string('allergies')->nullable();
             $table->string('wishes')->nullable();
+            $table->boolean('confirmed')->default(false);
+            $table->boolean('paid')->default(false);
             $table->timestamps();
 
             $table->foreign('lidnummer')->references('lidnummer')->on('users');
