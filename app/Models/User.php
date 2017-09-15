@@ -32,6 +32,6 @@ class User extends Authenticatable
 
     public function mensas()
     {
-        return $this->belongsToMany('App\Models\Mensa', 'mensa_users')->withPivot('cooks', 'dishwasher', 'is_intro', 'allergies', 'wishes', 'confirmed', 'paid');
+        return $this->belongsToMany('App\Models\Mensa', 'mensa_users', 'lidnummer', 'mensa_id')->withPivot('cooks', 'dishwasher', 'is_intro', 'allergies', 'wishes', 'confirmed', 'paid');
     }
 }
