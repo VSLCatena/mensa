@@ -16,7 +16,6 @@ class CreateMensasTable extends Migration
         Schema::create('mensas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('description');
             $table->dateTime('date');
             $table->dateTime('closing_time');
             $table->tinyInteger('max_users');

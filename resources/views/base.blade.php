@@ -8,6 +8,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -32,7 +33,8 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="#">Mensaoverzicht</a></li>
+                        <li><a href="#">Mensa aanmaken</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -47,16 +49,14 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="#">Statistiek</a></li>
+                                    <li><a href="#">Logboek</a></li>
+                                    <li role="separator" class="divider"></li>
                                     <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                             {{ csrf_field() }}
-                                            <input type="submit" class="btn btn-link" />
+                                            <input type="submit" class="btn btn-link logout" value="Logout" />
                                         </form>
                                     </li>
                                 </ul>
