@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mensa;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -22,6 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $mensae = Mensa::where('date', '>', date("Y-m-d"))->get();
+        return view('home', compact('mensae'));
     }
 }
