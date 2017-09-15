@@ -15,4 +15,5 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::match(['get', 'post'], '/login', 'LoginController@login')->name('login');
 Route::post('/logout', 'LoginController@logout')->name('logout');
 
+Route::get('/signup', function(){ return redirect(route('home')); });
 Route::post('/signup', 'SignupController@signup')->name('signup');
