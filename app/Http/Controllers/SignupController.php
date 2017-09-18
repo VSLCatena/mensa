@@ -30,7 +30,34 @@ class SignupController extends Controller
         // Else we continue and sign the person in.
         // Depending if the email address is the same as the user logged in or not, we automatically verify the user or not
 
-        
+        $user = null;
+        if(Auth::check()){
+            $user = Auth::user();
+        }
+        $lidnummer = null;
 
+        $pivots = [];
+        $pivots['cooks'] = false;
+        $pivots['dishwasher'] = $request->has('dishwasher');
+        $pivots['is_intro'] = false;
+        $pivots['allergies'] = $request->input('allergies');
+        $pivots['wishes'] = $request->input('wishes');
+        $pivots['paid'] = false;
+        $pivots['confirmed'] = false;
+
+        if($user != null && strtolower($user->email) == strtolower($request->input('email'))){
+            $pivots['confirmed'] = true;
+            $lidnummer = $user->lidnummer;
+            var_dump($user);
+        }
+
+        if($lidnummer == null){
+            $lidnummer = null; // LDAP lidnummer
+            // TODO Do LDAP email lidnummer stuff and check if exists
+        }
+        var_dump($lidnummer, $pivots);
+        $mensa->users()->attach($lidnummer, $pivots);
+
+        return redirect(route('home'));
     }
 }
