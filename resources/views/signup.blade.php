@@ -7,11 +7,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Inschrijven voor de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">
-                        @auth
-                            <div class="alert alert-info">
-                                <strong>Note:</strong> Als je ingelogd bent hoef je je voor jezelf niet te bevestigen!
-                            </div>
-                        @endauth
+                        <div class="alert alert-info">
+                            <strong>Note:</strong> Als je ingelogd bent hoef je je jezelf niet via de email te bevestigen!
+                        </div>
                         <form method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $mensa->id }}" />
