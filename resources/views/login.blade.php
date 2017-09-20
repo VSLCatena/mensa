@@ -10,7 +10,11 @@
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
-
+                        @if(!empty($msg))
+                            <div class="alert alert-danger">
+                                {{ $msg }}
+                            </div>
+                        @endif
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-md-4 control-label">Username</label>
 
