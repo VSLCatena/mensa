@@ -33,8 +33,10 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        <li><a href="#">Mensaoverzicht</a></li>
-                        <li><a href="#">Mensa aanmaken</a></li>
+                        <li><a href="{{ route('home') }}">Mensaoverzicht</a></li>
+                        @admin
+                            <li><a href="#">Mensa aanmaken</a></li>
+                        @endadmin
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -49,11 +51,12 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Statistiek</a></li>
-                                    <li><a href="#">Logboek</a></li>
-                                    <li role="separator" class="divider"></li>
+                                    @admin
+                                        <li><a href="#">Statistiek</a></li>
+                                        <li><a href="#">Logboek</a></li>
+                                        <li role="separator" class="divider"></li>
+                                    @endadmin
                                     <li>
-
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                             {{ csrf_field() }}
                                             <input type="submit" class="btn btn-link logout" value="Logout" />

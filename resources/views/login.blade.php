@@ -15,6 +15,7 @@
                                 {{ $msg }}
                             </div>
                         @endif
+                        <div class="alert alert-info">Heb je nog geen actief account? Laat je account activeren door het bestuur!</div>
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-md-4 control-label">Username</label>
 
