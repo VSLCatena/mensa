@@ -27,14 +27,14 @@
                         <tbody>
                             @foreach($mensae as $mensa)
                                 <tr>
-                                    <td>{{ formatDate($mensa->date) }}</td>
+                                    <td>{!! formatDate($mensa->date, true) !!}</td>
                                     <td>
                                         {{ $mensa->title }}<br />
                                         <small>{{ $mensa->description }}</small>
                                     </td>
                                     <td>-</td>
                                     <td>{{ $mensa->users->count() }}/{{ $mensa->max_users }}</td>
-                                    <td>{{ formatDate($mensa->closing_time) }}</td>
+                                    <td>{!! formatDate($mensa->closing_time, true) !!}</td>
                                     <td>
                                         <form method="POST" action="{{ route('signup') }}">
                                             {{ csrf_field() }}
