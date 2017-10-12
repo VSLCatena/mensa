@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Adldap\Laravel\Facades\Adldap;
 use App\Models\Mensa;
 use App\Models\User;
+use App\Traits\LdapHelpers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SignupController extends Controller
 {
+    use LdapHelpers;
+
     public function signup(Request $request){
         try {
             $mensa = Mensa::findOrFail($request->input('id'));
@@ -48,14 +52,17 @@ class SignupController extends Controller
         if($user != null && strtolower($user->email) == strtolower($request->input('email'))){
             $pivots['confirmed'] = true;
             $lidnummer = $user->lidnummer;
-            var_dump($user);
         }
 
         if($lidnummer == null){
-            $lidnummer = null; // LDAP lidnummer
-            // TODO Do LDAP email lidnummer stuff and check if exists
+            $user = $this->getLdapUserBy('mail', $request->input('email'));
+
+            if($user == null){
+                // TODO ERROR! email couldn't be found!
+            }
+            // TODO send email
         }
-        var_dump($lidnummer, $pivots);
+
         $mensa->users()->attach($lidnummer, $pivots);
 
         return redirect(route('home'));
