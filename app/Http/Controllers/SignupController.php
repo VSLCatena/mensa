@@ -67,4 +67,19 @@ class SignupController extends Controller
 
         return redirect(route('home'));
     }
+
+    public function signout(Request $request){
+        if(!Auth::check()){
+            return redirect(route('home'));
+        }
+
+        try {
+            $mensa = Mensa::findOrFail($request->input('id'));
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'));
+        }
+
+        $mensa->users()->detach(Auth::user()->lidnummer);
+        return redirect(route('home'));
+    }
 }
