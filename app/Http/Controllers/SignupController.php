@@ -56,7 +56,7 @@ class SignupController extends Controller
 
         if($lidnummer == null){
             $user = $this->getLdapUserBy('mail', $request->input('email'));
-
+            $lidnummer = $user->lidnummer;
             if($user == null){
                 // TODO ERROR! email couldn't be found!
             }
