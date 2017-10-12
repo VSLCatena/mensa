@@ -36,11 +36,19 @@
                                     <td>{{ $mensa->users->count() }}/{{ $mensa->max_users }}</td>
                                     <td>{!! formatDate($mensa->closing_time, true) !!}</td>
                                     <td>
-                                        <form method="POST" action="{{ route('signup') }}">
-                                            {{ csrf_field() }}
-                                            <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                            <input type="submit" class="btn btn-primary" value="Inschrijven" />
-                                        </form>
+                                        @if(Auth::check() && $mensa->users->contains(Auth::user()))
+                                            <form method="POST" action="{{ route('signout') }}">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
+                                                <input type="submit" class="btn btn-danger" value="Uitschrijven" />
+                                            </form>
+                                        @else
+                                            <form method="POST" action="{{ route('signup') }}">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
+                                                <input type="submit" class="btn btn-primary" value="Inschrijven" />
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -17,3 +17,5 @@ Route::post('/logout', 'LoginController@logout')->name('logout');
 
 Route::get('/signup', function(){ return redirect(route('home')); });
 Route::post('/signup', 'SignupController@signup')->name('signup');
+Route::get('signout', function(){ return redirect(route('home')); });
+Route::post('/signout', 'SignupController@signout')->name('signout');
