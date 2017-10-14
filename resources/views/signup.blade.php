@@ -27,8 +27,8 @@
                                 <input id="allergies" name="allergies" value="{{ old('allergies', $user->allergies) }}" class="form-control"  />
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" id="dishes" name="dishes" class="form-check-input" />
-                                <label for="dishes">Vrijwillig afwassen</label>
+                                <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" />
+                                <label for="dishwasher">Vrijwillig afwassen</label>
                             </div>
                             <input type="submit" value="Inschrijven" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ route('home') }}" class="btn btn-default">Terug</a>
                         </form>
