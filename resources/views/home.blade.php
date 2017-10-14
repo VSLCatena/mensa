@@ -13,7 +13,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <table class="table">
+                    <table class="table mensae">
                         <thead>
                             <tr>
                                 <th>Datum</th>
@@ -30,11 +30,17 @@
                                     <td>{!! formatDate($mensa->date, true) !!}</td>
                                     <td>
                                         {{ $mensa->title }}<br />
-                                        <small>{{ $mensa->description }}</small>
+                                        {{ (strlen($mensa->description) > 0) ? '<small>'.$mensa->description.'</small><br />' : '' }}
+                                        {{ (strlen($mensa->cooks()) > 0) ? 'Gekookt door: '.$mensa->cooks() : '' }}
                                     </td>
                                     <td>-</td>
-                                    <td>{{ $mensa->users->count() }}/{{ $mensa->max_users }}</td>
-                                    <td>{!! formatDate($mensa->closing_time, true) !!}</td>
+                                    <td>
+                                        {{ $mensa->users->count() }}/{{ $mensa->max_users }}<br />
+                                        {{ ($mensa->dishwashers() > 0)?
+                                                $mensa->dishwashers().' afwasser' . (($mensa->dishwashers() > 1)?'s':'').'*':
+                                                '' }}
+                                    </td>
+                                    <td>{!! $mensa->closingTime(true) !!}</td>
                                     <td>
                                         @if(Auth::check() && $mensa->users->contains(Auth::user()))
                                             <form method="POST" action="{{ route('signout') }}">

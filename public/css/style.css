@@ -3,3 +3,12 @@
     text-align: left;
     padding-left: 20px;
 }
+
+.mensae th, .mensae td {
+    white-space: nowrap;
+}
+
+.mensae th:nth-child(2), .mensae td:nth-child(2){
+    width: 100%;
+    white-space: normal;
+}
