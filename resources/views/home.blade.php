@@ -27,7 +27,7 @@
                         <tbody>
                             @foreach($mensae as $mensa)
                                 <tr>
-                                    <td>{!! formatDate($mensa->date, true) !!}</td>
+                                    <td>{{ formatDate($mensa->date, true) }}</td>
                                     <td>
                                         {{ $mensa->title }}<br />
                                         {{ (strlen($mensa->description) > 0) ? '<small>'.$mensa->description.'</small><br />' : '' }}
@@ -36,11 +36,9 @@
                                     <td>-</td>
                                     <td>
                                         {{ $mensa->users->count() }}/{{ $mensa->max_users }}<br />
-                                        {{ ($mensa->dishwashers() > 0)?
-                                                $mensa->dishwashers().' afwasser' . (($mensa->dishwashers() > 1)?'s':'').'*':
-                                                '' }}
+                                        {{ ($mensa->dishwashers() > 0)? $mensa->dishwashers().' afwasser' . (($mensa->dishwashers() > 1)?'s':'').'*': '' }}
                                     </td>
-                                    <td>{!! $mensa->closingTime(true) !!}</td>
+                                    <td>{{ $mensa->closingTime(true) }}</td>
                                     <td>
                                         @if(Auth::check() && $mensa->users->contains(Auth::user()))
                                             <form method="POST" action="{{ route('signout') }}">

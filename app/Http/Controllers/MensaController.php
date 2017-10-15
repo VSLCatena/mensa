@@ -31,10 +31,10 @@ class MensaController extends Controller
             'max_users' => 'required|numeric|between:1,999'
         ]);
 
-        $mensa->title = htmlspecialchars($request->input('title'));
+        $mensa->title = $request->input('title');
         $mensa->date = date("Y-m-d H:i:s", strtotime($request->input('date')));
         $mensa->closing_time = date("Y-m-d H:i:s", strtotime($request->input('closing_time')));
-        $mensa->max_users = htmlspecialchars($request->input('max_users'));
+        $mensa->max_users = $request->input('max_users');
         $mensa->save();
 
         return redirect(route('home'));
