@@ -42,10 +42,10 @@ class SignupController extends Controller
 
         $pivots = [];
         $pivots['cooks'] = false;
-        $pivots['dishwasher'] = $request->has('dishwasher');
+        $pivots['dishwasher'] = (bool)$request->has('dishwasher');
         $pivots['is_intro'] = false;
-        $pivots['allergies'] = strip_tags($request->input('allergies'));
-        $pivots['wishes'] = strip_tags($request->input('wishes'));
+        $pivots['allergies'] = htmlspecialchars($request->input('allergies'));
+        $pivots['wishes'] = htmlspecialchars($request->input('wishes'));
         $pivots['paid'] = false;
         $pivots['confirmed'] = false;
 
