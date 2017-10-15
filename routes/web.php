@@ -19,3 +19,6 @@ Route::get('/signup', function(){ return redirect(route('home')); });
 Route::post('/signup', 'SignupController@signup')->name('signup');
 Route::get('signout', function(){ return redirect(route('home')); });
 Route::post('/signout', 'SignupController@signout')->name('signout');
+
+Route::match(['get', 'post'], '/create', 'MensaController@edit')->name('mensa.create');
+Route::match(['get', 'post'], '/edit/{id}', 'MensaController@edit')->name('mensa.edit');

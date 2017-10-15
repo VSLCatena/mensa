@@ -5,10 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Mensa') }}</title>
+
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    @section('styles')
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    @show
+
+    <!-- Scripts -->
+    @section('scripts')
+    @show
 </head>
 <body>
     <div id="app">
@@ -35,7 +42,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="{{ route('home') }}">Mensaoverzicht</a></li>
                         @admin
-                            <li><a href="#">Mensa aanmaken</a></li>
+                            <li><a href="{{ route('mensa.create') }}">Mensa aanmaken</a></li>
                         @endadmin
                     </ul>
 
@@ -72,8 +79,5 @@
 
         @yield('content')
     </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
