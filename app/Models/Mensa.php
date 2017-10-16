@@ -12,15 +12,18 @@ class Mensa extends Model
     public function users()
     {
         return $this->belongsToMany('App\Models\User', 'mensa_users', 'mensa_id', 'lidnummer')
-            ->withTimestamps()
-            ->withPivot('cooks', 'dishwasher', 'is_intro', 'allergies', 'wishes', 'confirmed', 'paid');
+            ->using('App\Models\MensaUser');
     }
 
     public function dishwashers(){
         if($this->dishwashers === null)
-            $this->dishwashers = $this->users()->wherePivot('dishwasher', '1')->count();
+            $this->dishwashers = $this->users()->where('dishwasher', '1')->count();
 
         return $this->dishwashers;
+    }
+
+    public function prices(){
+        return $this->hasMany('App\Models\MensaPrice');
     }
 
     public function cooks(){
