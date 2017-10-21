@@ -29,18 +29,27 @@
                                 <tr>
                                     <td>{{ formatDate($mensa->date, true) }}</td>
                                     <td>
-                                        {{ $mensa->title }}<br />
-                                        {{ (strlen($mensa->description) > 0) ? '<small>'.$mensa->description.'</small><br />' : '' }}
-                                        {{ (strlen($mensa->cooks()) > 0) ? 'Gekookt door: '.$mensa->cooks() : '' }}
+                                        {{ $mensa->title }}
+                                        @if(strlen($mensa->description) > 0)
+                                            <br /><small>{{ $mensa->description }}</small>
+                                        @endif
+                                        @foreach($mensa->extraOptions()->get() as $option)
+                                            <br /><strong><u>Extra optie:</u></strong> {{ $option->description }} voor &euro;{{ $option->price }}
+                                        @endforeach
+                                        @if(strlen($mensa->cooks()) > 0)
+                                            <br />Gekookt door: {{ $mensa->cooks() }}
+                                        @endif
                                     </td>
-                                    <td>-</td>
+                                    <td>&euro;{{ $mensa->price }}</td>
                                     <td>
-                                        {{ $mensa->users->count() }}/{{ $mensa->max_users }}<br />
-                                        {{ ($mensa->dishwashers() > 0)? $mensa->dishwashers().' afwasser' . (($mensa->dishwashers() > 1)?'s':'').'*': '' }}
+                                        {{ $mensa->users()->count() }}/{{ $mensa->max_users }}<br />
+                                        @if($mensa->dishwashers() > 0)
+                                            {{ $mensa->dishwashers() }} afwasser{{ (($mensa->dishwashers() > 1)?'s':'') }}*
+                                        @endif
                                     </td>
                                     <td>{{ $mensa->closingTime(true) }}</td>
                                     <td>
-                                        @if(Auth::check() && $mensa->users->contains(Auth::user()))
+                                        @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
                                             <form method="POST" action="{{ route('signout') }}">
                                                 {{ csrf_field() }}
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
@@ -53,6 +62,13 @@
                                                 <input type="submit" class="btn btn-primary" value="Inschrijven" />
                                             </form>
                                         @endif
+                                        @admin
+                                            <form method="POST" action="{{ route('mensa.edit') }}">
+                                                {{ csrf_field() }}
+                                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
+                                                <input type="submit" class="btn btn-primary" value="Aanpassen*" />
+                                            </form>
+                                        @endadmin
                                     </td>
                                 </tr>
                             @endforeach

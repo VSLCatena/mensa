@@ -7,9 +7,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Inschrijven voor de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">
-                        <div class="alert alert-info">
-                            <strong>Note:</strong> Als je ingelogd bent hoef je je jezelf niet via de email te bevestigen!
-                        </div>
+                        @guest
+                            <div class="alert alert-info">
+                                <strong>Note:</strong> Als je ingelogd bent hoef je je jezelf niet via de email te bevestigen!
+                            </div>
+                        @endguest
                         <form method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $mensa->id }}" />
@@ -26,6 +28,16 @@
                                 <label for="allergies">Allergie&euml;n:</label>
                                 <input id="allergies" name="allergies" value="{{ old('allergies', $user->allergies) }}" class="form-control"  />
                             </div>
+                            @if(count($mensa->extraOptions()->get()))
+                                <div class="form-group">
+                                    <label>Extra opties:</label><br />
+                                    @foreach($mensa->extraOptions()->get() as $option)
+                                        <input type="checkbox" id="extra_{{ $option->id }}" name="extra[]" value="{{ $option->id }}" class="form-check-input" />
+                                        <label for="extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
+                                    @endforeach
+                                </div>
+                                <br />
+                            @endif
                             <div class="form-group">
                                 <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" />
                                 <label for="dishwasher">Vrijwillig afwassen</label>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Adldap\Laravel\Facades\Adldap;
 use App\Models\Mensa;
+use App\Models\MensaExtraOption;
+use App\Models\MensaUser;
 use App\Models\User;
 use App\Traits\LdapHelpers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -34,37 +36,47 @@ class SignupController extends Controller
         // Else we continue and sign the person in.
         // Depending if the email address is the same as the user logged in or not, we automatically verify the user or not
 
+        $request->validate([
+            'email' => 'required|email',
+            'extra.*' => 'exists:mensa_extra_options,id',
+        ]);
+
         $user = null;
         if(Auth::check()){
             $user = Auth::user();
         }
         $lidnummer = null;
 
-        $pivots = [];
-        $pivots['cooks'] = false;
-        $pivots['dishwasher'] = (bool)$request->has('dishwasher');
-        $pivots['is_intro'] = false;
-        $pivots['allergies'] = $request->input('allergies');
-        $pivots['wishes'] = $request->input('wishes');
-        $pivots['paid'] = false;
-        $pivots['confirmed'] = false;
+        $mensaUser = new MensaUser();
+        $mensaUser->cooks = false;
+        $mensaUser->dishwasher = (bool)$request->has('dishwasher');
+        $mensaUser->is_intro = false;
+        $mensaUser->allergies = $request->input('allergies');
+        $mensaUser->wishes = $request->input('wishes');
+        $mensaUser->paid = false;
+        $mensaUser->confirmed = false;
 
         if($user != null && strtolower($user->email) == strtolower($request->input('email'))){
-            $pivots['confirmed'] = true;
-            $lidnummer = $user->lidnummer;
+            $mensaUser->confirmed = true;
+            $mensaUser->lidnummer = $user->lidnummer;
         }
 
         if($lidnummer == null){
             $user = $this->getLdapUserBy('mail', $request->input('email'));
-            $lidnummer = $user->lidnummer;
+            $mensaUser->lidnummer = $user->lidnummer;
             if($user == null){
                 // TODO ERROR! email couldn't be found!
             }
             // TODO send email
         }
 
-        $mensa->users()->attach($lidnummer, $pivots);
+        $mensaUser->mensa()->associate($mensa);
+        $mensaUser->save();
 
+        foreach($request->all('extra') as $id){
+            $mensaUser->extraOptions()->attach($id);
+        }
+        
         return redirect(route('home'));
     }
 
@@ -79,7 +91,7 @@ class SignupController extends Controller
             return redirect(route('home'));
         }
 
-        $mensa->users()->detach(Auth::user()->lidnummer);
+        $mensa->users()->where('lidnummer', Auth::user()->lidnummer)->delete();
         return redirect(route('home'));
     }
 }

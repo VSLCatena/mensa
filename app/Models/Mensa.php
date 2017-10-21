@@ -11,8 +11,7 @@ class Mensa extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'mensa_users', 'mensa_id', 'lidnummer')
-            ->using('App\Models\MensaUser');
+        return $this->hasMany('App\Models\MensaUser');
     }
 
     public function dishwashers(){
@@ -22,8 +21,13 @@ class Mensa extends Model
         return $this->dishwashers;
     }
 
-    public function prices(){
-        return $this->hasMany('App\Models\MensaPrice');
+    public function extraOptions(){
+        return $this->hasMany('App\Models\MensaExtraOption');
+    }
+
+    public function jsonPrices(){
+        $prices = [['description' => '', 'price' => 3.50]];
+        return array_merge($prices, $this->extraOptions()->get()->toArray());
     }
 
     public function cooks(){
@@ -31,7 +35,7 @@ class Mensa extends Model
         if($this->cooks !== null)
             return $this->cooks;
 
-        $cooks = $this->users()->wherePivot('cooks', '1')->get();
+        $cooks = $this->users()->where('cooks', '1')->get();
         $ret = '';
 
         // If there is noone that will cook, we just return an empty string

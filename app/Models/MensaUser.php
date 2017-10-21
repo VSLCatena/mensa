@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Model;
 
-class MensaUser extends Pivot
+class MensaUser extends Model
 {
     public function extraOptions(){
-        return $this->hasMany('App\Models\MensaPrice');
+        return $this->belongsToMany('App\Models\MensaExtraOption', 'mensa_user_extra_options', 'mensa_user_id', 'mensa_extra_option_id');
+    }
+
+    public function mensa(){
+        return $this->belongsTo('App\Models\Mensa');
     }
 }
