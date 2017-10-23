@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $mensae = Mensa::where('date', '>', date("Y-m-d"))->get();
+        $mensae = Mensa::where('date', '>', date("Y-m-d"))->orderBy('date', 'ASC')->get();
         return view('home', compact('mensae'));
     }
 }

@@ -20,7 +20,7 @@
     @show
 </head>
 <body>
-    <div id="app">
+    <div>
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
@@ -78,6 +78,34 @@
                 </div>
             </div>
         </nav>
+        @if(session('error'))
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">Error</div>
+                            <div class="panel-body">
+                                {{ session('error') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        @if(session('info'))
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">Info</div>
+                            <div class="panel-body">
+                                {{ session('info') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @yield('content')
     </div>

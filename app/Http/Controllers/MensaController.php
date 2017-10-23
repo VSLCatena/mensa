@@ -16,7 +16,7 @@ class MensaController extends Controller
 
     public function edit(Request $request){
         try {
-            if($request->has('id')) {
+            if($request->has('id') && !empty($request->get('id'))) {
                 $mensa = Mensa::findOrFail($request->get('id'));
             } else {
                 $mensa = new Mensa();
@@ -24,7 +24,7 @@ class MensaController extends Controller
                 $mensa->max_users = 42;
             }
         } catch(ModelNotFoundException $e){
-            return redirect(route('home'), ['error' => 'Mensa niet gevonden.']);
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
         if(!$request->has('edited')){
@@ -36,6 +36,7 @@ class MensaController extends Controller
             'date' => 'required|date|after_or_equal:today',
             'closing_time' => 'required|date|before:date',
             'max_users' => 'required|numeric|between:0,999',
+            'price.0.price' => 'required|numeric|between:0,99',
             'price.*.description' => 'max:255',
             'price.*.price' => 'numeric|between:0,99',
             'price.*.id' => 'exists:mensa_extra_options',
@@ -62,6 +63,6 @@ class MensaController extends Controller
 
         $mensa->save();
 
-        return redirect(route('home'));
+        return redirect(route('home'))->with('info', 'Mensa aangemaakt/gewijzigd!');
     }
 }
