@@ -38,8 +38,18 @@ class SignupController extends Controller
 
         $request->validate([
             'email' => 'required|email',
+            'allergies' => 'max:191',
+            'wishes' => 'max:191',
             'extra.*' => 'exists:mensa_extra_options,id',
         ]);
+
+        if($request->has('intro')){
+            $request->validate([
+                'intro_allergies' => 'max:191',
+                'intr_wishes' => 'max:191',
+                'intro_extra.*' => 'exists:mensa_extra_options,id',
+            ]);
+        }
 
         $user = null;
         if(Auth::check()){
@@ -56,26 +66,51 @@ class SignupController extends Controller
         $mensaUser->paid = false;
         $mensaUser->confirmed = false;
 
+
+        // Check if we're already logged in, and if so, link the user to it.
         if($user != null && strtolower($user->email) == strtolower($request->input('email'))){
             $mensaUser->confirmed = true;
             $mensaUser->lidnummer = $user->lidnummer;
         }
 
+        // If not, we will look in LDAP
         if($lidnummer == null){
             $user = $this->getLdapUserBy('mail', $request->input('email'));
-            $mensaUser->lidnummer = $user->lidnummer;
             if($user == null){
                 // TODO ERROR! email couldn't be found!
             }
+
+            $mensaUser->lidnummer = $user->lidnummer;
+
             // TODO send email
         }
 
         $mensaUser->mensa()->associate($mensa);
         $mensaUser->save();
-
         foreach($request->all('extra') as $id){
             $mensaUser->extraOptions()->attach($id);
         }
+
+        // Here we check the intro stuff. Whoop whoop!
+        if($request->has('intro')){
+            $introUser = new MensaUser();
+            $introUser->lidnummer = $mensaUser->lidnummer;
+            $introUser->cooks = false;
+            $introUser->dishwasher = (bool)$request->has('dishwasher');
+            $introUser->is_intro = true;
+            $introUser->allergies = $request->input('intro_allergies');
+            $introUser->wishes = $request->input('intro_wishes');
+            $introUser->paid = false;
+            $introUser->confirmed = $mensaUser->confirmed;
+
+            $introUser->mensa()->associate($mensa);
+            $introUser->save();
+            foreach($request->all('intro_extra') as $id){
+                $introUser->extraOptions()->attach($id);
+            }
+        }
+
+
         
         return redirect(route('home'));
     }

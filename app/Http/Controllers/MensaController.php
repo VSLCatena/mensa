@@ -32,12 +32,12 @@ class MensaController extends Controller
         }
 
         $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:191',
             'date' => 'required|date|after_or_equal:today',
             'closing_time' => 'required|date|before:date',
             'max_users' => 'required|numeric|between:0,999',
             'price.0.price' => 'required|numeric|between:0,99',
-            'price.*.description' => 'max:255',
+            'price.*.description' => 'max:191',
             'price.*.price' => 'numeric|between:0,99',
             'price.*.id' => 'exists:mensa_extra_options',
         ]);

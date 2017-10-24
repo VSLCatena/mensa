@@ -38,12 +38,43 @@
                                 </div>
                                 <br />
                             @endif
+
                             <div class="form-group">
-                                <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" />
-                                <label for="dishwasher">Vrijwillig afwassen</label>
+                                <input type="checkbox" name="intro" id="intro" class="form-check-input" />
+                                <label>Met 1 intro</label>
+                            </div>
+                            <div class="intro" style="display: none;">
+                                <div class="form-group">
+                                    <label for="intro_wishes">Intro wensen:</label>
+                                    <input id="intro_wishes" name="intro_wishes" value="{{ old('wishes', $user->wishes) }}" class="form-control"  />
+                                </div>
+                                <div class="form-group">
+                                    <label for="intro_allergies">Intro allergie&euml;n:</label>
+                                    <input id="intro_allergies" name="intro_allergies" value="{{ old('allergies', $user->allergies) }}" class="form-control"  />
+                                </div>
+                                @if(count($mensa->extraOptions()->get()))
+                                    <div class="form-group">
+                                        <label>Intro's extra opties:</label><br />
+                                        @foreach($mensa->extraOptions()->get() as $option)
+                                            <input type="checkbox" id="intro_extra_{{ $option->id }}" name="intro_extra[]" value="{{ $option->id }}" class="form-check-input" />
+                                            <label for="intro_extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
+                                        @endforeach
+                                    </div>
+                                    <br />
+                                @endif
+                            </div>
+
+                            <div class="form-group">
+                                <input type="checkbox" id="intro_dishwasher" name="intro_dishwasher" class="form-check-input" />
+                                <label for="intro_dishwasher">Vrijwillig afwassen <span class="intro" style="display: none;">(met intro)</span></label>
                             </div>
                             <input type="submit" value="Inschrijven" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ route('home') }}" class="btn btn-default">Terug</a>
                         </form>
+                        <script type="text/javascript">
+                            $("#intro").click(function(){
+                                $(".intro").toggle($(this).prop('checked'));
+                            })
+                        </script>
                     </div>
                 </div>
             </div>
