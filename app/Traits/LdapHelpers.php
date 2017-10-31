@@ -40,7 +40,7 @@ trait LdapHelpers
         }
 
         // We update all the information of the user
-        $dbUser->name = $user->displayname[0];
+        $dbUser->name = $user->cn[0];
         $dbUser->email = $user->mail[0];
         $dbUser->phonenumber = $user->telephonenumber[0];
 
