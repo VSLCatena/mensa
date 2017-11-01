@@ -63,9 +63,9 @@
                                             </form>
                                         @endif
                                         @admin
-                                            <form method="POST" class="btn-group inline" action="{{ route('mensa.edit') }}">
+                                            <form method="POST" class="btn-group inline" action="{{ route('mensa.overview') }}">
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                                <input type="submit" class="btn btn-primary btn-right" value="Aanpassen*" />
+                                                <input type="submit" class="btn btn-primary btn-right" value="Bekijken" />
                                                 {{ csrf_field() }}
                                             </form>
                                         @endadmin

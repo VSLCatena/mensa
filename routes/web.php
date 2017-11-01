@@ -20,5 +20,10 @@ Route::post('/signup', 'SignupController@signup')->name('signup');
 Route::get('signout', function(){ return redirect(route('home')); });
 Route::post('/signout', 'SignupController@signout')->name('signout');
 
-Route::match(['get', 'post'], '/mensa/create', 'MensaController@edit')->name('mensa.create');
-Route::post('/mensa/edit/', 'MensaController@edit')->name('mensa.edit');
+Route::prefix('mensa')->group(function() {
+    Route::match(['get', 'post'], 'create', 'MensaController@edit')->name('mensa.create');
+    Route::get('edit', function () { return redirect(route('home')); });
+    Route::post('edit', 'MensaController@edit')->name('mensa.edit');
+    Route::get('overview', function () { return redirect(route('home')); });
+    Route::post('overview', 'MensaController@showOverview')->name('mensa.overview');
+});

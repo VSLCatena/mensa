@@ -14,6 +14,22 @@ class MensaController extends Controller
         $this->middleware('isAdmin');
     }
 
+    public function showOverview(Request $request){
+        try {
+            $mensa = Mensa::findOrFail($request->get('id'));
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
+        }
+
+        $users = $mensa->users->count();
+        $intros = $mensa->users->where('is_intro', '1')->count();
+        $cooks = $mensa->users->where('cooks', '1')->count();
+        $dishwashers = $mensa->users->where('dishwasher', '1')->count();
+        $budget = $mensa->budget();
+
+        return view('mensae.overview', compact('mensa', 'users', 'intros', 'cooks', 'dishwashers', 'budget'));
+    }
+
     public function edit(Request $request){
         try {
             if($request->has('id') && !empty($request->get('id'))) {

@@ -13,4 +13,8 @@ class MensaUser extends Model
     public function mensa(){
         return $this->belongsTo('App\Models\Mensa');
     }
+
+    public function price(){
+        return $this->extraOptions->sum('price') + $this->mensa->price;
+    }
 }

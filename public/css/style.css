@@ -30,3 +30,11 @@ form.btn-group + form.btn-group {
     border-top-right-radius: 4px !important;
     border-bottom-right-radius: 4px !important;
 }
+
+.mensa-overview .alert {
+    padding: 10px;
+}
+
+.d-inline {
+    display: inline;
+}

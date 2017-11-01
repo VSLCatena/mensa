@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Mensa extends Model
 {
     private $dishwashers = null;
     private $cooks = null;
+    private $budget = null;
 
     public function users()
     {
@@ -23,6 +25,30 @@ class Mensa extends Model
 
     public function extraOptions(){
         return $this->hasMany('App\Models\MensaExtraOption');
+    }
+
+    public function budget(){
+        if($this->budget === null){
+            // This query grabs all the users' extra options that are not cooking and are not washing dishes
+            // and then summarize it
+            $extra_options = DB::select('SELECT SUM(extra.price) as budget FROM mensa_users AS m_users
+LEFT JOIN mensa_user_extra_options AS users_extra ON users_extra.mensa_user_id=m_users.id
+LEFT JOIN mensa_extra_options AS extra ON extra.id=users_extra.mensa_extra_option_id
+WHERE m_users.mensa_id=? AND m_users.cooks=0 AND m_users.dishwasher=0', [$this->id]);
+            $budget = $extra_options[0]->budget;
+
+            // Then we grab the amount of users that actually has to pay the normal price
+            $paying_users = $this->users->where('cooks', '0')->where('dishwasher', '0')->count();
+            // We add the amount that users have to pay for the mensa
+            // But we subtract the amount that goes to the kitchen (which is 30 cents)
+            // And we subtract the amount that goes to the dishwashers (which is 50 cents)
+            $budget += $paying_users * ($this->price - (0.30 + 0.50));
+
+            // Save it for possible later use
+            $this->budget = $budget;
+        }
+
+        return $this->budget;
     }
 
     public function jsonPrices(){
