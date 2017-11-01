@@ -45,7 +45,7 @@ trait LdapHelpers
         $dbUser->phonenumber = $user->telephonenumber[0];
 
         // Check if the user is a mensa admin
-        $dbUser->mensa_admin = in_array(env('ADLDAP_ADMIN_GROUP', ''), $user->memberof);
+        $dbUser->mensa_admin = $user->memberof != null && in_array(env('ADLDAP_ADMIN_GROUP', ''), $user->memberof);
 
         // Save it back to the database
         $dbUser->save();

@@ -37,7 +37,7 @@ class LoginController extends Controller
         }
 
         // We check if the user is in the ADLDAP allowed group that we defined in the .env file
-        if(!in_array(env('ADLDAP_ALLOWED_GROUP', ''), $user->memberof)){
+        if($user->memberof == null || !in_array(env('ADLDAP_ALLOWED_GROUP', ''), $user->memberof)){
             return view('login', ['msg' => 'Something went wrong, contact the administrator for more information (not found in allowed group)']);
         }
 
