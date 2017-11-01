@@ -20,8 +20,8 @@ class CreateLogsTable extends Migration
             $table->string('lidnummer');
             $table->string('description');
 
-            $table->foreign('mensa_id')->references('mensas')->on('id');
-            $table->foreign('lidnummer')->references('users')->on('lidnummer');
+            $table->foreign('mensa_id')->references('id')->on('mensas');
+            $table->foreign('lidnummer')->references('lidnummer')->on('users');
         });
     }
 
