@@ -47,6 +47,7 @@ class MensaController extends Controller
         $mensa->closing_time = date("Y-m-d H:i:s", strtotime($request->input('closing_time')));
         $mensa->max_users = $request->input('max_users');
         $mensa->price = $request->input('price.0.price');
+        $mensa->save(); // Save it already to retrieve the mensas ID
 
         $prices = $request->all('price')['price'];
         for($i = 1; $i < count($prices); $i++){
@@ -61,7 +62,6 @@ class MensaController extends Controller
             $mensaPrice->save();
         }
 
-        $mensa->save();
 
         return redirect(route('home'))->with('info', 'Mensa aangemaakt/gewijzigd!');
     }
