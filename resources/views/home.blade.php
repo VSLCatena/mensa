@@ -50,23 +50,23 @@
                                     <td>{{ $mensa->closingTime(true) }}</td>
                                     <td>
                                         @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
-                                            <form method="POST" action="{{ route('signout') }}">
+                                            <form method="POST" @admin class="btn-group" @endadmin action="{{ route('signout') }}">
                                                 {{ csrf_field() }}
+                                                <input type="submit" class="btn btn-danger btn-left" value="Uitschrijven" />
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                                <input type="submit" class="btn btn-danger" value="Uitschrijven" />
                                             </form>
                                         @else
-                                            <form method="POST" action="{{ route('signup') }}">
+                                            <form method="POST" @admin class="btn-group" @endadmin action="{{ route('signup') }}">
                                                 {{ csrf_field() }}
+                                                <input type="submit" class="btn btn-primary btn-left" value="Inschrijven" />
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                                <input type="submit" class="btn btn-primary" value="Inschrijven" />
                                             </form>
                                         @endif
                                         @admin
-                                            <form method="POST" action="{{ route('mensa.edit') }}">
-                                                {{ csrf_field() }}
+                                            <form method="POST" class="btn-group inline" action="{{ route('mensa.edit') }}">
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                                <input type="submit" class="btn btn-primary" value="Aanpassen*" />
+                                                <input type="submit" class="btn btn-primary btn-right" value="Aanpassen*" />
+                                                {{ csrf_field() }}
                                             </form>
                                         @endadmin
                                     </td>
