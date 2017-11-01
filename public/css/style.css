@@ -38,3 +38,19 @@ form.btn-group + form.btn-group {
 .d-inline {
     display: inline;
 }
+
+.nav-tabs li.active form {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.nav-tabs li.active form input.btn-link {
+    color: inherit;
+}
+
+.nav-tabs li.active form input.btn-link:focus, .nav-tabs li.active form input.btn-link:hover {
+    text-decoration: none;
+}

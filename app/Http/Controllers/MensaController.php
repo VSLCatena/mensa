@@ -30,6 +30,10 @@ class MensaController extends Controller
         return view('mensae.overview', compact('mensa', 'users', 'intros', 'cooks', 'dishwashers', 'budget'));
     }
 
+    public function showSignins(Request $request){
+        // TODO
+    }
+
     public function edit(Request $request){
         try {
             if($request->has('id') && !empty($request->get('id'))) {
