@@ -9,6 +9,7 @@ class Mensa extends Model
 {
     private $dishwashers = null;
     private $cooks = null;
+    private $defaultBudget = null;
     private $budget = null;
 
     public function users()
@@ -37,18 +38,26 @@ LEFT JOIN mensa_extra_options AS extra ON extra.id=users_extra.mensa_extra_optio
 WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.dishwasher=0', [$this->id, $this->id]);
             $budget = $extra_options[0]->budget;
 
-            // Then we grab the amount of users that actually has to pay the normal price
-            $paying_users = $this->users->where('cooks', '0')->where('dishwasher', '0')->count();
-            // We add the amount that users have to pay for the mensa
-            // But we subtract the amount that goes to the kitchen (which is 30 cents)
-            // And we subtract the amount that goes to the dishwashers (which is 50 cents)
-            $budget += $paying_users * ($this->price - (0.30 + 0.50));
+            // We add the default budget that you
+            $budget += $this->defaultBudget();
 
             // Save it for possible later use
             $this->budget = $budget;
         }
 
         return $this->budget;
+    }
+
+    public function defaultBudget(){
+        if($this->defaultBudget === null) {
+            // We grab the amount of users that actually has to pay the normal price
+            $paying_users = $this->users()->where('cooks', '0')->where('dishwasher', '0')->count();
+            // We subtract the amount that goes to the kitchen (which is 30 cents)
+            // And we subtract the amount that goes to the dishwashers (which is 50 cents)
+            $this->defaultBudget = $paying_users * ($this->price - (0.30 + 0.50));
+        }
+
+        return $this->defaultBudget;
     }
 
     public function jsonPrices(){

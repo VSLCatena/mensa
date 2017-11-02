@@ -12,6 +12,18 @@
             Wanneer er geen tweede afwasser gekozen wordt,
             is het budget {{ number_format($budget, 2) }}
         @endif
+        @if($mensa->extraOptions->count() > 0)
+            <br /><br />
+            <i>De hieronder genoemde prijzen zijn slechts een <u>indicatie</u> om je een idee te geven wat je budget is per optie!</i>
+            @foreach($mensa->extraOptions as $extraOption)
+                <br />
+                Extra optie <i>{{ $extraOption->description }}</i>
+                is {{ $extraOption->users()->count() }}x gekozen
+                (budget van &euro;{{ number_format($extraOption->users()->where('cooks', '0')->where('dishwasher', '0')->count() * $extraOption->price, 2) }})
+            @endforeach
+            <br />
+            Dan is er nog &euro;{{ number_format($mensa->defaultBudget(), 2) }} over voor de rest.
+        @endif
     </div>
     <div class="alert alert-info">
         @if($cooks != 1)

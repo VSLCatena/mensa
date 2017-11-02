@@ -13,6 +13,6 @@ class MensaExtraOption extends Model
     }
 
     public function users(){
-        return $this->hasManyThrough('App\Models\User','App\Models\MensaUser');
+        return $this->belongsToMany('App\Models\MensaUser', 'mensa_user_extra_options', 'mensa_extra_option_id', 'mensa_user_id');
     }
 }
