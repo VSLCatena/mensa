@@ -14,6 +14,10 @@ class MensaUser extends Model
         return $this->belongsTo('App\Models\Mensa');
     }
 
+    public function user(){
+        return $this->belongsTo('App\Models\User', 'lidnummer');
+    }
+
     public function price(){
         return $this->extraOptions->sum('price') + $this->mensa->price;
     }

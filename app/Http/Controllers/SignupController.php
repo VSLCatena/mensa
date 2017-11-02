@@ -88,7 +88,10 @@ class SignupController extends Controller
         $mensaUser->mensa()->associate($mensa);
         $mensaUser->save();
         foreach($request->all('extra') as $id){
-            $mensaUser->extraOptions()->attach($id);
+            try {
+                $extraOption = $mensa->extraOptions()->findOrFail($id);
+                $mensaUser->extraOptions()->attach($extraOption);
+            } catch(ModelNotFoundException $e){}
         }
 
         // Here we check the intro stuff. Whoop whoop!

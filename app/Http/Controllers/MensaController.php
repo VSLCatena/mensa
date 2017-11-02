@@ -31,7 +31,18 @@ class MensaController extends Controller
     }
 
     public function showSignins(Request $request){
-        // TODO
+        try {
+            $mensa = Mensa::findOrFail($request->get('id'));
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
+        }
+
+        $users = $mensa->users()->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
+            ->orderBy('mensa_users.cooks', 'DESC')
+            ->orderBy('mensa_users.dishwasher', 'DESC')
+            ->orderBy('users.name')->get();
+
+        return view('mensae.signins', compact('mensa', 'users'));
     }
 
     public function edit(Request $request){
