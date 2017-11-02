@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-8 col-md-offset-2">
+            <div class="col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Inschrijven voor de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">
