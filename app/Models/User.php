@@ -29,10 +29,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-
-    public function mensas()
-    {
-        return $this->belongsToMany('App\Models\Mensa', 'mensa_users', 'lidnummer', 'mensa_id')->withTimestamps()->withPivot('cooks', 'dishwasher', 'is_intro', 'allergies', 'wishes', 'confirmed', 'paid');
-    }
 }
