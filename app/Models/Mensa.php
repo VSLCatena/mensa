@@ -61,7 +61,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
     }
 
     public function jsonPrices(){
-        $prices = [['description' => '', 'price' => 3.50]];
+        $prices = [['description' => '', 'price' => $this->price]];
         return array_merge($prices, $this->extraOptions()->get()->toArray());
     }
 

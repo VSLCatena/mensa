@@ -51,8 +51,9 @@ class MensaController extends Controller
                 $mensa = Mensa::findOrFail($request->get('id'));
             } else {
                 $mensa = new Mensa();
-                $mensa->title = 'Mensa met betaalde afwas';
-                $mensa->max_users = 42;
+                $mensa->title = env('MENSA_DEFAULT_NAME', '');
+                $mensa->max_users = env('MENSA_DEFAULT_MAX_USERS', 50);
+                $mensa->price = env('MENSA_DEFAULT_PRICE', 3.5);
             }
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
