@@ -75,4 +75,5 @@ form.btn-group + form.btn-group {
 
 .btn-paid {
     padding: 4px 6px;
+    transition: background 0.5s, border 0.5s;
 }

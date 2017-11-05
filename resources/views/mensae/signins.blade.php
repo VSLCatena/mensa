@@ -45,9 +45,9 @@
                     <td>
                         @if($mUser->cooks || $mUser->dishwasher)
                         @elseif($mUser->paid)
-                            <button class="btn btn-success btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
+                            <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
                         @else
-                            <button class="btn btn-danger btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
+                            <button data-id="{{ $mUser->id }}" class="btn btn-danger btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
                         @endif
                     </td>
                     <td>{{ $mUser->created_at }}</td>
@@ -61,4 +61,27 @@
             @endforeach
         </tbody>
     </table>
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
+        $(".btn-paid").click(function(){
+            console.debug($(this));
+            var btn = $(this);
+            var hasPaid = btn.hasClass('btn-success');
+            btn.removeClass('btn-success btn-danger');
+            btn.blur();
+
+            $.post("{{ route('mensa.togglepaid') }}", {id: $(this).data('id')}, function (data) {
+                btn.removeClass('btn-default');
+                btn.addClass(data.paid ? 'btn-success' : 'btn-danger');
+            }).fail(function(){
+                btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
+                alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
+            });
+        });
+    </script>
 @endsection

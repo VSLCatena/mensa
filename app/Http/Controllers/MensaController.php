@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
+use App\Models\MensaUser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
@@ -96,5 +97,22 @@ class MensaController extends Controller
 
 
         return redirect(route('home'))->with('info', 'Mensa aangemaakt/gewijzigd!');
+    }
+
+    public function togglePaid(Request $request){
+        try {
+            $mensaUser = MensaUser::findOrFail($request->get('id'));
+        } catch(ModelNotFoundException $e){
+            return response()->json([
+                'error' => 'MensaUser niet gevonden!'
+            ]);
+        }
+
+        $mensaUser->paid = !$mensaUser->paid;
+        $mensaUser->save();
+
+        return response()->json([
+            'paid' => $mensaUser->paid
+        ]);
     }
 }

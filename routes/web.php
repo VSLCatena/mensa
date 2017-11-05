@@ -28,4 +28,5 @@ Route::prefix('mensa')->group(function() {
     Route::post('overview', 'MensaController@showOverview')->name('mensa.overview');
     Route::get('overview/signins', function() { return redirect(route('home')); });
     Route::post('overview/signins', 'MensaController@showSignins')->name('mensa.overview.signins');
+    Route::post('togglepaid', 'MensaController@togglePaid')->name('mensa.togglepaid');
 });
