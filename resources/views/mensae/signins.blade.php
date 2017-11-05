@@ -76,8 +76,13 @@
             btn.blur();
 
             $.post("{{ route('mensa.togglepaid') }}", {id: $(this).data('id')}, function (data) {
-                btn.removeClass('btn-default');
-                btn.addClass(data.paid ? 'btn-success' : 'btn-danger');
+                if(data.error !== undefined){
+                    btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
+                    alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
+                } else {
+                    btn.removeClass('btn-default');
+                    btn.addClass(data.paid ? 'btn-success' : 'btn-danger');
+                }
             }).fail(function(){
                 btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
                 alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
