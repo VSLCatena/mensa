@@ -25,12 +25,23 @@ class SignupController extends Controller
 
         // If email hasn't been filled in, we want to show the signup form
         if(!$request->has('email')){
+            $mensaUser = new MensaUser();
+            $mensaUser->cooks = false;
+            $mensaUser->dishwasher = false;
+            $mensaUser->is_intro = false;
+            $mensaUser->paid = false;
+            $mensaUser->confirmed = false;
+            $mensaUser->mensa()->associate($mensa);
+
             if(Auth::check()){
-                $user = Auth::user();
+                $mensaUser->user()->associate(Auth::user());
+                $mensaUser->allergies = Auth::user()->allergies;
+                $mensaUser->wishes = Auth::user()->wishes;
             } else {
-                $user = new User();
+                $mensaUser->user()->associate(new User());
             }
-            return view('signup', compact('user', 'mensa'));
+
+            return view('signup', compact('mensaUser'));
         }
 
         // Else we continue and sign the person in.

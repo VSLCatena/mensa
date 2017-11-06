@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Inschrijven voor de mensa op {{ formatDate($mensa->date) }}</div>
+                    <div class="panel-heading">Inschrijven voor de mensa op {{ formatDate($mensaUser->mensa->date) }}</div>
                     <div class="panel-body">
                         @guest
                             <div class="alert alert-info">
@@ -14,24 +14,24 @@
                         @endguest
                         <form method="POST">
                             {{ csrf_field() }}
-                            <input type="hidden" name="id" value="{{ $mensa->id }}" />
+                            <input type="hidden" name="id" value="{{ $mensaUser->mensa->id }}" />
                             <input type="hidden" name="signup" value="true" />
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control"  />
+                                <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control"  />
                             </div>
                             <div class="form-group">
                                 <label for="wishes">Wensen:</label>
-                                <input id="wishes" name="wishes" value="{{ old('wishes', $user->wishes) }}" class="form-control"  />
+                                <input id="wishes" name="wishes" value="{{ old('wishes', $mensaUser->wishes) }}" class="form-control"  />
                             </div>
                             <div class="form-group">
                                 <label for="allergies">Allergie&euml;n:</label>
-                                <input id="allergies" name="allergies" value="{{ old('allergies', $user->allergies) }}" class="form-control"  />
+                                <input id="allergies" name="allergies" value="{{ old('allergies', $mensaUser->allergies) }}" class="form-control"  />
                             </div>
-                            @if(count($mensa->extraOptions()->get()))
+                            @if($mensaUser->mensa->extraOptions()->count() > 0)
                                 <div class="form-group">
                                     <label>Extra opties:</label><br />
-                                    @foreach($mensa->extraOptions()->get() as $option)
+                                    @foreach($mensa->mensa->extraOptions as $option)
                                         <input type="checkbox" id="extra_{{ $option->id }}" name="extra[]" value="{{ $option->id }}" class="form-check-input" />
                                         <label for="extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
                                     @endforeach
@@ -46,13 +46,13 @@
                             <div class="intro" style="display: none;">
                                 <div class="form-group">
                                     <label for="intro_wishes">Intro wensen:</label>
-                                    <input id="intro_wishes" name="intro_wishes" value="{{ old('wishes', $user->wishes) }}" class="form-control"  />
+                                    <input id="intro_wishes" name="intro_wishes" value="{{ old('wishes', $mensaUser->wishes) }}" class="form-control"  />
                                 </div>
                                 <div class="form-group">
                                     <label for="intro_allergies">Intro allergie&euml;n:</label>
-                                    <input id="intro_allergies" name="intro_allergies" value="{{ old('allergies', $user->allergies) }}" class="form-control"  />
+                                    <input id="intro_allergies" name="intro_allergies" value="{{ old('allergies', $mensaUser->allergies) }}" class="form-control"  />
                                 </div>
-                                @if(count($mensa->extraOptions()->get()))
+                                @if($mensaUser->mensa->extraOptions()->count() > 0)
                                     <div class="form-group">
                                         <label>Intro's extra opties:</label><br />
                                         @foreach($mensa->extraOptions()->get() as $option)
