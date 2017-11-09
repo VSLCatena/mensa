@@ -56,7 +56,7 @@
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
                                             </form>
                                         @else
-                                            <a href="{{ route('signup', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
+                                            <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
                                         @endif
                                         @admin
                                             <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>

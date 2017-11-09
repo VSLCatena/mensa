@@ -12,19 +12,19 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class SignupController extends Controller
+class SigninController extends Controller
 {
     use LdapHelpers;
 
-    public function signup(Request $request, $id){
+    public function signin(Request $request, $id){
         try {
             $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'));
         }
 
-        // If email hasn't been filled in, we want to show the signup form
-        if(!$request->has('email')){
+        // If method is get we want to just show the view
+        if($request->isMethod('get')){
             $mensaUser = new MensaUser();
             $mensaUser->cooks = false;
             $mensaUser->dishwasher = false;
@@ -47,6 +47,7 @@ class SignupController extends Controller
         // Else we continue and sign the person in.
         // Depending if the email address is the same as the user logged in or not, we automatically verify the user or not
 
+        // We validate the request
         $request->validate([
             'email' => 'required|email',
             'allergies' => 'max:191',
@@ -54,10 +55,11 @@ class SignupController extends Controller
             'extra.*' => 'exists:mensa_extra_options,id',
         ]);
 
+        // And if we have an intro validate those as well
         if($request->has('intro')){
             $request->validate([
                 'intro_allergies' => 'max:191',
-                'intr_wishes' => 'max:191',
+                'intro_wishes' => 'max:191',
                 'intro_extra.*' => 'exists:mensa_extra_options,id',
             ]);
         }
@@ -68,6 +70,7 @@ class SignupController extends Controller
         }
         $lidnummer = null;
 
+        // We create a new MensaUser object with some default values
         $mensaUser = new MensaUser();
         $mensaUser->cooks = false;
         $mensaUser->dishwasher = (bool)$request->has('dishwasher');
@@ -96,6 +99,7 @@ class SignupController extends Controller
             // TODO send email
         }
 
+        // We associate the user to a mensa (or the other way around, not like it matters)
         $mensaUser->mensa()->associate($mensa);
         $mensaUser->save();
         foreach($request->all('extra') as $id){
@@ -120,12 +124,14 @@ class SignupController extends Controller
             $introUser->mensa()->associate($mensa);
             $introUser->save();
             foreach($request->all('intro_extra') as $id){
-                $introUser->extraOptions()->attach($id);
+                try {
+                    $extraOption = $mensa->extraOptions()->findOrFail($id);
+                    $introUser->extraOptions()->attach($extraOption);
+                } catch(ModelNotFoundException $e){}
             }
         }
 
-
-        
+        // TODO give signup feedback
         return redirect(route('home'));
     }
 

@@ -116,4 +116,20 @@ class MensaController extends Controller
             'paid' => $mensaUser->paid
         ]);
     }
+
+    public function removeSignin(Request $request, $mensaId, $userId){
+        try {
+            $mUser = MensaUser::findOrFail($userId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('mensa.signins', ['id' => $mensaId]))->with('error', 'Gebruiker niet gevonden!');
+        }
+
+        if($request->isMethod('get')){
+            return view('mensae.confirmsignout', compact('mUser'));
+        }
+
+        $mUser->delete();
+
+        return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
+    }
 }

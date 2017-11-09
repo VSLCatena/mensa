@@ -28,8 +28,7 @@
                         {{ $mUser->user->phonenumber }}
                     </td>
                     <td>
-                        Allergie&euml;n: {{ $mUser->allergies }}
-                        @if(!empty($mUser->allergies))<br />@endif
+                        @if(!empty($mUser->allergies))Allergie&euml;n: {{ $mUser->allergies }}<br />@endif
                         @if(!empty($mUser->wishes))Wensen: {{ $mUser->wishes }}@endif
                     </td>
                     <td>
@@ -53,8 +52,8 @@
                     <td>{{ $mUser->created_at }}</td>
                     <td>
                         <div class="btn-group-vertical">
-                            <button class="btn btn-xs btn-default">Wijzigen</button>
-                            <button class="btn btn-xs btn-default">Uitschrijven</button>
+                            <a href="#" class="btn btn-xs btn-default">Wijzigen</a>
+                            <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa->id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
                         </div>
                     </td>
                 </tr>
