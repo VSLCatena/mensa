@@ -16,9 +16,9 @@ class SignupController extends Controller
 {
     use LdapHelpers;
 
-    public function signup(Request $request){
+    public function signup(Request $request, $id){
         try {
-            $mensa = Mensa::findOrFail($request->input('id'));
+            $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'));
         }

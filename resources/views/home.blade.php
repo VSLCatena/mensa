@@ -48,26 +48,18 @@
                                         @endif
                                     </td>
                                     <td>{{ $mensa->closingTime(true) }}</td>
-                                    <td>
+                                    <td class="btn-group-vertical">
                                         @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
-                                            <form method="POST" @admin class="btn-group" @endadmin action="{{ route('signout') }}">
+                                            <form method="POST" @admin class="btn-group-vertical" @endadmin action="{{ route('signout', ['id' => $mensa->id]) }}">
+                                                <input type="submit" class="btn btn-danger" value="Uitschrijven" />
                                                 {{ csrf_field() }}
-                                                <input type="submit" class="btn btn-danger btn-left" value="Uitschrijven" />
                                                 <input type="hidden" name="id" value="{{ $mensa->id }}" />
                                             </form>
                                         @else
-                                            <form method="POST" @admin class="btn-group" @endadmin action="{{ route('signup') }}">
-                                                {{ csrf_field() }}
-                                                <input type="submit" class="btn btn-primary btn-left" value="Inschrijven" />
-                                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                            </form>
+                                            <a href="{{ route('signup', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
                                         @endif
                                         @admin
-                                            <form method="POST" class="btn-group inline" action="{{ route('mensa.overview') }}">
-                                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                                <input type="submit" class="btn btn-primary btn-right" value="Bekijken" />
-                                                {{ csrf_field() }}
-                                            </form>
+                                            <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
                                         @endadmin
                                     </td>
                                 </tr>

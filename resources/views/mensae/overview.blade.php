@@ -5,10 +5,10 @@
         Er {{ ($users!=1)?'zijn':'is' }} in totaal {{ $users }} eter{{ ($users!=1)?'s':'' }}
         waarvan {{ $intros }} introduc&eacute;{{ ($intros != 1)?'s':'' }}.
         <br />
-        @if($dishwashers > 1 || $users < 15)
+        @if($dishwashers > 1 || $users < env('MENSA_SECOND_DISHWASHER', 15))
             Het budget bedraagt &euro;{{ number_format($budget, 2) }}.
         @else
-            Het budget bedraagt &euro;{{ number_format($budget-($mensa->price-0.3), 2) }}.
+            Het budget bedraagt &euro;{{ number_format($budget - ($mensa->price - env('MENSA_SUBTRACT_KITCHEN')), 2) }}.
             Wanneer er geen tweede afwasser gekozen wordt,
             is het budget {{ number_format($budget, 2) }}
         @endif

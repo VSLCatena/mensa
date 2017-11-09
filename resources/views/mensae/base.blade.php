@@ -8,44 +8,19 @@
                     <div class="panel-heading">Overzicht van de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">
                         <div class="btn-group btn-group-justified">
-                            <form method="POST" action="#" class="d-inline btn-group">
-                                <input type="submit" class="btn btn-default" value="// Iemand inschrijven" />
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                            </form>
-                            <form method="POST" action="{{ route('mensa.edit') }}" class="d-inline btn-group">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                <input type="submit" class="btn btn-default" value="Mensagegevens wijzigen" />
-                            </form>
-
-                            <form method="POST" action="#" class="d-inline btn-group">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                <input type="submit" class="btn btn-default" value="// Mensastaat printen" />
-                            </form>
-                            <form method="POST" action="#" class="d-inline btn-group">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                <input type="submit" class="btn btn-default" value="// Mensa annuleren" />
-                            </form>
+                            <a href="#" class="btn btn-default">// Iemand inschrijven</a>
+                            <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
+                            <a href="#" class="btn btn-default">// Mensastaat printen</a>
+                            <a href="#" class="btn btn-default">// Mensa annuleren</a>
                         </div>
                     </div>
                     <div class="panel-body">
                         <ul class="nav nav-tabs">
                             <li{!! Route::is('mensa.overview') ? ' class="active"' : '' !!}>
-                                <form method="POST" action="{{ route('mensa.overview') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                    <input type="submit" class="btn btn-link" value="Samenvatting" />
-                                </form>
+                                <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}">Samenvatting</a>
                             </li>
-                            <li{!! Route::is('mensa.overview.signins') ? ' class="active"' : '' !!}>
-                                <form method="POST" action="{{ route('mensa.overview.signins') }}">
-                                    {{ csrf_field() }}
-                                    <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                    <input type="submit" class="btn btn-link" value="Inschrijvingen" />
-                                </form>
+                            <li{!! Route::is('mensa.signins') ? ' class="active"' : '' !!}>
+                                <a href="{{ route('mensa.signins', ['id' => $mensa->id]) }}">Inschrijvingen</a>
                             </li>
                         </ul>
                     </div>

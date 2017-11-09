@@ -6,7 +6,7 @@
             <tr>
                 <th>Bevestigd</th>
                 <th>Naam</th>
-                <th>Allergie&euml;en/vegetarisch</th>
+                <th>Allergie&euml;n/vegetarisch</th>
                 <th>Koker</th>
                 <th>Afwasser</th>
                 <th>Betaald</th>
@@ -28,9 +28,9 @@
                         {{ $mUser->user->phonenumber }}
                     </td>
                     <td>
-                        {{ $mUser->allergies }}
+                        Allergie&euml;n: {{ $mUser->allergies }}
                         @if(!empty($mUser->allergies))<br />@endif
-                        {{ $mUser->wishes }}
+                        @if(!empty($mUser->wishes))Wensen: {{ $mUser->wishes }}@endif
                     </td>
                     <td>
                         @if($mUser->cooks) <span class="label label-success label-yesno">Ja</span>
@@ -75,7 +75,7 @@
             btn.removeClass('btn-success btn-danger');
             btn.blur();
 
-            $.post("{{ route('mensa.togglepaid') }}", {id: $(this).data('id')}, function (data) {
+            $.post("{{ route('mensa.togglepaid', ['id' => $mensa->id]) }}", {id: $(this).data('id')}, function (data) {
                 if(data.error !== undefined){
                     btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
                     alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")

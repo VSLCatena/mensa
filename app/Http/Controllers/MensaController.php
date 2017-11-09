@@ -15,9 +15,9 @@ class MensaController extends Controller
         $this->middleware('isAdmin');
     }
 
-    public function showOverview(Request $request){
+    public function showOverview(Request $request, $id){
         try {
-            $mensa = Mensa::findOrFail($request->get('id'));
+            $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
@@ -31,9 +31,9 @@ class MensaController extends Controller
         return view('mensae.overview', compact('mensa', 'users', 'intros', 'cooks', 'dishwashers', 'budget'));
     }
 
-    public function showSignins(Request $request){
+    public function showSignins(Request $request, $id){
         try {
-            $mensa = Mensa::findOrFail($request->get('id'));
+            $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
@@ -46,10 +46,10 @@ class MensaController extends Controller
         return view('mensae.signins', compact('mensa', 'users'));
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request, $id = null){
         try {
-            if($request->has('id') && !empty($request->get('id'))) {
-                $mensa = Mensa::findOrFail($request->get('id'));
+            if($id != null){
+                $mensa = Mensa::findOrFail($id);
             } else {
                 $mensa = new Mensa();
                 $mensa->title = env('MENSA_DEFAULT_NAME', '');
@@ -60,7 +60,7 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
-        if(!$request->has('edited')){
+        if($request->isMethod('get')){
             return view('mensae.edit', compact('mensa'));
         }
 
@@ -96,10 +96,10 @@ class MensaController extends Controller
         }
 
 
-        return redirect(route('home'))->with('info', 'Mensa aangemaakt/gewijzigd!');
+        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
     }
 
-    public function togglePaid(Request $request){
+    public function togglePaid(Request $request, $mensaId){
         try {
             $mensaUser = MensaUser::findOrFail($request->get('id'));
         } catch(ModelNotFoundException $e){

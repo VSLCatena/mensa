@@ -82,8 +82,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="panel panel-danger">
-                            <div class="panel-heading">Error</div>
+                        <div class="panel panel-danger" id="error-panel">
+                            <div class="panel-heading">
+                                Error
+                                <button type="button" class="close" data-target="#error-panel" data-dismiss="alert">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                            </div>
                             <div class="panel-body">
                                 {{ session('error') }}
                             </div>
@@ -96,8 +102,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="panel panel-info">
-                            <div class="panel-heading">Info</div>
+                        <div class="panel panel-info" id="info-panel">
+                            <div class="panel-heading">
+                                Info
+                                <button type="button" class="close" data-target="#info-panel" data-dismiss="alert">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                            </div>
                             <div class="panel-body">
                                 {{ session('info') }}
                             </div>
