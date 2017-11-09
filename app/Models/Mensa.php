@@ -52,6 +52,11 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
         if($this->defaultBudget === null) {
             // We grab the amount of users that actually has to pay the normal price
             $paying_users = $this->users()->where('cooks', '0')->where('dishwasher', '0')->count();
+
+            if($this->dishwashers() == 0){
+                $paying_users--;
+            }
+
             // We subtract the amount that goes to the kitchen (which is 30 cents)
             // And we subtract the amount that goes to the dishwashers (which is 50 cents)
             $this->defaultBudget = $paying_users * ($this->price - (0.30 + 0.50));

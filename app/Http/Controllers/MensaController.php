@@ -22,13 +22,14 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
-        $users = $mensa->users->count();
-        $intros = $mensa->users->where('is_intro', '1')->count();
-        $cooks = $mensa->users->where('cooks', '1')->count();
-        $dishwashers = $mensa->users->where('dishwasher', '1')->count();
+        $users = $mensa->users()->count();
+        $intros = $mensa->users()->where('is_intro', '1')->count();
+        $cooks = $mensa->users()->where('cooks', '1')->count();
+        $dishwashers = $mensa->users()->where('dishwasher', '1')->count();
         $budget = $mensa->budget();
+        $payingUsers = $mensa->users()->where('cooks', '0')->where('dishwasher', '0')->count();
 
-        return view('mensae.overview', compact('mensa', 'users', 'intros', 'cooks', 'dishwashers', 'budget'));
+        return view('mensae.overview', compact('mensa', 'users', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
     }
 
     public function showSignins(Request $request, $id){
