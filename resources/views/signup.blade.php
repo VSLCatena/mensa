@@ -31,9 +31,9 @@
                             @if($mensaUser->mensa->extraOptions()->count() > 0)
                                 <div class="form-group">
                                     <label>Extra opties:</label><br />
-                                    @foreach($mensa->mensa->extraOptions as $option)
+                                    @foreach($mensaUser->mensa->extraOptions as $option)
                                         <input type="checkbox" id="extra_{{ $option->id }}" name="extra[]" value="{{ $option->id }}" class="form-check-input" />
-                                        <label for="extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
+                                        <label for="extra_{{ $option->id }}">{{ $option->description }} (+&euro;{{ $option->price }})</label><br />
                                     @endforeach
                                 </div>
                                 <br />
@@ -55,7 +55,7 @@
                                 @if($mensaUser->mensa->extraOptions()->count() > 0)
                                     <div class="form-group">
                                         <label>Intro's extra opties:</label><br />
-                                        @foreach($mensa->extraOptions()->get() as $option)
+                                        @foreach($mensaUser->mensa->extraOptions()->get() as $option)
                                             <input type="checkbox" id="intro_extra_{{ $option->id }}" name="intro_extra[]" value="{{ $option->id }}" class="form-check-input" />
                                             <label for="intro_extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
                                         @endforeach
