@@ -72,6 +72,8 @@ class SigninController extends Controller
 
         // We create a new MensaUser object with some default values
         $mensaUser = new MensaUser();
+        // We associate the user to a mensa (or the other way around, not like it matters)
+        $mensaUser->mensa()->associate($mensa);
         $mensaUser->cooks = false;
         $mensaUser->dishwasher = (bool)$request->has('dishwasher');
         $mensaUser->is_intro = false;
@@ -91,7 +93,11 @@ class SigninController extends Controller
         if($lidnummer == null){
             $user = $this->getLdapUserBy('mail', $request->input('email'));
             if($user == null){
-                // TODO ERROR! email couldn't be found!
+                $request->flash();
+                $mensaUser->user()->associate(new User());
+
+                $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.env('MENSA_CONTACT_MAIL'));
+                return view('signup', compact('mensaUser'));
             }
 
             $mensaUser->lidnummer = $user->lidnummer;
@@ -99,8 +105,7 @@ class SigninController extends Controller
             // TODO send email
         }
 
-        // We associate the user to a mensa (or the other way around, not like it matters)
-        $mensaUser->mensa()->associate($mensa);
+        // And lastly we save the user
         $mensaUser->save();
         foreach($request->all('extra') as $id){
             try {
