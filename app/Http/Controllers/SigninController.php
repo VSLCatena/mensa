@@ -41,7 +41,7 @@ class SigninController extends Controller
                 $mensaUser->user()->associate(new User());
             }
 
-            return view('signup', compact('mensaUser'));
+            return view('signin', compact('mensaUser'));
         }
 
         // Else we continue and sign the person in.
@@ -97,7 +97,7 @@ class SigninController extends Controller
                 $mensaUser->user()->associate(new User());
 
                 $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.env('MENSA_CONTACT_MAIL'));
-                return view('signup', compact('mensaUser'));
+                return view('signin', compact('mensaUser'));
             }
 
             $mensaUser->lidnummer = $user->lidnummer;

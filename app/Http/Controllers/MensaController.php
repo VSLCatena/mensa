@@ -7,6 +7,7 @@ use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MensaController extends Controller
 {
@@ -39,7 +40,7 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
-        $users = $mensa->users()->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
+        $users = $mensa->users()->select(DB::raw('*, mensa_users.wishes as uwishes, mensa_users.allergies as uallergies'))->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
             ->orderBy('mensa_users.cooks', 'DESC')
             ->orderBy('mensa_users.dishwasher', 'DESC')
             ->orderBy('users.name')->get();
@@ -115,6 +116,43 @@ class MensaController extends Controller
         return response()->json([
             'paid' => $mensaUser->paid
         ]);
+    }
+
+    public function editSignin(Request $request, $mensaId, $userId){
+        try {
+            $mensaUser = MensaUser::findOrFail($userId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('mensa.signins', ['id' => $mensaId]))->with('error', 'Gebruiker niet gevonden!');
+        }
+
+        if($request->isMethod('get')){
+            return view('mensae.editsignin', compact('mensaUser'));
+        }
+
+
+        // We validate the request
+        $request->validate([
+            'allergies' => 'max:191',
+            'wishes' => 'max:191',
+            'extra.*' => 'exists:mensa_extra_options,id',
+        ]);
+
+        $mensaUser->cooks = (bool)$request->has('cooks');
+        $mensaUser->dishwasher = (bool)$request->has('dishwasher');
+        $mensaUser->allergies = $request->input('allergies');
+        $mensaUser->wishes = $request->input('wishes');
+
+        // And lastly we save the user
+        $mensaUser->save();
+        foreach($request->all('extra') as $id){
+            try {
+                $extraOption = $mensaUser->mensa->extraOptions()->findOrFail($id);
+                $mensaUser->extraOptions()->attach($extraOption);
+            } catch(ModelNotFoundException $e){}
+        }
+
+        return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', 'De gebruiker '.$mensaUser->user->name.' is aangepast!');
+
     }
 
     public function removeSignin(Request $request, $mensaId, $userId){

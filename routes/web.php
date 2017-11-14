@@ -33,5 +33,6 @@ Route::prefix('mensa')->group(function() {
 
     // Mensa administration
     Route::post('{mensaId}/togglepaid', 'MensaController@togglePaid')->name('mensa.togglepaid');
-    Route::match(['get', 'post'], '{id}/removesignin/{userId}', 'MensaController@removeSignin')->name('mensa.removesignin');
+    Route::match(['get', 'post'], '{mensaId}/editsignin/{userId}', 'MensaController@editSignin')->name('mensa.editsignin');
+    Route::match(['get', 'post'], '{mensaId}/removesignin/{userId}', 'MensaController@removeSignin')->name('mensa.removesignin');
 });

@@ -65,8 +65,8 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="checkbox" id="intro_dishwasher" name="intro_dishwasher" class="form-check-input" />
-                                <label for="intro_dishwasher">Vrijwillig afwassen <span class="intro" style="display: none;">(met intro)</span></label>
+                                <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" />
+                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="display: none;">(met intro)</span></label>
                             </div>
                             <input type="submit" value="Inschrijven" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ route('home') }}" class="btn btn-default">Terug</a>
                         </form>

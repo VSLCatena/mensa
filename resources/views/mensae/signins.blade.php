@@ -24,12 +24,16 @@
                     </td>
                     <td>
                         @if($mUser->is_intro)Intro van @endif
-                        {{ $mUser->user->name }}<br />
-                        {{ $mUser->user->phonenumber }}
+                        {{ $mUser->name }}<br />
+                        {{ $mUser->phonenumber }}
                     </td>
                     <td>
-                        @if(!empty($mUser->allergies))Allergie&euml;n: {{ $mUser->allergies }}<br />@endif
-                        @if(!empty($mUser->wishes))Wensen: {{ $mUser->wishes }}@endif
+                        @if(!empty($mUser->uallergies))
+                            Allergie&euml;n: {{ $mUser->uallergies }}<br />
+                        @endif
+                        @if(!empty($mUser->uwishes))
+                                Wensen: {{ $mUser->uwishes }}
+                            @endif
                     </td>
                     <td>
                         @if($mUser->cooks) <span class="label label-success label-yesno">Ja</span>
@@ -52,8 +56,8 @@
                     <td>{{ $mUser->created_at }}</td>
                     <td>
                         <div class="btn-group-vertical">
-                            <a href="#" class="btn btn-xs btn-default">Wijzigen</a>
-                            <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa->id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
+                            <a href="{{ route('mensa.editsignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Wijzigen</a>
+                            <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
                         </div>
                     </td>
                 </tr>
