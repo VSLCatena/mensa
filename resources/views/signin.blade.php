@@ -15,10 +15,13 @@
                         <form method="POST">
                             {{ csrf_field() }}
                             <input type="hidden" name="id" value="{{ $mensaUser->mensa->id }}" />
+                            @if(session("asAdmin") || old('asAdmin', false))
+                                <input type="hidden" name="asAdmin" value="true" />
+                            @endif
                             <input type="hidden" name="signup" value="true" />
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control"  />
+                                <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control" {{ session('asAdmin')?'readonly': '' }} />
                             </div>
                             <div class="form-group">
                                 <label for="wishes">Wensen:</label>

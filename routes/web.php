@@ -20,6 +20,7 @@ Route::post('logout', 'LoginController@logout')->name('logout');
 
 Route::prefix('mensa')->group(function() {
     // Sign in and sign out
+    Route::post('search', 'MensaController@requestUserLookup')->name('mensa.searchusers');
     Route::match(['get', 'post'], '{id}/signin', 'SigninController@signin')->name('signin');
     Route::post('{id}/signout', 'SigninController@signout')->name('signout');
 
@@ -33,6 +34,7 @@ Route::prefix('mensa')->group(function() {
 
     // Mensa administration
     Route::post('{mensaId}/togglepaid', 'MensaController@togglePaid')->name('mensa.togglepaid');
-    Route::match(['get', 'post'], '{mensaId}/editsignin/{userId}', 'MensaController@editSignin')->name('mensa.editsignin');
-    Route::match(['get', 'post'], '{mensaId}/removesignin/{userId}', 'MensaController@removeSignin')->name('mensa.removesignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/new', 'MensaController@newSignin')->name('mensa.newsignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'MensaController@editSignin')->name('mensa.editsignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', 'MensaController@removeSignin')->name('mensa.removesignin');
 });

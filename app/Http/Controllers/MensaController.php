@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
+use App\Traits\LdapHelpers;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class MensaController extends Controller
 {
+    use LdapHelpers;
+
     public function __construct(){
         $this->middleware('auth');
         $this->middleware('isAdmin');
@@ -169,5 +172,28 @@ class MensaController extends Controller
         $mUser->delete();
 
         return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
+    }
+
+    public function newSignin(Request $request, $mensaId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($request->isMethod('get')){
+            return view('mensae.newsignin', compact('mensa'));
+        }
+
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('email', $request->get('email'));
+    }
+
+    public function requestUserLookup(Request $request){
+        $request->validate(['name' => 'regex:/^[a-zA-Z _]+$/']);
+        return response()->json($this->searchLdapUsers($request->get('name')));
     }
 }

@@ -63,3 +63,26 @@
     padding: 4px 6px;
     transition: background 0.5s, border 0.5s;
 }
+
+.name-search {
+    position: relative;
+}
+
+#namesearch {
+    top: 35px;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    max-height: 300px;
+    width: 100%;
+    padding: 5px;
+    overflow-y: auto;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.user-result {
+    cursor: pointer;
+}
+
+.user-result:hover {
+    background-color: #CCC;
+}

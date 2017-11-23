@@ -8,7 +8,7 @@
                     <div class="panel-heading">Overzicht van de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">
                         <div class="btn-group btn-group-justified">
-                            <a href="#" class="btn btn-default">// Iemand inschrijven</a>
+                            <a href="{{ route('mensa.newsignin', ['id' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a>
                             <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
                             <a href="#" class="btn btn-default">// Mensastaat printen</a>
                             <a href="#" class="btn btn-default">// Mensa annuleren</a>

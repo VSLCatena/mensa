@@ -33,7 +33,11 @@ class SigninController extends Controller
             $mensaUser->confirmed = false;
             $mensaUser->mensa()->associate($mensa);
 
-            if(Auth::check()){
+            if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin') && $request->session()->has('email')){
+                $user = new User();
+                $user->email = session('email');
+                $mensaUser->user()->associate($user);
+            } else if(Auth::check()){
                 $mensaUser->user()->associate(Auth::user());
                 $mensaUser->allergies = Auth::user()->allergies;
                 $mensaUser->wishes = Auth::user()->wishes;
@@ -89,6 +93,11 @@ class SigninController extends Controller
             $mensaUser->lidnummer = $user->lidnummer;
         }
 
+        // If the user gets signed in as admin we just confirm the user
+        if($request->has('asAdmin') && $user != null && $user->mensa_admin){
+            $mensaUser->confirmed = true;
+        }
+
         // If not, we will look in LDAP
         if($lidnummer == null){
             $user = $this->getLdapUserBy('mail', $request->input('email'));
@@ -102,7 +111,9 @@ class SigninController extends Controller
 
             $mensaUser->lidnummer = $user->lidnummer;
 
-            // TODO send email
+            if(!$mensaUser->confirmed){
+                // TODO send email
+            }
         }
 
         // And lastly we save the user
@@ -134,6 +145,10 @@ class SigninController extends Controller
                     $introUser->extraOptions()->attach($extraOption);
                 } catch(ModelNotFoundException $e){}
             }
+        }
+
+        if($user != null && $user->mensa_admin && $request->has('redirect')){
+            return redirect($request->get('redirect'))->with('info', 'Gebruiker succesvol ingeschreven.');
         }
 
         // TODO give signup feedback

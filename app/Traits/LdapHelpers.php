@@ -14,8 +14,29 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
  */
 trait LdapHelpers
 {
-    public function getLdapInfoBy($field, $value){
-        return Adldap::search()->findBy($field, $value);
+    private function getLdapInfoBy($field, $value){
+        return Adldap::search()
+            ->in(env('ADLDAP_USER_BASEDN'))
+            ->findBy($field, $value);
+    }
+
+    public function searchLdapUsers($name){
+        if(!preg_match('/^[a-zA-Z0-9 _]+$/', $name)){
+            return '';
+        }
+        $users = Adldap::search()->users()
+            ->in(env('ADLDAP_USER_BASEDN'))
+            ->rawFilter('(cn=*'.$name.'*)')
+            ->whereHas('mail')
+            ->limit(10)
+            ->get();
+
+        return $users->map(function ($user){
+            return [
+                'name' => $user->cn[0],
+                'email' => $user->mail[0]
+            ];
+        }, $users);
     }
 
     public function isLdapUser($username, $password){
