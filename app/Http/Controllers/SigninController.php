@@ -78,6 +78,8 @@ class SigninController extends Controller
         $mensaUser = new MensaUser();
         // We associate the user to a mensa (or the other way around, not like it matters)
         $mensaUser->mensa()->associate($mensa);
+        // We also generate a confirmation link, this will be used both for signing in and out
+        $mensaUser->confirmation_code = bin2hex(random_bytes(32));
         $mensaUser->cooks = false;
         $mensaUser->dishwasher = (bool)$request->has('dishwasher');
         $mensaUser->is_intro = false;
@@ -118,6 +120,7 @@ class SigninController extends Controller
 
         // And lastly we save the user
         $mensaUser->save();
+        $mensaUser->extraOptions()->delete();
         foreach($request->all('extra') as $id){
             try {
                 $extraOption = $mensa->extraOptions()->findOrFail($id);
@@ -136,9 +139,11 @@ class SigninController extends Controller
             $introUser->wishes = $request->input('intro_wishes');
             $introUser->paid = false;
             $introUser->confirmed = $mensaUser->confirmed;
+            $introUser->confirmation_code = $mensaUser->confirmation_code;
 
             $introUser->mensa()->associate($mensa);
             $introUser->save();
+            $introUser->extraOptions()->delete();
             foreach($request->all('intro_extra') as $id){
                 try {
                     $extraOption = $mensa->extraOptions()->findOrFail($id);
@@ -152,7 +157,7 @@ class SigninController extends Controller
         }
 
         // TODO give signup feedback
-        return redirect(route('home'));
+        return redirect(route('home'))->with('info', 'Je hebt je succesvol ingeschreven!');
     }
 
     public function signout(Request $request){

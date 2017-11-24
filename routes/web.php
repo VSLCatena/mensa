@@ -1,21 +1,15 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/', 'HomeController@index')->name('home');
 
 // Login and log out
 Route::match(['get', 'post'], 'login', 'LoginController@login')->name('login');
 Route::post('logout', 'LoginController@logout')->name('logout');
+
+// Verify confirmation and sign out
+Route::get('signin/{code}/confirm', 'ConfirmController@confirm')->name('signin.confirm');
+Route::get('signin/{code}/edit', 'ConfirmController@edit')->name('signin.edit');
+Route::get('signin/{code}/signout', 'ConfirmController@cancel')->name('signin.cancel');
 
 
 Route::prefix('mensa')->group(function() {
@@ -37,4 +31,14 @@ Route::prefix('mensa')->group(function() {
     Route::match(['get', 'post'], '{mensaId}/signin/new', 'MensaController@newSignin')->name('mensa.newsignin');
     Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'MensaController@editSignin')->name('mensa.editsignin');
     Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', 'MensaController@removeSignin')->name('mensa.removesignin');
+});
+
+Route::get('/mailexample/1', function () {
+    $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
+    return new App\Mail\SigninConformation($mensaUser);
+});
+
+Route::get('/mailexample/2', function () {
+    $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
+    return new App\Mail\SigninConfirmed($mensaUser);
 });

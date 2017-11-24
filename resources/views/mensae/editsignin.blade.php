@@ -27,7 +27,7 @@
                                 <div class="form-group">
                                     <label>Extra opties:</label><br />
                                     @foreach($mensaUser->mensa->extraOptions as $option)
-                                        <input type="checkbox" id="extra_{{ $option->id }}" name="extra[]" value="{{ $option->id }}" class="form-check-input" />
+                                        <input type="checkbox" id="extra_{{ $option->id }}" name="extra[]" value="{{ $option->id }}" class="form-check-input" {{ $mensaUser->extraOptions->contains($option)?'checked':'' }} />
                                         <label for="extra_{{ $option->id }}">{{ $option->description }} (+&euro;{{ $option->price }})</label><br />
                                     @endforeach
                                 </div>

@@ -14,6 +14,10 @@ class MensaUser extends Model
         return $this->belongsTo('App\Models\Mensa');
     }
 
+    public function intros(){
+        return $this->hasMany('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('is_intro', '1');
+    }
+
     public function user(){
         return $this->belongsTo('App\Models\User', 'lidnummer');
     }
