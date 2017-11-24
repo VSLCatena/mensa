@@ -16,26 +16,59 @@ class SigninController extends Controller
 {
     use LdapHelpers;
 
-    public function signin(Request $request, $id){
+    public function signin(Request $request, $id, $userToken = null){
         try {
             $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
-            return redirect(route('home'));
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        $mensaUser = null;
+        if($userToken != null){
+            try {
+                // We want to create a query object to search for a certain signin
+                $userQuery = MensaUser::where('is_intro', '0')->where('confirmation_token', $userToken);
+                // And ONLY if we're admin, we allow to do it with the id too
+                if(Auth::check() && Auth::user()->mensa_admin)
+                    $userQuery = $userQuery->where('id', $userToken);
+
+                $mensaUser = $userQuery->firstOrFail();
+            } catch(ModelNotFoundException $e){
+                return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als dit een fout is neem dan contact op met '.env('MENSA_CONTACT_MAIL').'.');
+            }
+        }
+
+        // If we aren't editing, we are creating!
+        if($mensaUser == null){
+            $mensaUser = new MensaUser();
+            $mensaUser->paid = false;
+            $mensaUser->cooks = false;
+            $mensaUser->is_intro = false;
+            $mensaUser->confirmed = false;
+            // We also generate a confirmation link, this will be used both for signing in and out
+            $mensaUser->confirmation_code = bin2hex(random_bytes(32));
+            // We associate the user to a mensa (or the other way around, not like it matters)
+            $mensaUser->mensa()->associate($mensa);
+        }
+
+        if($mensaUser->intros()->count() > 0){
+            $introUser = $mensaUser->intros()->get(0);
+        } else {
+            $introUser = new MensaUser();
+
+            $introUser->is_intro = true;
+            $introUser->cooks = false;
+            $introUser->paid = false;
+            $introUser->confirmation_code = $mensaUser->confirmation_code;
+            $introUser->mensa()->associate($mensa);
         }
 
         // If method is get we want to just show the view
         if($request->isMethod('get')){
-            $mensaUser = new MensaUser();
-            $mensaUser->cooks = false;
-            $mensaUser->dishwasher = false;
-            $mensaUser->is_intro = false;
-            $mensaUser->paid = false;
-            $mensaUser->confirmed = false;
-            $mensaUser->mensa()->associate($mensa);
 
-            if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin') && $request->session()->has('email')){
+            if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('extra_email')){
                 $user = new User();
-                $user->email = session('email');
+                $user->email = session('extra_email');
                 $mensaUser->user()->associate($user);
             } else if(Auth::check()){
                 $mensaUser->user()->associate(Auth::user());
@@ -74,19 +107,9 @@ class SigninController extends Controller
         }
         $lidnummer = null;
 
-        // We create a new MensaUser object with some default values
-        $mensaUser = new MensaUser();
-        // We associate the user to a mensa (or the other way around, not like it matters)
-        $mensaUser->mensa()->associate($mensa);
-        // We also generate a confirmation link, this will be used both for signing in and out
-        $mensaUser->confirmation_code = bin2hex(random_bytes(32));
-        $mensaUser->cooks = false;
         $mensaUser->dishwasher = (bool)$request->has('dishwasher');
-        $mensaUser->is_intro = false;
         $mensaUser->allergies = $request->input('allergies');
         $mensaUser->wishes = $request->input('wishes');
-        $mensaUser->paid = false;
-        $mensaUser->confirmed = false;
 
 
         // Check if we're already logged in, and if so, link the user to it.
@@ -115,6 +138,7 @@ class SigninController extends Controller
 
             if(!$mensaUser->confirmed){
                 // TODO send email
+                // TODO Watch out that the user or an admin isn't just editing!
             }
         }
 
@@ -129,19 +153,13 @@ class SigninController extends Controller
         }
 
         // Here we check the intro stuff. Whoop whoop!
-        if($request->has('intro')){
-            $introUser = new MensaUser();
+        if($request->has('intro')){ 
             $introUser->lidnummer = $mensaUser->lidnummer;
-            $introUser->cooks = false;
+            $introUser->confirmed = $mensaUser->confirmed;
             $introUser->dishwasher = (bool)$request->has('dishwasher');
-            $introUser->is_intro = true;
             $introUser->allergies = $request->input('intro_allergies');
             $introUser->wishes = $request->input('intro_wishes');
-            $introUser->paid = false;
-            $introUser->confirmed = $mensaUser->confirmed;
-            $introUser->confirmation_code = $mensaUser->confirmation_code;
 
-            $introUser->mensa()->associate($mensa);
             $introUser->save();
             $introUser->extraOptions()->delete();
             foreach($request->all('intro_extra') as $id){
@@ -152,11 +170,6 @@ class SigninController extends Controller
             }
         }
 
-        if($user != null && $user->mensa_admin && $request->has('redirect')){
-            return redirect($request->get('redirect'))->with('info', 'Gebruiker succesvol ingeschreven.');
-        }
-
-        // TODO give signup feedback
         return redirect(route('home'))->with('info', 'Je hebt je succesvol ingeschreven!');
     }
 
