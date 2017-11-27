@@ -16,25 +16,39 @@ class SigninController extends Controller
 {
     use LdapHelpers;
 
-    public function signin(Request $request, $id, $userToken = null){
-        try {
-            $mensa = Mensa::findOrFail($id);
-        } catch(ModelNotFoundException $e){
-            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
-        }
+    public function mailSignin(Request $request, $userToken){
+        return $this->signin($request, null, $userToken);
+    }
+
+    public function signin(Request $request, $id = null, $userToken = null){
 
         $mensaUser = null;
+        $mensa = null;
+        // First we try if we can get the mensa by the user token
         if($userToken != null){
             try {
                 // We want to create a query object to search for a certain signin
-                $userQuery = MensaUser::where('is_intro', '0')->where('confirmation_token', $userToken);
+                $userQuery = MensaUser::where('is_intro', '0')->where('confirmation_code', $userToken);
                 // And ONLY if we're admin, we allow to do it with the id too
                 if(Auth::check() && Auth::user()->mensa_admin)
-                    $userQuery = $userQuery->where('id', $userToken);
+                    $userQuery = $userQuery->orWhere('id', $userToken);
 
                 $mensaUser = $userQuery->firstOrFail();
+                $mensa = $mensaUser->mensa;
+
+                if($mensaUser->is_intro){
+                    $introUser = $mensaUser;
+                    $mensaUser = $mensaUser->mainUser();
+                }
             } catch(ModelNotFoundException $e){
                 return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als dit een fout is neem dan contact op met '.env('MENSA_CONTACT_MAIL').'.');
+            }
+        } else {
+            // If we can't get the mensa by the user token, we try to get it by the mensaId
+            try {
+                $mensa = Mensa::findOrFail($id);
+            } catch(ModelNotFoundException $e){
+                return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
             }
         }
 
@@ -52,7 +66,7 @@ class SigninController extends Controller
         }
 
         if($mensaUser->intros()->count() > 0){
-            $introUser = $mensaUser->intros()->get(0);
+            $introUser = $mensaUser->intros()->first();
         } else {
             $introUser = new MensaUser();
 
@@ -78,7 +92,7 @@ class SigninController extends Controller
                 $mensaUser->user()->associate(new User());
             }
 
-            return view('signin', compact('mensaUser'));
+            return view('signin', compact('mensaUser', 'introUser'));
         }
 
         // Else we continue and sign the person in.
@@ -99,6 +113,9 @@ class SigninController extends Controller
                 'intro_wishes' => 'max:191',
                 'intro_extra.*' => 'exists:mensa_extra_options,id',
             ]);
+        } else {
+            // If the user doesn't want to have intros, we just try to delete them, if he had any
+            $mensaUser->intros()->delete();
         }
 
         $user = null;

@@ -66,7 +66,7 @@ class MensaController extends Controller
         }
 
         if($request->isMethod('get')){
-            return view('mensae.edit', compact('mensa'));
+            return view('mensae.editmensa', compact('mensa'));
         }
 
         $request->validate([
@@ -121,43 +121,6 @@ class MensaController extends Controller
         ]);
     }
 
-    public function editSignin(Request $request, $mensaId, $userId){
-        try {
-            $mensaUser = MensaUser::findOrFail($userId);
-        } catch(ModelNotFoundException $e){
-            return redirect(route('mensa.signins', ['id' => $mensaId]))->with('error', 'Gebruiker niet gevonden!');
-        }
-
-        if($request->isMethod('get')){
-            return view('mensae.editsignin', compact('mensaUser'));
-        }
-
-
-        // We validate the request
-        $request->validate([
-            'allergies' => 'max:191',
-            'wishes' => 'max:191',
-            'extra.*' => 'exists:mensa_extra_options,id',
-        ]);
-
-        $mensaUser->cooks = (bool)$request->has('cooks');
-        $mensaUser->dishwasher = (bool)$request->has('dishwasher');
-        $mensaUser->allergies = $request->input('allergies');
-        $mensaUser->wishes = $request->input('wishes');
-
-        // And lastly we save the user
-        $mensaUser->save();
-        foreach($request->all('extra') as $id){
-            try {
-                $extraOption = $mensaUser->mensa->extraOptions()->findOrFail($id);
-                $mensaUser->extraOptions()->attach($extraOption);
-            } catch(ModelNotFoundException $e){}
-        }
-
-        return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', 'De gebruiker '.$mensaUser->user->name.' is aangepast!');
-
-    }
-
     public function removeSignin(Request $request, $mensaId, $userId){
         try {
             $mUser = MensaUser::findOrFail($userId);
@@ -174,6 +137,7 @@ class MensaController extends Controller
         return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
     }
 
+    // This is for if you're an admin
     public function newSignin(Request $request, $mensaId){
         try {
             $mensa = Mensa::findOrFail($mensaId);

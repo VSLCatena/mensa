@@ -43,8 +43,4 @@ class ConfirmController extends Controller
 
         return redirect(route('home'))->with('info', 'Inschrijving succesvol bevestigd!');
     }
-
-    public function edit($code){
-
-    }
 }

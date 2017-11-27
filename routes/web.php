@@ -8,7 +8,7 @@ Route::post('logout', 'LoginController@logout')->name('logout');
 
 // Verify confirmation and sign out
 Route::get('signin/{code}/confirm', 'ConfirmController@confirm')->name('signin.confirm');
-Route::get('signin/{code}/edit', 'ConfirmController@edit')->name('signin.edit');
+Route::match(['get', 'post'], 'signin/{userId}/edit', 'SigninController@mailSignin')->name('signin.edit');
 Route::get('signin/{code}/signout', 'ConfirmController@cancel')->name('signin.cancel');
 
 
@@ -29,7 +29,7 @@ Route::prefix('mensa')->group(function() {
     // Mensa administration
     Route::post('{mensaId}/togglepaid', 'MensaController@togglePaid')->name('mensa.togglepaid');
     Route::match(['get', 'post'], '{mensaId}/signin/new', 'MensaController@newSignin')->name('mensa.newsignin');
-    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'MensaController@editSignin')->name('mensa.editsignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'SigninController@signin')->name('mensa.editsignin');
     Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', 'MensaController@removeSignin')->name('mensa.removesignin');
 });
 
