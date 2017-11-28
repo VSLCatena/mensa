@@ -99,6 +99,26 @@
                 </div>
             </div>
         @endif
+        @if(session('warning'))
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-warning" id="warning-panel">
+                            <div class="panel-heading">
+                                Warning
+                                <button type="button" class="close" data-target="#warning-panel" data-dismiss="alert">
+                                    <span aria-hidden="true">&times;</span>
+                                    <span class="sr-only">Close</span>
+                                </button>
+                            </div>
+                            <div class="panel-body">
+                                {{ session('warning') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         @if(session('info'))
             <div class="container">
                 <div class="row">

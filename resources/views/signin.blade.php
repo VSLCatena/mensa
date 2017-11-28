@@ -21,7 +21,7 @@
                             <input type="hidden" name="signup" value="true" />
                             <div class="form-group">
                                 <label for="email">Email:</label>
-                                <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control" {{ session('asAdmin')?'readonly': '' }} />
+                                <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control" {{ (session('asAdmin') || $mensaUser->id)?'readonly': '' }} />
                             </div>
                             <div class="form-group">
                                 <label for="allergies">Allergie&euml;n:</label>

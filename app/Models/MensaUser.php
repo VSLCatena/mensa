@@ -24,7 +24,7 @@ class MensaUser extends Model
     }
 
     public function mainUser(){
-        return $this->hasMany('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
+        return $this->hasOne('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
     }
 
     public function user(){
