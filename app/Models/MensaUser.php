@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MensaUser extends Model
 {
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
+
     public function extraOptions(){
         return $this->belongsToMany('App\Models\MensaExtraOption', 'mensa_user_extra_options', 'mensa_user_id', 'mensa_extra_option_id');
     }

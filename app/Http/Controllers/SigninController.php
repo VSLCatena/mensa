@@ -23,6 +23,7 @@ class SigninController extends Controller
     public function signin(Request $request, $id = null, $userToken = null){
 
         $mensaUser = null;
+        $introUser = null;
         $mensa = null;
         // First we try if we can get the mensa by the user token
         if($userToken != null){
@@ -65,17 +66,20 @@ class SigninController extends Controller
             $mensaUser->mensa()->associate($mensa);
         }
 
-        if($mensaUser->intros()->count() > 0){
-            $introUser = $mensaUser->intros()->first();
-        } else {
-            $introUser = new MensaUser();
+        if($introUser == null){
+            if($mensaUser->intros()->count() > 0){
+                $introUser = $mensaUser->intros()->first();
+            } else {
+                $introUser = new MensaUser();
 
-            $introUser->is_intro = true;
-            $introUser->cooks = false;
-            $introUser->paid = false;
-            $introUser->confirmation_code = $mensaUser->confirmation_code;
-            $introUser->mensa()->associate($mensa);
+                $introUser->is_intro = true;
+                $introUser->cooks = false;
+                $introUser->paid = false;
+                $introUser->confirmation_code = $mensaUser->confirmation_code;
+                $introUser->mensa()->associate($mensa);
+            }
         }
+
 
         // If method is get we want to just show the view
         if($request->isMethod('get')){

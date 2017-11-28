@@ -34,13 +34,12 @@ class ConfirmController extends Controller
             return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
         }
 
-        $mensaUser->confirmed = false;
-        // TODO how are we going to sign outs
-        $mensaUser->save();
-
+        // This is just a soft-delete. This is because we might need to retrieve information later.
+        $mensaUser->intros()->delete();
+        $mensaUser->delete();
 
         // TODO Send email
 
-        return redirect(route('home'))->with('info', 'Inschrijving succesvol bevestigd!');
+        return redirect(route('home'))->with('info', 'Je hebt je succesvol uitgeschreven!');
     }
 }
