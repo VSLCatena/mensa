@@ -43,7 +43,7 @@
                             @endif
                             <div class="form-group">
                                 <input type="checkbox" name="intro" id="intro" class="form-check-input" {{ $introUser->id==true?'checked':'' }} />
-                                <label>Met 1 intro</label>
+                                <label for="intro">Met 1 intro</label>
                             </div>
                             <div class="intro" style="{{ $introUser->id==true?'':'display: none;' }}">
                                 <div class="form-group">
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" />
+                                <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" {{ old('dishwasher', $mensaUser->dishwasher)?'checked':'' }} />
                                 <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="display: none;">(met intro)</span></label>
                             </div>
                             <input type="submit" value="Inschrijven" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ route('home') }}" class="btn btn-default">Terug</a>
