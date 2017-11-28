@@ -164,7 +164,6 @@ class SigninController extends Controller
             }
         }
 
-
         // If this is a new user, we want to check if the user already signed in previously or not
         // and if so (silly him), we just want to update the previous one
         if($mensaUser->id == null){
@@ -181,12 +180,21 @@ class SigninController extends Controller
                 }
 
                 $request->session()->flash('warning', 'We hebben een oude inschrijving voor deze mensa van je gevonden, deze hebben we geupdatet!');
+            } else {
+                if(Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer) {
+                    $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
+                } else {
+                    $request->session()->flash('info', 'Persoon succesvol ingeschreven!');
+                }
             }
-
+        } else {
+            $request->session()->flash('info', 'Inschrijving succesvol aangepast!');
         }
 
         // We need to update late, because we might retrieve a new mensaUser when we find a duplicate
+        $mensaUser->cooks = (Auth::check() && Auth::user()->mensa_admin) && ((bool)$request->has('cooks'));
         $mensaUser->dishwasher = (bool)$request->has('dishwasher');
+        $mensaUser->vegetarian = (bool)$request->has('vegetarian');
         $mensaUser->allergies = $request->input('allergies');
         $mensaUser->extra_info = $request->input('extrainfo');
 
@@ -206,7 +214,8 @@ class SigninController extends Controller
         if($request->has('intro')){ 
             $introUser->lidnummer = $mensaUser->lidnummer;
             $introUser->confirmed = $mensaUser->confirmed;
-            $introUser->dishwasher = (bool)$request->has('dishwasher');
+            $introUser->dishwasher = $mensaUser->dishwasher;
+            $introUser->vegetarian = (bool)$request->has('intro_vegetarian');
             $introUser->allergies = $request->input('intro_allergies');
             $introUser->extra_info = $request->input('intro_extrainfo');
 
@@ -223,7 +232,10 @@ class SigninController extends Controller
             $mensaUser->intros()->delete();
         }
 
-        return redirect(route('home'))->with('info', 'Je hebt je succesvol ingeschreven!');
+        $route = (Auth::check() && Auth::user()->mensa_admin) ?
+            route('mensa.signins', ['id' => $mensa->id]) :
+            route('home');
+        return redirect($route);
     }
 
     public function signout(Request $request){

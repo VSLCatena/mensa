@@ -3,7 +3,8 @@
 @section('overview.content')
     <div class="alert alert-{{ $payingUsers >= env('MENSA_MINIMUM_PAYING_SIGNINS', 6) ? 'success':'danger' }}">
         Er {{ ($users!=1)?'zijn':'is' }} in totaal {{ $users }} eter{{ ($users!=1)?'s':'' }}
-        waarvan {{ $intros }} introduc&eacute;{{ ($intros != 1)?'s':'' }}.
+        waarvan {{ $intros }} introduc&eacute;{{ ($intros != 1)?'s':'' }}.<br />
+        {{ $vegetarians }} hiervan zijn vegetarisch.
         <br />
         @if($payingUsers < env('MENSA_MINIMUM_PAYING_SIGNINS', 6))
             Minimaal {{ env('MENSA_MINIMUM_PAYING_SIGNINS', 6) }} (betalende) gasten zijn nodig om de mensa mogelijk te maken. Op dit moment zijn het er {{ $payingUsers }}.

@@ -24,6 +24,10 @@
                                 <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control" {{ (session('asAdmin') || $mensaUser->id)?'readonly': '' }} />
                             </div>
                             <div class="form-group">
+                                <input type="checkbox" name="vegetarian" id="vegetarian" class="form-check-input" {{ $mensaUser->vegetarian?'checked':'' }} />
+                                <label for="vegetarian">Vegetarisch</label>
+                            </div>
+                            <div class="form-group">
                                 <label for="allergies">Allergie&euml;n:</label>
                                 <input id="allergies" name="allergies" value="{{ old('allergies', $mensaUser->allergies) }}" class="form-control"  />
                             </div>
@@ -41,11 +45,16 @@
                                 </div>
                                 <br />
                             @endif
+                            <br />
                             <div class="form-group">
                                 <input type="checkbox" name="intro" id="intro" class="form-check-input" {{ $introUser->id==true?'checked':'' }} />
                                 <label for="intro">Met 1 intro</label>
                             </div>
                             <div class="intro" style="{{ $introUser->id==true?'':'display: none;' }}">
+                                <div class="form-group">
+                                    <input type="checkbox" name="intro_vegetarian" id="intro_vegetarian" class="form-check-input" {{ $introUser->vegetarian?'checked':'' }} />
+                                    <label for="intro_vegetarian">Intro vegetarisch</label>
+                                </div>
                                 <div class="form-group">
                                     <label for="intro_allergies">Intro allergie&euml;n:</label>
                                     <input id="intro_allergies" name="intro_allergies" value="{{ old('intro_allergies', $introUser->allergies) }}" class="form-control"  />
@@ -64,12 +73,19 @@
                                     </div>
                                     <br />
                                 @endif
+                                <br />
+                                <br />
                             </div>
-
                             <div class="form-group">
                                 <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" {{ old('dishwasher', $mensaUser->dishwasher)?'checked':'' }} />
-                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="display: none;">(met intro)</span></label>
+                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="{{ $introUser->id==true?'':'display: none;' }}">(met intro)</span></label>
                             </div>
+                            @admin
+                                <div class="form-group">
+                                    <input type="checkbox" id="cooks" name="cooks" class="form-check-input" {{ old('cooks', $mensaUser->cooks)?'checked':'' }} />
+                                    <label for="cooks">Koker</label>
+                                </div>
+                            @endadmin
                             <input type="submit" value="{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (Auth::check() && Auth::user()->mensa_admin)?route('mensa.signins', ['id' => $mensaUser->mensa->id]):route('home') }}" class="btn btn-default">Terug</a>
                         </form>
                         <script type="text/javascript">

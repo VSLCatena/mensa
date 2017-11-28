@@ -6,9 +6,7 @@
             <tr>
                 <th>Bevestigd</th>
                 <th>Naam</th>
-                <th>Allergie&euml;n/vegetarisch</th>
-                <th>Koker</th>
-                <th>Afwasser</th>
+                <th>Allergie&euml;n & extra info</th>
                 <th>Betaald</th>
                 <th>Inschrijftijd</th>
                 <th>Acties</th>
@@ -28,22 +26,23 @@
                         {{ $mUser->phonenumber }}
                     </td>
                     <td>
+                        <div class="pull-right">
+                            @if($mUser->uvegetarian)
+                                &nbsp;<span class="label label-success label-yesno">Vego</span>
+                            @endif
+                            @if($mUser->cooks)
+                                &nbsp;<span class="label label-primary label-yesno">Koker</span>
+                            @endif
+                            @if($mUser->dishwasher)
+                                &nbsp;<span class="label label-primary label-yesno">Afwasser</span>
+                            @endif
+                        </div>
                         @if(!empty($mUser->uallergies))
                             Allergie&euml;n: {{ $mUser->uallergies }}<br />
                         @endif
                         @if(!empty($mUser->uextra_info))
                                 Extra info: {{ $mUser->uextra_info }}
                             @endif
-                    </td>
-                    <td>
-                        @if($mUser->cooks) <span class="label label-success label-yesno">Ja</span>
-                        @else <span class="label label-default label-yesno">Nee</span>
-                        @endif
-                    </td>
-                    <td>
-                        @if($mUser->dishwasher) <span class="label label-success label-yesno">Ja</span>
-                        @else <span class="label label-default label-yesno">Nee</span>
-                        @endif
                     </td>
                     <td>
                         @if($mUser->cooks || $mUser->dishwasher)

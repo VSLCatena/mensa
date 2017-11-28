@@ -30,10 +30,11 @@ class MensaController extends Controller
         $intros = $mensa->users()->where('is_intro', '1')->count();
         $cooks = $mensa->users()->where('cooks', '1')->count();
         $dishwashers = $mensa->users()->where('dishwasher', '1')->count();
+        $vegetarians = $mensa->users()->where('vegetarian', '1')->count();
         $budget = $mensa->budget();
         $payingUsers = $mensa->users()->where('cooks', '0')->where('dishwasher', '0')->count();
 
-        return view('mensae.overview', compact('mensa', 'users', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
+        return view('mensae.overview', compact('mensa', 'users', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
     }
 
     public function showSignins(Request $request, $id){
@@ -43,10 +44,11 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
-        $users = $mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies'))->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
+        $users = $mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
             ->orderBy('mensa_users.cooks', 'DESC')
             ->orderBy('mensa_users.dishwasher', 'DESC')
-            ->orderBy('users.name')->get();
+            ->orderBy('users.name')
+            ->orderBy('mensa_users.is_intro')->get();
 
         return view('mensae.signins', compact('mensa', 'users'));
     }
@@ -153,7 +155,7 @@ class MensaController extends Controller
             'email' => 'required|email',
         ]);
 
-        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('email', $request->get('email'));
+        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('extra_email', $request->get('email'));
     }
 
     public function requestUserLookup(Request $request){
