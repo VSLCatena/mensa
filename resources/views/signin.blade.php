@@ -24,12 +24,12 @@
                                 <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user->email) }}" class="form-control" {{ session('asAdmin')?'readonly': '' }} />
                             </div>
                             <div class="form-group">
-                                <label for="wishes">Wensen:</label>
-                                <input id="wishes" name="wishes" value="{{ old('wishes', $mensaUser->wishes) }}" class="form-control"  />
-                            </div>
-                            <div class="form-group">
                                 <label for="allergies">Allergie&euml;n:</label>
                                 <input id="allergies" name="allergies" value="{{ old('allergies', $mensaUser->allergies) }}" class="form-control"  />
+                            </div>
+                            <div class="form-group">
+                                <label for="extrainfo">Extra informatie:</label>
+                                <input id="extrainfo" name="extrainfo" value="{{ old('extrainfo', $mensaUser->extra_info) }}" class="form-control"  />
                             </div>
                             @if($mensaUser->mensa->extraOptions()->count() > 0)
                                 <div class="form-group">
@@ -47,12 +47,12 @@
                             </div>
                             <div class="intro" style="{{ $introUser->id==true?'':'display: none;' }}">
                                 <div class="form-group">
-                                    <label for="intro_wishes">Intro wensen:</label>
-                                    <input id="intro_wishes" name="intro_wishes" value="{{ old('intro_wishes', $introUser->wishes) }}" class="form-control"  />
-                                </div>
-                                <div class="form-group">
                                     <label for="intro_allergies">Intro allergie&euml;n:</label>
                                     <input id="intro_allergies" name="intro_allergies" value="{{ old('intro_allergies', $introUser->allergies) }}" class="form-control"  />
+                                </div>
+                                <div class="form-group">
+                                    <label for="intro_extrainfo">Extra informatie:</label>
+                                    <input id="intro_extrainfo" name="intro_extrainfo" value="{{ old('intro_extrainfo', $introUser->extra_info) }}" class="form-control"  />
                                 </div>
                                 @if($mensaUser->mensa->extraOptions()->count() > 0)
                                     <div class="form-group">

@@ -31,8 +31,8 @@
                         @if(!empty($mUser->uallergies))
                             Allergie&euml;n: {{ $mUser->uallergies }}<br />
                         @endif
-                        @if(!empty($mUser->uwishes))
-                                Wensen: {{ $mUser->uwishes }}
+                        @if(!empty($mUser->uextra_info))
+                                Extra info: {{ $mUser->uextra_info }}
                             @endif
                     </td>
                     <td>

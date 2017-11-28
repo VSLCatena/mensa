@@ -91,7 +91,7 @@ class SigninController extends Controller
             } else if(Auth::check()){
                 $mensaUser->user()->associate(Auth::user());
                 $mensaUser->allergies = Auth::user()->allergies;
-                $mensaUser->wishes = Auth::user()->wishes;
+                $mensaUser->extra_info = Auth::user()->extra_info;
             } else {
                 $mensaUser->user()->associate(new User());
             }
@@ -106,7 +106,7 @@ class SigninController extends Controller
         $request->validate([
             'email' => 'required|email',
             'allergies' => 'max:191',
-            'wishes' => 'max:191',
+            'extrainfo' => 'max:191',
             'extra.*' => 'exists:mensa_extra_options,id',
         ]);
 
@@ -114,7 +114,7 @@ class SigninController extends Controller
         if($request->has('intro')){
             $request->validate([
                 'intro_allergies' => 'max:191',
-                'intro_wishes' => 'max:191',
+                'intro_extrainfo' => 'max:191',
                 'intro_extra.*' => 'exists:mensa_extra_options,id',
             ]);
         } else {
@@ -130,7 +130,7 @@ class SigninController extends Controller
 
         $mensaUser->dishwasher = (bool)$request->has('dishwasher');
         $mensaUser->allergies = $request->input('allergies');
-        $mensaUser->wishes = $request->input('wishes');
+        $mensaUser->extra_info = $request->input('extrainfo');
 
 
         // Check if we're already logged in, and if so, link the user to it.
@@ -179,7 +179,7 @@ class SigninController extends Controller
             $introUser->confirmed = $mensaUser->confirmed;
             $introUser->dishwasher = (bool)$request->has('dishwasher');
             $introUser->allergies = $request->input('intro_allergies');
-            $introUser->wishes = $request->input('intro_wishes');
+            $introUser->extra_info = $request->input('intro_extrainfo');
 
             $introUser->save();
             $introUser->extraOptions()->delete();

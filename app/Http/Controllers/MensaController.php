@@ -43,7 +43,7 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
-        $users = $mensa->users()->select(DB::raw('*, mensa_users.wishes as uwishes, mensa_users.allergies as uallergies'))->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
+        $users = $mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies'))->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
             ->orderBy('mensa_users.cooks', 'DESC')
             ->orderBy('mensa_users.dishwasher', 'DESC')
             ->orderBy('users.name')->get();
