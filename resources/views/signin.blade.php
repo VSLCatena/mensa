@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Inschrijven voor de mensa op {{ formatDate($mensaUser->mensa->date) }}</div>
+                    <div class="panel-heading">{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }} voor de mensa op {{ formatDate($mensaUser->mensa->date) }}</div>
                     <div class="panel-body">
                         @guest
                             <div class="alert alert-info">
@@ -70,7 +70,7 @@
                                 <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" {{ old('dishwasher', $mensaUser->dishwasher)?'checked':'' }} />
                                 <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="display: none;">(met intro)</span></label>
                             </div>
-                            <input type="submit" value="Inschrijven" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ route('home') }}" class="btn btn-default">Terug</a>
+                            <input type="submit" value="{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (Auth::check() && Auth::user()->mensa_admin)?route('mensa.signins', ['id' => $mensaUser->mensa->id]):route('home') }}" class="btn btn-default">Terug</a>
                         </form>
                         <script type="text/javascript">
                             $("#intro").click(function(){
