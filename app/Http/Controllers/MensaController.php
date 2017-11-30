@@ -102,6 +102,9 @@ class MensaController extends Controller
 
         $mensa->save(); // Save it already to retrieve the mensas ID
 
+        // We want to remove all extra options that haven't been provided in the request
+        $syncIds = array();
+
         $prices = $request->all('price')['price'];
         for($i = 1; $i < count($prices); $i++){
             if(isset($prices[$i]['id'])) {
@@ -113,7 +116,13 @@ class MensaController extends Controller
             $mensaPrice->price = $prices[$i]['price'];
             $mensaPrice->mensa()->associate($mensa);
             $mensaPrice->save();
+
+            // Add the mensaPrice to the syncIds so it won't be deleted!
+            $syncIds[] = $mensaPrice->id;
         }
+
+        // Delete all extra options that aren't included anymore
+        $mensa->extraOptions()->whereNotIn('id', $syncIds)->delete();
 
 
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
