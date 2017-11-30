@@ -6,6 +6,7 @@ use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
 use App\Traits\LdapHelpers;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -83,10 +84,22 @@ class MensaController extends Controller
         ]);
 
         $mensa->title = $request->input('title');
-        $mensa->date = date("Y-m-d H:i:s", strtotime($request->input('date')));
-        $mensa->closing_time = date("Y-m-d H:i:s", strtotime($request->input('closing_time')));
+        $mensa->date = date(new Carbon($request->input('date')));
+        $mensa->closing_time = date(new Carbon($request->input('closing_time')));
         $mensa->max_users = $request->input('max_users');
         $mensa->price = $request->input('price.0.price');
+
+        // If this is a new mensa, we first check if there doesn't already exist one on this day
+        if($mensa->id == null){
+            $count = Mensa::whereBetween('date', [
+                (new Carbon($request->input('date')))->startOfDay(),
+                (new Carbon($request->input('date')))->endOfDay()
+            ])->count();
+            if($count > 0){
+                return redirect(route('home'))->with('error', 'Er bestaat al een mensa op die dag!');
+            }
+        }
+
         $mensa->save(); // Save it already to retrieve the mensas ID
 
         $prices = $request->all('price')['price'];
