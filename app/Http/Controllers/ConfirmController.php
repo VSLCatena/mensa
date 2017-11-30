@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SigninConfirmed;
 use App\Models\MensaUser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Mail;
 
 class ConfirmController extends Controller
 {
@@ -22,7 +24,7 @@ class ConfirmController extends Controller
         $mensaUser->save();
 
 
-        // TODO Send email
+        Mail::to($mensaUser->user)->send(new SigninConfirmed($mensaUser));
 
         return redirect(route('home'))->with('info', 'Inschrijving succesvol bevestigd!');
     }

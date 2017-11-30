@@ -30,6 +30,7 @@ class SigninConfirmed extends Mailable
      */
     public function build()
     {
+        $this->subject('Inschrijving bevestigd voor de mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false));
         return $this->markdown('emails.signin.confirmed', ['mensaUser' => $this->mensaUser]);
     }
 }
