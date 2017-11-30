@@ -22,7 +22,7 @@
                 <br />
                 Extra optie <i>{{ $extraOption->description }}</i>
                 is {{ $extraOption->users()->count() }}x gekozen
-                (budget van &euro;{{ number_format($payingUsers * $extraOption->price, 2) }})
+                (budget van &euro;{{ number_format($extraOption->users()->count() * $extraOption->price, 2) }})
             @endforeach
             <br />
             Dan is er nog &euro;{{ number_format($mensa->defaultBudget(), 2) }} over voor de rest.
