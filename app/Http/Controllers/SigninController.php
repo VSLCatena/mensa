@@ -38,7 +38,7 @@ class SigninController extends Controller
 
 
         // We want to keep asAdmin and extra_email around
-        if($request->session()->has('asAdmin')) {
+        if(Auth::check() && Auth::user()->is_admin && $request->session()->has('asAdmin')) {
             $request->session()->reflash();
             // Except the default warnings and such, it's annoying to have them go with us after redirecting
             $request->session()->remove('info');
@@ -55,8 +55,6 @@ class SigninController extends Controller
                 // And ONLY if we're admin, we allow to do it with the id too
                 if(Auth::check() && Auth::user()->mensa_admin){
                     $userQuery = $userQuery->orWhere('id', $userToken);
-                    $request->session()->flash('asAdmin', true);
-                    $request->session()->reflash();
                 }
 
                 $mensaUser = $userQuery->firstOrFail();
@@ -114,7 +112,7 @@ class SigninController extends Controller
 
         // If method is get we want to just show the view
         if($request->isMethod('get')) {
-            if ($mensaUser == null) {
+            if ($mensaUser->id == null) {
 
                 // We can give some feedback for the mensa is full
                 if ($mensa->max_users >= $mensa->users()->count()) {

@@ -180,7 +180,7 @@ class MensaController extends Controller
             'email' => 'required|email',
         ]);
 
-        return redirect(route('signin', ['id' => $mensaId]))->with('extra_email', $request->get('email'));
+        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('extra_email', $request->get('email'));
     }
 
     public function requestUserLookup(Request $request){
