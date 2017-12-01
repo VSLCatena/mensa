@@ -35,7 +35,7 @@ class Mensa extends Model
             $extra_options = DB::select('SELECT SUM(extra.price) as budget FROM mensa_users AS m_users
 LEFT JOIN mensa_user_extra_options AS users_extra ON users_extra.mensa_user_id=m_users.id
 LEFT JOIN mensa_extra_options AS extra ON extra.id=users_extra.mensa_extra_option_id
-WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.dishwasher=0', [$this->id, $this->id]);
+WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.dishwasher=0 AND m_users.deleted_at IS NULL', [$this->id, $this->id]);
             $budget = $extra_options[0]->budget;
 
             // We add the default budget that you
@@ -53,13 +53,19 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
             // We grab the amount of users that actually has to pay the normal price
             $paying_users = $this->users()->where('cooks', '0')->where('dishwasher', '0')->count();
 
-            if($this->dishwashers() == 0){
+            // We want to take into account that if there are no cooks, we won't have the budget for it
+            if($this->users()->where('cooks', '0')->count() < 1){
+                $paying_users--;
+            }
+
+            // And same with dishwashers, if we don't have any dishwashers yet, we won't have the budget for it
+            if($this->dishwashers() < 1){
                 $paying_users--;
             }
 
             // We subtract the amount that goes to the kitchen (which is 30 cents)
             // And we subtract the amount that goes to the dishwashers (which is 50 cents)
-            $this->defaultBudget = $paying_users * ($this->price - (0.30 + 0.50));
+            $this->defaultBudget = $paying_users * ($this->price - (env('MENSA_SUBTRACT_KITCHEN', 0.30) + env('MENSA_SUBTRACT_DISHWASHER', 0.50)));
         }
 
         return $this->defaultBudget;

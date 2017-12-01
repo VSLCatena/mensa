@@ -22,6 +22,7 @@ class MensaController extends Controller
 
     public function showOverview(Request $request, $id){
         try {
+            /* @var $mensa Mensa */
             $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
@@ -40,6 +41,7 @@ class MensaController extends Controller
 
     public function showSignins(Request $request, $id){
         try {
+            /* @var $mensa Mensa */
             $mensa = Mensa::findOrFail($id);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
@@ -57,6 +59,7 @@ class MensaController extends Controller
     public function edit(Request $request, $id = null){
         try {
             if($id != null){
+                /* @var $mensa Mensa */
                 $mensa = Mensa::findOrFail($id);
             } else {
                 $mensa = new Mensa();
@@ -177,7 +180,7 @@ class MensaController extends Controller
             'email' => 'required|email',
         ]);
 
-        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('extra_email', $request->get('email'));
+        return redirect(route('signin', ['id' => $mensaId]))->with('extra_email', $request->get('email'));
     }
 
     public function requestUserLookup(Request $request){

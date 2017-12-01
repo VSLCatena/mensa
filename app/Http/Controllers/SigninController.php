@@ -53,8 +53,11 @@ class SigninController extends Controller
                 /* @var $userQuery \Doctrine\DBAL\Query\QueryBuilder */
                 $userQuery = MensaUser::where('confirmation_code', $userToken);
                 // And ONLY if we're admin, we allow to do it with the id too
-                if(Auth::check() && Auth::user()->mensa_admin)
+                if(Auth::check() && Auth::user()->mensa_admin){
                     $userQuery = $userQuery->orWhere('id', $userToken);
+                    $request->session()->flash('asAdmin', true);
+                    $request->session()->reflash();
+                }
 
                 $mensaUser = $userQuery->firstOrFail();
                 $mensa = $mensaUser->mensa;
@@ -110,27 +113,28 @@ class SigninController extends Controller
 
 
         // If method is get we want to just show the view
-        if($request->isMethod('get')){
-            // We can give some feedback for the mensa is full
-            if($mensaUser == null && $mensa->max_users >= $mensa->users()->count()){
-                $request->session()->flash('warning', 'Deze mensa zit vol!');
-            }
+        if($request->isMethod('get')) {
+            if ($mensaUser == null) {
 
-            // Are we requesting this page as an admin? Then we fill in the email we provided
-            if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')){
-                $user = new User();
-                $user->email = session('extra_email');
-                $mensaUser->user()->associate($user);
-            }
-            // If we are logged in, we can auto fill some info
-            else if(Auth::check()){
-                $mensaUser->user()->associate(Auth::user());
-                $mensaUser->allergies = Auth::user()->allergies;
-                $mensaUser->extra_info = Auth::user()->extra_info;
-            }
-            // Otherwise we associate an empty user to it
-            else {
-                $mensaUser->user()->associate(new User());
+                // We can give some feedback for the mensa is full
+                if ($mensa->max_users >= $mensa->users()->count()) {
+                    $request->session()->flash('warning', 'Deze mensa zit vol!');
+                }
+
+                // Are we requesting this page as an admin? Then we fill in the email we provided
+                if (Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')) {
+                    $user = new User();
+                    $user->email = session('extra_email');
+                    $mensaUser->user()->associate($user);
+                } // If we are logged in, we can auto fill some info
+                else if (Auth::check()) {
+                    $mensaUser->user()->associate(Auth::user());
+                    $mensaUser->allergies = Auth::user()->allergies;
+                    $mensaUser->extra_info = Auth::user()->extra_info;
+                } // Otherwise we associate an empty user to it
+                else {
+                    $mensaUser->user()->associate(new User());
+                }
             }
 
             return view('signin', compact('mensaUser', 'introUser'));
@@ -257,7 +261,7 @@ class SigninController extends Controller
         // And lastly we save the user
         $mensaUser->save();
         // Delete all previous extra options, having to update each one of them is just too much of a hassle
-        $mensaUser->extraOptions()->delete();
+        $mensaUser->extraOptions()->detach();
         foreach($request->all('extra') as $id){
             try {
                 $extraOption = $mensa->extraOptions()->findOrFail($id);
@@ -275,7 +279,7 @@ class SigninController extends Controller
             $introUser->extra_info = $request->input('intro_extrainfo');
 
             $introUser->save();
-            $introUser->extraOptions()->delete();
+            $introUser->extraOptions()->detach();
             foreach($request->all('intro_extra') as $id){
                 try {
                     $extraOption = $mensa->extraOptions()->findOrFail($id);

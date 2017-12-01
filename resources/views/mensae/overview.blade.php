@@ -13,7 +13,7 @@
         @else
             Het budget bedraagt &euro;{{ number_format($budget - ($mensa->price - env('MENSA_SUBTRACT_KITCHEN')), 2) }}.
             Wanneer er geen tweede afwasser gekozen wordt,
-            is het budget {{ number_format($budget, 2) }}
+            is het budget &euro;{{ number_format($budget, 2) }}
         @endif
         @if($mensa->extraOptions->count() > 0 && $payingUsers >= env('MENSA_MINIMUM_PAYING_SIGNINS', 6))
             <br /><br />
@@ -22,10 +22,15 @@
                 <br />
                 Extra optie <i>{{ $extraOption->description }}</i>
                 is {{ $extraOption->users()->count() }}x gekozen
-                (budget van &euro;{{ number_format($extraOption->users()->count() * $extraOption->price, 2) }})
+                (budget van &euro;{{ number_format($extraOption->users()->where('dishwasher', '0')->where('cooks', '0')->count() * $extraOption->price, 2) }})
             @endforeach
             <br />
-            Dan is er nog &euro;{{ number_format($mensa->defaultBudget(), 2) }} over voor de rest.
+            @if($dishwashers > 1 || $users < env('MENSA_SECOND_DISHWASHER', 15))
+                Dan is er nog &euro;{{ number_format($mensa->defaultBudget(), 2) }} over voor de rest.
+            @else
+                Dan is er nog &euro;{{ number_format($mensa->defaultBudget() - ($mensa->price - env('MENSA_SUBTRACT_KITCHEN')), 2) }} over voor de rest.
+                <i><small>(mits er geen tweede afwasser wordt gekozen)</small></i>
+            @endif
         @endif
     </div>
     <div class="alert alert-{{ $cooks ? 'success' : 'danger' }}">
