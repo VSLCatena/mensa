@@ -9,8 +9,9 @@ class Mensa extends Model
 {
     private $dishwashers = null;
     private $cooks = null;
-    private $defaultBudget = null;
-    private $budget = null;
+    private $defaultBudget = [null, null];
+    private $budget = [null, null];
+    private $payingUsers = null;
 
     public function users()
     {
@@ -28,8 +29,8 @@ class Mensa extends Model
         return $this->hasMany('App\Models\MensaExtraOption');
     }
 
-    public function budget(){
-        if($this->budget === null){
+    public function budget($raw = false){
+        if($this->budget[$raw?0:1] === null){
             // This query grabs all the users' extra options that are not cooking and are not washing dishes
             // and then summarize it
             $extra_options = DB::select('SELECT SUM(extra.price) as budget FROM mensa_users AS m_users
@@ -39,36 +40,90 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
             $budget = $extra_options[0]->budget;
 
             // We add the default budget that you
-            $budget += $this->defaultBudget();
+            $budget += $this->defaultBudget($raw);
 
             // Save it for possible later use
-            $this->budget = $budget;
+            $this->budget[$raw?0:1] = $budget;
         }
 
-        return $this->budget;
+        return $this->budget[$raw?0:1];
     }
 
-    public function defaultBudget(){
-        if($this->defaultBudget === null) {
+    public function maxDishwashers(){
+        return $this->payingUsers() < env('MENSA_SECOND_DISHWASHER') ? 1 : 2;
+
+    }
+
+    public function defaultBudget($raw = false){
+        if($this->defaultBudget[$raw?0:1] === null) {
+
+
+            if(!$raw){
+                $this->defaultBudget[1] = $this->payingUsers() * $this->defaultBudgetPerPayingUser();
+            } else {
+                $this->defaultBudget[0] = $this->payingUsers() * $this->price;
+            }
+
+        }
+
+        return $this->defaultBudget[$raw?0:1];
+    }
+
+    public function defaultBudgetPerPayingUser(){
+        // We subtract the amount that goes to the kitchen
+        // And we subtract the amount that goes to the dishwashers
+        // Both can be defined in the .env file
+        return $this->price - (env('MENSA_SUBTRACT_KITCHEN', 0.30) + env('MENSA_SUBTRACT_DISHWASHER', 0.50));
+    }
+
+    public function consumptions($isCook, $isDishwasher){
+        $consumptions = 0;
+        if($isCook){
+            // Cooks get a base consumption amount
+            $cookConsumptions = env('MENSA_CONSUMPTIONS_COOK_BASE');
+            // And then per X users you get an extra one
+            $cookConsumptions += floor($this->payingUsers() / env('MENSA_CONSUMPTIONS_COOK_1_PER_X_GUESTS'));
+            // But we are limited to a maximum though
+            $consumptions += min($cookConsumptions, env('MENSA_CONSUMPTIONS_COOK_MAX'));
+        }
+
+        if($isDishwasher){
+            // Per X users you get an extra consumption
+            $dishwasherConsumptions = floor($this->payingUsers() / env('MENSA_CONSUMPTIONS_DISHWASHER_SPLIT_1_PER_X_GUESTS'));
+            // But we do split it over all dishwashers
+            $dishwasherConsumptions = floor($dishwasherConsumptions / max($this->dishwashers(), $this->maxDishwashers()));
+            // Dishwashers do get a base consumption amount
+            $dishwasherConsumptions += env('MENSA_CONSUMPTIONS_DISHWASHER_BASE');
+            // But we are limited to a maximum though
+            $consumptions += min($dishwasherConsumptions, env('MENSA_CONSUMPTIONS_DISHWASHER_MAX'));
+        }
+
+        return $consumptions;
+    }
+
+    public function payingUsers(){
+        if($this->payingUsers === null) {
             // We grab the amount of users that actually has to pay the normal price
-            $paying_users = $this->users()->where('cooks', '0')->where('dishwasher', '0')->count();
+            $payingUsers = $this->users()->where('cooks', '0')->where('dishwasher', '0')->count();
 
             // We want to take into account that if there are no cooks, we won't have the budget for it
-            if($this->users()->where('cooks', '0')->count() < 1){
-                $paying_users--;
+            if ($this->users()->where('cooks', '1')->count() < 1) {
+                $payingUsers--;
             }
 
             // And same with dishwashers, if we don't have any dishwashers yet, we won't have the budget for it
-            if($this->dishwashers() < 1){
-                $paying_users--;
+            if ($this->dishwashers() < 1) {
+                $payingUsers--;
             }
 
-            // We subtract the amount that goes to the kitchen (which is 30 cents)
-            // And we subtract the amount that goes to the dishwashers (which is 50 cents)
-            $this->defaultBudget = $paying_users * ($this->price - (env('MENSA_SUBTRACT_KITCHEN', 0.30) + env('MENSA_SUBTRACT_DISHWASHER', 0.50)));
+            if($this->dishwashers() < 2 && $this->users()->count() >= env("MENSA_SECOND_DISHWASHER")){
+                $payingUsers--;
+            }
+
+            $this->payingUsers = $payingUsers;
         }
 
-        return $this->defaultBudget;
+        return $this->payingUsers;
     }
 
     public function jsonPrices(){

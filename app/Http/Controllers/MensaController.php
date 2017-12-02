@@ -34,7 +34,7 @@ class MensaController extends Controller
         $dishwashers = $mensa->users()->where('dishwasher', '1')->count();
         $vegetarians = $mensa->users()->where('vegetarian', '1')->count();
         $budget = $mensa->budget();
-        $payingUsers = $mensa->users()->where('cooks', '0')->where('dishwasher', '0')->count();
+        $payingUsers = $mensa->payingUsers();
 
         return view('mensae.overview', compact('mensa', 'users', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
     }
