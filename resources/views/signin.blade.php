@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }} voor de mensa op {{ formatDate($mensaUser->mensa->date) }}</div>
+                    <div class="panel-heading">{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }} {{ ($mensaUser->user != null && !empty($mensaUser->user->name))?'van '.$mensaUser->user->name:'' }} voor de mensa op {{ formatDate($mensaUser->mensa->date) }}</div>
                     <div class="panel-body">
                         @guest
                             <div class="alert alert-info">
@@ -14,10 +14,14 @@
                         @endguest
                         <form method="POST">
                             {{ csrf_field() }}
-                            <div class="form-group">
-                                <label for="email">Email:</label>
-                                <input id="email" type="email" name="email" value="{{ old('email', $mensaUser->user != null ? $mensaUser->user->email : '') }}" class="form-control" {{ (session('asAdmin') || $mensaUser->id)?'readonly': '' }} />
-                            </div>
+                            @if(!session('asAdmin') && $mensaUser->id == null)
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input id="email" type="email" name="email" value="{{ old('email', '') }}" class="form-control" />
+                                </div>
+                            @elseif(session('asAdmin') && $mensaUser->user != null)
+                                <input type="hidden" name="lidnummer" value="{{ $mensaUser->user->lidnummer }}" />
+                            @endif
                             @admin @if(session('asAdmin'))
                                 <div class="form-group">
                                     <input type="checkbox" id="as_intro" name="as_intro" class="form-check-input" {{ old('as_intro', $mensaUser->is_intro)?'checked':'' }} />
@@ -47,39 +51,41 @@
                                 <br />
                             @endif
                             <br />
-                            <div class="form-group">
-                                <input type="checkbox" name="intro" id="intro" class="form-check-input" {{ old('intro', $introUser->id==true)?'checked':'' }} />
-                                <label for="intro">Met 1 intro</label>
-                            </div>
-                            <div class="intro" style="{{ (old('intro') || $introUser->id != null)?'':'display: none;' }}">
+                            @if($introUser != null)
                                 <div class="form-group">
-                                    <input type="checkbox" name="intro_vegetarian" id="intro_vegetarian" class="form-check-input" {{ old('intro_vegetarian', $introUser->vegetarian)?'checked':'' }} />
-                                    <label for="intro_vegetarian">Intro vegetarisch</label>
+                                    <input type="checkbox" name="intro" id="intro" class="form-check-input" {{ old('intro', $introUser->id==true)?'checked':'' }} />
+                                    <label for="intro">Met 1 intro</label>
                                 </div>
-                                <div class="form-group">
-                                    <label for="intro_allergies">Intro allergie&euml;n:</label>
-                                    <input id="intro_allergies" name="intro_allergies" value="{{ old('intro_allergies', $introUser->allergies) }}" class="form-control"  />
-                                </div>
-                                <div class="form-group">
-                                    <label for="intro_extrainfo">Extra informatie:</label>
-                                    <input id="intro_extrainfo" name="intro_extrainfo" value="{{ old('intro_extrainfo', $introUser->extra_info) }}" class="form-control"  />
-                                </div>
-                                @if($mensaUser->mensa->extraOptions()->count() > 0)
+                                <div class="intro" style="{{ (old('intro') || $introUser->id != null)?'':'display: none;' }}">
                                     <div class="form-group">
-                                        <label>Intro's extra opties:</label><br />
-                                        @foreach($mensaUser->mensa->extraOptions()->get() as $option)
-                                            <input type="checkbox" id="intro_extra_{{ $option->id }}" name="intro_extra[]" value="{{ $option->id }}" class="form-check-input" {{ ((old('intro_extra') != null) ? in_array($option->id, old('intro_extra')) : $introUser->extraOptions->contains($option))?'checked':'' }} />
-                                            <label for="intro_extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
-                                        @endforeach
+                                        <input type="checkbox" name="intro_vegetarian" id="intro_vegetarian" class="form-check-input" {{ old('intro_vegetarian', $introUser->vegetarian)?'checked':'' }} />
+                                        <label for="intro_vegetarian">Intro vegetarisch</label>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="intro_allergies">Intro allergie&euml;n:</label>
+                                        <input id="intro_allergies" name="intro_allergies" value="{{ old('intro_allergies', $introUser->allergies) }}" class="form-control"  />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="intro_extrainfo">Extra informatie:</label>
+                                        <input id="intro_extrainfo" name="intro_extrainfo" value="{{ old('intro_extrainfo', $introUser->extra_info) }}" class="form-control"  />
+                                    </div>
+                                    @if($mensaUser->mensa->extraOptions()->count() > 0)
+                                        <div class="form-group">
+                                            <label>Intro's extra opties:</label><br />
+                                            @foreach($mensaUser->mensa->extraOptions()->get() as $option)
+                                                <input type="checkbox" id="intro_extra_{{ $option->id }}" name="intro_extra[]" value="{{ $option->id }}" class="form-check-input" {{ ((old('intro_extra') != null) ? in_array($option->id, old('intro_extra')) : $introUser->extraOptions->contains($option))?'checked':'' }} />
+                                                <label for="intro_extra_{{ $option->id }}">{{ $option->description }} (&euro;{{ $option->price }})</label><br />
+                                            @endforeach
+                                        </div>
+                                        <br />
+                                    @endif
                                     <br />
-                                @endif
-                                <br />
-                                <br />
-                            </div>
+                                    <br />
+                                </div>
+                            @endif
                             <div class="form-group">
                                 <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" {{ old('dishwasher', $mensaUser->dishwasher)?'checked':'' }} />
-                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="{{ $introUser->id==true?'':'display: none;' }}">(met intro)</span></label>
+                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="{{ ($introUser != null && $introUser->id==true)?'':'display: none;' }}">(met intro)</span></label>
                             </div>
                             @admin @if(session('asAdmin'))
                                 <div class="form-group">

@@ -36,9 +36,12 @@ class SigninController extends Controller
         $shouldSendMail = true;
         $shouldSendVerificationMailInstead = false;
 
+        if(Auth::check() && Auth::user()->mensa_admin && $id != null && $userToken != null){
+            $request->session()->flash('asAdmin', 'true');
+        }
 
-        // We want to keep asAdmin and extra_email around
-        if(Auth::check() && Auth::user()->is_admin && $request->session()->has('asAdmin')) {
+        // We want to keep asAdmin and extra_lidnummer around
+        if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')) {
             $request->session()->reflash();
             // Except the default warnings and such, it's annoying to have them go with us after redirecting
             $request->session()->remove('info');
@@ -115,14 +118,18 @@ class SigninController extends Controller
             if ($mensaUser->id == null) {
 
                 // We can give some feedback for the mensa is full
-                if ($mensa->max_users >= $mensa->users()->count()) {
+                if ($mensa->max_users <= $mensa->users()->count()) {
                     $request->session()->flash('warning', 'Deze mensa zit vol!');
                 }
 
                 // Are we requesting this page as an admin? Then we fill in the email we provided
                 if (Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')) {
-                    $user = new User();
-                    $user->email = session('extra_email');
+                    $user = $this->getLdapUserBy('description', session('extra_lidnummer'));
+                    // We check if the user can be found in LDAP, and if not, we return back to the form with an error message
+                    if($user == null){
+                        $request->session()->flash('error', 'Lidnummer niet gevonden!');
+                        return view('signin', compact('mensaUser', 'introUser'));
+                    }
                     $mensaUser->user()->associate($user);
                 } // If we are logged in, we can auto fill some info
                 else if (Auth::check()) {
@@ -142,7 +149,7 @@ class SigninController extends Controller
 
         // First we validate the request for the user itself
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'email',
             'allergies' => 'max:191',
             'extrainfo' => 'max:191',
             'extra.*' => 'exists:mensa_extra_options,id',
@@ -159,13 +166,20 @@ class SigninController extends Controller
 
         $user = null;
         if(Auth::check()){
-            $user = Auth::user();
+            if(Auth::user()->mensa_admin && $request->session()->has('asAdmin')){
+                $request->validate([
+                    'lidnummer' => 'required|exists:users'
+                ]);
+                $user = User::findOrFail($request->input('lidnummer'));
+                $mensaUser->user()->associate($user);
+                $mensaUser->lidnummer = $user->lidnummer;
+            } else {
+                $user = Auth::user();
+            }
         }
-        $lidnummer = null;
-
 
         // If the user gets signed in by an admin (from the admin panel) we just confirm the user
-        if($request->session()->has('asAdmin') && $user != null && $user->mensa_admin){
+        if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')){
             $mensaUser->confirmed = true;
 
             $shouldSendMail = false;
@@ -177,7 +191,7 @@ class SigninController extends Controller
             }
         }
         // If the user is logged in, depending if the email address is the same as the users', we automatically verify the user or not
-        else if($user != null && strtolower($user->email) == strtolower($request->input('email'))){
+        else if($user != null && $request->has('email') && strtolower($user->email) == strtolower($request->input('email'))){
             $mensaUser->confirmed = true;
             $mensaUser->lidnummer = $user->lidnummer;
 
@@ -187,7 +201,7 @@ class SigninController extends Controller
 
 
         // If lidnummer doesn't exist yet, we will look in LDAP with the provided email
-        if($lidnummer == null){
+        if($mensaUser->lidnummer == null){
             $user = $this->getLdapUserBy('mail', $request->input('email'));
             // We check if the user can be found in LDAP, and if not, we return back to the form with an error message
             if($user == null){
@@ -204,17 +218,17 @@ class SigninController extends Controller
 
         // If this is a new user, we want to check if the user already signed in previously or not
         // and if so (silly him), we just want to update the previous one
-        if($mensaUser->id == null && !$mensaUser->is_intro){
+        if($mensaUser->id == null && !$mensaUser->is_intro) {
             /* @var $possibleDuplicate MensaUser */
             $possibleDuplicate = $mensa->users()
                 ->where('lidnummer', $mensaUser->lidnummer)
                 ->where('is_intro', '0')->first();
 
-            if($possibleDuplicate != null){
+            if ($possibleDuplicate != null) {
                 $mensaUser = $possibleDuplicate;
 
                 // Check if we already had an intro
-                if($possibleDuplicate->intros()->count() > 0){
+                if ($possibleDuplicate->intros()->count() > 0) {
                     $introUser = $possibleDuplicate->intros()->first();
                 }
 
@@ -223,7 +237,7 @@ class SigninController extends Controller
 
                 $request->session()->flash('warning', 'We hebben een oude inschrijving voor deze mensa van je gevonden, deze hebben we geupdatet!');
             } else {
-                if(Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer) {
+                if (Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer) {
                     $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
                 } else {
                     $request->session()->flash('info', 'Persoon succesvol ingeschreven!');
@@ -235,7 +249,7 @@ class SigninController extends Controller
 
 
         // First we want to be sure that we aren't going over the maximum amount of signins
-        if($mensaUser->id == null || $introUser->id == null){
+        if($mensaUser->id == null || $introUser == null || $introUser->id == null){
             $addedUsers = ($mensaUser->id==null?1:0) + (($request->has('intro') && $introUser->id==null)?1:0);
             // If the amount of users we currently have, plus the new users we are about to add
             // exceed the max users of a mensa, we want to cancel
@@ -284,7 +298,7 @@ class SigninController extends Controller
                     $introUser->extraOptions()->attach($extraOption);
                 } catch(ModelNotFoundException $e){}
             }
-        } else {
+        } else if(!$mensaUser->is_intro) {
             // If the user doesn't want to have intros, we just try to delete them, if he had any
             $mensaUser->intros()->delete();
         }

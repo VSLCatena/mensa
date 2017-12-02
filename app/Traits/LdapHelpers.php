@@ -34,7 +34,7 @@ trait LdapHelpers
         return $users->map(function ($user){
             return [
                 'name' => $user->cn[0],
-                'email' => $user->mail[0]
+                'lidnummer' => $user->description[0]
             ];
         }, $users);
     }

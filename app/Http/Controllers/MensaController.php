@@ -177,10 +177,10 @@ class MensaController extends Controller
         }
 
         $request->validate([
-            'email' => 'required|email',
+            'lidnummer' => 'required',
         ]);
 
-        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('extra_email', $request->get('email'));
+        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('extra_lidnummer', $request->get('lidnummer'));
     }
 
     public function requestUserLookup(Request $request){
