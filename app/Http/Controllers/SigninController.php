@@ -84,6 +84,14 @@ class SigninController extends Controller
             }
         }
 
+        // We check if the Mensa isn't closed yet
+        if($mensa->closed){
+            $route = (Auth::check() && Auth::user()->mensa_admin) ?
+                route('mensa.signins', ['id' => $mensa->id]) :
+                route('home');
+            return redirect($route)->with('error', 'Deze mensa is al gesloten!');
+        }
+
         // If we aren't editing, we are creating!
         if($mensaUser == null){
             $mensaUser = new MensaUser();

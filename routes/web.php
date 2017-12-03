@@ -43,7 +43,7 @@ Route::get('/mailexample/2', function () {
     return new App\Mail\SigninConfirmed($mensaUser);
 });
 
-Route::get('/mailexample/3', function () {
-    $mensa = App\Models\Mensa::orderBy('created_at', 'DESC')->firstOrFail();
+Route::get('/mailexample/3/{id}', function ($id) {
+    $mensa = App\Models\Mensa::orderBy('created_at', 'DESC')->findOrFail($id);
     return new App\Mail\MensaState($mensa);
 });
