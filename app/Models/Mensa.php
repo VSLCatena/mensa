@@ -120,7 +120,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
                 $payingUsers--;
             }
 
-            $this->payingUsers = $payingUsers;
+            $this->payingUsers = max(0, $payingUsers);
         }
 
         return $this->payingUsers;

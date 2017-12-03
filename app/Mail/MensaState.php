@@ -34,12 +34,13 @@ class MensaState extends Mailable
      */
     public function build()
     {
-        $secondDishwasher = $this->mensa->dishwashers() < 2 && $this->mensa->maxDishwashers() > 1;
 
         $personel = $this->mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))
             ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
-            ->where('mensa_users.cooks', '1')
-            ->orWhere('mensa_users.dishwasher', '1')
+            ->where(function($query) {
+                $query->where('mensa_users.cooks', '1')
+                    ->orWhere('mensa_users.dishwasher', '1');
+            })
             ->orderBy('mensa_users.cooks', 'DESC')
             ->orderBy('mensa_users.dishwasher', 'DESC')
             ->orderBy('users.name')
@@ -47,7 +48,8 @@ class MensaState extends Mailable
 
         $personelIndex = 1;
         $cooks = $this->mensa->users()->where('cooks', '1')->count();
-        $dishwashers = $this->mensa->users()->where('dishwasher', '1')->count();
+        $dishwashers = $this->mensa->dishwashers();
+        $secondDishwasher = $dishwashers < 2 && $this->mensa->maxDishwashers() > 1;
 
         $guests = $this->mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))
             ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
