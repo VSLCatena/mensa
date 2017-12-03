@@ -41,7 +41,7 @@
         @endif
         Huidig maximum: {{ ($payingUsers < env('MENSA_SECOND_COOK', 15)) ? 1 : 2 }}
     </div>
-    <div class="alert alert-warning">
+    <div class="alert alert-{{ ($dishwashers < $mensa->maxDishwashers())?'warning':'success' }}">
         @if($dishwashers != 1)
             Er zijn {{ $dishwashers }} afwassers.
         @else
