@@ -76,7 +76,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
         return $this->price - (env('MENSA_SUBTRACT_KITCHEN', 0.30) + env('MENSA_SUBTRACT_DISHWASHER', 0.50));
     }
 
-    public function consumptions($isCook, $isDishwasher){
+    public function consumptions($isCook, $isDishwasher, $noExtraDishwasher = false){
         $consumptions = 0;
         if($isCook){
             // Cooks get a base consumption amount
@@ -90,8 +90,12 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.cooks=0 AND m_users.di
         if($isDishwasher){
             // Per X users you get an extra consumption
             $dishwasherConsumptions = floor($this->payingUsers() / env('MENSA_CONSUMPTIONS_DISHWASHER_SPLIT_1_PER_X_GUESTS'));
-            // But we do split it over all dishwashers
-            $dishwasherConsumptions = floor($dishwasherConsumptions / max($this->dishwashers(), $this->maxDishwashers()));
+            // But we do split it over all dishwashers (Except if we want to calculate without)
+            if($noExtraDishwasher){
+                $dishwasherConsumptions = floor($dishwasherConsumptions / $this->dishwashers());
+            } else {
+                $dishwasherConsumptions = floor($dishwasherConsumptions / max($this->dishwashers(), $this->maxDishwashers()));
+            }
             // Dishwashers do get a base consumption amount
             $dishwasherConsumptions += env('MENSA_CONSUMPTIONS_DISHWASHER_BASE');
             // But we are limited to a maximum though

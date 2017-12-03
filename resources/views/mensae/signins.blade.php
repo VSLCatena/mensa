@@ -46,8 +46,10 @@
                     </td>
                     <td>
                         @if($mUser->cooks || $mUser->dishwasher)
-                        @elseif($mUser->paid)
+                        @elseif($mUser->price() == $mUser->paid)
                             <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
+                        @elseif($mUser->paid != 0)
+                            <button data-id="{{ $mUser->id }}" class="btn btn-warning btn-paid">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button>
                         @else
                             <button data-id="{{ $mUser->id }}" class="btn btn-danger btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
                         @endif
@@ -83,6 +85,7 @@
                     alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
                 } else {
                     btn.removeClass('btn-default');
+                    btn.html(data.price);
                     btn.addClass(data.paid ? 'btn-success' : 'btn-danger');
                 }
             }).fail(function(){

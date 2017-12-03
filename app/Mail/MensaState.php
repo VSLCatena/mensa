@@ -50,6 +50,7 @@ class MensaState extends Mailable
         $cooks = $this->mensa->users()->where('cooks', '1')->count();
         $dishwashers = $this->mensa->dishwashers();
         $secondDishwasher = $dishwashers < 2 && $this->mensa->maxDishwashers() > 1;
+        $singleDishwasherExtraConsumptions = $this->mensa->consumptions(false, true, true) - $this->mensa->consumptions(false, true);
 
         $guests = $this->mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))
             ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
@@ -65,6 +66,7 @@ class MensaState extends Mailable
             'dishwashers' => $dishwashers,
             'mensa' => $this->mensa,
             'secondDishwasher' => $secondDishwasher,
+            'singleDishwasherExtraConsumptions' => $singleDishwasherExtraConsumptions,
             'personel' => $personel,
             'guests' => $guests
         ]);

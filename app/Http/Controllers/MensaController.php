@@ -133,6 +133,7 @@ class MensaController extends Controller
 
     public function togglePaid(Request $request, $mensaId){
         try {
+            /* @var $mensaUser MensaUser */
             $mensaUser = MensaUser::findOrFail($request->get('id'));
         } catch(ModelNotFoundException $e){
             return response()->json([
@@ -140,11 +141,12 @@ class MensaController extends Controller
             ]);
         }
 
-        $mensaUser->paid = !$mensaUser->paid;
+        $mensaUser->paid = ($mensaUser->paid == $mensaUser->price()) ? 0 : $mensaUser->price();
         $mensaUser->save();
 
         return response()->json([
-            'paid' => $mensaUser->paid
+            'price' => $mensaUser->paid,
+            'paid' => $mensaUser->paid == $mensaUser->price()
         ]);
     }
 
