@@ -84,17 +84,17 @@ Gegenereerd op {{ \Carbon\Carbon::now() }}
             <br /><br /><br />
             <hr style="border: none; border-bottom: 1px solid black;" />
             <br />
-            @foreach($personel as $user)
+            @foreach($staff as $user)
                 @component('emails.state.consumptiontable', ['consumptions' => $user->consumptions()])
                     {{ $user->user->name }}
                 @endcomponent
             @endforeach
-            @if($cooks < 1)
+            @if(count($cooks) < 1)
                 @component('emails.state.consumptiontable', ['consumptions' => $mensa->consumptions(true, false)])
                     Koker 1
                 @endcomponent
             @endif
-            @if($dishwashers < 1)
+            @if(count($dishwashers) < 1)
                 @component('emails.state.consumptiontable', ['consumptions' => $mensa->consumptions(false, true)])
                     Afwasser 1
                 @endcomponent
@@ -115,18 +115,18 @@ Gegenereerd op {{ \Carbon\Carbon::now() }}
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px; width: 100%;">Opmerkingen</th>
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;">Functie</th>
                 </tr>
-                @foreach($personel as $user)
-                    @component('emails.state.userrow', ['index' => $personelIndex++, 'user' => $user])
+                @foreach($staff as $user)
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'user' => $user])
                     @endcomponent
                 @endforeach
-                @if($cooks < 1)
-                    @component('emails.state.userrow', ['index' => $personelIndex++, 'extra' => 'Koker']) @endcomponent
+                @if(count($cooks) < 1)
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Koker']) @endcomponent
                 @endif
-                @if($dishwashers < 1)
-                    @component('emails.state.userrow', ['index' => $personelIndex++, 'extra' => 'Afwasser']) @endcomponent
+                @if(count($dishwashers) < 1)
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Afwasser']) @endcomponent
                 @endif
                 @if($secondDishwasher)
-                    @component('emails.state.userrow', ['index' => $personelIndex++, 'extra' => 'Afwasser']) @endcomponent
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Afwasser']) @endcomponent
                 @endif
                 <tr>
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;" colspan="3">Gasten</th>
@@ -149,8 +149,7 @@ Gegenereerd op {{ \Carbon\Carbon::now() }}
                 en het subtotaal wordt &euro;{{ number_format( ($mensa->budget(true) + $mensa->defaultBudgetPerPayingUser()) - (($mensa->payingUsers()+1) * env('MENSA_SUBTRACT_DISHWASHER'))  , 2) }}.
 
                 @if($singleDishwasherExtraConsumptions > 0)
-                    <br /><br />
-                    Ook krijgt de afwasser {{ $singleDishwasherExtraConsumptions }} extra consumptie{{ $singleDishwasherExtraConsumptions==1?'':'s' }}.
+                    Ook krijgt de afwasser dan {{ $singleDishwasherExtraConsumptions }} extra consumptie{{ $singleDishwasherExtraConsumptions==1?'':'s' }}.
                 @endif
             @endif
         </td>

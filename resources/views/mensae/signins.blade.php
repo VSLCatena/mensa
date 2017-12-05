@@ -27,7 +27,7 @@
                     </td>
                     <td>
                         <div class="pull-right">
-                            @if($mUser->uvegetarian)
+                            @if($mUser->vegetarian)
                                 &nbsp;<span class="label label-success label-yesno">Vego</span>
                             @endif
                             @if($mUser->cooks)
@@ -37,15 +37,15 @@
                                 &nbsp;<span class="label label-primary label-yesno">Afwasser</span>
                             @endif
                         </div>
-                        @if(!empty($mUser->uallergies))
-                            Allergie&euml;n: {{ $mUser->uallergies }}<br />
+                        @if(!empty($mUser->allergies))
+                            Allergie&euml;n: {{ $mUser->allergies }}<br />
                         @endif
-                        @if(!empty($mUser->uextra_info))
-                                Extra info: {{ $mUser->uextra_info }}
+                        @if(!empty($mUser->extra_info))
+                                Extra info: {{ $mUser->extra_info }}
                             @endif
                     </td>
                     <td>
-                        @if($mUser->cooks || $mUser->dishwasher)
+                        @if($mUser->isStaff())
                         @elseif($mUser->price() == $mUser->paid)
                             <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
                         @elseif($mUser->paid != 0)

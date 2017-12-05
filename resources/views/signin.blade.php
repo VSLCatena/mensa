@@ -51,7 +51,7 @@
                                 <br />
                             @endif
                             <br />
-                            @if($introUser != null)
+                            @if(isset($introUser))
                                 <div class="form-group">
                                     <input type="checkbox" name="intro" id="intro" class="form-check-input" {{ old('intro', $introUser->id==true)?'checked':'' }} />
                                     <label for="intro">Met 1 intro</label>
@@ -85,7 +85,7 @@
                             @endif
                             <div class="form-group">
                                 <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" {{ old('dishwasher', $mensaUser->dishwasher)?'checked':'' }} />
-                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="{{ ($introUser != null && $introUser->id==true)?'':'display: none;' }}">(met intro)</span></label>
+                                <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="{{ (isset($introUser) && $introUser->id==true)?'':'display: none;' }}">(met intro)</span></label>
                             </div>
                             @admin @if(session('asAdmin'))
                                 <div class="form-group">

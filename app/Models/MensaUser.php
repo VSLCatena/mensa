@@ -38,4 +38,8 @@ class MensaUser extends Model
     public function consumptions(){
         return $this->mensa->consumptions($this->cooks, $this->dishwasher);
     }
+
+    public function isStaff(){
+        return $this->mensa->staff()->contains('id', $this->id);
+    }
 }

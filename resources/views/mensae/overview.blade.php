@@ -25,7 +25,7 @@
                 <br />
                 Extra optie <i>{{ $extraOption->description }}</i>
                 is {{ $extraOption->users()->count() }}x gekozen
-                (budget van &euro;{{ number_format($extraOption->users()->where('dishwasher', '0')->where('cooks', '0')->count() * $extraOption->price, 2) }})
+                (budget van &euro;{{ number_format($extraOption->users()->whereNotIn('id', $staffIds)->count() * $extraOption->price, 2) }})
             @endforeach
             <br />
             @if($dishwashers > 1 || $payingUsers < env('MENSA_SECOND_DISHWASHER', 15))

@@ -35,39 +35,29 @@ class MensaState extends Mailable
     public function build()
     {
 
-        $personel = $this->mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))
-            ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
-            ->where(function($query) {
-                $query->where('mensa_users.cooks', '1')
-                    ->orWhere('mensa_users.dishwasher', '1');
-            })
-            ->orderBy('mensa_users.cooks', 'DESC')
-            ->orderBy('mensa_users.dishwasher', 'DESC')
-            ->orderBy('users.name')
-            ->orderBy('mensa_users.is_intro')->get();
+        $staff = $this->mensa->staff();
 
-        $personelIndex = 1;
-        $cooks = $this->mensa->users()->where('cooks', '1')->count();
+        $staffIds = $staff->map(function($item){
+            return $item->id;
+        });
+
+        $staffIndex = 1;
+        $cooks = $this->mensa->cooks();
         $dishwashers = $this->mensa->dishwashers();
-        $secondDishwasher = $dishwashers < 2 && $this->mensa->maxDishwashers() > 1;
+        $secondDishwasher = count($dishwashers) < 2 && $this->mensa->maxDishwashers() > 1;
         $singleDishwasherExtraConsumptions = $this->mensa->consumptions(false, true, true) - $this->mensa->consumptions(false, true);
 
-        $guests = $this->mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))
-            ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
-            ->where('mensa_users.cooks', '0')
-            ->where('mensa_users.dishwasher', '0')
-            ->orderBy('users.name')
-            ->orderBy('mensa_users.is_intro')->get();
+        $guests = $this->mensa->users(true)->whereNotIn('mensa_users.id', $staffIds)->get();
 
 
         return $this->view('emails.state.mensastate', [
-            'personelIndex' => $personelIndex,
+            'staffIndex' => $staffIndex,
             'cooks' => $cooks,
             'dishwashers' => $dishwashers,
             'mensa' => $this->mensa,
             'secondDishwasher' => $secondDishwasher,
             'singleDishwasherExtraConsumptions' => $singleDishwasherExtraConsumptions,
-            'personel' => $personel,
+            'staff' => $staff,
             'guests' => $guests
         ]);
     }

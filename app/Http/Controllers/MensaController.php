@@ -30,13 +30,18 @@ class MensaController extends Controller
 
         $users = $mensa->users()->count();
         $intros = $mensa->users()->where('is_intro', '1')->count();
-        $cooks = $mensa->users()->where('cooks', '1')->count();
-        $dishwashers = $mensa->users()->where('dishwasher', '1')->count();
+        $cooks = count($mensa->cooks());
+        $dishwashers = count($mensa->dishwashers());
         $vegetarians = $mensa->users()->where('vegetarian', '1')->count();
         $budget = $mensa->budget();
         $payingUsers = $mensa->payingUsers();
 
-        return view('mensae.overview', compact('mensa', 'users', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
+
+        $staffIds = $mensa->staff()->map(function($item){
+            return $item->id;
+        });
+
+        return view('mensae.overview', compact('mensa', 'users', 'staffIds', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
     }
 
     public function showSignins(Request $request, $id){
@@ -47,11 +52,7 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
-        $users = $mensa->users()->select(DB::raw('*, mensa_users.extra_info as uextra_info, mensa_users.allergies as uallergies, mensa_users.vegetarian as uvegetarian'))->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
-            ->orderBy('mensa_users.cooks', 'DESC')
-            ->orderBy('mensa_users.dishwasher', 'DESC')
-            ->orderBy('users.name')
-            ->orderBy('mensa_users.is_intro')->get();
+        $users = $mensa->users(true)->get();
 
         return view('mensae.signins', compact('mensa', 'users'));
     }

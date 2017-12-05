@@ -36,15 +36,15 @@
                                         @foreach($mensa->extraOptions()->get() as $option)
                                             <br /><strong><u>Extra optie:</u></strong> {{ $option->description }} voor &euro;{{ $option->price }}
                                         @endforeach
-                                        @if(strlen($mensa->cooks()) > 0)
-                                            <br />Gekookt door: {{ $mensa->cooks() }}
+                                        @if(strlen($mensa->cooksFormatted()) > 0)
+                                            <br />Gekookt door: {{ $mensa->cooksFormatted() }}
                                         @endif
                                     </td>
                                     <td>&euro;{{ $mensa->price }}</td>
                                     <td>
                                         {{ $mensa->users()->count() }}/{{ $mensa->max_users }}<br />
-                                        @if($mensa->dishwashers() > 0)
-                                            {{ $mensa->dishwashers() }} afwasser{{ (($mensa->dishwashers() > 1)?'s':'') }}*
+                                        @if(count($mensa->dishwashers()) > 0)
+                                            {{ count($mensa->dishwashers()) }} afwasser{{ ((count($mensa->dishwashers()) > 1)?'s':'') }}*
                                         @endif
                                     </td>
                                     <td>{{ $mensa->closingTime(true) }}</td>
