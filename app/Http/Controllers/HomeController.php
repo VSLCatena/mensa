@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Mensa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $mensae = Mensa::where('date', '>', date("Y-m-d"))->orderBy('date', 'ASC')->get();
+        $mensae = Mensa::whereBetween('date', array(Carbon::today(), Carbon::today()->addWeeks(2)))->orderBy('date', 'ASC')->get();
         return view('home', compact('mensae'));
     }
 }
