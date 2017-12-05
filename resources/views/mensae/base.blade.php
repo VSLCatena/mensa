@@ -10,7 +10,7 @@
                         <div class="btn-group btn-group-justified">
                             <a href="{{ route('mensa.newsignin', ['id' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a>
                             <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
-                            <a href="#" class="btn btn-default">// Mensastaat printen</a>
+                            <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
                             <a href="#" class="btn btn-default">// Mensa annuleren</a>
                         </div>
                     </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MensaState;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
@@ -190,5 +191,23 @@ class MensaController extends Controller
     public function requestUserLookup(Request $request){
         $request->validate(['name' => 'regex:/^[a-zA-Z _]+$/']);
         return response()->json($this->searchLdapUsers($request->get('name')));
+    }
+
+    public function printState(Request $request, $mensaId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($request->isMethod("get")){
+            return view('mensae.confirmprintstate', compact('mensa'));
+        }
+        Mail::to(env('MENSA_PRINTER_MAIL'))->send(new MensaState($mensa));
+
+        $mensa->closed = true;
+        $mensa->save();
+
+        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensastaat is uitgeprint!');
     }
 }

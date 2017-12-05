@@ -47,7 +47,7 @@
                                             {{ count($mensa->dishwashers()) }} afwasser{{ ((count($mensa->dishwashers()) > 1)?'s':'') }}*
                                         @endif
                                     </td>
-                                    <td>{{ $mensa->closingTime(true) }}</td>
+                                    <td>{{ !$mensa->closed ? $mensa->closingTime(true) : 'Gesloten' }}</td>
                                     <td class="btn-group-vertical">
                                         @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
                                             <form method="POST" @admin class="btn-group-vertical" @endadmin action="{{ route('signout', ['id' => $mensa->id]) }}">
