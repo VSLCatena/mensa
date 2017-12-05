@@ -47,49 +47,58 @@
                     <td>
                         @if($mUser->isStaff())
                         @elseif($mUser->price() == $mUser->paid)
-                            <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
+                            <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button>
                         @else
-                            <button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button>
+                            <button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button>
                         @endif
                     </td>
                     <td>{{ $mUser->created_at }}</td>
                     <td>
-                        <div class="btn-group-vertical">
-                            <a href="{{ route('mensa.editsignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Wijzigen</a>
-                            <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
-                        </div>
+                        @if(!$mensa->closed)
+                            <div class="btn-group-vertical">
+                                <a href="{{ route('mensa.editsignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Wijzigen</a>
+                                <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
+                            </div>
+                        @else
+                            <div class="btn-group-vertical">
+                                <span class="btn btn-xs btn-default disabled">Wijzigen</span>
+                                <span class="btn btn-xs btn-default disabled">Uitschrijven</span>
+                            </div>
+                        @endif
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    <script type="text/javascript">
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        });
+    @if(!$mensa->closed)
+        <script type="text/javascript">
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            });
 
-        $(".btn-paid").click(function(){
-            console.debug($(this));
-            var btn = $(this);
-            var hasPaid = btn.hasClass('btn-success');
-            btn.removeClass('btn-success btn-danger btn-warning');
-            btn.blur();
+            $(".btn-paid").click(function(){
+                console.debug($(this));
+                var btn = $(this);
+                var hasPaid = btn.hasClass('btn-success');
+                btn.removeClass('btn-success btn-danger btn-warning');
+                btn.blur();
 
-            $.post("{{ route('mensa.togglepaid', ['id' => $mensa->id]) }}", {id: $(this).data('id')}, function (data) {
-                if(data.error !== undefined){
+                $.post("{{ route('mensa.togglepaid', ['id' => $mensa->id]) }}", {id: $(this).data('id')}, function (data) {
+                    if(data.error !== undefined){
+                        btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
+                        alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
+                    } else {
+                        btn.removeClass('btn-default');
+                        btn.html(data.price);
+                        btn.addClass(data.paid ? 'btn-success' : 'btn-danger');
+                    }
+                }).fail(function(){
                     btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
                     alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
-                } else {
-                    btn.removeClass('btn-default');
-                    btn.html(data.price);
-                    btn.addClass(data.paid ? 'btn-success' : 'btn-danger');
-                }
-            }).fail(function(){
-                btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
-                alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")
+                });
             });
-        });
-    </script>
+        </script>
+    @endif
 @endsection

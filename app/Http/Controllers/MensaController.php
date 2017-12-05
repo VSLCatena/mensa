@@ -74,6 +74,10 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
         }
 
+        if($mensa->closed){
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
+        }
+
         if($request->isMethod('get')){
             return view('mensae.editmensa', compact('mensa'));
         }
@@ -144,6 +148,10 @@ class MensaController extends Controller
             ]);
         }
 
+        if($mensaUser->mensa->closed){
+            return response()->json(['error' => 'Deze mensa is al gesloten!']);
+        }
+
         $mensaUser->paid = ($mensaUser->paid == $mensaUser->price()) ? 0 : $mensaUser->price();
         $mensaUser->save();
 
@@ -158,6 +166,10 @@ class MensaController extends Controller
             $mUser = MensaUser::findOrFail($userId);
         } catch(ModelNotFoundException $e){
             return redirect(route('mensa.signins', ['id' => $mensaId]))->with('error', 'Gebruiker niet gevonden!');
+        }
+
+        if($mUser->mensa->closed){
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod('get')){
@@ -175,6 +187,10 @@ class MensaController extends Controller
             $mensa = Mensa::findOrFail($mensaId);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+        
+        if($mensa->closed){
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod('get')){
@@ -198,6 +214,10 @@ class MensaController extends Controller
             $mensa = Mensa::findOrFail($mensaId);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($mensa->closed){
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod("get")){
