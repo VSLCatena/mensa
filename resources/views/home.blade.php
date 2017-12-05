@@ -48,21 +48,23 @@
                                         @endif
                                     </td>
                                     <td>{{ !$mensa->closed ? $mensa->closingTime(true) : 'Gesloten' }}</td>
-                                    <td class="btn-group-vertical">
-                                        @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
-                                            <form method="POST" @admin class="btn-group-vertical" @endadmin action="{{ route('signout', ['id' => $mensa->id]) }}">
-                                                <input type="submit" class="btn btn-danger {{ $mensa->closed?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
-                                                {{ csrf_field() }}
-                                                <input type="hidden" name="id" value="{{ $mensa->id }}" />
-                                            </form>
-                                        @elseif(!$mensa->closed)
-                                            <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
-                                        @else
-                                            <span href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary disabled">Gesloten</span>
-                                        @endif
-                                        @admin
-                                            <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
-                                        @endadmin
+                                    <td>
+                                        <div class="btn-group-vertical">
+                                            @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
+                                                <form method="POST" @admin class="btn-group-vertical" @endadmin action="{{ route('signout', ['id' => $mensa->id]) }}">
+                                                    <input type="submit" class="btn btn-danger {{ $mensa->closed?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
+                                                    {{ csrf_field() }}
+                                                    <input type="hidden" name="id" value="{{ $mensa->id }}" />
+                                                </form>
+                                            @elseif(!$mensa->closed)
+                                                <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
+                                            @else
+                                                <span href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary disabled">Gesloten</span>
+                                            @endif
+                                            @admin
+                                                <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
+                                            @endadmin
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
