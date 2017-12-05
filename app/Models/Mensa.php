@@ -174,7 +174,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [
         }
 
         // We subtract the amount of staff spots we haven't filled in yet.
-        $actualStaff += $maxCooks-$cooks;
+        $actualStaff += ($cooks < 1) ? 1 : 0;
         $actualStaff += $maxDishwashers-$dishwashers;
 
         return $actualStaff;

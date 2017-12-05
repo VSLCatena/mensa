@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class MensaController extends Controller
 {
@@ -146,7 +147,7 @@ class MensaController extends Controller
         $mensaUser->save();
 
         return response()->json([
-            'price' => $mensaUser->paid,
+            'price' => '&euro;'.number_format($mensaUser->price(), 2),
             'paid' => $mensaUser->paid == $mensaUser->price()
         ]);
     }

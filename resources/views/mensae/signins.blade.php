@@ -48,10 +48,8 @@
                         @if($mUser->isStaff())
                         @elseif($mUser->price() == $mUser->paid)
                             <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
-                        @elseif($mUser->paid != 0)
-                            <button data-id="{{ $mUser->id }}" class="btn btn-warning btn-paid">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button>
                         @else
-                            <button data-id="{{ $mUser->id }}" class="btn btn-danger btn-paid">&euro;{{ number_format($mUser->price(), 2) }}</button>
+                            <button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button>
                         @endif
                     </td>
                     <td>{{ $mUser->created_at }}</td>
@@ -76,7 +74,7 @@
             console.debug($(this));
             var btn = $(this);
             var hasPaid = btn.hasClass('btn-success');
-            btn.removeClass('btn-success btn-danger');
+            btn.removeClass('btn-success btn-danger btn-warning');
             btn.blur();
 
             $.post("{{ route('mensa.togglepaid', ['id' => $mensa->id]) }}", {id: $(this).data('id')}, function (data) {
