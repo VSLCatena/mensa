@@ -38,9 +38,9 @@ class Mensa extends Model
         return $this->dishwashers;
     }
 
-    public function cooks(){
+    public function cooks($order = false){
         if($this->cooks === null) {
-            $this->cooks = $this->users()->where('cooks', '1')->get();
+            $this->cooks = $this->users($order)->where('cooks', '1')->get();
         }
         return $this->cooks;
     }
@@ -230,7 +230,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [
         if($this->cooksFormatted !== null)
             return $this->cooksFormatted;
 
-        $cooks = $this->cooks();
+        $cooks = $this->cooks(true);
         $ret = '';
 
         // If there is noone that will cook, we just return an empty string
