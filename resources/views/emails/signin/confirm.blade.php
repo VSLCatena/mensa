@@ -7,7 +7,7 @@ Je hebt je ingeschreven voor de mensa op {{ formatDate($mensaUser->mensa->date, 
 <a href="{{ route('signin.confirm', [$mensaUser->confirmation_code]) }}">Bevestig je inschrijving</a>
 
 Je wordt verzocht om {{ formatTime($mensaUser->mensa->date) }} aanwezig te zijn. Deze mensa kost &euro;{{ number_format($mensaUser->price(), 2) }}.<br />
-Er is momenteel nog {{ $mensaUser->mensa->dishwashers() > 0 ? 'een':'geen' }} afwasser geregeld.
+Er is momenteel nog {{ count($mensaUser->mensa->dishwashers()) > 0 ? 'een':'geen' }} afwasser geregeld.
 
 <b>LET OP</b>: Wanneer je jouw inschrijving niet binnen 15 minuten bevestigt, vervalt je inschrijving.
 <br /><br />
