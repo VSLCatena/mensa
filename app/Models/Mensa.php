@@ -31,6 +31,10 @@ class Mensa extends Model
         }
     }
 
+    public function logs(){
+        return $this->hasMany('App\Models\Log');
+    }
+
     public function dishwashers(){
         if($this->dishwashers === null) {
             $this->dishwashers = $this->users()->where('dishwasher', '1')->get();

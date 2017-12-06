@@ -7,15 +7,17 @@ use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
 use App\Traits\LdapHelpers;
+use App\Traits\Logger;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class MensaController extends Controller
 {
-    use LdapHelpers;
+    use LdapHelpers, Logger;
 
     public function __construct(){
         $this->middleware('auth');
@@ -112,6 +114,9 @@ class MensaController extends Controller
 
         $mensa->save(); // Save it already to retrieve the mensas ID
 
+        // Log the editing of the mensa
+        $this->log($mensa, 'Mensa gewijzigd');
+
         // We want to remove all extra options that haven't been provided in the request
         $syncIds = array();
 
@@ -138,6 +143,18 @@ class MensaController extends Controller
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
     }
 
+    public function showLogs(Request $request, $mensaId){
+        try {
+            /* @var $mensa Mensa */
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
+        }
+
+        $logs = $mensa->logs()->orderBy('created_at', 'DESC')->get();
+        return view('mensae.logs', compact('mensa', 'logs'));
+    }
+
     public function togglePaid(Request $request, $mensaId){
         try {
             /* @var $mensaUser MensaUser */
@@ -155,6 +172,9 @@ class MensaController extends Controller
         $mensaUser->paid = ($mensaUser->paid == $mensaUser->price()) ? 0 : $mensaUser->price();
         $mensaUser->save();
 
+        // Log the payment change
+        $this->log($mensaUser->mensa, ($mensaUser->is_intro?'Intro van ':'').$mensaUser->user->name.($mensaUser->paid?' heeft betaald.':' is op niet betaald gezet.'));
+
         return response()->json([
             'price' => '&euro;'.number_format($mensaUser->price(), 2),
             'paid' => $mensaUser->paid == $mensaUser->price()
@@ -169,7 +189,7 @@ class MensaController extends Controller
         }
 
         if($mUser->mensa->closed){
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
+            return redirect(route('mensa.overview', ['id' => $mensaId]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod('get')){
@@ -177,6 +197,9 @@ class MensaController extends Controller
         }
 
         $mUser->delete();
+
+        // Log the deletion
+        $this->log($mUser->mensa, $mUser->user->name.' is uitgeschreven.');
 
         return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
     }
@@ -188,7 +211,7 @@ class MensaController extends Controller
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
-        
+
         if($mensa->closed){
             return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
         }
@@ -227,6 +250,10 @@ class MensaController extends Controller
 
         $mensa->closed = true;
         $mensa->save();
+
+        // Log the printing of the state
+        $this->log($mensa, 'Het wijzigen van de mensa is geblokkeerd i.v.m. het printen van de mensastaat');
+        $this->log($mensa, 'Mensastaat uitgeprint.');
 
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensastaat is uitgeprint!');
     }

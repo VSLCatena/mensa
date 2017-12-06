@@ -10,6 +10,7 @@ use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
 use App\Models\User;
 use App\Traits\LdapHelpers;
+use App\Traits\Logger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Mail;
 
 class SigninController extends Controller
 {
-    use LdapHelpers;
+    use LdapHelpers, Logger;
 
     public function mailSignin(Request $request, $userToken){
         return $this->signin($request, null, $userToken);
@@ -248,7 +249,7 @@ class SigninController extends Controller
                 if (Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer) {
                     $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
                 } else {
-                    $request->session()->flash('info', 'Persoon succesvol ingeschreven!');
+                    $request->session()->flash('info', 'Inschrijving succesvol!');
                 }
             }
         } else {
@@ -277,6 +278,15 @@ class SigninController extends Controller
         $mensaUser->vegetarian = (bool)$request->has('vegetarian');
         $mensaUser->allergies = $request->input('allergies');
         $mensaUser->extra_info = $request->input('extrainfo');
+
+        // Log the singin
+        if($mensaUser->id == null){
+            $this->log($mensa,
+                $mensaUser->user->name.
+                ($mensaUser->confirmed?' is ingeschreven.':' heeft gereserveerd en moet zich nog bevestigen.'));
+        } else {
+            $this->log($mensa, 'De inschrijving van '.$mensaUser->user->name.' is aangepast.');
+        }
 
         // And lastly we save the user
         $mensaUser->save();
@@ -338,6 +348,10 @@ class SigninController extends Controller
         }
 
         $mensa->users()->where('lidnummer', Auth::user()->lidnummer)->delete();
+
+        // Log the signout
+        $this->log($mensa, Auth::user()->name.' is uitgeschreven.');
+
         return redirect(route('home'));
     }
 }

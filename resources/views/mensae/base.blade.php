@@ -28,6 +28,9 @@
                             <li{!! Route::is('mensa.signins') ? ' class="active"' : '' !!}>
                                 <a href="{{ route('mensa.signins', ['id' => $mensa->id]) }}">Inschrijvingen</a>
                             </li>
+                            <li{!! Route::is('mensa.logs') ? ' class="active"' : '' !!}>
+                                <a href="{{ route('mensa.logs', ['id' => $mensa->id]) }}">Logs</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="panel-body">
