@@ -33,12 +33,12 @@ class LoginController extends Controller
         // Then we grab the user object from LDAP using the samaccountname
         $user = $this->getLdapInfoBy('samaccountname', $request->input('username'));
         if($user == null){
-            return view('login', ['msg' => 'Something went wrong, contact '.env('MENSA_CONTACT_MAIL').' for more information (samaccountname not found in base user dn)']);
+            return view('login', ['msg' => 'Something went wrong, contact '.config('mensa.contact.mail').' for more information (samaccountname not found in base user dn)']);
         }
 
         // We check if the user is in the ADLDAP allowed group that we defined in the .env file
-        if($user->memberof == null || !in_array(env('ADLDAP_ALLOWED_GROUP', ''), $user->memberof)){
-            return view('login', ['msg' => 'Something went wrong, contact '.env('MENSA_CONTACT_MAIL').' for more information (not found in allowed group)']);
+        if($user->memberof == null || !in_array(config('mensa.ldap.allowed_group'), $user->memberof)){
+            return view('login', ['msg' => 'Something went wrong, contact '.config('mensa.contact.mail').' for more information (not found in allowed group)']);
         }
 
         $dbUser = $this->saveLdapUser($user);

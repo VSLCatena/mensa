@@ -48,13 +48,13 @@ Gegenereerd op {{ \Carbon\Carbon::now() }}
                 <tr>
                     <td>Afwasser</td>
                     <td style="border-bottom: 1px solid black;">&euro;</td>
-                    <td style="border-bottom: 1px solid black; text-align: right; padding-left: 5px; padding-right: 10px;">{{ number_format($mensa->payingUsers() * env('MENSA_SUBTRACT_DISHWASHER'), 2) }}</td>
+                    <td style="border-bottom: 1px solid black; text-align: right; padding-left: 5px; padding-right: 10px;">{{ number_format($mensa->payingUsers() * config('mensa.price_reduction.dishwasher'), 2) }}</td>
                     <td>-{{ $secondDishwasher ? '*':'' }}</td>
                 </tr>
                 <tr>
                     <td>Subtotaal</td>
                     <td>&euro;</td>
-                    <td style="text-align: right; padding-left: 5px; padding-right: 10px;">{{ number_format($mensa->budget(true) - ($mensa->payingUsers() * env('MENSA_SUBTRACT_DISHWASHER')), 2) }}</td>
+                    <td style="text-align: right; padding-left: 5px; padding-right: 10px;">{{ number_format($mensa->budget(true) - ($mensa->payingUsers() * config('mensa.price_reduction.dishwasher')), 2) }}</td>
                     <td>{{ $secondDishwasher ? '*':'' }}</td>
                 </tr>
                 <tr>
@@ -145,8 +145,8 @@ Gegenereerd op {{ \Carbon\Carbon::now() }}
                 *LET OP: wanneer er geen 2de afwasser volgt, stijgt het aantal gasten met 1,
                 gaat het budget naar &euro;{{ number_format($mensa->budget()+$mensa->defaultBudgetPerPayingUser(), 2) }},
                 inkomsten naar &euro;{{ number_format($mensa->budget(true) + $mensa->defaultBudgetPerPayingUser(), 2) }},
-                afwasser naar &euro;{{ number_format(($mensa->payingUsers()+1) * env('MENSA_SUBTRACT_DISHWASHER'), 2) }}
-                en het subtotaal wordt &euro;{{ number_format( ($mensa->budget(true) + $mensa->defaultBudgetPerPayingUser()) - (($mensa->payingUsers()+1) * env('MENSA_SUBTRACT_DISHWASHER'))  , 2) }}.
+                afwasser naar &euro;{{ number_format(($mensa->payingUsers()+1) * config('mensa.price_reduction.dishwasher'), 2) }}
+                en het subtotaal wordt &euro;{{ number_format( ($mensa->budget(true) + $mensa->defaultBudgetPerPayingUser()) - (($mensa->payingUsers()+1) * config('mensa.price_reduction.dishwasher'))  , 2) }}.
 
                 @if($singleDishwasherExtraConsumptions > 0)
                     Ook krijgt de afwasser dan {{ $singleDishwasherExtraConsumptions }} extra consumptie{{ $singleDishwasherExtraConsumptions==1?'':'s' }}.

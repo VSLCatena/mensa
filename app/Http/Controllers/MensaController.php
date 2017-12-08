@@ -68,9 +68,9 @@ class MensaController extends Controller
                 $mensa = Mensa::findOrFail($id);
             } else {
                 $mensa = new Mensa();
-                $mensa->title = env('MENSA_DEFAULT_NAME', '');
-                $mensa->max_users = env('MENSA_DEFAULT_MAX_USERS', 50);
-                $mensa->price = env('MENSA_DEFAULT_PRICE', 3.5);
+                $mensa->title = config('mensa.default.name');
+                $mensa->max_users = config('mensa.default.max_users');
+                $mensa->price = config('mensa.default.price');
             }
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
@@ -246,7 +246,7 @@ class MensaController extends Controller
         if($request->isMethod("get")){
             return view('mensae.confirmprintstate', compact('mensa'));
         }
-        Mail::to(env('MENSA_PRINTER_MAIL'))->send(new MensaState($mensa));
+        Mail::to(config('mensa.contact.printer'))->send(new MensaState($mensa));
 
         $mensa->closed = true;
         $mensa->save();

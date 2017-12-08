@@ -79,11 +79,11 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [
     }
 
     public function maxDishwashers(){
-        return $this->users()->count()-1 < env('MENSA_SECOND_DISHWASHER') ? 1 : 2;
+        return $this->users()->count()-1 < config('mensa.minimum.second_dishwasher') ? 1 : 2;
     }
 
     public function maxCooks(){
-        return $this->users()->count()-1 < env('MENSA_SECOND_COOK') ? 1 : 2;
+        return $this->users()->count()-1 < config('mensa.minimum.second_cook') ? 1 : 2;
     }
 
     public function defaultBudget($raw = false){
@@ -104,29 +104,29 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [
         // We subtract the amount that goes to the kitchen
         // And we subtract the amount that goes to the dishwashers
         // Both can be defined in the .env file
-        return $this->price - (env('MENSA_SUBTRACT_KITCHEN', 0.30) + env('MENSA_SUBTRACT_DISHWASHER', 0.50));
+        return $this->price - (config('mensa.price_reduction.kitchen') + config('mensa.price_reduction.dishwasher'));
     }
 
     public function consumptions($isCook, $isDishwasher, $noExtraDishwasher = false){
         $consumptions = 0;
         if($isCook){
             // Cooks get a base consumption amount
-            $cookConsumptions = env('MENSA_CONSUMPTIONS_COOK_BASE');
+            $cookConsumptions = config('mensa.consumptions.cook.base');
             // And then per X users you get an extra one
-            $cookConsumptions += floor($this->payingUsers() / env('MENSA_CONSUMPTIONS_COOK_1_PER_X_GUESTS'));
+            $cookConsumptions += floor($this->payingUsers() / config('mensa.consumptions.cook.1_per_x_guests'));
             // But we are limited to a maximum though
-            $consumptions += min($cookConsumptions, env('MENSA_CONSUMPTIONS_COOK_MAX'));
+            $consumptions += min($cookConsumptions, config('mensa.consumptions.cook.max'));
         }
 
         if($isDishwasher){
             // Per X users you get an extra consumption
-            $dishwasherConsumptions = floor($this->payingUsers() / env('MENSA_CONSUMPTIONS_DISHWASHER_SPLIT_1_PER_X_GUESTS'));
+            $dishwasherConsumptions = floor($this->payingUsers() / config('mensa.consumptions.dishwasher.split_1_per_x_guests'));
             // But we do split it over all the dishwashers
             $dishwasherConsumptions = floor($dishwasherConsumptions / ($noExtraDishwasher?count($this->dishwashers()):$this->maxDishwashers()));
             // Dishwashers do get a base consumption amount
-            $dishwasherConsumptions += env('MENSA_CONSUMPTIONS_DISHWASHER_BASE');
+            $dishwasherConsumptions += config('mensa.consumptions.dishwasher.base');
             // But we are limited to a maximum though
-            $consumptions += min($dishwasherConsumptions, env('MENSA_CONSUMPTIONS_DISHWASHER_MAX'));
+            $consumptions += min($dishwasherConsumptions, config('mensa.consumptions.dishwasher.max'));
         }
 
         return $consumptions;

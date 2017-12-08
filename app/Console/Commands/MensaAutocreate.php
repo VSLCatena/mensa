@@ -45,11 +45,11 @@ class MensaAutocreate extends Command
         if($count < 1){
             $this->info('No mensas found two weeks from now, creating...');
             $mensa = new Mensa();
-            $mensa->title = env('MENSA_DEFAULT_NAME', '');
-            $mensa->max_users = env('MENSA_DEFAULT_MAX_USERS', 1);
-            $mensa->price = env('MENSA_DEFAULT_PRICE', 3.5);
-            $mensa->date = Carbon::today()->addWeeks(2)->setTimeFromTimeString(env('MENSA_DEFAULT_START_TIME', '18:30'));
-            $mensa->closing_time = Carbon::today()->addWeeks(2)->setTimeFromTimeString(env('MENSA_DEFAULT_CLOSING_TIME', '16:00'));
+            $mensa->title = config('mensa.default.name');
+            $mensa->max_users = config('mensa.default.max_users');
+            $mensa->price = config('mensa.default.price');
+            $mensa->date = Carbon::today()->addWeeks(2)->setTimeFromTimeString(config('mensa.default.start_time'));
+            $mensa->closing_time = Carbon::today()->addWeeks(2)->setTimeFromTimeString(config('mensa.default.closing_time'));
             $mensa->save();
             $this->info('Created a new mensa using the default values');
         } else {

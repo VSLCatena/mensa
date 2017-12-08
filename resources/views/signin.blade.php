@@ -13,8 +13,8 @@
                             </div>
                         @endguest
                         <ul style="padding-left: 15px;">
-                            <li>Gebruik het e-mailadres dat bekend is bij {{ env('APP_NAME') }}.</li>
-                            <li>Bij meer dan 1 introduc&eacute;, bel de bar: {{ env('MENSA_BAR_PHONE') }}.</li>
+                            <li>Gebruik het e-mailadres dat bekend is bij {{ config('app.name') }}.</li>
+                            <li>Bij meer dan 1 introduc&eacute;, bel de bar: {{ config('mensa.contact.bar') }}.</li>
                             <li>Bevestig de reserveringsemail binnen 15 minuten, anders vervalt je reservering.</li>
                         </ul>
                         <div class="row">

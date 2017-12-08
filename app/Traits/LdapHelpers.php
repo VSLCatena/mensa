@@ -16,7 +16,7 @@ trait LdapHelpers
 {
     private function getLdapInfoBy($field, $value){
         return Adldap::search()
-            ->in(env('ADLDAP_USER_BASEDN'))
+            ->in(config('mensa.ldap.user_base'))
             ->findBy($field, $value);
     }
 
@@ -25,7 +25,7 @@ trait LdapHelpers
             return '';
         }
         $users = Adldap::search()->users()
-            ->in(env('ADLDAP_USER_BASEDN'))
+            ->in(config('mensa.ldap.user_base'))
             ->rawFilter('(cn=*'.$name.'*)')
             ->whereHas('mail')
             ->limit(10)
@@ -66,7 +66,7 @@ trait LdapHelpers
         $dbUser->phonenumber = $user->telephonenumber[0];
 
         // Check if the user is a mensa admin
-        $dbUser->mensa_admin = $user->memberof != null && in_array(env('ADLDAP_ADMIN_GROUP', ''), $user->memberof);
+        $dbUser->mensa_admin = $user->memberof != null && in_array(config('mensa.ldap.admin_group'), $user->memberof);
 
         // Save it back to the database
         $dbUser->save();

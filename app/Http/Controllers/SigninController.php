@@ -74,7 +74,7 @@ class SigninController extends Controller
 
                 $shouldSendMail = false;
             } catch(ModelNotFoundException $e){
-                return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met '.env('MENSA_CONTACT_MAIL').'.');
+                return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met '.config('mensa.contact.mail').'.');
             }
         } else {
             // If we can't get the mensa by the user token, we try to get it by the mensaId
@@ -217,7 +217,7 @@ class SigninController extends Controller
                 $request->flash();
                 $mensaUser->user()->associate(new User());
 
-                $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.env('MENSA_CONTACT_MAIL'));
+                $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.config('mensa.contact.mail').'.');
                 return view('signin', compact('mensaUser'));
             }
 
