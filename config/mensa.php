@@ -46,4 +46,17 @@ return [
         'user_base' => env('MENSA_LDAP_USER_BASEDN'),
     ],
 
+    'service_users' => [
+        [
+            'lidnummer' => 'bar_soos',
+            'name' => 'Bar soos',
+            'token' => env('MENSA_ACCOUNTURL_BAR001'),
+        ],
+        [
+            'lidnummer' => 'bar_fz',
+            'name' => 'Bar filmzaal',
+            'token' => env('MENSA_ACCOUNTURL_BAR002'),
+        ]
+    ],
+
 ];

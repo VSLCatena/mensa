@@ -64,14 +64,18 @@
                                     @admin
                                         <li><a href="#">Statistiek</a></li>
                                         <li><a href="#">Logboek</a></li>
-                                        <li role="separator" class="divider"></li>
+                                        @if(!Auth::user()->service_user)
+                                            <li role="separator" class="divider"></li>
+                                        @endif
                                     @endadmin
-                                    <li>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST">
-                                            {{ csrf_field() }}
-                                            <input type="submit" class="btn btn-link logout" value="Logout" />
-                                        </form>
-                                    </li>
+                                    @if(!Auth::user()->service_user)
+                                        <li>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                                {{ csrf_field() }}
+                                                <input type="submit" class="btn btn-link logout" value="Logout" />
+                                            </form>
+                                        </li>
+                                    @endif
                                 </ul>
                             </li>
                         @endguest

@@ -50,8 +50,35 @@ class LoginController extends Controller
         return redirect(route('home'));
     }
 
+    public function loginByToken($token){
+        $serviceUsers = config('mensa.service_users', []);
+
+        foreach($serviceUsers as $serviceUser){
+            if($token == $serviceUser['token']){
+                try {
+                    $user = User::findOrFail($serviceUser['lidnummer']);
+                } catch(ModelNotFoundException $e){
+                    $user = new User();
+                    $user->lidnummer = $serviceUser['lidnummer'];
+                }
+
+                $user->service_user = true;
+                $user->mensa_admin = true;
+                $user->email = $serviceUser['lidnummer'];
+                $user->name = $serviceUser['name'];
+                $user->save();
+                Auth::login($user, false);
+            }
+        }
+
+        return redirect(route('home'));
+    }
+
+
     public function logout(){
-        Auth::logout();
+        if(Auth::check() && !Auth::user()->user_service) {
+            Auth::logout();
+        }
         return redirect(route('home'));
     }
 }

@@ -51,13 +51,13 @@ class SigninController extends Controller
         } // The reason we're doing it here is so we don't have to do it with every error message we display
 
         // First we try if we can get the mensa by the user token
-        if($userToken != null){
+        if($userToken != null) {
             try {
                 // We want to create a query object to search for a certain signin
                 /* @var $userQuery \Doctrine\DBAL\Query\QueryBuilder */
                 $userQuery = MensaUser::where('confirmation_code', $userToken);
                 // And ONLY if we're admin, we allow to do it with the id too
-                if(Auth::check() && Auth::user()->mensa_admin){
+                if (Auth::check() && Auth::user()->mensa_admin) {
                     $userQuery = $userQuery->orWhere('id', $userToken);
                 }
 
@@ -67,15 +67,17 @@ class SigninController extends Controller
                 // If the selected user is an intro, we retrieve the main user and switch them around
                 // We can also sign people in as intro without the person introing it having to be there
                 // So make sure the main person exists
-                if($mensaUser->is_intro && $mensaUser->mainUser != null){
+                if ($mensaUser->is_intro && $mensaUser->mainUser != null) {
                     $introUser = $mensaUser;
                     $mensaUser = $mensaUser->mainUser;
                 }
 
                 $shouldSendMail = false;
-            } catch(ModelNotFoundException $e){
-                return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met '.config('mensa.contact.mail').'.');
+            } catch (ModelNotFoundException $e) {
+                return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met ' . config('mensa.contact.mail') . '.');
             }
+        } else if(Auth::check() && Auth::user()->service_user){
+            return redirect(route('home'))->with('error', 'Je kan jezelf niet inschrijven!');
         } else {
             // If we can't get the mensa by the user token, we try to get it by the mensaId
             try {

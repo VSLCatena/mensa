@@ -3,6 +3,7 @@
 Route::get('/', 'HomeController@index')->name('home');
 
 // Login and log out
+Route::get('login/{token}', 'LoginController@loginByToken');
 Route::match(['get', 'post'], 'login', 'LoginController@login')->name('login');
 Route::post('logout', 'LoginController@logout')->name('logout');
 
