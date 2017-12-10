@@ -47,16 +47,19 @@ return [
     ],
 
     'service_users' => [
-        [
-            'lidnummer' => 'bar_soos',
-            'name' => 'Bar soos',
-            'token' => env('MENSA_ACCOUNTURL_BAR001'),
+        'users' => [
+            [
+                'lidnummer' => 'bar_soos',
+                'name' => 'Bar soos',
+                'token' => env('MENSA_ACCOUNTURL_BAR001'),
+            ],
+            [
+                'lidnummer' => 'bar_fz',
+                'name' => 'Bar filmzaal',
+                'token' => env('MENSA_ACCOUNTURL_BAR002'),
+            ]
         ],
-        [
-            'lidnummer' => 'bar_fz',
-            'name' => 'Bar filmzaal',
-            'token' => env('MENSA_ACCOUNTURL_BAR002'),
-        ]
+        'whitelisted_ips' => explode(',', env('MENSA_ACCOUNT_WHITELIST_IPS')),
     ],
 
 ];

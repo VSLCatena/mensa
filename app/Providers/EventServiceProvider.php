@@ -18,7 +18,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         'Illuminate\Auth\Events\Login' => [
             'App\Listeners\CookieLoginListener',
-        ]
+        ],
+        'Illuminate\Auth\Events\Authenticated' => [
+            'App\Listeners\ServiceUserIPWhitelistListener',
+        ],
     ];
 
     /**

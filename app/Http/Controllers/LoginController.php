@@ -51,7 +51,7 @@ class LoginController extends Controller
     }
 
     public function loginByToken($token){
-        $serviceUsers = config('mensa.service_users', []);
+        $serviceUsers = config('mensa.service_users.users', []);
 
         foreach($serviceUsers as $serviceUser){
             if($token == $serviceUser['token']){
