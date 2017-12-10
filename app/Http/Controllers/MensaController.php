@@ -239,10 +239,6 @@ class MensaController extends Controller
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
 
-        if($mensa->closed){
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
-        }
-
         if($request->isMethod("get")){
             return view('mensae.confirmprintstate', compact('mensa'));
         }
@@ -256,5 +252,16 @@ class MensaController extends Controller
         $this->log($mensa, 'Mensastaat uitgeprint.');
 
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensastaat is uitgeprint!');
+    }
+
+    public function printStatePreview(Request $request, $mensaId){
+
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        return new MensaState($mensa);
     }
 }

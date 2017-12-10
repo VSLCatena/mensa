@@ -32,6 +32,7 @@ Route::prefix('mensa')->group(function() {
     Route::match(['get', 'post'], '{mensaId}/signin/new', 'MensaController@newSignin')->name('mensa.newsignin');
     Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'SigninController@signin')->name('mensa.editsignin');
     Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', 'MensaController@removeSignin')->name('mensa.removesignin');
+    Route::match(['get', 'post'], '{mensaId}/printstate/preview', 'MensaController@printStatePreview')->name('mensa.printstate.preview');
     Route::match(['get', 'post'], '{mensaId}/printstate', 'MensaController@printState')->name('mensa.printstate');
     Route::get('{mensaId}/logs', 'MensaController@showLogs')->name('mensa.logs');
 });

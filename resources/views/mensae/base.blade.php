@@ -11,12 +11,11 @@
                             @if(!$mensa->closed)
                                 <a href="{{ route('mensa.newsignin', ['id' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a>
                                 <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
-                                <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
                             @else
                                 <span class="btn btn-default disabled">Iemand inschrijven</span>
                                 <span class="btn btn-default disabled">Mensagegevens wijzigen</span>
-                                <span class="btn btn-default disabled">Mensastaat printen</span>
                             @endif
+                            <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
                             <a href="#" class="btn btn-default">// Mensa annuleren</a>
                         </div>
                     </div>

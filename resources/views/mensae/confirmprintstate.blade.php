@@ -13,6 +13,7 @@
                         {{ csrf_field() }}
                         <input type="submit" class="btn btn-danger" value="Ja" />
                         <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-success">Nee</a>
+                        <a href="{{ route('mensa.printstate.preview', ['id' => $mensa->id]) }}" target="_blank" class="btn btn-default">Alleen bekijken</a>
                     </div>
                 </form>
             </div>

@@ -122,7 +122,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [
             // Per X users you get an extra consumption
             $dishwasherConsumptions = floor($this->payingUsers() / config('mensa.consumptions.dishwasher.split_1_per_x_guests'));
             // But we do split it over all the dishwashers
-            $dishwasherConsumptions = floor($dishwasherConsumptions / ($noExtraDishwasher?count($this->dishwashers()):$this->maxDishwashers()));
+            $dishwasherConsumptions = floor($dishwasherConsumptions / max($noExtraDishwasher?count($this->dishwashers()):$this->maxDishwashers(), 1));
             // Dishwashers do get a base consumption amount
             $dishwasherConsumptions += config('mensa.consumptions.dishwasher.base');
             // But we are limited to a maximum though
@@ -142,7 +142,7 @@ WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [
             $this->payingUsers = $payingUsers;
         }
 
-        return $this->payingUsers;
+        return max($this->payingUsers, 0);
     }
 
     public function countStaff(){
