@@ -48,7 +48,9 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if(!$mensa->closed)
+                                        @if($mensa->max_users <= 0)
+                                            <span class="text-danger">Geannuleerd</span>
+                                        @elseif(!$mensa->closed)
                                             {{ $mensa->closingTime(true) }}
                                         @else
                                             <span class="text-danger">Gesloten</span>
@@ -56,7 +58,9 @@
                                     </td>
                                     <td>
                                         <div class="btn-group-vertical">
-                                            @if(!Auth::check() || !Auth::user()->service_user)
+                                            @if($mensa->max_users <= 0 && (!Auth::check() || !Auth::user()->service_user))
+                                                <span class="btn btn-primary disabled">Geannuleerd</span>
+                                            @elseif(!Auth::check() || !Auth::user()->service_user)
                                                 @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
                                                     <form method="POST" @admin class="btn-group-vertical" @endadmin action="{{ route('signout', ['id' => $mensa->id]) }}">
                                                         <input type="submit" class="btn btn-danger {{ $mensa->closed?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
@@ -64,7 +68,11 @@
                                                         <input type="hidden" name="id" value="{{ $mensa->id }}" />
                                                     </form>
                                                 @elseif(!$mensa->closed)
-                                                    <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
+                                                    @if($mensa->max_users > $mensa->users()->count())
+                                                        <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
+                                                    @else
+                                                        <span class="btn btn-primary disabled">Vol</span>
+                                                    @endif
                                                 @else
                                                     <span class="btn btn-primary disabled">Gesloten</span>
                                                 @endif

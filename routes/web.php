@@ -38,6 +38,7 @@ Route::prefix('mensa')->group(function() {
 
     Route::post('{mensaId}/close', 'MensaController@closeMensa')->name('mensa.close');
     Route::match(['get', 'post'], '{mensaId}/reopen', 'MensaController@openMensa')->name('mensa.open');
+    Route::match(['get', 'post'], '{mensaId}/cancel', 'MensaController@cancelMensa')->name('mensa.cancel');
 });
 
 Route::get('/mailexample/1', function () {

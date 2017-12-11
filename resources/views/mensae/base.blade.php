@@ -15,7 +15,7 @@
                                 <a href="{{ route('mensa.open', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa openen voor wijzigingen</a>
                             @endif
                             <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
-                            <a href="#" class="btn btn-default">// Mensa annuleren</a>
+                            <a href="{{ route('mensa.cancel', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
                         </div>
                     </div>
                     <div class="panel-body">

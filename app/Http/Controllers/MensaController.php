@@ -304,4 +304,26 @@ class MensaController extends Controller
         $this->log($mensa, 'Mensa gesloten voor wijzigingen');
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa gesloten voor aanpassingen!');
     }
+
+    public function cancelMensa(Request $request, $mensaId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($mensa->max_users <= 0) {
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al geannuleerd!');
+        }
+
+        if($request->isMethod("get")){
+            return view('mensae.confirmcancel', compact('mensa'));
+        }
+
+        $mensa->max_users = 0;
+        $mensa->save();
+
+        $this->log($mensa, 'Mensa geannuleerd');
+        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geannuleerd!');
+    }
 }
