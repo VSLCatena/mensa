@@ -12,8 +12,7 @@
                                 <a href="{{ route('mensa.newsignin', ['id' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a>
                                 <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
                             @else
-                                <span class="btn btn-default disabled">Iemand inschrijven</span>
-                                <span class="btn btn-default disabled">Mensagegevens wijzigen</span>
+                                <a href="{{ route('mensa.open', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa openen voor wijzigingen</a>
                             @endif
                             <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
                             <a href="#" class="btn btn-default">// Mensa annuleren</a>

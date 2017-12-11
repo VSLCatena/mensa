@@ -47,7 +47,13 @@
                                             {{ count($mensa->dishwashers()) }} afwasser{{ ((count($mensa->dishwashers()) > 1)?'s':'') }}*
                                         @endif
                                     </td>
-                                    <td>{{ !$mensa->closed ? $mensa->closingTime(true) : 'Gesloten' }}</td>
+                                    <td>
+                                        @if(!$mensa->closed)
+                                            {{ $mensa->closingTime(true) }}
+                                        @else
+                                            <span class="text-danger">Gesloten</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="btn-group-vertical">
                                             @if(!Auth::check() || !Auth::user()->service_user)
@@ -60,7 +66,7 @@
                                                 @elseif(!$mensa->closed)
                                                     <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
                                                 @else
-                                                    <span href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary disabled">Gesloten</span>
+                                                    <span class="btn btn-primary disabled">Gesloten</span>
                                                 @endif
                                             @endif
                                             @admin

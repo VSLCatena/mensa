@@ -264,4 +264,44 @@ class MensaController extends Controller
 
         return new MensaState($mensa);
     }
+
+    public function openMensa(Request $request, $mensaId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($request->isMethod('get')){
+            return view('mensae.confirmreopen', compact('mensa'));
+        }
+
+        if(!$mensa->closed) {
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al gesloten!');
+        }
+
+        $mensa->closed = false;
+        $mensa->save();
+
+        $this->log($mensa, 'Mensa opnieuw geopend voor wijzigingen');
+        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geopend voor aanpassingen!');
+    }
+
+    public function closeMensa(Request $request, $mensaId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($mensa->closed) {
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al geopend!');
+        }
+
+        $mensa->closed = true;
+        $mensa->save();
+
+        $this->log($mensa, 'Mensa gesloten voor wijzigingen');
+        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa gesloten voor aanpassingen!');
+    }
 }

@@ -35,6 +35,9 @@ Route::prefix('mensa')->group(function() {
     Route::match(['get', 'post'], '{mensaId}/printstate/preview', 'MensaController@printStatePreview')->name('mensa.printstate.preview');
     Route::match(['get', 'post'], '{mensaId}/printstate', 'MensaController@printState')->name('mensa.printstate');
     Route::get('{mensaId}/logs', 'MensaController@showLogs')->name('mensa.logs');
+
+    Route::post('{mensaId}/close', 'MensaController@closeMensa')->name('mensa.close');
+    Route::match(['get', 'post'], '{mensaId}/reopen', 'MensaController@openMensa')->name('mensa.open');
 });
 
 Route::get('/mailexample/1', function () {
@@ -45,9 +48,4 @@ Route::get('/mailexample/1', function () {
 Route::get('/mailexample/2', function () {
     $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
     return new App\Mail\SigninConfirmed($mensaUser);
-});
-
-Route::get('/mailexample/3/{id}', function ($id) {
-    $mensa = App\Models\Mensa::orderBy('created_at', 'DESC')->findOrFail($id);
-    return new App\Mail\MensaState($mensa);
 });
