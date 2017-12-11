@@ -41,17 +41,19 @@ Route::prefix('mensa')->group(function() {
     Route::match(['get', 'post'], '{mensaId}/cancel', 'MensaController@cancelMensa')->name('mensa.cancel');
 });
 
-Route::get('/mailexample/1', function () {
-    $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
-    return new App\Mail\SigninConformation($mensaUser);
-});
+if(config('app.debug', false)){
+    Route::get('/mailexample/1', function () {
+        $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
+        return new App\Mail\SigninConformation($mensaUser);
+    });
 
-Route::get('/mailexample/2', function () {
-    $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
-    return new App\Mail\SigninConfirmed($mensaUser);
-});
+    Route::get('/mailexample/2', function () {
+        $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
+        return new App\Mail\SigninConfirmed($mensaUser);
+    });
 
-Route::get('/mailexample/3', function() {
-    $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
-    return new App\Mail\SigninCancelled($mensaUser);
-});
+    Route::get('/mailexample/3', function() {
+        $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
+        return new App\Mail\SigninCancelled($mensaUser);
+    });
+}
