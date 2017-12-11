@@ -5,7 +5,14 @@
     <div class="row">
         <div class="col-xs-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Mensae in de komende 2 weken</div>
+                <div class="panel-heading">
+                    @if(!isset($page) || $page == 0)
+                        Mensae in de komende 2 weken
+                    @else
+                        Mansae tussen {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2), false, false, false) }}
+                        en {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2 + 2), false, false, false) }}
+                    @endif
+                </div>
 
                 <div class="panel-body">
                     @if (session('status'))
@@ -88,7 +95,18 @@
                     </table>
                 </div>
                 <div class="panel-footer">
-                    << >>
+                    <a href="{{
+                        $page == 1 ?
+                            route('home') :
+                            route('home.page', ['page' => (isset($page) ? $page-1 : -1)])
+                    }}" class="pull-left">&lt;&lt;</a>
+
+                    <a href="{{
+                        $page == -1 ?
+                            route('home') :
+                            route('home.page', ['page' => (isset($page) ? $page+1 : 1)])
+                    }}" class="pull-right">&gt;&gt;</a>
+                    <br class="clearfix"/>
                 </div>
             </div>
         </div>

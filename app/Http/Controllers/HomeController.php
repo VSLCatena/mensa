@@ -22,9 +22,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 0)
     {
-        $mensae = Mensa::whereBetween('date', array(Carbon::today(), Carbon::today()->addWeeks(2)))->orderBy('date', 'ASC')->get();
-        return view('home', compact('mensae'));
+        if(!is_numeric($page)) {
+            return redirect(route('home'));
+        }
+
+        $page = intval($page);
+
+        $mensae = Mensa::whereBetween('date', array(Carbon::today()->addWeeks($page*2), Carbon::today()->addWeeks($page*2+2)))->orderBy('date', 'ASC')->get();
+        return view('home', compact('mensae', 'page'));
     }
 }

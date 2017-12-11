@@ -1,6 +1,7 @@
 <?php
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/page/{page}', 'HomeController@index')->name('home.page');
 
 // Login and log out
 Route::get('login/{token}', 'LoginController@loginByToken');
