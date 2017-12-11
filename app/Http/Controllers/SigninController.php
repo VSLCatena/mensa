@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Adldap\Laravel\Facades\Adldap;
+use App\Mail\SigninCancelled;
 use App\Mail\SigninConfirmed;
 use App\Mail\SigninConformation;
 use App\Models\Mensa;
@@ -345,14 +346,16 @@ class SigninController extends Controller
 
         try {
             $mensa = Mensa::findOrFail($request->input('id'));
+            $mensaUser = $mensa->users()->where('lidnummer', Auth::user()->lidnummer)->firstOrFail();
         } catch(ModelNotFoundException $e){
             return redirect(route('home'));
         }
 
-        $mensa->users()->where('lidnummer', Auth::user()->lidnummer)->delete();
-
         // Log the signout
         $this->log($mensa, Auth::user()->name.' is uitgeschreven.');
+
+        // Send signout email
+        Mail::to($mensaUser->user)->send(new SigninCancelled($mensaUser));
 
         return redirect(route('home'));
     }

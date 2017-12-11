@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SigninCancelled;
 use App\Mail\SigninConfirmed;
 use App\Models\MensaUser;
 use App\Traits\Logger;
@@ -49,7 +50,8 @@ class ConfirmController extends Controller
         // Log the cancellation
         $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft zich uitgeschreven.');
 
-        // TODO Send email
+        // Send signout email
+        Mail::to($mensaUser->user)->send(new SigninCancelled($mensaUser));
 
         return redirect(route('home'))->with('info', 'Je hebt je succesvol uitgeschreven!');
     }

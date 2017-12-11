@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\MensaState;
+use App\Mail\SigninCancelled;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
@@ -200,6 +201,9 @@ class MensaController extends Controller
 
         // Log the deletion
         $this->log($mUser->mensa, $mUser->user->name.' is uitgeschreven.');
+
+        // Send signout email
+        Mail::to($mUser->user)->send(new SigninCancelled($mUser));
 
         return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
     }
