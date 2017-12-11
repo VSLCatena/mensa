@@ -129,6 +129,9 @@ class MensaController extends Controller
 
         $prices = $request->all('price')['price'];
         for($i = 1; $i < count($prices); $i++){
+            if(empty($prices[$i]['description']))
+                continue;
+
             if(isset($prices[$i]['id'])) {
                 $mensaPrice = MensaExtraOption::find($prices[$i]['id']);
             } else {
