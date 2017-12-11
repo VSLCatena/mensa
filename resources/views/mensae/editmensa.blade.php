@@ -17,11 +17,10 @@
         <div class="row">
             <div class="col-xs-12 col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
-                    <div class="panel-heading"></div>
+                    <div class="panel-heading">{{ $mensa->id == null ? 'Mensa aanmaken' : ('Mensa wijzigen van '.formatDate($mensa->date, false, false)) }}</div>
                     <div class="panel-body">
                         <form method="POST" action="">
                             {{ csrf_field() }}
-                            <input type="hidden" name="id" value="{{ $mensa->id }}" />
                             <input type="hidden" name="edited" value="true" />
                             <div class="form-group">
                                 <label for="title">Titel:</label>
@@ -122,12 +121,19 @@
                             $('#date').datetimepicker({
                                 format: 'DD-MM-YYYY HH:mm',
                                 minDate: moment().set('hour', 0).set('minute', 0),
-                                defaultDate: moment().set('hour', 19).set('minute', 0)
+                                defaultDate: {{ old('date',
+                                $mensa->id != null ?
+                                new \Illuminate\Support\HtmlString("moment('".$mensa->date."')") :
+                                new \Illuminate\Support\HtmlString("moment().set('hour', 19).set('minute', 0)")
+                                ) }}
                             });
                             $('#closing_time').datetimepicker({
                                 format: 'DD-MM-YYYY HH:mm',
                                 minDate: moment().set('hour', 0).set('minute', 0),
-                                defaultDate: moment().set('hour', 16).set('minute', 0),
+                                defaultDate: {{ old('date',
+                                $mensa->id != null ?
+                                new \Illuminate\Support\HtmlString("moment('".$mensa->closing_time."')") :
+                                new \Illuminate\Support\HtmlString("moment().set('hour', 16).set('minute', 0)")) }},
                                 stepping: 5
                             });
 
