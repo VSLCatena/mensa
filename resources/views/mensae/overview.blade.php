@@ -37,6 +37,15 @@
         @endif
 
     </div>
+
+    @if(count($unconfirmedUsers) > 0)
+        <div class="alert alert-warning">
+            Er zijn leden die hun inschrijving nooit bevestigd hebben en derhalve vanzelf uitgeschreven zijn:<br />
+            @foreach($unconfirmedUsers as $unconfirmedUser)
+                {{ $unconfirmedUser->user->name }} ({{ $unconfirmedUser->user->phonenumber }})<br />
+            @endforeach
+        </div>
+    @endif
     <div class="alert alert-{{ $cooks ? 'success' : 'danger' }}">
         @if($cooks != 1)
             Er zijn {{ $cooks }} kokers.

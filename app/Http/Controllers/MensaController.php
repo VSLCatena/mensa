@@ -42,11 +42,17 @@ class MensaController extends Controller
         $payingUsers = $mensa->payingUsers();
 
 
+        $unconfirmedUsers = $mensa->users()->onlyTrashed()->distinct()
+            ->where('confirmed', '0')
+            ->whereNotIn('lidnummer', $mensa->users()->get(['lidnummer'])->map(function($el){ return $el->lidnummer; }))
+            ->get(['lidnummer', 'mensa_id']);
+
+
         $staffIds = $mensa->staff()->map(function($item){
             return $item->id;
         });
 
-        return view('mensae.overview', compact('mensa', 'users', 'staffIds', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
+        return view('mensae.overview', compact('mensa', 'users', 'unconfirmedUsers', 'staffIds', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
     }
 
     public function showSignins(Request $request, $id){
@@ -265,6 +271,9 @@ class MensaController extends Controller
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
+
+        // Delete all unconfirmed users
+        $mensa->users()->where('confirmed', '0')->delete();
 
         return new MensaState($mensa);
     }

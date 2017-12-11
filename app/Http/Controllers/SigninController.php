@@ -12,6 +12,7 @@ use App\Models\MensaUser;
 use App\Models\User;
 use App\Traits\LdapHelpers;
 use App\Traits\Logger;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,9 +35,6 @@ class SigninController extends Controller
         $mensaUser = null;
         $introUser = null;
         $mensa = null;
-
-        $shouldSendMail = true;
-        $shouldSendVerificationMailInstead = false;
 
         if(Auth::check() && Auth::user()->mensa_admin && $id != null && $userToken != null){
             $request->session()->flash('asAdmin', 'true');
@@ -73,7 +71,6 @@ class SigninController extends Controller
                     $mensaUser = $mensaUser->mainUser;
                 }
 
-                $shouldSendMail = false;
             } catch (ModelNotFoundException $e) {
                 return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met ' . config('mensa.contact.mail') . '.');
             }
@@ -194,21 +191,14 @@ class SigninController extends Controller
         if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')){
             $mensaUser->confirmed = true;
 
-            $shouldSendMail = false;
-            $shouldSendVerificationMailInstead = true;
-
             if($request->has('as_intro')){
                 $mensaUser->is_intro = true;
-                $shouldSendVerificationMailInstead = false;
             }
         }
         // If the user is logged in, depending if the email address is the same as the users', we automatically verify the user or not
         else if($user != null && $request->has('email') && strtolower($user->email) == strtolower($request->input('email'))){
             $mensaUser->confirmed = true;
             $mensaUser->lidnummer = $user->lidnummer;
-
-            $shouldSendMail = false;
-            $shouldSendVerificationMailInstead = true;
         }
 
 
@@ -233,19 +223,19 @@ class SigninController extends Controller
         if($mensaUser->id == null && !$mensaUser->is_intro) {
             /* @var $possibleDuplicate MensaUser */
             $possibleDuplicate = $mensa->users()
+                ->withTrashed()
                 ->where('lidnummer', $mensaUser->lidnummer)
                 ->where('is_intro', '0')->first();
 
             if ($possibleDuplicate != null) {
                 $mensaUser = $possibleDuplicate;
+                $mensaUser->setCreatedAt(Carbon::now());
+                $mensaUser->restore();
 
                 // Check if we already had an intro
                 if ($possibleDuplicate->intros()->count() > 0) {
                     $introUser = $possibleDuplicate->intros()->first();
                 }
-
-                $shouldSendMail = false;
-                $shouldSendVerificationMailInstead = false;
 
                 $request->session()->flash('warning', 'We hebben een oude inschrijving voor deze mensa van je gevonden, deze hebben we geupdatet!');
             } else {
@@ -326,9 +316,9 @@ class SigninController extends Controller
 
 
         // Do the sending stuffz
-        if($shouldSendMail){
+        if(!$mensaUser->confirmed){
             Mail::to($mensaUser->user)->send(new SigninConformation($mensaUser));
-        } else if($shouldSendVerificationMailInstead){
+        } else {
             Mail::to($mensaUser->user)->send(new SigninConfirmed($mensaUser));
         }
 
