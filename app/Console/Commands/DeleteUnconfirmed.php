@@ -3,11 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Models\MensaUser;
+use App\Traits\Logger;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class DeleteUnconfirmed extends Command
 {
+    use Logger;
     /**
      * The name and signature of the console command.
      *
@@ -39,7 +41,10 @@ class DeleteUnconfirmed extends Command
      */
     public function handle()
     {
-        $affected = MensaUser::where('confirmed', '0')->where('created_at', '<', Carbon::now()->subMinutes(15))->delete();
-        $this->line($affected.' user(s) was/were automatically signed out!');
+        $unconfirmedUsers = MensaUser::where('confirmed', '0')->where('created_at', '<', Carbon::now()->subMinutes(15))->get();
+        foreach($unconfirmedUsers as $user){
+            $user->delete();
+            $this->log($user->mensa, $user->user->name.'\'s reservering is verlopen en wordt verwijderd.');
+        }
     }
 }
