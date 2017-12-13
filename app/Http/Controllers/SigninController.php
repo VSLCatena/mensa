@@ -24,67 +24,144 @@ class SigninController extends Controller
     use LdapHelpers, Logger;
 
     public function mailSignin(Request $request, $userToken){
-        return $this->signin($request, null, $userToken);
+        try {
+            $mensaUser = MensaUser::where('confirmation_code', $userToken)->firstOrFail();
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
+        }
+
+        return $this->handleSignin($request, $mensaUser, $mensaUser->intros()->first());
     }
 
-    public function signin(Request $request, $id = null, $userToken = null){
-
-        /* @var $mensaUser MensaUser */
-        /* @var $introUser MensaUser */
-        /* @var $mensa Mensa */
-        $mensaUser = null;
-        $introUser = null;
-        $mensa = null;
-
-        if(Auth::check() && Auth::user()->mensa_admin && $id != null && $userToken != null){
-            $request->session()->flash('asAdmin', 'true');
+    public function newSignin(Request $request, $mensaId, $lidnummer = null){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
 
-        // We want to keep asAdmin and extra_lidnummer around
-        if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')) {
-            $request->session()->reflash();
-            // Except the default warnings and such, it's annoying to have them go with us after redirecting
-            $request->session()->remove('info');
-            $request->session()->remove('warning');
-            $request->session()->remove('error');
-        } // The reason we're doing it here is so we don't have to do it with every error message we display
+        // We create a generic mensa user which we can later copy from
+        $mensaUser = new MensaUser();
+        $mensaUser->paid = false;
+        $mensaUser->cooks = false;
+        $mensaUser->is_intro = false;
+        $mensaUser->confirmed = false;
+        // We also generate a confirmation link, this will be used both for signing in and out
+        $mensaUser->confirmation_code = bin2hex(random_bytes(32));
+        // We associate the user to a mensa (or the other way around, not like it matters)
+        $mensaUser->mensa()->associate($mensa);
 
-        // First we try if we can get the mensa by the user token
-        if($userToken != null) {
-            try {
-                // We want to create a query object to search for a certain signin
-                /* @var $userQuery \Doctrine\DBAL\Query\QueryBuilder */
-                $userQuery = MensaUser::where('confirmation_code', $userToken);
-                // And ONLY if we're admin, we allow to do it with the id too
-                if (Auth::check() && Auth::user()->mensa_admin) {
-                    $userQuery = $userQuery->orWhere('id', $userToken);
-                }
-
-                $mensaUser = $userQuery->firstOrFail();
-                $mensa = $mensaUser->mensa;
-
-                // If the selected user is an intro, we retrieve the main user and switch them around
-                // We can also sign people in as intro without the person introing it having to be there
-                // So make sure the main person exists
-                if ($mensaUser->is_intro && $mensaUser->mainUser != null) {
-                    $introUser = $mensaUser;
-                    $mensaUser = $mensaUser->mainUser;
-                }
-
-            } catch (ModelNotFoundException $e) {
-                return redirect(route('home'))->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met ' . config('mensa.contact.mail') . '.');
-            }
-        } else if(Auth::check() && Auth::user()->service_user){
+        // If the user is a service user, we want to block it.
+        if(Auth::check() && Auth::user()->service_user && $lidnummer == null){
             return redirect(route('home'))->with('error', 'Je kan jezelf niet inschrijven!');
-        } else {
-            // If we can't get the mensa by the user token, we try to get it by the mensaId
+        }
+
+        // We can give some feedback for if the mensa is full
+        if ($mensaUser->id == null && $mensa->max_users <= $mensa->users()->count()) {
+            $request->session()->flash('warning', 'Deze mensa zit vol!');
+        }
+
+        // If the user is a mensa admin, we allow him to sign someone else in with his lidnummer
+        if($lidnummer != null && Auth::check() && Auth::user()->mensa_admin){
             try {
-                $mensa = Mensa::findOrFail($id);
+                $user = $this->getLdapUserBy('description', $lidnummer);
             } catch(ModelNotFoundException $e){
-                return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+                return redirect(route('home'))->with('error', 'Persoon niet gevonden!');
+            }
+            $mensaUser->user()->associate($user);
+            $mensaUser->confirmed = true;
+        } else {
+            $mensaUser->user()->associate(Auth::check()?Auth::user(): new User());
+        }
+
+        // If the signin is new, and the person wants to sign in himself we automatically confirm him
+        if(Auth::check() && $request->has('email') && strtolower(Auth::user()->email) == strtolower($request->input('email'))){
+            $mensaUser->confirmed = true;
+            $mensaUser->lidnummer = Auth::user()->lidnummer;
+        }
+
+        // We replicate the mensa user, which makes everything easier for us
+        $introUser = $mensaUser->replicate();
+        $introUser->is_intro = true;
+
+
+        if($request->isMethod('post')) {
+            // If we already got POST data, we want to process some stuff
+            // If we didn't provide a lidnummer but an email is provided, we want to check LDAP
+            if($lidnummer == null && $request->has('email')){
+                $user = $this->getLdapUserBy('mail', $request->input('email'));
+                // We check if the user can be found in LDAP, and if not, we return back to the form with an error message
+                if($user == null){
+                    $mensaUser->user()->associate(new User());
+                    $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.config('mensa.contact.mail').'.');
+                    return view('signin', compact('mensaUser', 'introUser'));
+                }
+
+                $mensaUser->user()->associate($user);
+                $introUser->user()->associate($user);
+
+                // Otherwise we update the mensaUser and introUser
+                $mensaUser->lidnummer = $user->lidnummer;
+                $introUser->lidnummer = $user->lidnummer;
+            }
+
+            // Then we check if we haven't found a previous signin of the user
+            /* @var $possibleDuplicate MensaUser */
+            $possibleDuplicate = $mensa->users()
+                ->withTrashed()
+                ->where('lidnummer', $mensaUser->lidnummer)
+                ->where('is_intro', '0')->first();
+
+            if ($possibleDuplicate != null) {
+                $mensaUser = $possibleDuplicate;
+                $mensaUser->setCreatedAt(Carbon::now());
+                $mensaUser->restore();
+
+                // Check if we already had an intro
+                if ($possibleDuplicate->intros()->count() > 0) {
+                    $introUser = $possibleDuplicate->intros()->first();
+                }
+
+                $request->session()->flash('warning', 'We hebben een oude inschrijving voor deze mensa van je gevonden, deze hebben we geupdatet!');
+            } // We want to be sure that we aren't going over the maximum amount of signins
+            else {
+                $addedUsers = ($mensaUser->id == null ? 1 : 0) + (($request->has('intro') && $introUser->id == null) ? 1 : 0);
+                // If the amount of users we currently have, plus the new users we are about to add
+                // exceed the max users of a mensa, we want to cancel
+                if ($mensa->users()->count() + $addedUsers > $mensa->max_users) {
+                    Input::flash();
+                    $request->session()->flash('error', 'Deze mensa zit vol!');
+                    return view('signin', compact('mensaUser', 'introUser'));
+                }
             }
         }
 
+
+        return $this->handleSignin($request, $mensaUser, $introUser);
+    }
+
+
+    public function editSignin(Request $request, $mensaId, $mensaUserId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+            $mensaUser = $mensa->users()->where('id', $mensaUserId)->firstOrFail();
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
+        }
+
+        if(!Auth::check() || (Auth::user()->lidnummer != $mensaUser->user->lidnummer && !Auth::user()->mensa_admin)){
+            return redirect(route('home'))->with('error', 'Je mag deze inschrijving niet wijzigen!');
+        }
+
+        return $this->handleSignin($request, $mensaUser, $mensaUser->intros()->first());
+    }
+
+
+    /* @var $mensa Mensa */
+    /* @var $mensaUser MensaUser */
+    /* @var $introUser MensaUser */
+    private function handleSignin(Request $request, $mensaUser, $introUser = null){
+        $mensa = $mensaUser->mensa;
         // We check if the Mensa isn't closed yet
         if($mensa->closed){
             $route = (Auth::check() && Auth::user()->mensa_admin) ?
@@ -93,64 +170,8 @@ class SigninController extends Controller
             return redirect($route)->with('error', 'Deze mensa is al gesloten!');
         }
 
-        // If we aren't editing, we are creating!
-        if($mensaUser == null){
-            $mensaUser = new MensaUser();
-            $mensaUser->paid = false;
-            $mensaUser->cooks = false;
-            $mensaUser->is_intro = false;
-            $mensaUser->confirmed = false;
-            // We also generate a confirmation link, this will be used both for signing in and out
-            $mensaUser->confirmation_code = bin2hex(random_bytes(32));
-            // We associate the user to a mensa (or the other way around, not like it matters)
-            $mensaUser->mensa()->associate($mensa);
-        }
-
-        // Same applies to this one, we create a new intro if none has been defined yet
-        if(!$mensaUser->is_intro && $introUser == null){
-            if($mensaUser->intros()->count() > 0){
-                $introUser = $mensaUser->intros()->first();
-            } else {
-                $introUser = new MensaUser();
-
-                $introUser->is_intro = true;
-                $introUser->cooks = false;
-                $introUser->paid = false;
-                $introUser->confirmation_code = $mensaUser->confirmation_code;
-                $introUser->mensa()->associate($mensa);
-            }
-        }
-
-
         // If method is get we want to just show the view
         if($request->isMethod('get')) {
-            if ($mensaUser->id == null) {
-
-                // We can give some feedback for the mensa is full
-                if ($mensa->max_users <= $mensa->users()->count()) {
-                    $request->session()->flash('warning', 'Deze mensa zit vol!');
-                }
-
-                // Are we requesting this page as an admin? Then we fill in the email we provided
-                if (Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')) {
-                    $user = $this->getLdapUserBy('description', session('extra_lidnummer'));
-                    // We check if the user can be found in LDAP, and if not, we return back to the form with an error message
-                    if($user == null){
-                        $request->session()->flash('error', 'Lidnummer niet gevonden!');
-                        return view('signin', compact('mensaUser', 'introUser'));
-                    }
-                    $mensaUser->user()->associate($user);
-                } // If we are logged in, we can auto fill some info
-                else if (Auth::check()) {
-                    $mensaUser->user()->associate(Auth::user());
-                    $mensaUser->allergies = Auth::user()->allergies;
-                    $mensaUser->extra_info = Auth::user()->extra_info;
-                } // Otherwise we associate an empty user to it
-                else {
-                    $mensaUser->user()->associate(new User());
-                }
-            }
-
             return view('signin', compact('mensaUser', 'introUser'));
         }
 
@@ -173,97 +194,6 @@ class SigninController extends Controller
             ]);
         }
 
-        $user = null;
-        if(Auth::check()){
-            if(Auth::user()->mensa_admin && $request->session()->has('asAdmin')){
-                $request->validate([
-                    'lidnummer' => 'required|exists:users'
-                ]);
-                $user = User::findOrFail($request->input('lidnummer'));
-                $mensaUser->user()->associate($user);
-                $mensaUser->lidnummer = $user->lidnummer;
-            } else {
-                $user = Auth::user();
-            }
-        }
-
-        // If the user gets signed in by an admin (from the admin panel) we just confirm the user
-        if(Auth::check() && Auth::user()->mensa_admin && $request->session()->has('asAdmin')){
-            $mensaUser->confirmed = true;
-
-            if($request->has('as_intro')){
-                $mensaUser->is_intro = true;
-            }
-        }
-        // If the user is logged in, depending if the email address is the same as the users', we automatically verify the user or not
-        else if($user != null && $request->has('email') && strtolower($user->email) == strtolower($request->input('email'))){
-            $mensaUser->confirmed = true;
-            $mensaUser->lidnummer = $user->lidnummer;
-        }
-
-
-        // If lidnummer doesn't exist yet, we will look in LDAP with the provided email
-        if($mensaUser->lidnummer == null){
-            $user = $this->getLdapUserBy('mail', $request->input('email'));
-            // We check if the user can be found in LDAP, and if not, we return back to the form with an error message
-            if($user == null){
-                $request->flash();
-                $mensaUser->user()->associate(new User());
-
-                $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.config('mensa.contact.mail').'.');
-                return view('signin', compact('mensaUser'));
-            }
-
-            // Otherwise we update the mensa user
-            $mensaUser->lidnummer = $user->lidnummer;
-        }
-
-        // If this is a new user, we want to check if the user already signed in previously or not
-        // and if so (silly him), we just want to update the previous one
-        if($mensaUser->id == null && !$mensaUser->is_intro) {
-            /* @var $possibleDuplicate MensaUser */
-            $possibleDuplicate = $mensa->users()
-                ->withTrashed()
-                ->where('lidnummer', $mensaUser->lidnummer)
-                ->where('is_intro', '0')->first();
-
-            if ($possibleDuplicate != null) {
-                $mensaUser = $possibleDuplicate;
-                $mensaUser->setCreatedAt(Carbon::now());
-                $mensaUser->restore();
-
-                // Check if we already had an intro
-                if ($possibleDuplicate->intros()->count() > 0) {
-                    $introUser = $possibleDuplicate->intros()->first();
-                }
-
-                $request->session()->flash('warning', 'We hebben een oude inschrijving voor deze mensa van je gevonden, deze hebben we geupdatet!');
-            } else {
-                if (Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer) {
-                    $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
-                } else {
-                    $request->session()->flash('info', 'Inschrijving succesvol!');
-                }
-            }
-        } else {
-            $request->session()->flash('info', 'Inschrijving succesvol aangepast!');
-        }
-
-
-        // First we want to be sure that we aren't going over the maximum amount of signins
-        if($mensaUser->id == null || $introUser == null || $introUser->id == null){
-            $addedUsers = ($mensaUser->id==null?1:0) + (($request->has('intro') && $introUser->id==null)?1:0);
-            // If the amount of users we currently have, plus the new users we are about to add
-            // exceed the max users of a mensa, we want to cancel
-            if($mensa->users()->count() + $addedUsers > $mensa->max_users){
-                Input::flash();
-                $request->session()->remove('info');
-                $request->session()->remove('warning');
-                $request->session()->flash('error', 'Deze mensa zit vol!');
-                return view('signin', compact('mensaUser', 'introUser'));
-            }
-        }
-
 
         // We need to update late, because we might retrieve a new mensaUser when we find a duplicate
         $mensaUser->cooks = (Auth::check() && Auth::user()->mensa_admin) && ((bool)$request->has('cooks'));
@@ -272,7 +202,7 @@ class SigninController extends Controller
         $mensaUser->allergies = $request->input('allergies');
         $mensaUser->extra_info = $request->input('extrainfo');
 
-        // Log the singin
+        // Log the signin
         if($mensaUser->id == null){
             $this->log($mensa,
                 $mensaUser->user->name.
@@ -293,9 +223,7 @@ class SigninController extends Controller
         }
 
         // Here we check the intro stuff. Whoop whoop!
-        if($request->has('intro')){ 
-            $introUser->lidnummer = $mensaUser->lidnummer;
-            $introUser->confirmed = $mensaUser->confirmed;
+        if($request->has('intro')){
             $introUser->dishwasher = $mensaUser->dishwasher;
             $introUser->vegetarian = (bool)$request->has('intro_vegetarian');
             $introUser->allergies = $request->input('intro_allergies');

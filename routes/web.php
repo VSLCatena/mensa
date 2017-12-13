@@ -15,10 +15,6 @@ Route::get('signin/{code}/signout', 'ConfirmController@cancel')->name('signin.ca
 
 
 Route::prefix('mensa')->group(function() {
-    // Sign in and sign out
-    Route::post('search', 'MensaController@requestUserLookup')->name('mensa.searchusers');
-    Route::match(['get', 'post'], '{id}/signin', 'SigninController@signin')->name('signin');
-    Route::post('{id}/signout', 'SigninController@signout')->name('signout');
 
     // Mensa editing
     Route::match(['get', 'post'], 'create', 'MensaController@edit')->name('mensa.create');
@@ -31,7 +27,8 @@ Route::prefix('mensa')->group(function() {
     // Mensa administration
     Route::post('{mensaId}/togglepaid', 'MensaController@togglePaid')->name('mensa.togglepaid');
     Route::match(['get', 'post'], '{mensaId}/signin/new', 'MensaController@newSignin')->name('mensa.newsignin');
-    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'SigninController@signin')->name('mensa.editsignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/{lidnummer}/bulk', 'MensaController@bulkSignin')->name('mensa.newsignin.bulk');
+    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'SigninController@editSignin')->name('mensa.editsignin');
     Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', 'MensaController@removeSignin')->name('mensa.removesignin');
     Route::match(['get', 'post'], '{mensaId}/printstate/preview', 'MensaController@printStatePreview')->name('mensa.printstate.preview');
     Route::match(['get', 'post'], '{mensaId}/printstate', 'MensaController@printState')->name('mensa.printstate');
@@ -40,6 +37,11 @@ Route::prefix('mensa')->group(function() {
     Route::post('{mensaId}/close', 'MensaController@closeMensa')->name('mensa.close');
     Route::match(['get', 'post'], '{mensaId}/reopen', 'MensaController@openMensa')->name('mensa.open');
     Route::match(['get', 'post'], '{mensaId}/cancel', 'MensaController@cancelMensa')->name('mensa.cancel');
+
+    // Sign in and sign out
+    Route::post('search', 'MensaController@requestUserLookup')->name('mensa.searchusers');
+    Route::match(['get', 'post'], '{id}/signin/{lidnummer?}', 'SigninController@newSignin')->name('signin');
+    Route::post('{id}/signout', 'SigninController@signout')->name('signout');
 });
 
 if(config('app.debug', false)){

@@ -12,28 +12,22 @@
                                 <strong>Note:</strong> Als je ingelogd bent hoef je je jezelf niet via de email te bevestigen!
                             </div>
                         @endguest
-                        <ul style="padding-left: 15px;">
-                            <li>Gebruik het e-mailadres dat bekend is bij {{ config('app.name') }}.</li>
-                            <li>Bij meer dan 1 introduc&eacute;, bel de bar: {{ config('mensa.contact.bar') }}.</li>
-                            <li>Bevestig de reserveringsemail binnen 15 minuten, anders vervalt je reservering.</li>
-                        </ul>
+                        @if($mensaUser->user->email == null)
+                            <ul style="padding-left: 15px;">
+                                <li>Gebruik het e-mailadres dat bekend is bij {{ config('app.name') }}.</li>
+                                <li>Bij meer dan 1 introduc&eacute;, bel de bar: {{ config('mensa.contact.bar') }}.</li>
+                                <li>Bevestig de reserveringsemail binnen 15 minuten, anders vervalt je reservering.</li>
+                            </ul>
+                        @endif
                         <div class="row">
                             <form class="col-xs-12 col-md-8" method="POST">
                                 {{ csrf_field() }}
-                                @if(!session('asAdmin') && $mensaUser->id == null)
+                                @if($mensaUser->user->email == null)
                                     <div class="form-group">
                                         <label for="email">Email:</label>
                                         <input id="email" type="email" name="email" value="{{ old('email', Auth::check()?Auth::user()->email:'') }}" class="form-control" />
                                     </div>
-                                @elseif(session('asAdmin') && $mensaUser->user != null)
-                                    <input type="hidden" name="lidnummer" value="{{ $mensaUser->user->lidnummer }}" />
                                 @endif
-                                @admin @if(session('asAdmin'))
-                                    <div class="form-group">
-                                        <input type="checkbox" id="as_intro" name="as_intro" class="form-check-input" {{ old('as_intro', $mensaUser->is_intro)?'checked':'' }} />
-                                        <label for="as_intro">Schrijf in als intro</label>
-                                    </div>
-                                @endif @endadmin
                                 <div class="form-group">
                                     <input type="checkbox" name="vegetarian" id="vegetarian" class="form-check-input" {{ old('vegetarian', $mensaUser->vegetarian)?'checked':'' }} />
                                     <label for="vegetarian">Vegetarisch</label>
@@ -95,12 +89,12 @@
                                     <input type="checkbox" id="dishwasher" name="dishwasher" class="form-check-input" {{ old('dishwasher', $mensaUser->dishwasher)?'checked':'' }} />
                                     <label for="dishwasher">Vrijwillig afwassen <span class="intro" style="{{ (isset($introUser) && $introUser->id==true)?'':'display: none;' }}">(met intro)</span></label>
                                 </div>
-                                @admin @if(session('asAdmin'))
+                                @admin
                                     <div class="form-group">
                                         <input type="checkbox" id="cooks" name="cooks" class="form-check-input" {{ old('cooks', $mensaUser->cooks)?'checked':'' }} />
                                         <label for="cooks">Koker</label>
                                     </div>
-                                @endif @endadmin
+                                @endadmin
                                 <input type="submit" value="{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (Auth::check() && Auth::user()->mensa_admin)?route('mensa.signins', ['id' => $mensaUser->mensa->id]):route('home') }}" class="btn btn-default">Terug</a>
                             </form>
                             <script type="text/javascript">

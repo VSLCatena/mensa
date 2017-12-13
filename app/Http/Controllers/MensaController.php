@@ -237,7 +237,11 @@ class MensaController extends Controller
             'lidnummer' => 'required',
         ]);
 
-        return redirect(route('signin', ['id' => $mensaId]))->with('asAdmin', 'true')->with('extra_lidnummer', $request->get('lidnummer'));
+        if($request->has('bulk')){
+            return redirect(route('mensa.newsignin.bulk', ['id' => $mensa->id, 'lidnummer' => $request->get('lidnummer')]));
+        }
+
+        return redirect(route('signin', ['id' => $mensaId, 'lidnummer' => $request->get('lidnummer')]));
     }
 
     public function requestUserLookup(Request $request){
@@ -341,5 +345,55 @@ class MensaController extends Controller
 
         $this->log($mensa, 'Mensa geannuleerd');
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geannuleerd!');
+    }
+
+    public function bulkSignin(Request $request, $mensaId, $lidnummer){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        $user = $this->getLdapUserBy('description', $lidnummer);
+        if($user == null){
+            return redirect()->back()->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met ' . config('mensa.contact.mail') . '.');
+        }
+
+        if($request->isMethod('get')){
+            return view('mensae.bulkenlistintros', compact('mensa', 'user'));
+        }
+
+        $baseIntroUser = new MensaUser();
+        $baseIntroUser->is_intro = true;
+        $baseIntroUser->cooks = false;
+        $baseIntroUser->dishwasher = false;
+        $baseIntroUser->paid = false;
+        $baseIntroUser->confirmed = true;
+        $baseIntroUser->mensa()->associate($mensa);
+        $baseIntroUser->lidnummer = $user->lidnummer;
+        $baseIntroUser->confirmation_code = bin2hex(random_bytes(32));
+
+        foreach($request->all("intro")['intro'] as $introData){
+            $introUser = $baseIntroUser->replicate();
+            $introUser->vegetarian = isset($introData['vegetarian']);
+            $introUser->allergies = $introData['allergies'];
+            $introUser->extra_info = $introData['info'];
+
+            $introUser->save();
+            if(isset($introData['extraOptions'])){
+                foreach($introData['extraOptions'] as $id){
+                    try {
+                        $extraOption = $mensa->extraOptions()->findOrFail($id);
+                        $introUser->extraOptions()->attach($extraOption);
+                    } catch(ModelNotFoundException $e){}
+                }
+            }
+        }
+
+        $count = count($request->all('intro')['intro']);
+
+        $this->log($mensa, $count.' intro'.($count == 1?'':'s').' ingeschreven voor '.$user->name.'.');
+
+        return redirect(route('mensa.signins', ['id' => $mensa->id]))->with('info', $count.' intro'.($count == 1?'':'s').' succesvol ingeschreven voor '.$user->name.'!');
     }
 }
