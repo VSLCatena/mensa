@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MensaCancelled;
 use App\Mail\MensaState;
 use App\Mail\SigninCancelled;
 use App\Models\Mensa;
@@ -342,6 +343,13 @@ class MensaController extends Controller
 
         $mensa->max_users = 0;
         $mensa->save();
+
+        foreach($mensa->users as $user){
+            if($user->user->email == null)
+                continue;
+
+            Mail::to($user->user)->send(new MensaCancelled($user));
+        }
 
         $this->log($mensa, 'Mensa geannuleerd');
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geannuleerd!');

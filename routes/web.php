@@ -59,4 +59,9 @@ if(config('app.debug', false)){
         $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
         return new App\Mail\SigninCancelled($mensaUser);
     });
+
+    Route::get('/mailexample/4', function() {
+        $mensaUser = App\Models\MensaUser::where('is_intro', '0')->orderBy('created_at', 'DESC')->firstOrFail();
+        return new App\Mail\MensaCancelled($mensaUser);
+    });
 }
