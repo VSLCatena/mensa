@@ -27,7 +27,6 @@ trait LdapHelpers
         $users = Adldap::search()->users()
             ->in(config('mensa.ldap.user_base'))
             ->rawFilter('(cn=*'.$name.'*)')
-            ->whereHas('mail')
             ->limit(10)
             ->get();
 

@@ -65,6 +65,7 @@ class SigninController extends Controller
         if($lidnummer != null && Auth::check() && Auth::user()->mensa_admin){
             try {
                 $user = $this->getLdapUserBy('description', $lidnummer);
+                $request->session()->flash('extra_lidnummer', $lidnummer);
             } catch(ModelNotFoundException $e){
                 return redirect(route('home'))->with('error', 'Persoon niet gevonden!');
             }
@@ -145,6 +146,7 @@ class SigninController extends Controller
         try {
             $mensa = Mensa::findOrFail($mensaId);
             $mensaUser = $mensa->users()->where('id', $mensaUserId)->firstOrFail();
+            $request->session()->flash('extra_lidnummer', $mensaUser->user->lidnummer);
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
         }
@@ -244,12 +246,13 @@ class SigninController extends Controller
 
 
         // Do the sending stuffz
-        if(!$mensaUser->confirmed){
-            Mail::to($mensaUser->user)->send(new SigninConformation($mensaUser));
-        } else {
-            Mail::to($mensaUser->user)->send(new SigninConfirmed($mensaUser));
+        if($mensaUser->user->email != null){
+            if(!$mensaUser->confirmed){
+                Mail::to($mensaUser->user)->send(new SigninConformation($mensaUser));
+            } else {
+                Mail::to($mensaUser->user)->send(new SigninConfirmed($mensaUser));
+            }
         }
-
 
         $route = (Auth::check() && Auth::user()->mensa_admin) ?
             route('mensa.signins', ['id' => $mensa->id]) :
@@ -273,7 +276,9 @@ class SigninController extends Controller
         $this->log($mensa, Auth::user()->name.' is uitgeschreven.');
 
         // Send signout email
-        Mail::to($mensaUser->user)->send(new SigninCancelled($mensaUser));
+        if($mensaUser->user->email != null) {
+            Mail::to($mensaUser->user)->send(new SigninCancelled($mensaUser));
+        }
 
         return redirect(route('home'));
     }

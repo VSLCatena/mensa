@@ -22,7 +22,7 @@
                         <div class="row">
                             <form class="col-xs-12 col-md-8" method="POST">
                                 {{ csrf_field() }}
-                                @if($mensaUser->user->email == null)
+                                @if($mensaUser->user->email == null && !Session::has('extra_lidnummer'))
                                     <div class="form-group">
                                         <label for="email">Email:</label>
                                         <input id="email" type="email" name="email" value="{{ old('email', Auth::check()?Auth::user()->email:'') }}" class="form-control" />
