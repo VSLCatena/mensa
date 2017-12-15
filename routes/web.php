@@ -13,9 +13,9 @@ Route::get('signin/{code}/confirm', 'ConfirmController@confirm')->name('signin.c
 Route::match(['get', 'post'], 'signin/{userId}/edit', 'SigninController@mailSignin')->name('signin.edit');
 Route::get('signin/{code}/signout', 'ConfirmController@cancel')->name('signin.cancel');
 
+Route::match(['get', 'post'], 'settings', 'UserSettingsController@changeSettings')->name('user.settings');
 
 Route::prefix('mensa')->group(function() {
-
     // Mensa editing
     Route::match(['get', 'post'], 'create', 'MensaController@edit')->name('mensa.create');
     Route::match(['get', 'post'], '{id}/edit', 'MensaController@edit')->name('mensa.edit');

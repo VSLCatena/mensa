@@ -61,6 +61,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ route('user.settings') }}">Instellingen</a></li>
                                     @admin
                                         <li><a href="#">Statistiek</a></li>
                                         <li><a href="#">Logboek</a></li>

@@ -61,6 +61,8 @@ class SigninController extends Controller
             $request->session()->flash('warning', 'Deze mensa zit vol!');
         }
 
+        $user = Auth::user();
+
         // If the user is a mensa admin, we allow him to sign someone else in with his lidnummer
         if($lidnummer != null && Auth::check() && Auth::user()->mensa_admin){
             try {
@@ -72,14 +74,19 @@ class SigninController extends Controller
             $mensaUser->user()->associate($user);
             $mensaUser->confirmed = true;
         } else {
-            $mensaUser->user()->associate(Auth::check()?Auth::user(): new User());
+            $mensaUser->user()->associate(new User());
         }
 
         // If the signin is new, and the person wants to sign in himself we automatically confirm him
-        if(Auth::check() && $request->has('email') && strtolower(Auth::user()->email) == strtolower($request->input('email'))){
+        // And we can also fill in some default values like allergies and such
+        if($user != null){
             $mensaUser->confirmed = true;
-            $mensaUser->lidnummer = Auth::user()->lidnummer;
+            $mensaUser->lidnummer = $user->lidnummer;
+            $mensaUser->vegetarian = $user->vegetarian;
+            $mensaUser->allergies = $user->allergies;
+            $mensaUser->extra_info = $user->extra_info;
         }
+
 
         // We replicate the mensa user, which makes everything easier for us
         $introUser = $mensaUser->replicate();
