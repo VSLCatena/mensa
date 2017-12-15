@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MensaCancelled extends Mailable
+class MensaPriceChanged extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class MensaCancelled extends Mailable
      */
     public function build()
     {
-        $this->subject('Mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false).' is geannuleerd!');
-        return $this->markdown('emails.mensa.cancelled', ['mensaUser' => $this->mensaUser]);
+        $this->subject('Mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false).' is gewijzigd!');
+        return $this->markdown('emails.mensa.changed', ['mensaUser' => $this->mensaUser]);
     }
 }

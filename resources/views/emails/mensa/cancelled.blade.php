@@ -4,7 +4,7 @@
 Beste {{ $mensaUser->user->name }},
 
 Hierbij willen we je laten weten dat de mensa op {{ formatDate($mensaUser->mensa->date, false, false) }} is geannuleerd.<br />
-Al heb je al betaald dan kan je je geld terug vragen bij de bar
+Al heb je al betaald dan kan je je geld terug vragen bij de bar.
 <br /><br />
 Met vriendelijke groet,<br />
 De mensacomputer

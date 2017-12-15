@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\MensaCancelled;
+use App\Mail\MensaPriceChanged;
 use App\Mail\MensaState;
 use App\Mail\SigninCancelled;
 use App\Models\Mensa;
@@ -94,7 +95,7 @@ class MensaController extends Controller
 
         $request->validate([
             'title' => 'required|max:191',
-            'date' => 'required|date|after_or_equal:today',
+            'date' => 'required|date',
             'closing_time' => 'required|date|before:date',
             'max_users' => 'required|numeric|between:0,999',
             'price.0.price' => 'required|numeric|between:0,99',
@@ -120,6 +121,12 @@ class MensaController extends Controller
             }
         }
 
+        $notify = false;
+
+        if($mensa->isDirty('price')){
+            $notify = true;
+        }
+
         $mensa->save(); // Save it already to retrieve the mensas ID
 
         // Log the editing of the mensa
@@ -141,6 +148,11 @@ class MensaController extends Controller
             $mensaPrice->description = $prices[$i]['description'];
             $mensaPrice->price = $prices[$i]['price'];
             $mensaPrice->mensa()->associate($mensa);
+
+            if($mensaPrice->isDirty('price')){
+                $notify = true;
+            }
+
             $mensaPrice->save();
 
             // Add the mensaPrice to the syncIds so it won't be deleted!
@@ -149,6 +161,15 @@ class MensaController extends Controller
 
         // Delete all extra options that aren't included anymore
         $mensa->extraOptions()->whereNotIn('id', $syncIds)->delete();
+
+        if($notify){
+            foreach($mensa->users as $user){
+                if($user->user->email == null)
+                    continue;
+
+                Mail::to($user->user)->send(new MensaPriceChanged($user));
+            }
+        }
 
 
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');

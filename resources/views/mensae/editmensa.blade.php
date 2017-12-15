@@ -19,6 +19,11 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ $mensa->id == null ? 'Mensa aanmaken' : ('Mensa wijzigen van '.formatDate($mensa->date, false, false)) }}</div>
                     <div class="panel-body">
+                        @if($mensa->id != null)
+                            <div class="alert alert-info">
+                                <strong>Note:</strong> Bij het aanpassen van de prijs wordt iedereen die zich heeft ingeschreven op de hoogte gebracht.
+                            </div>
+                        @endif
                         <form method="POST" action="">
                             {{ csrf_field() }}
                             <input type="hidden" name="edited" value="true" />
