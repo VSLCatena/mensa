@@ -12,7 +12,7 @@
                                 <strong>Note:</strong> Als je ingelogd bent hoef je je jezelf niet via de email te bevestigen!
                             </div>
                         @endguest
-                        @if($mensaUser->user->email == null)
+                        @if($mensaUser->user->email == null && (!Auth::check() || !Auth::user()->service_user))
                             <ul style="padding-left: 15px;">
                                 <li>Gebruik het e-mailadres dat bekend is bij {{ config('app.name') }}.</li>
                                 <li>Bij meer dan 1 introduc&eacute;, bel de bar: {{ config('mensa.contact.bar') }}.</li>
