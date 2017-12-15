@@ -120,7 +120,6 @@
 
                             $('#date').datetimepicker({
                                 format: 'DD-MM-YYYY HH:mm',
-                                minDate: moment().set('hour', 0).set('minute', 0),
                                 defaultDate: {{ old('date',
                                 $mensa->id != null ?
                                 new \Illuminate\Support\HtmlString("moment('".$mensa->date."')") :
@@ -129,7 +128,6 @@
                             });
                             $('#closing_time').datetimepicker({
                                 format: 'DD-MM-YYYY HH:mm',
-                                minDate: moment().set('hour', 0).set('minute', 0),
                                 defaultDate: {{ old('date',
                                 $mensa->id != null ?
                                 new \Illuminate\Support\HtmlString("moment('".$mensa->closing_time."')") :
