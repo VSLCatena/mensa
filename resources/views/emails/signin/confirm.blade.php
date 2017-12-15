@@ -14,7 +14,7 @@ Er is momenteel nog {{ count($mensaUser->mensa->dishwashers()) > 0 ? 'een':'geen
 Met vriendelijke groet,<br />
 De mensacomputer
 
-Vragen of problemen? Bel de bar: <a href="tel://0715120774">071-5120774</a>
+Vragen of problemen? Bel de bar: <a href="tel://{{ str_replace('-', '', config('mensa.contact.bar')) }}">{{ config('mensa.contact.bar') }}</a>
 @endcomponent
 
 

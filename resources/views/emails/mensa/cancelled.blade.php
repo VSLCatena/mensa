@@ -9,5 +9,5 @@ Al heb je al betaald dan kan je je geld terug vragen bij de bar.
 Met vriendelijke groet,<br />
 De mensacomputer
 
-Vragen of problemen? Bel de bar: <a href="tel://0715120774">071-5120774</a>
+Vragen of problemen? Bel de bar: <a href="tel://{{ str_replace('-', '', config('mensa.contact.bar')) }}">{{ config('mensa.contact.bar') }}</a>
 @endcomponent
