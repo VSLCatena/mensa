@@ -104,6 +104,13 @@ class MensaController extends Controller
             'price.*.id' => 'exists:mensa_extra_options',
         ]);
 
+        $notify = false;
+
+        if($mensa->price != $request->input('price.0.price')){
+            $notify = true;
+        }
+
+
         $mensa->title = $request->input('title');
         $mensa->date = date(new Carbon($request->input('date')));
         $mensa->closing_time = date(new Carbon($request->input('closing_time')));
@@ -119,12 +126,6 @@ class MensaController extends Controller
             if($count > 0){
                 return redirect(route('home'))->with('error', 'Er bestaat al een mensa op die dag!');
             }
-        }
-
-        $notify = false;
-
-        if($mensa->isDirty('price')){
-            $notify = true;
         }
 
         $mensa->save(); // Save it already to retrieve the mensas ID
@@ -145,13 +146,14 @@ class MensaController extends Controller
             } else {
                 $mensaPrice = new MensaExtraOption();
             }
+
+            if($mensaPrice->price != $prices[$i]['price']){
+                $notify = true;
+            }
+
             $mensaPrice->description = $prices[$i]['description'];
             $mensaPrice->price = $prices[$i]['price'];
             $mensaPrice->mensa()->associate($mensa);
-
-            if($mensaPrice->isDirty('price')){
-                $notify = true;
-            }
 
             $mensaPrice->save();
 
