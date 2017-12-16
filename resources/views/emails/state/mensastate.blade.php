@@ -108,36 +108,39 @@ Gegenereerd op {{ \Carbon\Carbon::now() }}
         <td style="width:100%;">
             <table style="border-spacing: 0px 0px; border-collapse: collapse; width: 100%;">
                 <tr>
-                    <th style="border: 1px solid black; text-align: left; padding-left: 5px;" colspan="3">Personeel</th>
+                    <th style="border: 1px solid black; text-align: left; padding-left: 5px;" {{ new \Illuminate\Support\HtmlString($countExtraOptions > 0 ? 'colspan="4"' : 'colspan="3"') }}>Personeel</th>
                 </tr>
                 <tr>
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;">Naam</th>
-                    <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px; width: 100%;">Opmerkingen</th>
+                    <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px; width: 100%;" {{ new \Illuminate\Support\HtmlString($countExtraOptions > 0 ? 'colspan="2"' : '') }}>Opmerkingen</th>
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;">Functie</th>
                 </tr>
                 @foreach($staff as $user)
-                    @component('emails.state.userrow', ['index' => $staffIndex++, 'user' => $user])
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'user' => $user, 'countExtraOptions' => $countExtraOptions])
                     @endcomponent
                 @endforeach
                 @if(count($cooks) < 1)
-                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Koker']) @endcomponent
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Koker', 'countExtraOptions' => $countExtraOptions]) @endcomponent
                 @endif
                 @if(count($dishwashers) < 1)
-                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Afwasser']) @endcomponent
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Afwasser', 'countExtraOptions' => $countExtraOptions]) @endcomponent
                 @endif
                 @if($secondDishwasher)
-                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Afwasser']) @endcomponent
+                    @component('emails.state.userrow', ['index' => $staffIndex++, 'extra' => 'Afwasser', 'countExtraOptions' => $countExtraOptions]) @endcomponent
                 @endif
                 <tr>
-                    <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;" colspan="3">Gasten</th>
+                    <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;" {{ new \Illuminate\Support\HtmlString($countExtraOptions > 0 ? 'colspan="4"' : 'colspan="3"') }}>Gasten</th>
                 </tr>
                 <tr>
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;">Naam</th>
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px; width: 100%">Opmerkingen</th>
+                    @if($countExtraOptions > 0)
+                        <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;">Prijs</th>
+                    @endif
                     <th style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px;">Betaald</th>
                 </tr>
                 @foreach($guests as $user)
-                    @component('emails.state.userrow', ['index' => $loop->iteration, 'user' => $user]) @endcomponent
+                    @component('emails.state.userrow', ['index' => $loop->iteration, 'user' => $user, 'countExtraOptions' => $countExtraOptions]) @endcomponent
                 @endforeach
             </table>
             @if($secondDishwasher)
