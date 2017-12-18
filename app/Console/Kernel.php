@@ -24,8 +24,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        // Remove all expired sign ins that past the 15 minutes
+        $schedule->command('users:deleteunconfirmed')
+            ->everyFiveMinutes();
+
+        // Create a new mensa two weeks in advance
+        $schedule->command('mensas:autocreate')
+            ->weekdays()
+            ->evenInMaintenanceMode();
     }
 
     /**

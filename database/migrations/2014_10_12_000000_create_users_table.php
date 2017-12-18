@@ -17,6 +17,9 @@ class CreateUsersTable extends Migration
             $table->string('lidnummer')->index();
             $table->string('name');
             $table->string('email');
+            $table->string('allergies')->nullable();
+            $table->string('wishes')->nullable();
+            $table->boolean('mensa_admin')->default(false);
             $table->rememberToken();
             $table->timestamps();
 

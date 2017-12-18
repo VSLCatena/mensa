@@ -9,6 +9,9 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    protected $primaryKey = 'lidnummer';
+    public $incrementing = false;
+
     /**
      * The attributes that are mass assignable.
      *

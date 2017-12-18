@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Mensa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -20,8 +22,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 0)
     {
-        return view('home');
+        if(!is_numeric($page)) {
+            return redirect(route('home'));
+        }
+
+        $page = intval($page);
+
+        $mensae = Mensa::whereBetween('date', array(Carbon::today()->addWeeks($page*2), Carbon::today()->addWeeks($page*2+2)))->orderBy('date', 'ASC')->get();
+        return view('home', compact('mensae', 'page'));
     }
 }

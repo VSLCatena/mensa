@@ -1,0 +1,88 @@
+.logout {
+    width: 100%;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.mensae th, .mensae td {
+    white-space: nowrap;
+}
+
+.mensae th:nth-child(2), .mensae td:nth-child(2){
+    width: 100%;
+    white-space: normal;
+}
+
+.price-options {
+    margin-bottom: 5px;
+}
+
+.mensa-overview .alert {
+    padding: 10px;
+}
+
+.d-inline {
+    display: inline;
+}
+
+.nav-tabs li.active form {
+    color: #555;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+
+.nav-tabs li.active form input.btn-link {
+    color: inherit;
+}
+
+.nav-tabs li.active form input.btn-link:focus, .nav-tabs li.active form input.btn-link:hover {
+    text-decoration: none;
+}
+
+.label-yesno {
+    font-size: 12px;
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+.table-signins td:nth-child(1), .table-signins td:nth-child(4), .table-signins td:nth-child(5), .table-signins td:nth-child(6) {
+    text-align: center;
+}
+
+.table-signins td:nth-child(2) {
+    white-space: nowrap;
+}
+
+.table-signins td:nth-child(3) {
+    width: 100%;
+}
+
+.btn-paid {
+    padding: 4px 6px;
+    transition: background 0.5s, border 0.5s;
+}
+
+.name-search {
+    position: relative;
+}
+
+#namesearch {
+    top: 35px;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    max-height: 300px;
+    width: 100%;
+    padding: 5px;
+    overflow-y: auto;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.user-result {
+    cursor: pointer;
+}
+
+.user-result:hover {
+    background-color: #CCC;
+}
