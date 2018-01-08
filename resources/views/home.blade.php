@@ -9,7 +9,7 @@
                     @if(!isset($page) || $page == 0)
                         Mensae in de komende 2 weken
                     @else
-                        Mansae tussen {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2), false, false, false) }}
+                        Mensae tussen {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2), false, false, false) }}
                         en {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2 + 2), false, false, false) }}
                     @endif
                 </div>
