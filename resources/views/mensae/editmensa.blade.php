@@ -71,10 +71,10 @@
                                 <label>Prijs opties:</label>
                                 <div class="row price-options" ng-repeat="price in mensa.prices">
                                     <input type="hidden" name="price[@{{ $index }}][id]" ng-if="price.id > 0" value="@{{ price.id }}" />
-                                    <div class="col-xs-7">
+                                    <div class="col-xs-12 col-md-7">
                                         <input name="price[@{{ $index }}][description]" ng-disabled="$index==0" value="@{{ $index==0?'Default':price.description }}" class="form-control" />
                                     </div>
-                                    <div class="col-xs-3">
+                                    <div class="col-xs-7 col-md-3">
                                         <div class="input-group date">
                                             <label for="closing_time" class="input-group-addon">
                                                 <span class="glyphicon glyphicon-euro"></span>
@@ -82,13 +82,13 @@
                                             <input name="price[@{{ $index }}][price]" ng-value="@{{ price.price }}" type="number" step="0.05" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-xs-2">
+                                    <div class="col-xs-5 col-md-2">
                                         <span class="btn btn-danger disabled form-control" ng-if="$index==0">X</span>
                                         <span class="btn btn-danger form-control" ng-if="$index>0" ng-click="mensa.removePrice($index)">X</span>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-2 col-xs-offset-10">
+                                    <div class="col-xs-5 col-xs-offset-7 col-md-2 col-md-offset-10">
                                         <span class="btn btn-success form-control" ng-click="mensa.addNew()">+</span>
                                     </div>
                                 </div>
