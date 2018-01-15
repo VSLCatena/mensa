@@ -6,7 +6,7 @@
 @endsection
 
 @section('overview.content')
-    <table class="table table-signins responsive-table">
+    <table class="table table-signins table-striped responsive-table">
         <thead>
             <tr>
                 <th>Bevestigd</th>
