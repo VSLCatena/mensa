@@ -1,9 +1,14 @@
 @extends('base')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}" />
+@endsection
+
 @section('content')
     <div class="container mensa-overview">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 admin">
                 <div class="panel panel-default">
                     <div class="panel-heading">Overzicht van de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">

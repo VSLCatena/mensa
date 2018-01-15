@@ -1,7 +1,12 @@
 @extends('mensae.base')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('css/logs.css') }}" />
+@endsection
+
 @section('overview.content')
-    <table class="table table-striped">
+    <table class="table table-striped responsive-table logs">
         <thead>
         <tr>
             <th>Door</th>
@@ -10,13 +15,17 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($logs as $log)
+        @forelse($logs as $log)
             <tr>
                 <td style="white-space: nowrap;">{{ ($log->user != null)?$log->user->name:'' }}</td>
                 <td>{{ $log->description }}</td>
                 <td style="white-space: nowrap;">{{ formatDate($log->created_at) }}</td>
             </tr>
-        @endforeach
+        @empty
+            <tr>
+                <td colspan="3">Geen logs gevonden!</td>
+            </tr>
+        @endforelse
         </tbody>
     </table>
 @endsection

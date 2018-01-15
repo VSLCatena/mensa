@@ -1,5 +1,10 @@
 @extends('base')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}" />
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -9,7 +14,7 @@
                     @if(!isset($page) || $page == 0)
                         Mensae in de komende 2 weken
                     @else
-                        Mansae tussen {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2), false, false, false) }}
+                        Mensae tussen {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2), false, false, false) }}
                         en {{ formatDate(\Carbon\Carbon::today()->addWeeks($page*2 + 2), false, false, false) }}
                     @endif
                 </div>
@@ -20,7 +25,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <table class="table mensae">
+                    <table class="table responsive-table mensae">
                         <thead>
                             <tr>
                                 <th>Datum</th>
@@ -32,8 +37,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($mensae as $mensa)
-                                <tr>
+                            @forelse($mensae as $mensa)
+                                @if($mensa->max_users <= 0 && $mensa->users()->count() <= 0 && (!Auth::check() || !Auth::user()->mensa_admin))
+                                    @continue;
+                                @endif
+                                <tr @if($mensa->max_users <= 0 && $mensa->users()->count() <= 0)class="cancelled" @endif>
                                     <td>{{ formatDate($mensa->date, true) }}</td>
                                     <td>
                                         {{ $mensa->title }}
@@ -90,7 +98,11 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="6">Geen mensas gevonden!</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

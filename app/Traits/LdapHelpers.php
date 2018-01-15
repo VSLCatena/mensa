@@ -48,6 +48,16 @@ trait LdapHelpers
         }
     }
 
+    public function getUserGroups($user){
+        return $user
+            ->getGroups(['*'], true)
+            ->map(function($obj){ return $obj->dn; });
+    }
+
+    public function isUserInGroup($user, $group){
+        return $this->getUserGroups($user)->contains($group);
+    }
+
     public function saveLdapUser($user){
         $dbUser = null;
         try {
@@ -65,7 +75,7 @@ trait LdapHelpers
         $dbUser->phonenumber = $user->telephonenumber[0];
 
         // Check if the user is a mensa admin
-        $dbUser->mensa_admin = $user->memberof != null && in_array(config('mensa.ldap.admin_group'), $user->memberof);
+        $dbUser->mensa_admin = $user->memberof != null && $this->isUserInGroup($user, config('mensa.ldap.admin_group'));
 
         // Save it back to the database
         $dbUser->save();

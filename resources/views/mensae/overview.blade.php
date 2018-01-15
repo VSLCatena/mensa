@@ -1,6 +1,12 @@
 @extends('mensae.base')
 
 @section('overview.content')
+    @if($mensa->max_users <= 0)
+        <div class="alert alert-danger">
+            Deze mensa is geannuleerd!
+        </div>
+    @endif
+
     <div class="alert alert-{{ $payingUsers >= config('mensa.minimum.paying_signins') ? 'success':'danger' }}">
         Er {{ ($users!=1)?'zijn':'is' }} in totaal {{ $users }} eter{{ ($users!=1)?'s':'' }}
         waarvan {{ $intros }} introduc&eacute;{{ ($intros != 1)?'s':'' }}.<br />

@@ -1,7 +1,12 @@
 @extends('mensae.base')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('css/signins.css') }}" />
+@endsection
+
 @section('overview.content')
-    <table class="table table-signins">
+    <table class="table table-signins table-striped responsive-table">
         <thead>
             <tr>
                 <th>Bevestigd</th>
@@ -13,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $mUser)
+            @forelse($users as $mUser)
                 <tr>
                     <td>
                         @if($mUser->confirmed) <span class="label label-success label-yesno">Ja</span>
@@ -26,7 +31,7 @@
                         {{ $mUser->phonenumber }}
                     </td>
                     <td>
-                        <div class="pull-right">
+                        <div class="labels">
                             @if($mUser->vegetarian)
                                 &nbsp;<span class="label label-success label-yesno">Vego</span>
                             @endif
@@ -41,17 +46,17 @@
                             Allergie&euml;n: {{ $mUser->allergies }}<br />
                         @endif
                         @if(!empty($mUser->extra_info))
-                                Extra info: {{ $mUser->extra_info }}
-                            @endif
-                    </td>
-                    <td>
-                        @if($mUser->isStaff())
-                        @elseif($mUser->price() == $mUser->paid)
-                            <button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button>
-                        @else
-                            <button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button>
+                            Extra info: {{ $mUser->extra_info }}
                         @endif
+                        &nbsp;
                     </td>
+                    @if($mUser->isStaff())
+                        <td></td>
+                    @elseif($mUser->price() == $mUser->paid)
+                        <td><button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button></td>
+                    @else
+                        <td><button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button></td>
+                    @endif
                     <td>{{ $mUser->created_at }}</td>
                     <td>
                         @if(!$mensa->closed)
@@ -67,7 +72,11 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6">Er zijn nog geen inschrijvingen!</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     @if(!$mensa->closed)
