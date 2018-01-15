@@ -8,7 +8,7 @@
                     <div class="panel-heading">Instellingen aanpassen</div>
 
                     <div class="panel-body">
-                        <form class="form-horizontal col-xs-6" method="POST">
+                        <form class="form-horizontal col-md-6 col-xs-12" method="POST">
                             {{ csrf_field() }}
 
                             <div class="form-group">
