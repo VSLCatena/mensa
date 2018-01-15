@@ -37,8 +37,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($mensae as $mensa)
-                                <tr>
+                            @forelse($mensae as $mensa)
+                                @if($mensa->max_users <= 0 && $mensa->users()->count() <= 0 && (!Auth::check() || !Auth::user()->mensa_admin))
+                                    @continue;
+                                @endif
+                                <tr @if($mensa->max_users <= 0 && $mensa->users()->count() <= 0)class="cancelled" @endif>
                                     <td>{{ formatDate($mensa->date, true) }}</td>
                                     <td>
                                         {{ $mensa->title }}
@@ -95,7 +98,11 @@
                                         </div>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="6">Geen mensas gevonden!</td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

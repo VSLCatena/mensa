@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $mUser)
+            @forelse($users as $mUser)
                 <tr>
                     <td>
                         @if($mUser->confirmed) <span class="label label-success label-yesno">Ja</span>
@@ -72,7 +72,11 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6">Er zijn nog geen inschrijvingen!</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     @if(!$mensa->closed)
