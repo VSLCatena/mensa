@@ -1,7 +1,12 @@
 @extends('mensae.base')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('css/logs.css') }}" />
+@endsection
+
 @section('overview.content')
-    <table class="table table-striped">
+    <table class="table table-striped responsive-table logs">
         <thead>
         <tr>
             <th>Door</th>
