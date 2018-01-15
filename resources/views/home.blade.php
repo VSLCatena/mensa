@@ -1,5 +1,10 @@
 @extends('base')
 
+@section('styles')
+    @parent
+    <link rel="stylesheet" href="{{ asset('css/home.css') }}" />
+@endsection
+
 @section('content')
 <div class="container">
     <div class="row">
@@ -20,7 +25,7 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <table class="table mensae">
+                    <table class="table responsive-table mensae">
                         <thead>
                             <tr>
                                 <th>Datum</th>
