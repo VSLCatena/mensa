@@ -286,6 +286,10 @@ class SigninController extends Controller
             return redirect(route('home'));
         }
 
+        // This is just a soft-delete. This is because we might need to retrieve information later.
+        $mensaUser->intros()->delete();
+        $mensaUser->delete();
+
         // Log the signout
         $this->log($mensa, Auth::user()->name.' is uitgeschreven.');
 
