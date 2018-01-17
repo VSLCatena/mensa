@@ -29,8 +29,9 @@ class Kernel extends ConsoleKernel
             ->everyFiveMinutes();
 
         // Create a new mensa two weeks in advance
-        $schedule->command('mensas:autocreate')
+        $schedule->command('mensa:autocreate')
             ->weekdays()
+            ->daily()
             ->evenInMaintenanceMode();
     }
 
