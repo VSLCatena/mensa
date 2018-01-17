@@ -298,6 +298,8 @@ class SigninController extends Controller
             Mail::to($mensaUser->user)->send(new SigninCancelled($mensaUser));
         }
 
+        $request->session()->flash('info', 'Je hebt jezelf succesvol uitgeschreven!');
+
         return redirect(route('home'));
     }
 }
