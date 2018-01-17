@@ -116,7 +116,6 @@ class SigninController extends Controller
             // Then we check if we haven't found a previous signin of the user
             /* @var $possibleDuplicate MensaUser */
             $possibleDuplicate = $mensa->users()
-                ->withTrashed()
                 ->where('lidnummer', $mensaUser->lidnummer)
                 ->where('is_intro', '0')->first();
 
@@ -140,6 +139,14 @@ class SigninController extends Controller
                     Input::flash();
                     $request->session()->flash('error', 'Deze mensa zit vol!');
                     return view('signin', compact('mensaUser', 'introUser'));
+                } else {
+                    if(Auth::check() && $mensaUser->lidnummer == Auth::user()->lidnummer){
+                        $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
+                    } else {
+                        $request->session()->flash('info',
+                            'We hebben voor verificatie een bevestigingsmailtje gestuurd naar het opgegeven emailadres. '.
+                            'Zorg dat je deze binnen 15 minuten bevestigd!');
+                    }
                 }
             }
         }
