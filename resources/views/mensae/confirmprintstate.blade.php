@@ -12,6 +12,7 @@
                     <div class="panel-body">
                         Het printen van de mensastaat zal ook alle nog niet bevestigde gebruikers uitschrijven.<br /><br />
                         <form method="POST" action="{{ route('mensa.printstate', ['mensaId' => $mensa->id]) }}">
+                            {{ csrf_field() }}
                             <input type="submit" class="btn btn-danger" value="Ja" />
                             <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-success">Nee</a>
                         </form><br />
