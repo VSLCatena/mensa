@@ -15,7 +15,7 @@
                                 {{ $msg }}
                             </div>
                         @endif
-                        <div class="alert alert-info">Heb je nog geen actief account? Laat je account activeren door het bestuur!</div>
+                        <div class="alert alert-info">Je accountnaam is de eerste letter van je voornaam plus je achternaam voluit geschreven.</div>
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-md-4 control-label">Username</label>
 
@@ -59,6 +59,11 @@
                                 <button type="submit" class="btn btn-primary">
                                     Login
                                 </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8 col-md-offset-4">
+                                <a href="{{ config('mensa.url.forgot_password') }}">Wachtwoord vergeten?</a>
                             </div>
                         </div>
                     </form>

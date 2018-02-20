@@ -46,6 +46,10 @@ return [
         'user_base' => env('MENSA_LDAP_USER_BASEDN'),
     ],
 
+    'url' => [
+        'forgot_password' => env('MENSA_URL_FORGOT_PASSWORD'),
+    ],
+
     'service_users' => [
         'users' => [
             [
