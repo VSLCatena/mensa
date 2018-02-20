@@ -15,7 +15,7 @@
                                 {{ $msg }}
                             </div>
                         @endif
-                        <div class="alert alert-info">Je accountnaam is de eerste letter van je voornaam plus je achternaam voluit geschreven.</div>
+                        <div class="alert alert-info text-center">Je accountnaam is de eerste letter van je voornaam plus je achternaam voluit geschreven.</div>
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-md-4 control-label">Username</label>
 
