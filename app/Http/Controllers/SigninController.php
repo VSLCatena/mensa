@@ -240,6 +240,7 @@ class SigninController extends Controller
 
         // Here we check the intro stuff. Whoop whoop!
         if($request->has('intro')){
+            $introUser->confirmation_code = $mensaUser->confirmation_code;
             $introUser->dishwasher = $mensaUser->dishwasher;
             $introUser->vegetarian = (bool)$request->has('intro_vegetarian');
             $introUser->allergies = $request->input('intro_allergies');
