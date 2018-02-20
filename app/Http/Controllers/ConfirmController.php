@@ -29,7 +29,7 @@ class ConfirmController extends Controller
         $mensaUser->save();
 
         // Log the confirmation
-        $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft zijn inschrijving bevestigd.');
+        $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft hun inschrijving bevestigd.');
 
         Mail::to($mensaUser->user)->send(new SigninConfirmed($mensaUser));
 
