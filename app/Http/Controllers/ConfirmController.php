@@ -15,21 +15,26 @@ class ConfirmController extends Controller
     use Logger;
 
     public function confirm($code){
-        try {
-            $mensaUser = MensaUser::where('confirmation_code', $code)->firstOrFail();
-        } catch(ModelNotFoundException $e){
+        $mensaUsers = MensaUser::where('confirmation_code', $code)->get();
+        if(count($mensaUsers) < 0){
             return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
         }
 
-        if($mensaUser->confirmed){
-            return redirect(route('home'))->with('error', 'Deze inschrijving is al bevestigd!');
+        foreach($mensaUsers as $mensaUser) {
+            if ($mensaUser->confirmed) {
+                return redirect(route('home'))->with('error', 'Deze inschrijving is al bevestigd!');
+            }
+
+            $mensaUser->confirmed = true;
+            $mensaUser->save();
+        }
+        // Log the confirmation
+        if(count($mensaUsers) == 1){
+            $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft hun inschrijving bevestigd.');
+        } else {
+            $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft '.count($mensaUsers).' inschrijvingen bevestigd.');
         }
 
-        $mensaUser->confirmed = true;
-        $mensaUser->save();
-
-        // Log the confirmation
-        $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft hun inschrijving bevestigd.');
 
         Mail::to($mensaUser->user)->send(new SigninConfirmed($mensaUser));
 
