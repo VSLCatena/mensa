@@ -14,10 +14,11 @@
             @if(($user->cooks || $user->dishwasher) && !$user->isStaff()) (Reserve pers.) @endif
         @endif
     </td>
+    <td style="border: 1px solid black; text-align: center;">{{ (isset($user) && $user->vegetarian) ? 'V':'&nbsp;' }}</td>
     @if($countExtraOptions > 0 && isset($user) && !$user->isStaff())
-        <td style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px; text-align: center;">&euro;{{ number_format($user->price(), 2) }}</td>
+        <td style="border: 1px solid black; padding-left: 5px; padding-right: 5px; text-align: center;">&euro;{{ number_format($user->price(), 2) }}</td>
     @endif
-    <td style="border: 1px solid black; text-align: left; padding-left: 5px; padding-right: 5px; text-align: center;">
+    <td style="border: 1px solid black; padding-left: 5px; padding-right: 5px; text-align: center;">
         @if(isset($extra))
             {{ $extra }}
         @elseif(isset($user))
