@@ -44,3 +44,15 @@
 .nav-tabs li.active form input.btn-link:focus, .nav-tabs li.active form input.btn-link:hover {
     text-decoration: none;
 }
+
+.sortable .mover {
+    cursor: move;
+}
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item p {
+    margin-left: 20px;
+}

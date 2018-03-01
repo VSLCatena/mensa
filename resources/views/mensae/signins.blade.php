@@ -12,9 +12,9 @@
                 <th>Bevestigd</th>
                 <th>Naam</th>
                 <th>Allergie&euml;n & extra info</th>
-                <th>Betaald</th>
+                @admin <th>Betaald</th> @else <th></th> @endadmin
                 <th>Inschrijftijd</th>
-                <th>Acties</th>
+                @admin <th>Acties</th> @else <th></th> @endadmin
             </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
                     </td>
                     <td>
                         @if($mUser->is_intro)Intro van @endif
-                        {{ $mUser->name }}<br />
+                        <span class="text-nowrap">{{ $mUser->name }}</span><br />
                         {{ $mUser->phonenumber }}
                     </td>
                     <td>
@@ -50,27 +50,35 @@
                         @endif
                         &nbsp;
                     </td>
-                    @if($mUser->isStaff())
-                        <td></td>
-                    @elseif($mUser->price() == $mUser->paid)
-                        <td><button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button></td>
-                    @else
-                        <td><button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button></td>
-                    @endif
-                    <td>{{ $mUser->created_at }}</td>
-                    <td>
-                        @if(!$mensa->closed)
-                            <div class="btn-group-vertical">
-                                <a href="{{ route('mensa.editsignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Wijzigen</a>
-                                <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
-                            </div>
+                    @admin
+                        @if($mUser->isStaff())
+                            <td>&nbsp;</td>
+                        @elseif($mUser->price() == $mUser->paid)
+                            <td><button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button></td>
                         @else
-                            <div class="btn-group-vertical">
-                                <span class="btn btn-xs btn-default disabled">Wijzigen</span>
-                                <span class="btn btn-xs btn-default disabled">Uitschrijven</span>
-                            </div>
+                            <td><button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid {{ ($mensa->closed || !Auth::user()->mensa_user)?'disabled':'' }}">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button></td>
                         @endif
-                    </td>
+                    @else
+                        <td></td>
+                    @endadmin
+                    <td>{{ $mUser->created_at }}</td>
+                    @admin
+                        <td>
+                            @if(!$mensa->closed)
+                                <div class="btn-group-vertical">
+                                    <a href="{{ route('mensa.editsignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Wijzigen</a>
+                                    <a href="{{ route('mensa.removesignin', ['mensaId' => $mUser->mensa_id, 'userId' => $mUser->id]) }}" class="btn btn-xs btn-default">Uitschrijven</a>
+                                </div>
+                            @else
+                                <div class="btn-group-vertical">
+                                    <span class="btn btn-xs btn-default disabled">Wijzigen</span>
+                                    <span class="btn btn-xs btn-default disabled">Uitschrijven</span>
+                                </div>
+                            @endif
+                        </td>
+                    @else
+                        <td></td>
+                    @endadmin
                 </tr>
             @empty
                 <tr>
@@ -79,7 +87,7 @@
             @endforelse
         </tbody>
     </table>
-    @if(!$mensa->closed)
+    @if(!$mensa->closed && Auth::user()->mensa_admin)
         <script type="text/javascript">
             $.ajaxSetup({
                 headers: {

@@ -47,6 +47,7 @@
                         @admin
                             <li><a href="{{ route('mensa.create') }}">Mensa aanmaken</a></li>
                         @endadmin
+                        <li><a href="{{ route('faq') }}">FAQ</a></li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

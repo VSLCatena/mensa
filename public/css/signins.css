@@ -38,7 +38,7 @@
         text-align: left !important;
     }
 
-    .responsive-table td:empty {
+    .responsive-table td:empty, .responsive-table th:empty {
         display: none;
     }
 

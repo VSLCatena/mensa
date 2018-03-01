@@ -1,180 +1,29 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: SubSide
+ * Date: 1-3-2018
+ * Time: 15:26
+ */
 
 namespace App\Http\Controllers;
 
 use App\Mail\MensaCancelled;
-use App\Mail\MensaPriceChanged;
 use App\Mail\MensaState;
 use App\Mail\SigninCancelled;
 use App\Models\Mensa;
-use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
-use App\Traits\LdapHelpers;
-use App\Traits\Logger;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
-class MensaController extends Controller
+class MensaAdminController extends MensaCookController
 {
-    use LdapHelpers, Logger;
 
-    public function __construct(){
-        $this->middleware('auth');
+    public function __construct()
+    {
+        parent::__construct();
         $this->middleware('isAdmin');
-    }
-
-    public function showOverview(Request $request, $id){
-        try {
-            /* @var $mensa Mensa */
-            $mensa = Mensa::findOrFail($id);
-        } catch(ModelNotFoundException $e){
-            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
-        }
-
-        $users = $mensa->users()->count();
-        $intros = $mensa->users()->where('is_intro', '1')->count();
-        $cooks = count($mensa->cooks());
-        $dishwashers = count($mensa->dishwashers());
-        $vegetarians = $mensa->users()->where('vegetarian', '1')->count();
-        $budget = $mensa->budget();
-        $payingUsers = $mensa->payingUsers();
-
-
-        $unconfirmedUsers = $mensa->users()->onlyTrashed()->distinct()
-            ->where('confirmed', '0')
-            ->whereNotIn('lidnummer', $mensa->users()->get(['lidnummer'])->map(function($el){ return $el->lidnummer; }))
-            ->get(['lidnummer', 'mensa_id']);
-
-
-        $staffIds = $mensa->staff()->map(function($item){
-            return $item->id;
-        });
-
-        return view('mensae.overview', compact('mensa', 'users', 'unconfirmedUsers', 'staffIds', 'vegetarians', 'intros', 'cooks', 'dishwashers', 'budget', 'payingUsers'));
-    }
-
-    public function showSignins(Request $request, $id){
-        try {
-            /* @var $mensa Mensa */
-            $mensa = Mensa::findOrFail($id);
-        } catch(ModelNotFoundException $e){
-            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
-        }
-
-        $users = $mensa->users(true)->get();
-
-        return view('mensae.signins', compact('mensa', 'users'));
-    }
-
-    public function edit(Request $request, $id = null){
-        try {
-            if($id != null){
-                /* @var $mensa Mensa */
-                $mensa = Mensa::findOrFail($id);
-            } else {
-                $mensa = new Mensa();
-                $mensa->title = config('mensa.default.name');
-                $mensa->max_users = config('mensa.default.max_users');
-                $mensa->price = config('mensa.default.price');
-            }
-        } catch(ModelNotFoundException $e){
-            return redirect(route('home'))->with('error', 'Mensa niet gevonden.');
-        }
-
-        if($mensa->closed){
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
-        }
-
-        if($request->isMethod('get')){
-            return view('mensae.editmensa', compact('mensa'));
-        }
-
-        $request->validate([
-            'title' => 'required|max:191',
-            'date' => 'required|date',
-            'closing_time' => 'required|date|before:date',
-            'max_users' => 'required|numeric|between:0,999',
-            'price.0.price' => 'required|numeric|between:0,99',
-            'price.*.description' => 'max:191',
-            'price.*.price' => 'numeric|between:0,99',
-            'price.*.id' => 'exists:mensa_extra_options',
-        ]);
-
-        $notify = false;
-
-        if($mensa->price != $request->input('price.0.price')){
-            $notify = true;
-        }
-
-
-        $mensa->title = $request->input('title');
-        $mensa->date = date(new Carbon($request->input('date')));
-        $mensa->closing_time = date(new Carbon($request->input('closing_time')));
-        $mensa->max_users = $request->input('max_users');
-        $mensa->price = $request->input('price.0.price');
-
-        // If this is a new mensa, we first check if there doesn't already exist one on this day
-        if($mensa->id == null){
-            $count = Mensa::whereBetween('date', [
-                (new Carbon($request->input('date')))->startOfDay(),
-                (new Carbon($request->input('date')))->endOfDay()
-            ])->count();
-            if($count > 0){
-                return redirect(route('home'))->with('error', 'Er bestaat al een mensa op die dag!');
-            }
-        }
-
-        $mensa->save(); // Save it already to retrieve the mensas ID
-
-        // Log the editing of the mensa
-        $this->log($mensa, 'Mensa gewijzigd');
-
-        // We want to remove all extra options that haven't been provided in the request
-        $syncIds = array();
-
-        $prices = $request->all('price')['price'];
-        for($i = 1; $i < count($prices); $i++){
-            if(empty($prices[$i]['description']))
-                continue;
-
-            if(isset($prices[$i]['id'])) {
-                $mensaPrice = MensaExtraOption::find($prices[$i]['id']);
-            } else {
-                $mensaPrice = new MensaExtraOption();
-            }
-
-            if($mensaPrice->price != $prices[$i]['price']){
-                $notify = true;
-            }
-
-            $mensaPrice->description = $prices[$i]['description'];
-            $mensaPrice->price = $prices[$i]['price'];
-            $mensaPrice->mensa()->associate($mensa);
-
-            $mensaPrice->save();
-
-            // Add the mensaPrice to the syncIds so it won't be deleted!
-            $syncIds[] = $mensaPrice->id;
-        }
-
-        // Delete all extra options that aren't included anymore
-        $mensa->extraOptions()->whereNotIn('id', $syncIds)->delete();
-
-        if($notify){
-            foreach($mensa->users as $user){
-                if($user->user->email == null)
-                    continue;
-
-                Mail::to($user->user)->send(new MensaPriceChanged($user));
-            }
-        }
-
-
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
     }
 
     public function showLogs(Request $request, $mensaId){

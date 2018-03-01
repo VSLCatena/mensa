@@ -2,6 +2,14 @@ tr.cancelled {
     color: #CCC;
 }
 
+.menu-toggle {
+    display: none;
+}
+
+.menu-toggle h4 {
+    margin-bottom: 0;
+}
+
 @media (max-width: 767px) {
 
     /* Force table to not be like tables anymore */
