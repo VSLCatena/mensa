@@ -85,7 +85,7 @@
                                     <div class="row price-options sortable" ng-repeat="item in mensaMenu.items">
                                         <input type="hidden" name="menu[@{{ $index }}][id]" value="@{{ item.id }}" />
                                         <input type="hidden" name="menu[@{{ $index }}][order]" value="@{{ $index }}" />
-                                        <div class="col-xs-8 col-md-10">
+                                        <div class="col-xs-8 col-sm-10">
                                             <div class="input-group">
                                                 <label class="input-group-addon mover">
                                                     <span class="glyphicon glyphicon-menu-hamburger"></span>
@@ -99,8 +99,8 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-8 col-md-10" ng-if="mensaMenu.items.length == 0">Voeg hier je menu toe! :)</div>
-                                    <div class="col-xs-4 col-md-2" ng-class="mensaMenu.items.length != 0 ? 'col-xs-offset-8 col-md-offset-10' : ''">
+                                    <div class="col-xs-8 col-sm-10" ng-if="mensaMenu.items.length == 0">Voeg hier je menu toe! :)</div>
+                                    <div class="col-xs-4 col-sm-2" ng-class="mensaMenu.items.length != 0 ? 'col-xs-offset-8 col-sm-offset-10' : ''">
                                         <span class="btn btn-success form-control" ng-click="mensaMenu.addNew()">+</span>
                                     </div>
                                 </div>
@@ -118,10 +118,10 @@
                                 <legend>Prijs opties:</legend>
                                 <div class="row price-options" ng-repeat="price in mensa.prices">
                                     <input type="hidden" name="price[@{{ $index }}][id]" ng-if="price.id > 0" value="@{{ price.id }}" />
-                                    <div class="col-xs-12 col-md-7">
+                                    <div class="col-xs-12 col-sm-7">
                                         <input name="price[@{{ $index }}][description]" ng-disabled="$index==0" value="@{{ $index==0?'Default':price.description }}" class="form-control" />
                                     </div>
-                                    <div class="col-xs-8 col-md-3">
+                                    <div class="col-xs-8 col-sm-3">
                                         <div class="input-group">
                                             <label class="input-group-addon">
                                                 <span class="glyphicon glyphicon-euro"></span>
@@ -129,13 +129,13 @@
                                             <input name="price[@{{ $index }}][price]" ng-value="@{{ price.price }}" type="number" step="0.05" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-xs-4 col-md-2">
+                                    <div class="col-xs-4 col-sm-2">
                                         <span class="btn btn-danger disabled form-control" ng-if="$index==0">X</span>
                                         <span class="btn btn-danger form-control" ng-if="$index>0" ng-click="mensa.removePrice($index)">X</span>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-4 col-xs-offset-8 col-md-2 col-md-offset-10">
+                                    <div class="col-xs-4 col-xs-offset-8 col-sm-2 col-sm-offset-10">
                                         <span class="btn btn-success form-control" ng-click="mensa.addNew()">+</span>
                                     </div>
                                 </div>
@@ -203,6 +203,9 @@
 
                                 mensa.addNew = function() {
                                     mensa.prices.push({text:"", price:0});
+                                    window.setTimeout(function() {
+                                        $('[name="price['+(mensa.prices.length-1)+'][description]"]').focus();
+                                    }, 100)
                                 };
 
                                 mensa.removePrice = function(id){
@@ -214,6 +217,9 @@
 
                                 menu.addNew = function() {
                                     menu.items.push({ text: "" });
+                                    window.setTimeout(function() {
+                                        $('[name="menu['+(menu.items.length-1)+'][text]"]').focus();
+                                    }, 100)
                                 };
 
                                 menu.removeItem = function(id){
