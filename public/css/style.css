@@ -48,3 +48,11 @@
 .sortable .mover {
     cursor: move;
 }
+
+.faq-item {
+    margin-bottom: 20px;
+}
+
+.faq-item p {
+    margin-left: 20px;
+}

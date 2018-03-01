@@ -3,6 +3,12 @@
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/page/{page}', 'HomeController@index')->name('home.page');
 
+Route::get('faq', 'FaqController@view')->name('faq');
+Route::get('faq/list', 'FaqController@listFaqs')->name('faq.list');
+Route::match(['get', 'post'], 'faq/add', 'FaqController@edit')->name('faq.add');
+Route::match(['get', 'post'], 'faq/edit/{id}', 'FaqController@edit')->name('faq.edit');
+Route::match(['get', 'post'], 'faq/delete/{id}', 'FaqController@delete')->name('faq.delete');
+
 // Login and log out
 Route::get('login/{token}', 'LoginController@loginByToken');
 Route::match(['get', 'post'], 'login', 'LoginController@login')->name('login');

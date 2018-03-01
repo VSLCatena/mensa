@@ -17,7 +17,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="password">Extra informatie</label>
+                                <label for="extra_info">Extra informatie</label>
                                 <input id="extra_info" class="form-control" name="extra_info" value="{{ old('extra_info', Auth::user()->extra_info) }}">
                             </div>
 
