@@ -23,10 +23,6 @@
     text-align: center;
 }
 
-.table-signins td:nth-child(2) {
-    white-space: nowrap;
-}
-
 .table-signins td:nth-child(3) {
     width: 100%;
 }

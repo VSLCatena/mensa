@@ -21,7 +21,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">{{ $mensa->id == null ? 'Mensa aanmaken' : ('Mensa wijzigen van '.formatDate($mensa->date, false, false)) }}</div>
                     <div class="panel-body">
-                        @if($mensa->id != null)
+                        @if($mensa->id != null && Auth::user()->mensa_admin)
                             <div class="alert alert-info">
                                 <strong>Note:</strong> Bij het aanpassen van de prijs wordt iedereen die zich heeft ingeschreven op de hoogte gebracht.
                             </div>
@@ -42,7 +42,7 @@
                             <div class="form-group">
                                 <label for="date">Datum:</label>
                                 <div class="input-group date" id="datepicker">
-                                    <input id="date" name="date" class="form-control" />
+                                    <input id="date" name="date" class="form-control" @notadmin readonly @endnotadmin />
                                     <label for="date" class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </label>
@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label for="closing_time">Sluittijd:</label>
                                 <div class="input-group date">
-                                    <input id="closing_time" name="closing_time" class="form-control" />
+                                    <input id="closing_time" name="closing_time" class="form-control" @notadmin readonly @endnotadmin />
                                     <label for="closing_time" class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </label>
@@ -71,7 +71,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="max_users">Max inschrijvingen:</label>
-                                <input id="max_users" type="number" name="max_users" value="{{ old('max_users', $mensa->max_users) }}" class="form-control" />
+                                <input id="max_users" type="number" name="max_users" value="{{ old('max_users', $mensa->max_users) }}" class="form-control" @notadmin readonly @endnotadmin />
 
                                 @if ($errors->has('max_users'))
                                     <span class="help-block">
@@ -83,7 +83,7 @@
                                 <legend>Menu:</legend>
                                 <div ui-sortable ng-model="mensaMenu.items">
                                     <div class="row price-options sortable" ng-repeat="item in mensaMenu.items">
-                                        <input type="hidden" name="menu[@{{ $index }}][id]" value="@{{ item.id }}" />
+                                        <input type="hidden" name="menu[@{{ $index }}][id]" ng-if="item.id > 0" value="@{{ item.id }}" />
                                         <input type="hidden" name="menu[@{{ $index }}][order]" value="@{{ $index }}" />
                                         <div class="col-xs-8 col-sm-10">
                                             <div class="input-group">
@@ -105,8 +105,8 @@
                                     </div>
                                 </div>
 
-                                @if ($errors->has('price.*'))
-                                    @foreach($errors->get('price.*') as $error)
+                                @if ($errors->has('menu.*'))
+                                    @foreach($errors->get('menu.*') as $error)
                                         <span class="help-block">
                                             <strong>{{ $error[0] }}</strong>
                                         </span>
@@ -118,27 +118,31 @@
                                 <legend>Prijs opties:</legend>
                                 <div class="row price-options" ng-repeat="price in mensa.prices">
                                     <input type="hidden" name="price[@{{ $index }}][id]" ng-if="price.id > 0" value="@{{ price.id }}" />
-                                    <div class="col-xs-12 col-sm-7">
-                                        <input name="price[@{{ $index }}][description]" ng-disabled="$index==0" value="@{{ $index==0?'Default':price.description }}" class="form-control" />
+                                    <div class="@admin col-xs-12 col-sm-7 @else col-xs-7 @endadmin">
+                                        <input name="price[@{{ $index }}][description]" ng-disabled="$index==0" value="@{{ $index==0?'Default':price.description }}" class="form-control" @notadmin readonly @endnotadmin />
                                     </div>
-                                    <div class="col-xs-8 col-sm-3">
+                                    <div class="@admin col-xs-8 col-sm-3 @else col-xs-5 @endadmin">
                                         <div class="input-group">
                                             <label class="input-group-addon">
                                                 <span class="glyphicon glyphicon-euro"></span>
                                             </label>
-                                            <input name="price[@{{ $index }}][price]" ng-value="@{{ price.price }}" type="number" step="0.05" class="form-control" />
+                                            <input name="price[@{{ $index }}][price]" ng-value="@{{ price.price }}" type="number" step="0.05" class="form-control" @notadmin readonly @endnotadmin />
                                         </div>
                                     </div>
+                                    @admin
                                     <div class="col-xs-4 col-sm-2">
                                         <span class="btn btn-danger disabled form-control" ng-if="$index==0">X</span>
                                         <span class="btn btn-danger form-control" ng-if="$index>0" ng-click="mensa.removePrice($index)">X</span>
                                     </div>
+                                    @endadmin
                                 </div>
+                                @admin
                                 <div class="row">
                                     <div class="col-xs-4 col-xs-offset-8 col-sm-2 col-sm-offset-10">
                                         <span class="btn btn-success form-control" ng-click="mensa.addNew()">+</span>
                                     </div>
                                 </div>
+                                @endadmin
 
                                 @if ($errors->has('price.*'))
                                     @foreach($errors->get('price.*') as $error)
@@ -162,18 +166,12 @@
 
                             $('#date').datetimepicker({
                                 format: 'DD-MM-YYYY HH:mm',
-                                defaultDate: {{ old('date',
-                                $mensa->id != null ?
-                                new \Illuminate\Support\HtmlString("moment('".$mensa->date."')") :
-                                new \Illuminate\Support\HtmlString("moment().set('hour', 19).set('minute', 0)")
-                                ) }}
+                                defaultDate: moment('{{ old('date', $mensa->date) }}'),
+                                stepping: 5
                             });
                             $('#closing_time').datetimepicker({
                                 format: 'DD-MM-YYYY HH:mm',
-                                defaultDate: {{ old('date',
-                                $mensa->id != null ?
-                                new \Illuminate\Support\HtmlString("moment('".$mensa->closing_time."')") :
-                                new \Illuminate\Support\HtmlString("moment().set('hour', 16).set('minute', 0)")) }},
+                                defaultDate: moment('{{ old('closing_time', $mensa->closing_time) }}'),
                                 stepping: 5
                             });
 
