@@ -46,7 +46,7 @@
                                     <td>
                                         {{ $mensa->title }}
                                         @if($mensa->menuItems()->count() > 0)
-                                            <small class="menu-toggler"><a href="#">(Klik voor het menu)</a></small>
+                                            <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
                                             <div class="menu-toggle">
                                                 <h4>Menu:</h4>
                                                 <ul>
@@ -60,7 +60,7 @@
                                             <div><strong><u>Extra optie:</u></strong> {{ $option->description }} voor &euro;{{ $option->price }}</div>
                                         @endforeach
                                         @if(strlen($mensa->cooksFormatted()) > 0)
-                                            <div>Gekookt door: {{ $mensa->cooksFormatted() }}</div>
+                                            <div>Gekookt door: <span class="text-nowrap">{{ $mensa->cooksFormatted() }}</span></div>
                                         @endif
                                     </td>
                                     <td>&euro;{{ $mensa->price }}</td>
