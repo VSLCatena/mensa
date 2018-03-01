@@ -9,6 +9,7 @@ use App\Mail\SigninCancelled;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
+use App\Models\MenuItem;
 use App\Traits\LdapHelpers;
 use App\Traits\Logger;
 use Carbon\Carbon;
@@ -102,6 +103,9 @@ class MensaController extends Controller
             'price.*.description' => 'max:191',
             'price.*.price' => 'numeric|between:0,99',
             'price.*.id' => 'exists:mensa_extra_options',
+            'menu.*.id' => 'exists:menu_items',
+            'menu.*.order' => 'numeric',
+            'menu.*.text' => 'max:191'
         ]);
 
         $notify = false;
@@ -164,6 +168,7 @@ class MensaController extends Controller
         // Delete all extra options that aren't included anymore
         $mensa->extraOptions()->whereNotIn('id', $syncIds)->delete();
 
+        // If the price has changed we want to notify everyone that signed in
         if($notify){
             foreach($mensa->users as $user){
                 if($user->user->email == null)
@@ -172,6 +177,34 @@ class MensaController extends Controller
                 Mail::to($user->user)->send(new MensaPriceChanged($user));
             }
         }
+
+        // Here we do menu stuff
+        // We want to remove all menu items that haven't been provided in the request
+        $syncIds = array();
+
+        $menu = $request->all('menu')['menu'];
+        for($i = 0; $i < count($menu); $i++){
+            if(empty($menu[$i]['text']))
+                continue;
+
+            if(isset($menu[$i]['id'])) {
+                $menuItem = MenuItem::find($menu[$i]['id']);
+            } else {
+                $menuItem = new MenuItem();
+            }
+
+            $menuItem->text = $menu[$i]['text'];
+            $menuItem->order = $menu[$i]['order'];
+            $menuItem->mensa()->associate($mensa);
+
+            $menuItem->save();
+
+            // Add the mensaPrice to the syncIds so it won't be deleted!
+            $syncIds[] = $menuItem->id;
+        }
+
+        // Delete all menu options that aren't included anymore
+        $mensa->menuItems()->whereNotIn('id', $syncIds)->delete();
 
 
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');

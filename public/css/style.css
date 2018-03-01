@@ -44,3 +44,7 @@
 .nav-tabs li.active form input.btn-link:focus, .nav-tabs li.active form input.btn-link:hover {
     text-decoration: none;
 }
+
+.sortable .mover {
+    cursor: move;
+}

@@ -9,11 +9,13 @@
     @parent
     <script src="{{ asset('js/moment.min.js') }}"></script>
     <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="{{ asset('js/sortable.min.js') }}"></script>
 @endsection
 
 @section('content')
-    <div class="container" ng-app="mensa" ng-controller="MensaEditor as mensa">
+    <div class="container" ng-app="mensa">
         <div class="row">
             <div class="col-xs-12 col-md-8 col-md-offset-2">
                 <div class="panel panel-default">
@@ -68,27 +70,72 @@
                                 @endif
                             </div>
                             <div class="form-group">
-                                <label>Prijs opties:</label>
+                                <label for="max_users">Max inschrijvingen:</label>
+                                <input id="max_users" type="number" name="max_users" value="{{ old('max_users', $mensa->max_users) }}" class="form-control" />
+
+                                @if ($errors->has('max_users'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('max_users') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <fieldset ng-controller="MenuEditor as mensaMenu">
+                                <legend>Menu:</legend>
+                                <div ui-sortable ng-model="mensaMenu.items">
+                                    <div class="row price-options sortable" ng-repeat="item in mensaMenu.items">
+                                        <input type="hidden" name="menu[@{{ $index }}][id]" value="@{{ item.id }}" />
+                                        <input type="hidden" name="menu[@{{ $index }}][order]" value="@{{ $index }}" />
+                                        <div class="col-xs-8 col-md-10">
+                                            <div class="input-group">
+                                                <label class="input-group-addon mover">
+                                                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                                                </label>
+                                                <input name="menu[@{{ $index }}][text]" value="@{{ item.text }}" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-2">
+                                            <span class="btn btn-danger form-control" ng-click="mensaMenu.removeItem($index)">X</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-8 col-md-10" ng-if="mensaMenu.items.length == 0">Voeg hier je menu toe! :)</div>
+                                    <div class="col-xs-4 col-md-2" ng-class="mensaMenu.items.length != 0 ? 'col-xs-offset-8 col-md-offset-10' : ''">
+                                        <span class="btn btn-success form-control" ng-click="mensaMenu.addNew()">+</span>
+                                    </div>
+                                </div>
+
+                                @if ($errors->has('price.*'))
+                                    @foreach($errors->get('price.*') as $error)
+                                        <span class="help-block">
+                                            <strong>{{ $error[0] }}</strong>
+                                        </span>
+                                    @endforeach
+                                @endif
+                            </fieldset>
+                            <br />
+                            <fieldset ng-controller="MensaEditor as mensa">
+                                <legend>Prijs opties:</legend>
                                 <div class="row price-options" ng-repeat="price in mensa.prices">
                                     <input type="hidden" name="price[@{{ $index }}][id]" ng-if="price.id > 0" value="@{{ price.id }}" />
                                     <div class="col-xs-12 col-md-7">
                                         <input name="price[@{{ $index }}][description]" ng-disabled="$index==0" value="@{{ $index==0?'Default':price.description }}" class="form-control" />
                                     </div>
-                                    <div class="col-xs-7 col-md-3">
-                                        <div class="input-group date">
-                                            <label for="closing_time" class="input-group-addon">
+                                    <div class="col-xs-8 col-md-3">
+                                        <div class="input-group">
+                                            <label class="input-group-addon">
                                                 <span class="glyphicon glyphicon-euro"></span>
                                             </label>
                                             <input name="price[@{{ $index }}][price]" ng-value="@{{ price.price }}" type="number" step="0.05" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-xs-5 col-md-2">
+                                    <div class="col-xs-4 col-md-2">
                                         <span class="btn btn-danger disabled form-control" ng-if="$index==0">X</span>
                                         <span class="btn btn-danger form-control" ng-if="$index>0" ng-click="mensa.removePrice($index)">X</span>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-xs-5 col-xs-offset-7 col-md-2 col-md-offset-10">
+                                    <div class="col-xs-4 col-xs-offset-8 col-md-2 col-md-offset-10">
                                         <span class="btn btn-success form-control" ng-click="mensa.addNew()">+</span>
                                     </div>
                                 </div>
@@ -100,18 +147,8 @@
                                         </span>
                                     @endforeach
                                 @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="max_users">Max inschrijvingen:</label>
-                                <input id="max_users" type="number" name="max_users" value="{{ old('max_users', $mensa->max_users) }}" class="form-control" />
-
-                                @if ($errors->has('max_users'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('max_users') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-
+                            </fieldset>
+                            <br /><br />
                             <input type="submit" value="{{ (!$mensa->id)?'Mensa aanmaken':'Wijzig mensa' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (!$mensa->id)?route('home'):route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-default">Terug</a>
                         </form>
                     </div>
@@ -159,11 +196,10 @@
                         });
 
                         // Price list
-                        angular.module('mensa', [])
+                        angular.module('mensa', ['ui.sortable'])
                             .controller('MensaEditor', function() {
                                 var mensa = this;
                                 mensa.prices = {!! json_encode(old('price', $mensa->jsonPrices())) !!};
-                                console.debug(mensa.prices);
 
                                 mensa.addNew = function() {
                                     mensa.prices.push({text:"", price:0});
@@ -171,6 +207,17 @@
 
                                 mensa.removePrice = function(id){
                                     mensa.prices.splice(id, 1);
+                                };
+                            }).controller('MenuEditor', function(){
+                                var menu = this;
+                                menu.items = {!! json_encode(old('menu', $mensa->menuItems->toArray())) !!};
+
+                                menu.addNew = function() {
+                                    menu.items.push({ text: "" });
+                                };
+
+                                menu.removeItem = function(id){
+                                    menu.items.splice(id, 1);
                                 };
                             });
                     </script>
