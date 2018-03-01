@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MensaCancelled;
 use App\Mail\MensaPriceChanged;
-use App\Mail\MensaState;
-use App\Mail\SigninCancelled;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
-use App\Models\MensaUser;
 use App\Models\MenuItem;
 use App\Traits\LdapHelpers;
 use App\Traits\Logger;
@@ -16,7 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class MensaCookController extends Controller
