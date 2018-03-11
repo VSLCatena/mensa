@@ -19,7 +19,7 @@ class MensaPolicy
      */
     public function softEdit(User $user, Mensa $mensa)
     {
-        return $user->mensa_admin || $mensa->users->where('cooks', '1')->where('user_id', $user->id)->count() > 0;
+        return $user->mensa_admin || $mensa->users->where('cooks', '1')->where('lidnummer', $user->lidnummer)->count() > 0;
     }
 
     /**
