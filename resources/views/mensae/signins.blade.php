@@ -54,7 +54,7 @@
                         @if($mUser->isStaff())
                             <td>&nbsp;</td>
                         @elseif($mUser->price() == $mUser->paid)
-                            <td><button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ $mensa->closed?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button></td>
+                            <td><button data-id="{{ $mUser->id }}" class="btn btn-success btn-paid {{ ($mensa->closed || !Auth::user()->mensa_admin)?'disabled':'' }}">&euro;{{ number_format($mUser->price(), 2) }}</button></td>
                         @else
                             <td><button data-id="{{ $mUser->id }}" class="btn btn-{{ ($mUser->price() < $mUser->paid)?'warning':'danger' }} btn-paid {{ ($mensa->closed || !Auth::user()->mensa_admin)?'disabled':'' }}">&euro;{{ number_format($mUser->price() - $mUser->paid, 2) }}</button></td>
                         @endif
