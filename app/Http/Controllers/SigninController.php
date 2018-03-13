@@ -73,6 +73,8 @@ class SigninController extends Controller
             }
             $mensaUser->user()->associate($user);
             $mensaUser->confirmed = true;
+            $mensaUser->allergies = $user->allergies;
+            $mensaUser->extra_info = $user->extra_info;
         } else {
             $mensaUser->user()->associate(new User());
         }
