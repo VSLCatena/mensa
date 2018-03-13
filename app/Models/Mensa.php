@@ -20,7 +20,7 @@ class Mensa extends Model
     {
         if($order) {
             return $this->hasMany('App\Models\MensaUser')
-                ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian'))
+                ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
                 ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
                 ->orderBy('cooks', 'DESC')
                 ->orderBy('dishwasher', 'DESC')
