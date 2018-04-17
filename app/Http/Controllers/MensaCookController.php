@@ -152,11 +152,11 @@ class MensaCookController extends Controller
 
                 if (isset($prices[$i]['id'])) {
                     $mensaPrice = MensaExtraOption::find($prices[$i]['id']);
-                } else {
-                    $mensaPrice = new MensaExtraOption();
                     if($mensa->id !== $mensaPrice->mensa->id){
                         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
                     }
+                } else {
+                    $mensaPrice = new MensaExtraOption();
                 }
 
                 if ($mensaPrice->price != $prices[$i]['price']) {
