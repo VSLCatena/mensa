@@ -25,8 +25,10 @@
                             @endif
                             @admin
                                 <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
-                                <a href="{{ route('mensa.cancel', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
                             @endadmin
+                            @if(!$mensa->closed)
+                                <a href="{{ route('mensa.cancel', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
+                            @endif
                         </div>
                     </div>
                     <div class="panel-body">

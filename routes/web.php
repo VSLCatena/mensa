@@ -42,7 +42,7 @@ Route::prefix('mensa')->group(function() {
 
     Route::post('{mensaId}/close', 'MensaAdminController@closeMensa')->name('mensa.close');
     Route::match(['get', 'post'], '{mensaId}/reopen', 'MensaAdminController@openMensa')->name('mensa.open');
-    Route::match(['get', 'post'], '{mensaId}/cancel', 'MensaAdminController@cancelMensa')->name('mensa.cancel');
+    Route::match(['get', 'post'], '{mensaId}/cancel', 'MensaCookController@cancelMensa')->name('mensa.cancel');
 
     // Sign in and sign out
     Route::post('search', 'MensaAdminController@requestUserLookup')->name('mensa.searchusers');
