@@ -79,10 +79,8 @@ class SigninController extends Controller
             $mensaUser->user()->associate(new User());
         }
 
-        // If the signin is new, and the person wants to sign in himself we automatically confirm him
-        // And we can also fill in some default values like allergies and such
+        // If the signin is new we can fill in some default values like allergies and such
         if($user != null){
-            $mensaUser->confirmed = true;
             $mensaUser->lidnummer = $user->lidnummer;
             $mensaUser->vegetarian = $user->vegetarian;
             $mensaUser->allergies = $user->allergies;
@@ -113,6 +111,12 @@ class SigninController extends Controller
                 // Otherwise we update the mensaUser and introUser
                 $mensaUser->lidnummer = $user->lidnummer;
                 $introUser->lidnummer = $user->lidnummer;
+            }
+
+            // If the person is logged in and the same user as we want to sign in we confirm it
+            if(Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer){
+                $mensaUser->confirmed = true;
+                $introUser->confirmed = true;
             }
 
             // Then we check if we haven't found a previous signin of the user
