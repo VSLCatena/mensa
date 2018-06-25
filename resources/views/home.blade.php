@@ -90,7 +90,7 @@
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="id" value="{{ $mensa->id }}" />
                                                     </form>
-                                                @elseif(!$mensa->closed)
+                                                @elseif(!$mensa->isClosed())
                                                     @if($mensa->max_users > $mensa->users()->count())
                                                         <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
                                                     @else

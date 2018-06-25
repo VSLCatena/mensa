@@ -144,10 +144,12 @@ class SigninController extends Controller
                 } else {
                     if(Auth::check() && $mensaUser->lidnummer == Auth::user()->lidnummer){
                         $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
-                    } else {
+                    } elseif(!$mensaUser->confirmed){
                         $request->session()->flash('info',
                             'We hebben voor verificatie een bevestigingsmailtje gestuurd naar het opgegeven emailadres. '.
                             'Zorg dat je deze binnen 15 minuten bevestigd!');
+                    } else {
+                        $request->session()->flash('info', 'Persoon succesvol ingeschreven! We hebben een bevestigingsmailtje gestuurd naar het opgegeven emailadres.');
                     }
                 }
             }
@@ -181,7 +183,7 @@ class SigninController extends Controller
     private function handleSignin(Request $request, $mensaUser, $introUser = null){
         $mensa = $mensaUser->mensa;
         // We check if the Mensa isn't closed yet
-        if($mensa->closed){
+        if($mensa->closed || $mensa->isClosed() && !(Auth::check() && Auth::user()->mensa_admin)){
             $route = (Auth::check() && Auth::user()->mensa_admin) ?
                 route('mensa.signins', ['id' => $mensa->id]) :
                 route('home');
