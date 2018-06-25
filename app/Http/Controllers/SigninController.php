@@ -79,10 +79,8 @@ class SigninController extends Controller
             $mensaUser->user()->associate(new User());
         }
 
-        // If the signin is new, and the person wants to sign in himself we automatically confirm him
-        // And we can also fill in some default values like allergies and such
+        // If the signin is new we can fill in some default values like allergies and such
         if($user != null){
-            $mensaUser->confirmed = true;
             $mensaUser->lidnummer = $user->lidnummer;
             $mensaUser->vegetarian = $user->vegetarian;
             $mensaUser->allergies = $user->allergies;
@@ -115,6 +113,12 @@ class SigninController extends Controller
                 $introUser->lidnummer = $user->lidnummer;
             }
 
+            // If the person is logged in and the same user as we want to sign in we confirm it
+            if(Auth::check() && Auth::user()->lidnummer == $mensaUser->lidnummer){
+                $mensaUser->confirmed = true;
+                $introUser->confirmed = true;
+            }
+
             // Then we check if we haven't found a previous signin of the user
             /* @var $possibleDuplicate MensaUser */
             $possibleDuplicate = $mensa->users()
@@ -144,10 +148,12 @@ class SigninController extends Controller
                 } else {
                     if(Auth::check() && $mensaUser->lidnummer == Auth::user()->lidnummer){
                         $request->session()->flash('info', 'Je hebt jezelf succesvol ingeschreven!');
-                    } else {
+                    } elseif(!$mensaUser->confirmed){
                         $request->session()->flash('info',
                             'We hebben voor verificatie een bevestigingsmailtje gestuurd naar het opgegeven emailadres. '.
                             'Zorg dat je deze binnen 15 minuten bevestigd!');
+                    } else {
+                        $request->session()->flash('info', 'Persoon succesvol ingeschreven! We hebben een bevestigingsmailtje gestuurd naar het opgegeven emailadres.');
                     }
                 }
             }
@@ -181,7 +187,7 @@ class SigninController extends Controller
     private function handleSignin(Request $request, $mensaUser, $introUser = null){
         $mensa = $mensaUser->mensa;
         // We check if the Mensa isn't closed yet
-        if($mensa->closed){
+        if($mensa->closed || $mensa->isClosed() && !(Auth::check() && Auth::user()->mensa_admin)){
             $route = (Auth::check() && Auth::user()->mensa_admin) ?
                 route('mensa.signins', ['id' => $mensa->id]) :
                 route('home');

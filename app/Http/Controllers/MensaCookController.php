@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MensaCancelled;
 use App\Mail\MensaPriceChanged;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
@@ -220,5 +221,34 @@ class MensaCookController extends Controller
 
 
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
+    }
+
+    public function cancelMensa(Request $request, $mensaId){
+        try {
+            $mensa = Mensa::findOrFail($mensaId);
+        } catch(ModelNotFoundException $e){
+            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
+        }
+
+        if($mensa->max_users <= 0) {
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al geannuleerd!');
+        }
+
+        if($request->isMethod("get")){
+            return view('mensae.confirmcancel', compact('mensa'));
+        }
+
+        $mensa->max_users = 0;
+        $mensa->save();
+
+        foreach($mensa->users as $user){
+            if($user->user->email == null)
+                continue;
+
+            Mail::to($user->user)->send(new MensaCancelled($user));
+        }
+
+        $this->log($mensa, 'Mensa geannuleerd');
+        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geannuleerd!');
     }
 }

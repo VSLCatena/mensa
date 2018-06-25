@@ -8,7 +8,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MensaCancelled;
 use App\Mail\MensaState;
 use App\Mail\SigninCancelled;
 use App\Models\Mensa;
@@ -169,11 +168,12 @@ class MensaAdminController extends MensaCookController
             return view('mensae.confirmreopen', compact('mensa'));
         }
 
-        if(!$mensa->closed) {
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al gesloten!');
+        if($mensa->closed) {
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al open!');
         }
 
         $mensa->closed = false;
+        $mensa->max_users = config('mensa.default.max_users');
         $mensa->save();
 
         $this->log($mensa, 'Mensa opnieuw geopend voor wijzigingen');
@@ -196,35 +196,6 @@ class MensaAdminController extends MensaCookController
 
         $this->log($mensa, 'Mensa gesloten voor wijzigingen');
         return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa gesloten voor aanpassingen!');
-    }
-
-    public function cancelMensa(Request $request, $mensaId){
-        try {
-            $mensa = Mensa::findOrFail($mensaId);
-        } catch(ModelNotFoundException $e){
-            return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
-        }
-
-        if($mensa->max_users <= 0) {
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al geannuleerd!');
-        }
-
-        if($request->isMethod("get")){
-            return view('mensae.confirmcancel', compact('mensa'));
-        }
-
-        $mensa->max_users = 0;
-        $mensa->save();
-
-        foreach($mensa->users as $user){
-            if($user->user->email == null)
-                continue;
-
-            Mail::to($user->user)->send(new MensaCancelled($user));
-        }
-
-        $this->log($mensa, 'Mensa geannuleerd');
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geannuleerd!');
     }
 
     public function bulkSignin(Request $request, $mensaId, $lidnummer){

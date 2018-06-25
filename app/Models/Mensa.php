@@ -35,6 +35,10 @@ class Mensa extends Model
         return $this->hasMany('App\Models\Log');
     }
 
+    public function isClosed(){
+        return $this->closed || strtotime($this->closing_time) < time();
+    }
+
     public function menuItems(){
         return $this->hasMany('App\Models\MenuItem')->orderBy('order');
     }

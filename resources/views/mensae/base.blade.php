@@ -13,7 +13,7 @@
                     <div class="panel-heading">Overzicht van de mensa op {{ formatDate($mensa->date) }}</div>
                     <div class="panel-body">
                         <div class="btn-group btn-group-justified">
-                            @if(!$mensa->closed)
+                            @if(!$mensa->closed && $mensa->max_users > 0)
                                 @admin <a href="{{ route('mensa.newsignin', ['id' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a> @endadmin
                                 <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
                             @else
@@ -25,8 +25,10 @@
                             @endif
                             @admin
                                 <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
-                                <a href="{{ route('mensa.cancel', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
                             @endadmin
+                            @if(!$mensa->closed && $mensa->max_users > 0)
+                                <a href="{{ route('mensa.cancel', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
+                            @endif
                         </div>
                     </div>
                     <div class="panel-body">
