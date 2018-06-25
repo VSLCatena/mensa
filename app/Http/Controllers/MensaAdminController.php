@@ -168,11 +168,12 @@ class MensaAdminController extends MensaCookController
             return view('mensae.confirmreopen', compact('mensa'));
         }
 
-        if(!$mensa->closed) {
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al gesloten!');
+        if($mensa->closed) {
+            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al open!');
         }
 
         $mensa->closed = false;
+        $mensa->max_users = config('mensa.default.max_users');
         $mensa->save();
 
         $this->log($mensa, 'Mensa opnieuw geopend voor wijzigingen');
