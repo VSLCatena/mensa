@@ -73,7 +73,7 @@
                                     <td>
                                         @if($mensa->max_users <= 0)
                                             <span class="text-danger">Geannuleerd</span>
-                                        @elseif(!$mensa->closed)
+                                        @elseif(!$mensa->isClosed())
                                             {{ $mensa->closingTime(true) }}
                                         @else
                                             <span class="text-danger">Gesloten</span>
@@ -86,7 +86,7 @@
                                             @elseif(!Auth::check() || !Auth::user()->service_user)
                                                 @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
                                                     <form method="POST" @can('softEdit', $mensa) class="btn-group-vertical" @endcan action="{{ route('signout', ['id' => $mensa->id]) }}">
-                                                        <input type="submit" class="btn btn-danger {{ $mensa->closed?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
+                                                        <input type="submit" class="btn btn-danger {{ $mensa->isClosed()?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="id" value="{{ $mensa->id }}" />
                                                     </form>
