@@ -60,7 +60,7 @@
                                             <div><strong><u>Extra optie:</u></strong> {{ $option->description }} voor &euro;{{ $option->price }}</div>
                                         @endforeach
                                         @if(strlen($mensa->cooksFormatted()) > 0)
-                                            <div>Gekookt door: <span class="text-nowrap">{{ $mensa->cooksFormatted() }}</span></div>
+                                            <div>Gekookt door: {{ $mensa->cooksFormatted() }}</div>
                                         @endif
                                     </td>
                                     <td>&euro;{{ $mensa->price }}</td>
