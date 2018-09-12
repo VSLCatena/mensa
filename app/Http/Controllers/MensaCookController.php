@@ -193,27 +193,29 @@ class MensaCookController extends Controller
         $syncIds = array();
 
         $menu = $request->all('menu')['menu'];
-        for($i = 0; $i < count($menu); $i++){
-            if(empty($menu[$i]['text']))
-                continue;
+        if($menu != null) {
+            for ($i = 0; $i < count($menu); $i++) {
+                if (empty($menu[$i]['text']))
+                    continue;
 
-            if(isset($menu[$i]['id'])) {
-                $menuItem = MenuItem::find($menu[$i]['id']);
-                if($mensa->id != $menuItem->mensa->id){
-                    return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
+                if (isset($menu[$i]['id'])) {
+                    $menuItem = MenuItem::find($menu[$i]['id']);
+                    if ($mensa->id != $menuItem->mensa->id) {
+                        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
+                    }
+                } else {
+                    $menuItem = new MenuItem();
                 }
-            } else {
-                $menuItem = new MenuItem();
+
+                $menuItem->text = $menu[$i]['text'];
+                $menuItem->order = $menu[$i]['order'];
+                $menuItem->mensa()->associate($mensa);
+
+                $menuItem->save();
+
+                // Add the mensaPrice to the syncIds so it won't be deleted!
+                $syncIds[] = $menuItem->id;
             }
-
-            $menuItem->text = $menu[$i]['text'];
-            $menuItem->order = $menu[$i]['order'];
-            $menuItem->mensa()->associate($mensa);
-
-            $menuItem->save();
-
-            // Add the mensaPrice to the syncIds so it won't be deleted!
-            $syncIds[] = $menuItem->id;
         }
 
         // Delete all menu options that aren't included anymore
