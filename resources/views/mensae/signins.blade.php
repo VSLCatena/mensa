@@ -27,7 +27,7 @@
                     </td>
                     <td>
                         @if($mUser->is_intro)Intro van @endif
-                        <span class="text-nowrap">{{ $mUser->name }}</span><br />
+                        {{ $mUser->name }}<br />
                         {{ $mUser->phonenumber }}
                     </td>
                     <td>
