@@ -3,7 +3,7 @@
 
 Beste {{ $mensaUser->user->name }},
 
-Je ingeschrijving voor de mensa op {{ formatDate($mensaUser->mensa->date, false, false) }} is hierbij bevestigd.
+Je inschrijving voor de mensa op {{ formatDate($mensaUser->mensa->date, false, false) }} is hierbij bevestigd.
 Wil je je uitschrijven? <a href="{{ route('signin.cancel', [$mensaUser->confirmation_code]) }}">Klik dan hier</a>.
 
 Wil je je inschrijving wijzigen, <a href="{{ route('signin.edit', [$mensaUser->confirmation_code]) }}">klik dan hier</a>.

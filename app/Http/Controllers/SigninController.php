@@ -151,7 +151,7 @@ class SigninController extends Controller
                     } elseif(!$mensaUser->confirmed){
                         $request->session()->flash('info',
                             'We hebben voor verificatie een bevestigingsmailtje gestuurd naar het opgegeven emailadres. '.
-                            'Zorg dat je deze binnen 15 minuten bevestigd!');
+                            'Zorg dat je deze binnen 15 minuten bevestigt!');
                     } else {
                         $request->session()->flash('info', 'Persoon succesvol ingeschreven! We hebben een bevestigingsmailtje gestuurd naar het opgegeven emailadres.');
                     }
