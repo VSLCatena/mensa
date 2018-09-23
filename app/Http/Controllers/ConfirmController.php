@@ -48,6 +48,12 @@ class ConfirmController extends Controller
             return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
         }
 
+        // We don't want people to be able to sign out even after mensa is closed. This is annoying for the cooks
+        // when they have already bought stuff with their budget.
+        if($mensaUser->mensa->isClosed()){
+            return redirect(route('home'))->with('error', 'Deze mensa is gesloten en je kan je hiervoor dus niet meer uitschrijven.');
+        }
+
         // This is just a soft-delete. This is because we might need to retrieve information later.
         $mensaUser->intros()->delete();
         $mensaUser->delete();
