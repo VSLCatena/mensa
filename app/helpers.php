@@ -24,3 +24,8 @@ function formatTime($date){
     $timestamp = strtotime($date);
     return htmlspecialchars(date('H:i', $timestamp));
 }
+
+function formatDateISO8601($date,$time){
+    $timestamp = strtotime("$date" . " $time");
+    return htmlspecialchars(date_format($timestamp,DATE_ISO8601));
+}
