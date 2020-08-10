@@ -67,7 +67,6 @@ We zien je dan!
 Met vriendelijke groet,<br />
 De mensacomputer
 
-Vragen of problemen? Bel de bar: <a href="tel://{{ str_replace('-', '', config('mensa.contact.bar')) }}">{{ config('mensa.contact.bar') }}</a>
+Vragen of problemen? Bel de bar: <a href="tel://{{ str_replace('-', '', config('mensa.contact.bar')) }}">{{ config('mensa.contact.bar') }}</a><br>
+Voeg toe aan je eigen agenda: https://calendar.google.com/calendar/r/eventedit?text=Mensa&dates={{formatDateISO8601($mensaUser->mensa->date,$mensaUser->mensa->closingTime()}}&details=Mijn+inschrijving:+{{ route('signin.edit', [$mensaUser->confirmation_code]) }}&Studentenvereniging+V.S.L.+Catena,+Kolfmakersteeg 8,+2311+VG+Leiden,+Netherlands
 @endcomponent
-
-
