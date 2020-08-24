@@ -45,6 +45,11 @@
                                     <td>{{ formatDate($mensa->date, true) }}</td>
                                     <td>
                                         {{ $mensa->title }}
+                                        @if (strpos(strtolower($mensa->title), 'mensa') !== false) 
+                                           <span style="background-color:green" class="badge">Mensa</span> 
+                                        @endif
+                                        @if (strpos(strtolower($menda->title), 'reservering') !== false)
+                                           <span style="background-color:blue", class= "badge">Reservering</span>
                                         @if($mensa->menuItems()->count() > 0)
                                             <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
                                             <div class="menu-toggle">
