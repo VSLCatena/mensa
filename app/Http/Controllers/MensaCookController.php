@@ -125,15 +125,15 @@ class MensaCookController extends Controller
             }
 
             // If this is a new mensa, we first check if there doesn't already exist one on this day
-            if ($mensa->id == null) {
-                $count = Mensa::whereBetween('date', [
-                    (new Carbon($request->input('date')))->startOfDay(),
-                    (new Carbon($request->input('date')))->endOfDay()
-                ])->count();
-                if ($count > 0) {
-                    return redirect(route('home'))->with('error', 'Er bestaat al een mensa op die dag!');
-                }
-            }
+            //if ($mensa->id == null) {
+            //    $count = Mensa::whereBetween('date', [
+            //        (new Carbon($request->input('date')))->startOfDay(),
+            //        (new Carbon($request->input('date')))->endOfDay()
+            //    ])->count();
+            //    if ($count > 0) {
+            //        return redirect(route('home'))->with('error', 'Er bestaat al een mensa op die dag!');
+            //    }
+            //}
         }
 
         $mensa->save(); // Save it already to retrieve the mensas ID
