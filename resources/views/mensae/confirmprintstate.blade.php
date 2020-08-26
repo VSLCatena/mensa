@@ -26,9 +26,9 @@
                             <input type="submit" class="btn btn-danger" value="Ja" />
                             <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-success">Nee</a>
                         </form><br />
-                        <a href="{{ route('mensa.printstate.preview', ['id' => $mensa->id]) }}" target="_blank" class="btn btn-default">Alleen bekijken</a>
+                        <a href="{{ route('mensa.printstate.preview', ['mensaId' => $mensa->id]) }}" target="_blank" class="btn btn-default">Alleen bekijken</a>
                         @if(!$mensa->closed)
-                            <form action="{{ route('mensa.close', ['id' => $mensa->id]) }}" method="POST" style="display: inline">
+                            <form action="{{ route('mensa.close', ['mensaId' => $mensa->id]) }}" method="POST" style="display: inline">
                                 {{ csrf_field() }}
                                 <input type="submit" class="btn btn-default" value="Alleen sluiten" />
                             </form>

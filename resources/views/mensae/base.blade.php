@@ -14,7 +14,7 @@
                     <div class="panel-body">
                         <div class="btn-group btn-group-justified">
                             @if(!$mensa->closed && $mensa->max_users > 0)
-                                @admin <a href="{{ route('mensa.newsignin', ['id' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a> @endadmin
+                                @admin <a href="{{ route('mensa.newsignin', ['mensaId' => $mensa->id]) }}" class="btn btn-default">Iemand inschrijven</a> @endadmin
                                 <a href="{{ route('mensa.edit', ['id' => $mensa->id]) }}" class="btn btn-default">Mensagegevens wijzigen</a>
                             @else
                                 @admin
@@ -24,10 +24,10 @@
                                 @endadmin
                             @endif
                             @admin
-                                <a href="{{ route('mensa.printstate', ['id' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
+                                <a href="{{ route('mensa.printstate', ['mensaId' => $mensa->id]) }}" class="btn btn-default">Mensastaat printen</a>
                             @endadmin
                             @if(!$mensa->closed && $mensa->max_users > 0)
-                                <a href="{{ route('mensa.cancel', ['id' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
+                                <a href="{{ route('mensa.cancel', ['mensaId' => $mensa->id]) }}" class="btn btn-default">Mensa annuleren</a>
                             @endif
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             </li>
                             @admin
                                 <li{!! Route::is('mensa.logs') ? ' class="active"' : '' !!}>
-                                    <a href="{{ route('mensa.logs', ['id' => $mensa->id]) }}">Logs</a>
+                                    <a href="{{ route('mensa.logs', ['mensaId' => $mensa->id]) }}">Logs</a>
                                 </li>
                             @endadmin
                         </ul>
