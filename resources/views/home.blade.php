@@ -44,7 +44,15 @@
                                 <tr @if($mensa->max_users <= 0 && $mensa->users()->count() <= 0)class="cancelled" @endif>
                                     <td>{{ formatDate($mensa->date, true) }}</td>
                                     <td>
+                                        @if (substr($mensa->title, 0, 2) == "m|") 
+                                           <span class="label label-success">Mensa</span>
+                                           {{ substr($mensa->title, 2) }}
+                                        @elseif (substr($mensa->title, 0, 2) == "r|")
+                                           <span class= "label label-primary">Reservering</span>
+                                           {{ substr($mensa->title, 2) }}
+                                        @else
                                         {{ $mensa->title }}
+                                        @endif
                                         @if($mensa->menuItems()->count() > 0)
                                             <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
                                             <div class="menu-toggle">

@@ -32,7 +32,8 @@
                             <div class="form-group">
                                 <label for="title">Titel:</label>
                                 <input id="title" name="title" value="{{ old('title', $mensa->title) }}" class="form-control"  />
-
+                                <h6>Prefix je titel met r| of m| voor de label [r| Reservering] of [m| Mensa]</h6>
+                                <h6>Bijvoorbeeld: "m|Mensa met betaalde afwas"</h6>
                                 @if ($errors->has('title'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('title') }}</strong>
