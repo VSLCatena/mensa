@@ -22,7 +22,7 @@ class MensaAdminController extends MensaCookController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('isAdmin');
+        $this->middleware('IsAdmin');
     }
 
     public function showLogs(Request $request, $mensaId){
