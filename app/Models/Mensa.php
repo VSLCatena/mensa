@@ -3,18 +3,43 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * App\Models\Mensa
+ *
+ * @property string $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property string $title
+ * @property string $date
+ * @property string $closing_time
+ * @property int $max_users
+ * @property int $closed
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaExtraOption[] $extraOptions
+ * @property-read int|null $extra_options_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Log[] $logs
+ * @property-read int|null $logs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MenuItem[] $menuItems
+ * @property-read int|null $menu_items_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereClosed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereClosingTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereMaxUsers($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Mensa extends Model
 {
-    private $staff = null;
-    private $dishwashers = null;
-    private $cooks = null;
-    private $cooksFormatted = null;
-    private $defaultBudget = [null, null];
-    private $budget = [null, null];
-    private $payingUsers = null;
+    protected $casts = ['id' => 'string'];
 
     public function users($order = false)
     {
@@ -31,258 +56,19 @@ class Mensa extends Model
         }
     }
 
-    public function logs(){
-        return $this->hasMany('App\Models\Log');
+    public function extraOptions() {
+        return $this->hasMany('App\Models\MensaExtraOption');
     }
 
-    public function isClosed(){
-        return $this->closed || strtotime($this->closing_time) < time();
+    public function logs(){
+        return $this->hasMany('App\Models\Log');
     }
 
     public function menuItems(){
         return $this->hasMany('App\Models\MenuItem')->orderBy('order');
     }
 
-    public function dishwashers(){
-        if($this->dishwashers === null) {
-            $this->dishwashers = $this->users()->where('dishwasher', '1')->get();
-        }
-        return $this->dishwashers;
-    }
-
-    public function cooks($order = false){
-        if($this->cooks === null) {
-            $this->cooks = $this->users($order)->where('cooks', '1')->get();
-        }
-        return $this->cooks;
-    }
-
-    public function extraOptions(){
-        return $this->hasMany('App\Models\MensaExtraOption');
-    }
-
-    public function budget($raw = false){
-        if($this->budget[$raw?0:1] === null){
-
-            // We start with the default budget
-            $budget = $this->defaultBudget($raw);
-
-            // Then we grab all the users extra options and summarise the price of it
-            $extra_options = DB::select('SELECT SUM(extra.price) as budget FROM mensa_users AS m_users
-LEFT JOIN mensa_user_extra_options AS users_extra ON users_extra.mensa_user_id=m_users.id
-LEFT JOIN mensa_extra_options AS extra ON extra.id=users_extra.mensa_extra_option_id
-WHERE m_users.mensa_id=? AND extra.mensa_id=? AND m_users.deleted_at IS NULL', [$this->id, $this->id]);
-            $budget += $extra_options[0]->budget;
-
-            // Then we subtract the extra options for each staff member
-            foreach($this->staff() as $staff){
-                $budget -= $staff->extraOptions->sum('price');
-            }
-
-            // Save it for possible later use
-            $this->budget[$raw?0:1] = $budget;
-        }
-
-        return $this->budget[$raw?0:1];
-    }
-
-    public function maxDishwashers(){
-        return $this->users()->count()-1 < config('mensa.minimum.second_dishwasher') ? 1 : 2;
-    }
-
-    public function maxCooks(){
-        return $this->users()->count()-1 < config('mensa.minimum.second_cook') ? 1 : 2;
-    }
-
-    public function defaultBudget($raw = false){
-        if($this->defaultBudget[$raw?0:1] === null) {
-
-            if(!$raw){
-                $this->defaultBudget[1] = $this->payingUsers() * $this->defaultBudgetPerPayingUser();
-            } else {
-                $this->defaultBudget[0] = $this->payingUsers() * $this->price;
-            }
-
-        }
-
-        return $this->defaultBudget[$raw?0:1];
-    }
-
-    public function defaultBudgetPerPayingUser(){
-        // We subtract the amount that goes to the kitchen
-        // And we subtract the amount that goes to the dishwashers
-        // Both can be defined in the .env file
-        return $this->price - (config('mensa.price_reduction.kitchen') + config('mensa.price_reduction.dishwasher'));
-    }
-
-    public function consumptions($isCook, $isDishwasher, $noExtraDishwasher = false){
-        $consumptions = 0;
-        if($isCook){
-            // Cooks get a base consumption amount
-            $cookConsumptions = config('mensa.consumptions.cook.base');
-            // And then per X users you get an extra one
-            $cookConsumptions += floor($this->payingUsers() / config('mensa.consumptions.cook.1_per_x_guests'));
-            // But we are limited to a maximum though
-            $consumptions += min($cookConsumptions, config('mensa.consumptions.cook.max'));
-        }
-
-        if($isDishwasher){
-            // Per X users you get an extra consumption
-            $dishwasherConsumptions = floor($this->payingUsers() / config('mensa.consumptions.dishwasher.split_1_per_x_guests'));
-            // But we do split it over all the dishwashers
-            $dishwasherConsumptions = floor($dishwasherConsumptions / max($noExtraDishwasher?count($this->dishwashers()):$this->maxDishwashers(), 1));
-            // Dishwashers do get a base consumption amount
-            $dishwasherConsumptions += config('mensa.consumptions.dishwasher.base');
-            // But we are limited to a maximum though
-            $consumptions += min($dishwasherConsumptions, config('mensa.consumptions.dishwasher.max'));
-        }
-
-        return $consumptions;
-    }
-
-    public function payingUsers(){
-        if($this->payingUsers === null) {
-            // We grab the amount of users
-            $payingUsers = $this->users()->count();
-
-            // And subtract the amount of staff
-            $payingUsers -= $this->countStaff();
-            $this->payingUsers = $payingUsers;
-        }
-
-        return max($this->payingUsers, 0);
-    }
-
-    public function countStaff(){
-        $staff = $this->users()->where(function($query) {
-            $query->where('cooks', '1')
-                ->orWhere('dishwasher', '1');
-        })->orderBy('cooks', 'DESC')
-            ->orderBy('dishwasher', 'DESC')
-            ->get();
-        $cooks = 0;
-        $dishwashers = 0;
-
-        $maxCooks = $this->maxCooks();
-        $maxDishwashers = $this->maxDishwashers();
-
-        $actualStaff = 0;
-
-        foreach($staff as $user){
-            $hasSubtracted = false;
-            if($user->cooks){
-                $cooks++;
-                if($cooks <= $maxCooks){
-                    $actualStaff++;
-                    $hasSubtracted = true;
-                }
-            }
-            if($user->dishwasher) {
-                $dishwashers++;
-                if ($dishwashers <= $maxDishwashers && !$hasSubtracted) {
-                    $actualStaff++;
-                }
-            }
-        }
-
-        // We subtract the amount of staff spots we haven't filled in yet.
-        $actualStaff += ($cooks < 1) ? 1 : 0;
-        $actualStaff += $maxDishwashers-$dishwashers;
-
-        return $actualStaff;
-    }
-
-    public function staff(){
-        if($this->staff === null) {
-            $staff = $this->users()->where(function($query) {
-                $query->where('cooks', '1')
-                    ->orWhere('dishwasher', '1');
-            })->orderBy('cooks', 'DESC')
-                ->orderBy('dishwasher', 'DESC')
-            ->get();
-
-            $cooks = 0;
-            $dishwashers = 0;
-
-            $maxCooks = $this->maxCooks();
-            $maxDishwashers = $this->maxDishwashers();
-
-            $actualStaff = [];
-
-            foreach($staff as $user){
-                $hasSubtracted = false;
-                if($user->cooks){
-                    $cooks++;
-                    if($cooks <= $maxCooks){
-                        $actualStaff[] = $user;
-                        $hasSubtracted = true;
-                    }
-                }
-                if($user->dishwasher) {
-                    $dishwashers++;
-                    if ($dishwashers <= $maxDishwashers && !$hasSubtracted) {
-                        $actualStaff[] = $user;
-                    }
-                }
-            }
-
-            $this->staff = Collection::make($actualStaff);
-        }
-
-        return $this->staff;
-    }
-
-    public function jsonPrices(){
-        $prices = [['description' => '', 'price' => $this->price]];
-        return array_merge($prices, $this->extraOptions()->get()->toArray());
-    }
-
-    public function cooksFormatted(){
-        // If we cached it before, show that instead
-        if($this->cooksFormatted !== null)
-            return $this->cooksFormatted;
-
-        $cooks = $this->cooks(true);
-        $ret = '';
-
-        // If there is noone that will cook, we just return an empty string
-        if(count($cooks) < 1){
-            $this->cooksFormatted = ''; // Make sure to update 'cooks' for in the future!
-            return '';
-        }
-
-        // Now we loop over all cooks and append the name to the return variable, seperated by commas.
-        foreach($cooks as $cook){
-            $ret .= $cook->name . ', ';
-        }
-
-        // Now we strip the last comma from the return variabele
-        $ret = substr($ret, 0, -2);
-
-        // Now we look for the latest comma
-        $pos = strrpos($ret, ',');
-        if($pos !== false) {
-            // If we can find one we replace it with 'en'
-            $ret = substr_replace($ret, ' en', $pos, 1);
-        }
-
-        // Update the cache
-        $this->cooksFormatted = $ret;
-
-        // And return
-        return $ret;
-    }
-
-    public function closingTime($addEnter = false){
-        $closingTime = strtotime($this->closing_time);
-        $date = date('Y-m-d', strtotime($this->date));
-        $cDate = date('Y-m-d', $closingTime);
-
-        // If closing_date is the same as date, we just show the time.
-        if($date == $cDate){
-            return date('H:i', $closingTime);
-        }
-
-        return formatDate($this->closing_time, $addEnter);
+    public function isClosed(){
+        return $this->closed || strtotime($this->closing_time) < time();
     }
 }
