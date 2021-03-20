@@ -1,14 +1,20 @@
 <?php
-namespace App\Http\Controllers\Api\User\Controller;
+namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
+use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
 use App\Http\Helpers\Permissions;
+use App\Http\Helpers\UserHelper;
 use App\Models\Mensa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
-class SelfController extends Controller
+class GetMensaController extends Controller
 {
+
+    use MensaMapper;
 
     /**
      * Create a new controller instance.
@@ -22,23 +28,22 @@ class SelfController extends Controller
     /**
      * Get a single mensa
      *
-     * Url: mensa/[uuid]
-     *
      * @param Request $request
-     * @param $mensaId
+     * @param string $mensaId
      * @return JsonResponse
      */
-    public function getMensa(Request $request, $mensaId) {
+    public function __invoke(Request $request, string $mensaId): JsonResponse {
         $mensa = Mensa::findOrFail($mensaId);
 
-        $canRequestMoreInfo = $this->hasUserPermission($request->user(), Permissions::MENSA_MORE_INFO);
+        $canRequestMoreInfo = Gate::allows('seeOverview', $mensa);
+
+        $users = $canRequestMoreInfo ? $mensa->orderedUser->all() : $mensa->users->all();
 
         return response()->json(self::mapMensa(
             $mensa,
-            $mensa->users->all(),
+            $users,
             $mensa->extraOptions->all(),
             $canRequestMoreInfo,
-            $canRequestMoreInfo
         ));
     }
 }

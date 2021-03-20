@@ -1,8 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\Mensa\MensaController;
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,9 +11,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('mensa/list', 'Api\Mensa\Controllers\GetMensaListController@getMensas');
-Route::get('mensa/{mensaId}', 'Api\Mensa\Controllers\GetMensaController@getMensa');
+Route::prefix("v1")->group(function(){
+    Route::get('login/url', 'Api\v1\User\Controllers\GetAuthorizationUrlController');
+    Route::get('login/token', 'Api\v1\User\Controllers\GenerateTokenController');
+
+    Route::get('mensa/list', 'Api\v1\Mensa\Controllers\GetMensaListController');
+    Route::get('mensa/{mensaId}', 'Api\v1\Mensa\Controllers\GetMensaController');
+
+    Route::get('user/self', 'Api\v1\User\Controllers\SelfController');
+});
 
 Route::fallback(function () {
-    return "Invalid API call";
+    return response()->json(["error" => "Invalid API call"]);
 });

@@ -22,6 +22,10 @@ class EventServiceProvider extends ServiceProvider
         'Illuminate\Auth\Events\Authenticated' => [
             'App\Listeners\ServiceUserIPWhitelistListener',
         ],
+        'SocialiteProviders\Manager\SocialiteWasCalled' => [
+            // ... other providers
+            'App\\Http\\Socialite\\SocialiteExtender@handle',
+        ],
     ];
 
     /**

@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('extra_info')->nullable();
             $table->boolean('mensa_admin')->default(false);
             $table->rememberToken();
-            $table->boolean('vegetarian');
+            $table->boolean('vegetarian')->nullable();
 
             $table->primary('id');
         });

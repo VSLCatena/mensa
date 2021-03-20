@@ -11,25 +11,46 @@ class MensaPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can view the mensa.
+     * Determine whether the user can edit soft parts of the mensa.
      *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Mensa  $mensa
-     * @return mixed
+     * @param User $user
+     * @param Mensa $mensa
+     * @return bool
      */
-    public function softEdit(User $user, Mensa $mensa)
-    {
-        return $user->mensa_admin || $mensa->users->where('cooks', '1')->where('lidnummer', $user->lidnummer)->count() > 0;
+    public function softEdit(User $user, Mensa $mensa): bool {
+        return $user->mensa_admin || $this->isCook($user, $mensa);
     }
 
     /**
-     * Determine whether the user can view the mensa.
+     * Determine whether the uiser can edit hard parts of the mensa.
      *
-     * @param  \App\Models\User  $user
-     * @return mixed
+     * @param User $user
+     * @param Mensa $mensa
+     * @return bool
      */
-    public function hardEdit(User $user)
-    {
+    public function hardEdit(User $user, Mensa $mensa): bool {
         return $user->mensa_admin;
+    }
+
+    /**
+     * Can the given user see the mensa overview
+     *
+     * @param User $user
+     * @param Mensa $mensa
+     * @return bool
+     */
+    public function seeOverview(User $user, Mensa $mensa): bool {
+        return $user->mensa_admin || $this->isCook($user, $mensa);
+    }
+
+    /**
+     * Checks if the given user is a cook
+     *
+     * @param User $user
+     * @param Mensa $mensa
+     * @return bool
+     */
+    private function isCook(User $user, Mensa $mensa): bool {
+        return $mensa->users()->where('cooks', '1')->where('id', $user->id)->count() > 0;
     }
 }

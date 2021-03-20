@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 /**
  * App\Models\Mensa
@@ -36,24 +37,28 @@ use Illuminate\Support\Facades\DB;
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaUser[] $orderedUsers
+ * @property-read int|null $ordered_users_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaUser[] $users
+ * @property-read int|null $users_count
  */
 class Mensa extends Model
 {
-    protected $casts = ['id' => 'string'];
+    protected $keyType = 'string';
+    public $incrementing = false;
 
-    public function users($order = false)
-    {
-        if($order) {
-            return $this->hasMany('App\Models\MensaUser')
-                ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
-                ->join('users', 'users.lidnummer', '=', 'mensa_users.lidnummer')
-                ->orderBy('cooks', 'DESC')
-                ->orderBy('dishwasher', 'DESC')
-                ->orderBy('users.name')
-                ->orderBy('mensa_users.is_intro');
-        } else {
-            return $this->hasMany('App\Models\MensaUser');
-        }
+    public function users() {
+        return $this->hasMany('App\Models\MensaUser');
+    }
+
+    public function orderedUsers() {
+        return $this->hasMany('App\Models\MensaUser')
+            ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
+            ->join('users', 'users.id', '=', 'mensa_users.id')
+            ->orderBy('cooks', 'DESC')
+            ->orderBy('dishwasher', 'DESC')
+            ->orderBy('users.name')
+            ->orderBy('mensa_users.is_intro');
     }
 
     public function extraOptions() {
@@ -64,11 +69,19 @@ class Mensa extends Model
         return $this->hasMany('App\Models\Log');
     }
 
-    public function menuItems(){
-        return $this->hasMany('App\Models\MenuItem')->orderBy('order');
-    }
+//    public function menuItems(){
+//        return $this->hasMany('App\Models\MenuItem')->orderBy('order');
+//    }
 
     public function isClosed(){
         return $this->closed || strtotime($this->closing_time) < time();
+    }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function (Model $model) {
+            $model->setAttribute($model->getKeyName(), Str::uuid());
+        });
     }
 }

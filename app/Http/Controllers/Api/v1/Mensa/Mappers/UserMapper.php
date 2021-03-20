@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\Shared\Mappers;
+namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\Shared\Models\SimpleUser;
+use App\Http\Controllers\Api\v1\Mensa\Models\SimpleUser;
 use App\Models\User;
 
 trait UserMapper {

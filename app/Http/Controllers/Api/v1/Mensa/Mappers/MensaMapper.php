@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\Mensa\Mappers;
+namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\Mensa\Models\MensaItem;
-use App\Http\Controllers\Api\Shared\Mappers\ExtraOptionsMapper;
-use App\Http\Controllers\Api\Shared\Mappers\UserMapper;
+use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
@@ -20,14 +18,14 @@ trait MensaMapper {
      * @param bool $dishwashersAsObject
      * @return MensaItem
      */
-    function mapMensa(Mensa $mensa, array $users, array $options, bool $usersAsObject = false, bool $dishwashersAsObject = false) {
+    function mapMensa(Mensa $mensa, array $users, array $options, bool $usersAsObject = false) {
         $dishwashers = array_filter($users, function ($user) { return $user->dishwasher; });
         $cooks = array_filter($users, function($user) { return $user->cooks; });
 
         $userMapper = function($user) { return self::mapUser($user); };
 
         $usersVal = $usersAsObject ? array_map($userMapper, $users) : count($users);
-        $dishwashersVal = $dishwashersAsObject ? array_map($userMapper, $dishwashers) : count($dishwashers);
+        $dishwashersVal = $usersAsObject ? array_map($userMapper, $dishwashers) : count($dishwashers);
 
         return new MensaItem(
             id: $mensa->id,

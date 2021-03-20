@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Shared\Models;
+namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
 class SimpleUser {
 

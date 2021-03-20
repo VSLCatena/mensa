@@ -178,6 +178,11 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
+         * Custom privoders
+         */
+        SocialiteProviders\Manager\ServiceProvider::class,
+
+        /*
          * Application Debug Providers...
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,

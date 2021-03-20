@@ -1,8 +1,7 @@
 <?php
-namespace App\Http\Controllers\Api\Mensa\Controllers;
+namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
-use App\Http\Controllers\Api\Mensa\Mappers\MensaMapper;
-use App\Http\Helpers\UserHelper;
+use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
 use App\Models\Mensa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 class GetMensaListController extends Controller
 {
 
-    use MensaMapper, UserHelper;
+    use MensaMapper;
 
     /**
      * Create a new controller instance.
@@ -26,12 +25,10 @@ class GetMensaListController extends Controller
     /**
      * Get a list of mensas
      *
-     * Url: mensa/list?limit=[10]&fromLastId=[uuid]
-     *
      * @param Request $request
      * @return JsonResponse
      */
-    public function getMensas(Request $request) {
+    public function __invoke(Request $request): JsonResponse {
 
         $validator = Validator::make($request->all(), [
             'limit' => ['required', 'min:1', 'max: 25'],

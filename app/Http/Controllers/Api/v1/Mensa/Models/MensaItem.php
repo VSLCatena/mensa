@@ -1,8 +1,5 @@
 <?php
-namespace App\Http\Controllers\Api\Mensa\Models;
-
-use App\Http\Controllers\Api\Shared\Models\ExtraOption;
-use App\Http\Controllers\Api\Shared\Models\SimpleUser;
+namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
 class MensaItem {
     /**
