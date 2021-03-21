@@ -1,15 +1,15 @@
-import Price from "./Price";
-import MensaSignup from "./MensaSignup";
+import ExtraOption from "./ExtraOption";
+import SimpleUser from "./SimpleUser";
 
 export default interface Mensa {
     id: string,
     title: string,
     description: string,
-    prices: Price[],
-    date: number,
-    closeTime: number,
+    extraOptions: ExtraOption[],
+    date: string,
+    closingTime: string,
     maxSignups: number,
-    cooks: MensaSignup[],
-    dishwashers: MensaSignup[]|number,
-    users: MensaSignup[]|number,
+    signups: number,
+    cooks: SimpleUser[],
+    dishwashers: number,
 }

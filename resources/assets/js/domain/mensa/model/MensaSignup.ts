@@ -1,10 +1,8 @@
-import User from "../../models/User";
+import User from "../../user/model/User";
 
 export default interface MensaSignup {
-    id: string,
-    mensaId: string,
     user: User,
-    email?: string,
+    mensaId: string,
     vegetarian: boolean,
     description: string,
     cook: boolean,
@@ -13,4 +11,4 @@ export default interface MensaSignup {
 
 export type NewMensaSignup = Omit<MensaSignup, 'id'>;
 
-export type UpdateMensaSignup = Partial<MensaSignup> & Pick<MensaSignup, 'id'>
+export type UpdateMensaSignup = Partial<MensaSignup> & Pick<MensaSignup, 'user'>

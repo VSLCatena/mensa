@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class SimpleUser {
+class SimpleUserItem {
 
     /**
-     * SimpleUser constructor.
+     * SimpleUserItem constructor.
      * @param string $id
      * @param string $name
      */

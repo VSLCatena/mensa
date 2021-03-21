@@ -6,7 +6,7 @@
                     <div class="panel-heading">Example Component</div>
 
                     <div class="panel-body">
-                        I'm an example component!
+                        {{ this.mensas }}
                     </div>
                 </div>
             </div>
@@ -15,9 +15,20 @@
 </template>
 
 <script lang="ts">
-    export default {
+    import GetMensas from "../../../domain/mensa/usecase/GetMensas";
+    import Mensa from "../../../domain/mensa/model/Mensa";
+    import Vue from 'vue';
+
+    export default Vue.extend({
         mounted() {
-            console.log('Component mounted.')
+            GetMensas(20)
+                .then(mensas => this.mensas = mensas)
+                .catch(error => console.error(error))
+        },
+        data() {
+            return {
+                mensas: [] as Mensa[]
+            }
         }
-    }
+    });
 </script>

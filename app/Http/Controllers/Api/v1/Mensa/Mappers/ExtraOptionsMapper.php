@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\ExtraOption;
-use App\Http\Controllers\Api\v1\Mensa\Models\SimpleUser;
+use App\Http\Controllers\Api\v1\Mensa\Models\ExtraOptionItem;
+use App\Http\Controllers\Api\v1\Mensa\Models\SimpleUserItem;
 use App\Models\MensaExtraOption;
 
 
 trait ExtraOptionsMapper {
     /**
      * @param MensaExtraOption $extraOption
-     * @return SimpleUser
+     * @return ExtraOptionItem
      */
-    function mapExtraOptions(MensaExtraOption $extraOption): ExtraOption {
-        return new ExtraOption(
+    function mapExtraOptions(MensaExtraOption $extraOption): ExtraOptionItem {
+        return new ExtraOptionItem(
             $extraOption->id,
             $extraOption->description,
         );

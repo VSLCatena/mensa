@@ -25,6 +25,7 @@ class MensaSeeder extends Seeder
         DB::table('mensas')->insert([
             'id' => Str::uuid(),
             'title' => Str::random(),
+            'description' => Str::random(),
             'date' => $date,
             'closing_time' => $date,
             'max_users' => 42,

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\MensaUser
+ * App\Models\MensaUserItem
  *
  * @method static \Illuminate\Database\Eloquent\Builder|MensaUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|MensaUser newQuery()
@@ -67,11 +67,11 @@ class MensaUser extends Model
     }
 
 //    public function intros(){
-//        return $this->hasMany('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '1');
+//        return $this->hasMany('App\Models\MensaUserItem', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '1');
 //    }
 //
 //    public function mainUser(){
-//        return $this->hasOne('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
+//        return $this->hasOne('App\Models\MensaUserItem', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
 //    }
 
     public function user(){

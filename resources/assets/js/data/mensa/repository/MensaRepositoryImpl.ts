@@ -1,13 +1,26 @@
 import Mensa from '../../../domain/mensa/model/Mensa';
 import MensaSignup from '../../../domain/mensa/model/MensaSignup';
 import { MensaRepository } from '../../../domain/mensa/repository/MensaRepository';
-import api from '../../api/Api';
+import {ServiceBuilder} from "ts-retrofit";
+import { API_BASE_URL } from '../../../config';
+import MapMensas from "../mapper/MapMensas";
+import axios from "axios";
 
 class MensaRepositoryImpl implements MensaRepository {
 
     async getMensas(limit: number, fromLastId?: string): Promise<Mensa[]> {
-        let response = await api.GET("mensas");
-        return [];
+        try {
+            let result = await axios.get(`${API_BASE_URL}/mensa/list`, {
+                params: {
+                    limit: limit,
+                    fromLastId: fromLastId
+                }
+            });
+
+            return MapMensas(result.data).getOrThrow();
+        } catch (e) {
+            return Promise.reject(e);
+        }
     }
     getMensa(mensaId: string): Promise<Mensa | null> {
         throw new Error('Method not implemented.');

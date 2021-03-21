@@ -41,6 +41,8 @@ use Illuminate\Support\Str;
  * @property-read int|null $ordered_users_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaUser[] $users
  * @property-read int|null $users_count
+ * @property string $description
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDescription($value)
  */
 class Mensa extends Model
 {

@@ -18,6 +18,9 @@
 </head>
 <body>
     <div id="app">
+        <router-link to="/">Go to Home</router-link>
+        <router-link to="/mensa">Go to Mensa</router-link>
+        <router-view></router-view>
     </div>
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>

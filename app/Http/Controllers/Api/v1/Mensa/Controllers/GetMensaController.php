@@ -23,6 +23,7 @@ class GetMensaController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth:sanctum');
     }
 
     /**
@@ -31,19 +32,21 @@ class GetMensaController extends Controller
      * @param Request $request
      * @param string $mensaId
      * @return JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function __invoke(Request $request, string $mensaId): JsonResponse {
-        $mensa = Mensa::findOrFail($mensaId);
+        $mensa = Mensa::find($mensaId);
 
-        $canRequestMoreInfo = Gate::allows('seeOverview', $mensa);
+        if ($mensa == null) {
+            abort(404);
+        }
 
-        $users = $canRequestMoreInfo ? $mensa->orderedUser->all() : $mensa->users->all();
+        Gate::authorize('seeOverview', $mensa);
 
-        return response()->json(self::mapMensa(
+        return response()->json(self::mapMensaDetails(
             $mensa,
-            $users,
+            $mensa->users->all(),
             $mensa->extraOptions->all(),
-            $canRequestMoreInfo,
         ));
     }
 }

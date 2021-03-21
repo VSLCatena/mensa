@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MensaItem {
+class MensaDetailItem {
     /**
-     * MensaItem constructor.
+     * MensaDetailItem constructor.
      * @param string $id
      * @param string $title
      * @param string $description
@@ -11,9 +11,7 @@ class MensaItem {
      * @param string $closingTime
      * @param bool $isClosed
      * @param int $maxSignups
-     * @param int $signups
-     * @param int $dishwashers
-     * @param SimpleUserItem[] $cooks
+     * @param MensaUserItem[] $signups
      * @param ExtraOptionItem[] $extraOptions
      */
     public function __construct(
@@ -24,9 +22,7 @@ class MensaItem {
         public string $closingTime,
         public bool $isClosed,
         public int $maxSignups,
-        public int $signups,
-        public int $dishwashers,
-        public array $cooks,
+        public array $signups,
         public array $extraOptions,
     ) {
     }
