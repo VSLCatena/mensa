@@ -35,11 +35,7 @@ class GetMensaController extends Controller
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function __invoke(Request $request, string $mensaId): JsonResponse {
-        $mensa = Mensa::find($mensaId);
-
-        if ($mensa == null) {
-            abort(404);
-        }
+        $mensa = Mensa::findOrFail($mensaId);
 
         Gate::authorize('seeOverview', $mensa);
 
