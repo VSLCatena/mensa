@@ -16,6 +16,11 @@ class JsonRequests
      */
     public function handle(Request $request, Closure $next)
     {
+        $type = $request->headers->get('Accept', 'application/json');
+        if ($type != 'application/json' && $type != '*/*') {
+            return response()->json(['error' => 'Server only accepts application/json requests'], 406);
+        }
+
         $request->headers->set('Accept', 'application/json');
         return $next($request);
     }
