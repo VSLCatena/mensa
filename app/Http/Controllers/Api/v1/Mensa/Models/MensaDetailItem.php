@@ -11,7 +11,7 @@ class MensaDetailItem {
      * @param string $closingTime
      * @param bool $isClosed
      * @param int $maxSignups
-     * @param MensaUserItem[] $signups
+     * @param SignupItem[] $signups
      * @param ExtraOptionItem[] $extraOptions
      */
     public function __construct(

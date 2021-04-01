@@ -5,16 +5,16 @@ namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaDetailItem;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
 use App\Models\Mensa;
-use App\Models\MensaExtraOption;
-use App\Models\MensaUser;
+use App\Models\ExtraOption;
+use App\Models\Signup;
 
 trait MensaMapper {
     use ExtraOptionsMapper, UserMapper;
 
     /**
      * @param Mensa $mensa
-     * @param MensaUser[] $users
-     * @param MensaExtraOption[] $options
+     * @param Signup[] $users
+     * @param ExtraOption[] $options
      * @return MensaItem
      */
     function mapMensa(Mensa $mensa, array $users, array $options): MensaItem {

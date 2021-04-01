@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMensaUsersTable extends Migration
+class CreateSignupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMensaUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('mensa_users', function (Blueprint $table) {
+        Schema::create('signups', function (Blueprint $table) {
             $table->uuid('id');
             $table->timestampsTz();
             $table->softDeletesTz();
@@ -21,11 +21,11 @@ class CreateMensaUsersTable extends Migration
             $table->boolean('dishwasher');
             $table->boolean('vegetarian');
             $table->boolean('is_intro');
-            $table->string('allergies');
-            $table->string('extra_info');
+            $table->string('allergies')->nullable();
+            $table->string('extra_info')->nullable();
             $table->boolean('confirmed');
-            $table->double('paid');
-            $table->string('confirmation_code');
+            $table->double('paid')->default(0.0);
+            $table->uuid('confirmation_code');
 
             $table->primary('id');
             $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
@@ -45,6 +45,6 @@ class CreateMensaUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mensa_users');
+        Schema::dropIfExists('signups');
     }
 }

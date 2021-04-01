@@ -2,13 +2,10 @@
 namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
 use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
-use App\Http\Helpers\Permissions;
-use App\Http\Helpers\UserHelper;
 use App\Models\Mensa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class GetMensaController extends Controller

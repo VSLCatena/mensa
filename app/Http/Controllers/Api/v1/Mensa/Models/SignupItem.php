@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MensaUserItem {
+class SignupItem {
 
     /**
      * SimpleUserItem constructor.
+     * @param string $id
      * @param SimpleUserItem $user
-     * @param string $email
      * @param string $allergies
      * @param string $extraInfo
      * @param bool $vegetarian
@@ -15,8 +15,8 @@ class MensaUserItem {
      * @param bool $dishwasher
      */
     public function __construct(
+        public string $id,
         public SimpleUserItem $user,
-        public string $email,
         public string $allergies,
         public string $extraInfo,
         public bool $vegetarian,

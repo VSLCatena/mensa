@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
  * @property string $closing_time
  * @property int $max_users
  * @property int $closed
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaExtraOption[] $extraOptions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExtraOption[] $extraOptions
  * @property-read int|null $extra_options_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Log[] $logs
  * @property-read int|null $logs_count
@@ -37,9 +37,9 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaUser[] $orderedUsers
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $orderedUsers
  * @property-read int|null $ordered_users_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MensaUser[] $users
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $users
  * @property-read int|null $users_count
  * @property string $description
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDescription($value)
@@ -47,14 +47,15 @@ use Illuminate\Support\Str;
 class Mensa extends Model
 {
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     public function users() {
-        return $this->hasMany('App\Models\MensaUser');
+        return $this->hasMany('App\Models\Signup');
     }
 
     public function orderedUsers() {
-        return $this->hasMany('App\Models\MensaUser')
+        return $this->hasMany('App\Models\Signup')
             ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
             ->join('users', 'users.id', '=', 'mensa_users.id')
             ->orderBy('cooks', 'DESC')
@@ -64,7 +65,7 @@ class Mensa extends Model
     }
 
     public function extraOptions() {
-        return $this->hasMany('App\Models\MensaExtraOption');
+        return $this->hasMany('App\Models\ExtraOption');
     }
 
     public function logs(){

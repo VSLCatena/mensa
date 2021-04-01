@@ -1,23 +1,28 @@
 <?php
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
+use App\Contracts\RemoteUserLookup;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+use Psr\Http\Client\ClientExceptionInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class GenerateTokenController extends Controller
 {
+    private RemoteUserLookup $remoteUserLookup;
 
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param RemoteUserLookup $remoteUserLookup
      */
-    public function __construct()
+    public function __construct(RemoteUserLookup $remoteUserLookup)
     {
+        $this->remoteUserLookup = $remoteUserLookup;
     }
 
     /**
@@ -26,7 +31,6 @@ class GenerateTokenController extends Controller
      * Url: mensa/[uuid]
      *
      * @param Request $request
-     * @param $mensaId
      * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse {
@@ -37,11 +41,15 @@ class GenerateTokenController extends Controller
         if (!$user->exists)
             $user->id = $azureUser->id;
 
+        try {
+            $user = $this->remoteUserLookup->getUpdatedUser($user, $azureUser->principal_name);
+        } catch (ClientExceptionInterface) {
+            abort(Response::HTTP_BAD_GATEWAY);
+        }
 
-        $user->name = $azureUser->name;
-        $user->email = $azureUser->email;
-        $user->mensa_admin = in_array(env('AZURE_ADMIN_GROUP_ID'), $azureUser->groups);
-        $user->save();
+        if ($user == null) {
+            abort(Response::HTTP_UNAUTHORIZED);
+        }
 
         return response()->json([
             'token' => $user->createToken(Str::uuid())->plainTextToken

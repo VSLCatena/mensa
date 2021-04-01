@@ -9,7 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * App\Models\User
  *
- * @property int $id
+ * @property string $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $name
@@ -17,11 +17,13 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $allergies
  * @property string|null $extra_info
  * @property int $mensa_admin
- * @property string|null $remember_token
  * @property int|null $vegetarian
+ * @property string $remote_last_check
+ * @property string $remote_principal_name
+ * @property string|null $remember_token
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -34,6 +36,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMensaAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRemoteLastCheck($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRemotePrincipalName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereVegetarian($value)
  * @mixin \Eloquent
@@ -51,7 +55,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'id', 'name', 'email', 'remote_principal_name', 'mensa_admin',
     ];
 
     /**
@@ -60,6 +64,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'remember_token',
     ];
 }

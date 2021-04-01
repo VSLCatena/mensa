@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\RemoteUserLookup;
 use App\Models\PersonalAccessToken;
-use Illuminate\Support\Facades\Blade;
+use App\Services\AzureUserLookup;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
@@ -20,13 +21,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
-        // Register our own @admin blade if to simplify things
-        Blade::if('admin', function () {
-            return auth()->check() && auth()->user()->mensa_admin;
-        });
-        Blade::if('notadmin', function () {
-            return !auth()->check() || !auth()->user()->mensa_admin;
-        });
+        $this->app->bind(RemoteUserLookup::class, AzureUserLookup::class);
     }
 
     /**

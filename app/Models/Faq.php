@@ -27,6 +27,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Faq extends Model
 {
+
+    protected $keyType = 'string';
+
     public function lastEditedBy(){
         return $this->belongsTo('App\Models\User', 'last_edited_by');
     }

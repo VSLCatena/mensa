@@ -25,6 +25,8 @@ class MenuItem extends Model
 {
     public $timestamps = false;
 
+    protected $keyType = 'string';
+
     public function mensa(){
         return $this->belongsTo('App\Models\Mensa');
     }

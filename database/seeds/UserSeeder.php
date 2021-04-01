@@ -25,7 +25,8 @@ class UserSeeder extends Seeder
             'id' => Str::uuid(),
             'name' => Str::random(),
             'email' => Str::random() . '@example.com',
-            'vegetarian' => rand(0, 1)
+            'vegetarian' => rand(0, 1),
+            'remote_principal_name' => Str::random(),
         ]);
     }
 }

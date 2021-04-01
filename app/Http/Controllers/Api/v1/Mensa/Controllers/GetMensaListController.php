@@ -31,7 +31,7 @@ class GetMensaListController extends Controller
     public function __invoke(Request $request): JsonResponse {
 
         $validator = Validator::make($request->all(), [
-            'limit' => ['required', 'min:1', 'max: 25'],
+            'limit' => ['required', 'integer', 'min:1', 'max:25'],
             'fromLastId' => ['App\Models\Mensa,id'],
         ]);
 

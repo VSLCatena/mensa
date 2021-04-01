@@ -20,12 +20,6 @@ class AzureProvider extends AbstractProvider
     protected $graphUrl = 'https://graph.microsoft.com/v1.0/me/';
 
     /**
-     * The URL to grab all the users' groups
-     * @var string
-     */
-    protected $groupsUrl = 'https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group';
-
-    /**
      * {@inheritdoc}
      */
     protected function getAuthUrl($state)
@@ -67,18 +61,7 @@ class AzureProvider extends AbstractProvider
             ],
         ]);
 
-        $groups = $this->getHttpClient()->get($this->groupsUrl, [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$token
-            ]
-        ]);
-
-
-        return [
-            'user' => json_decode($response->getBody(), true),
-            'groups' => json_decode($groups->getBody(), true)
-        ];
+        return json_decode($response->getBody(), true);
     }
 
     /**
@@ -86,18 +69,9 @@ class AzureProvider extends AbstractProvider
      */
     protected function mapUserToObject(array $user)
     {
-        $userObj = $user['user'];
-        $groupsObj = array_map(function($group) {
-            return $group['id'];
-        }, $user['groups']['value']);
-
         return (new User())->setRaw($user)->map([
-            'id'    => $userObj['id'],
-            'nickname' => null,
-            'name' => $userObj['displayName'],
-            'email' => $userObj['mail'],
-            'groups' => $groupsObj,
-            'avatar' => null,
+            'id' => $user['id'],
+            'principal_name' => $user['userPrincipalName'],
         ]);
     }
 
