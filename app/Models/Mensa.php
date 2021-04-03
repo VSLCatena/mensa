@@ -50,6 +50,10 @@ class Mensa extends Model
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'id', 'title', 'description', 'date', 'closing_time', 'max_users',
+    ];
+
     public function users() {
         return $this->hasMany('App\Models\Signup');
     }

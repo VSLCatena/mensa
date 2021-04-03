@@ -10,6 +10,16 @@ class MensaPolicy
 {
     use HandlesAuthorization;
 
+
+    /**
+     * Determine whether the user can create a mensa.
+     * @param User $user
+     * @return bool
+     */
+    public function create(User $user): bool {
+        return $user->mensa_admin;
+    }
+
     /**
      * Determine whether the user can edit soft parts of the mensa.
      *
@@ -22,13 +32,23 @@ class MensaPolicy
     }
 
     /**
-     * Determine whether the uiser can edit hard parts of the mensa.
+     * Determine whether the user can edit hard parts of the mensa.
      *
      * @param User $user
      * @param Mensa $mensa
      * @return bool
      */
     public function hardEdit(User $user, Mensa $mensa): bool {
+        return $user->mensa_admin;
+    }
+
+    /**
+     * Determine whether the user can delete the mensa.
+     * @param User $user
+     * @param Mensa $mensa
+     * @return bool
+     */
+    public function delete(User $user, Mensa $mensa): bool {
         return $user->mensa_admin;
     }
 

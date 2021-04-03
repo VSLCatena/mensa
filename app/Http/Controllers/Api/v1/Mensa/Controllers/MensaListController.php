@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class GetMensaListController extends Controller
+class MensaListController extends Controller
 {
 
     use MensaMapper;
