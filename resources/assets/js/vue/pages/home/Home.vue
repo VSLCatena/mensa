@@ -1,15 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Example Component</div>
-
-                    <div class="panel-body">
-                        {{ this.mensas }}
-                    </div>
-                </div>
-            </div>
+            <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" />
         </div>
     </div>
 </template>
@@ -18,11 +10,13 @@
     import GetMensas from "../../../domain/mensa/usecase/GetMensas";
     import Mensa from "../../../domain/mensa/model/Mensa";
     import Vue from 'vue';
+    import MensaItem from './components/MensaItem.vue';
 
     export default Vue.extend({
+        components: {MensaItem},
         mounted() {
             GetMensas(20)
-                .then(mensas => this.mensas = mensas)
+                .then(mensas => this.mensas = [...mensas])
                 .catch(error => console.error(error))
         },
         data() {

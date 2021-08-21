@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
 use App\Http\Controllers\Api\v1\Mensa\Models\SimpleUserItem;
+use App\Http\Controllers\Api\v1\Utils\User\UserCache;
+use App\Models\Signup;
 use App\Models\User;
 
 trait UserMapper {
@@ -15,5 +17,9 @@ trait UserMapper {
             $user->id,
             $user->name,
         );
+    }
+
+    function mapUserFromSignup(Signup $signup): SimpleUserItem {
+        return $this->mapUser(UserCache::getCachedUser($signup->user_id));
     }
 }

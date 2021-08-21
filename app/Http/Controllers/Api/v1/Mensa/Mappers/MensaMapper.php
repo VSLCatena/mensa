@@ -21,7 +21,7 @@ trait MensaMapper {
         $dishwashers = array_filter($users, function ($user) { return $user->dishwasher; });
         $cooks = array_filter($users, function($user) { return $user->cooks; });
 
-        $userMapper = function($user) { return self::mapUser($user); };
+        $userSignupMapper = function($signup) { return self::mapUserFromSignup($signup); };
 
         return new MensaItem(
             id: $mensa->id,
@@ -33,7 +33,7 @@ trait MensaMapper {
             maxSignups: $mensa->max_users,
             signups: count($users),
             dishwashers: count($dishwashers),
-            cooks: array_map($userMapper, $cooks),
+            cooks: array_map($userSignupMapper, $cooks),
             extraOptions: array_map(function ($option) { return self::mapExtraOptions($option); }, $options),
         );
     }
@@ -46,7 +46,7 @@ trait MensaMapper {
      * @return MensaDetailItem
      */
     function mapMensaDetails(Mensa $mensa, array $users, array $options): MensaDetailItem {
-        $userMapper = function($user) { return self::mapUser($user); };
+        $userSignupMapper = function($signup) { return self::mapUserFromSignup($signup); };
 
         return new MensaDetailItem(
             id: $mensa->id,
@@ -56,7 +56,7 @@ trait MensaMapper {
             closingTime: $mensa->closing_time,
             isClosed: $mensa->isClosed(),
             maxSignups: $mensa->max_users,
-            signups: array_map($userMapper, $users),
+            signups: array_map($userSignupMapper, $users),
             extraOptions: array_map(function ($option) { return self::mapExtraOptions($option); }, $options),
         );
     }

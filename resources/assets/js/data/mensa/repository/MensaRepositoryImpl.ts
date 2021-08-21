@@ -1,7 +1,6 @@
 import Mensa from '../../../domain/mensa/model/Mensa';
 import MensaSignup from '../../../domain/mensa/model/MensaSignup';
 import { MensaRepository } from '../../../domain/mensa/repository/MensaRepository';
-import {ServiceBuilder} from "ts-retrofit";
 import { API_BASE_URL } from '../../../config';
 import MapMensas from "../mapper/MapMensas";
 import axios from "axios";
@@ -10,7 +9,7 @@ class MensaRepositoryImpl implements MensaRepository {
 
     async getMensas(limit: number, fromLastId?: string): Promise<Mensa[]> {
         try {
-            let result = await axios.get(`${API_BASE_URL}/mensa/list`, {
+            let result = await axios.get(`${API_BASE_URL}/mensas`, {
                 params: {
                     limit: limit,
                     fromLastId: fromLastId

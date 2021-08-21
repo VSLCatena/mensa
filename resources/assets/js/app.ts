@@ -10,7 +10,9 @@ import './bootstrap';
 // window.Vue = require('vue');
 
 import Vue from 'vue';
-import VueRouter from 'vue-router'
+import Vuetify from "vuetify";
+import 'vuetify/dist/vuetify.min.css';
+import VueRouter from 'vue-router';
 import Home from './vue/pages/home/Home.vue';
 import Mensa from './vue/pages/home/components/MensaItem.vue';
 /**
@@ -20,6 +22,7 @@ import Mensa from './vue/pages/home/components/MensaItem.vue';
  */
 
 Vue.use(VueRouter);
+Vue.use(Vuetify);
 
 const routes = [
     { path: '/', component: Home },
@@ -31,6 +34,13 @@ const router = new VueRouter({
     routes: routes
 });
 
+const vuetify = new Vuetify({
+    theme: {
+        dark: true
+    }
+});
+
 const app = new Vue({
+    vuetify,
     router
 }).$mount('#app');

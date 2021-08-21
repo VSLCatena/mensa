@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use App\Contracts\RemoteUserLookup;
+use App\Http\Controllers\Api\v1\Utils\User\UserLookup;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,22 +14,18 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GenerateTokenController extends Controller
 {
-    private RemoteUserLookup $remoteUserLookup;
 
     /**
      * Create a new controller instance.
      *
-     * @param RemoteUserLookup $remoteUserLookup
+     * @param UserLookup $userLookup
      */
-    public function __construct(RemoteUserLookup $remoteUserLookup)
+    public function __construct(private UserLookup $userLookup)
     {
-        $this->remoteUserLookup = $remoteUserLookup;
     }
 
     /**
      * Get a single mensa
-     *
-     * Url: mensa/[uuid]
      *
      * @param Request $request
      * @return JsonResponse
@@ -42,7 +39,7 @@ class GenerateTokenController extends Controller
             $user->id = $azureUser->id;
 
         try {
-            $user = $this->remoteUserLookup->getUpdatedUser($user, $azureUser->principal_name);
+            $user = $this->userLookup->getUpdatedUser($user, $azureUser->principal_name);
         } catch (ClientExceptionInterface) {
             abort(Response::HTTP_BAD_GATEWAY);
         }

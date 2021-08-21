@@ -1,5 +1,7 @@
 let mix = require('laravel-mix');
 
+require('vuetifyjs-mix-extension');
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -12,5 +14,6 @@ let mix = require('laravel-mix');
  */
 
 mix.ts('resources/assets/js/app.ts', 'public/js')
-   .vue()
-   .sass('resources/assets/sass/app.scss', 'public/css');
+    .vuetify()
+    .vue()
+    .sass('resources/assets/sass/app.scss', 'public/css');
