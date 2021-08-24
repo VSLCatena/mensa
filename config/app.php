@@ -178,7 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         /*
-         * Custom privoders
+         * Custom providers
          */
         SocialiteProviders\Manager\ServiceProvider::class,
 

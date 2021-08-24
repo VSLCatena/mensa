@@ -1,5 +1,5 @@
 export default interface PriceEntity {
     id?: string,
-    name?: string,
+    description?: string,
     price?: number,
 }

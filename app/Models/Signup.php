@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -49,23 +52,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Query\Builder|Signup withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Signup withoutTrashed()
  * @mixin \Eloquent
+ * @method static \Database\Factories\SignupFactory factory(...$parameters)
  */
 class Signup extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory;
 
     protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = ['id', 'cooks', 'dishwasher', 'vegetarian', 'is_intro', 'allergies', 'extra_info', 'confirmed', 'confirmation_code', 'user_id', 'mensa_id'];
 
     protected $dates = ['deleted_at'];
 
-    public function extraOptions(){
-        return $this->belongsToMany('App\Models\ExtraOption', 'mensa_user_extra_options', 'mensa_user_id', 'mensa_extra_option_id');
+    public function extraOptions(): BelongsToMany {
+        return $this->belongsToMany(ExtraOption::class, 'signup_extra_options', 'signup_id', 'extra_option_id');
     }
 
-    public function mensa(){
-        return $this->belongsTo('App\Models\Mensa');
+    public function mensa(): BelongsTo {
+        return $this->belongsTo(Mensa::class);
     }
 
 //    public function intros(){
@@ -76,19 +81,19 @@ class Signup extends Model
 //        return $this->hasOne('App\Models\MensaUserItem', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
 //    }
 
-    public function user() {
-        return $this->belongsTo('App\Models\User', 'user_id');
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function price(){
+    public function price(): float {
         return $this->extraOptions->sum('price') + $this->mensa->price;
     }
 
-    public function consumptions(){
-        return $this->mensa->consumptions($this->cooks, $this->dishwasher);
-    }
+//    public function consumptions() {
+//        return $this->mensa->consumptions($this->cooks, $this->dishwasher);
+//    }
 
-    public function isStaff(){
-        return $this->mensa->staff()->contains('id', $this->id);
-    }
+//    public function isStaff(){
+//        return $this->mensa->staff()->contains('id', $this->id);
+//    }
 }

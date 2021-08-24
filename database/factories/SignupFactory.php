@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+use App\Models\Signup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserFactory extends Factory
+class SignupFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = User::class;
+    protected $model = Signup::class;
 
     /**
      * Define the model's default state.
@@ -23,14 +23,15 @@ class UserFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid,
-            'name' => $this->faker->name,
-            'email' => $this->faker->email,
+            'cooks' => $this->faker->boolean,
+            'dishwasher' => $this->faker->boolean,
+            'vegetarian' => $this->faker->boolean,
+            'is_intro' => $this->faker->boolean,
             'allergies' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'extra_info' => $this->faker->boolean ? $this->faker->sentence(10) : null,
-            'mensa_admin' => $this->faker->boolean,
-            'vegetarian' => $this->faker->boolean,
-            'remote_last_check' => $this->faker->dateTime->getTimestamp(),
-            'remote_principal_name' => ''
+            'confirmed' => $this->faker->boolean,
+            'paid' => $this->faker->randomFloat(2, 0, 25),
+            'confirmation_code' => $this->faker->uuid
         ];
     }
 }

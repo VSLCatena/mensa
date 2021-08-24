@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('extra_info')->nullable();
             $table->boolean('mensa_admin')->default(false);
             $table->boolean('vegetarian')->nullable();
-            $table->timestamp('remote_last_check')->useCurrent();
+            $table->integer('remote_last_check')->useCurrent();
             $table->string('remote_principal_name');
             $table->rememberToken();
 

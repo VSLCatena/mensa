@@ -16,6 +16,7 @@ trait ExtraOptionsMapper {
         return new ExtraOptionItem(
             $extraOption->id,
             $extraOption->description,
+            $extraOption->price
         );
     }
 }

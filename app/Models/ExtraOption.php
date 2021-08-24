@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\ExtraOption
@@ -22,19 +25,22 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read \App\Models\Mensa $mensa
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $users
  * @property-read int|null $users_count
+ * @method static \Database\Factories\ExtraOptionFactory factory(...$parameters)
  */
 class ExtraOption extends Model
 {
+    use HasFactory;
 
     protected $keyType = 'string';
+    public $incrementing = false;
 
     public $timestamps = false;
 
-    public function mensa() {
-        return $this->belongsTo('App\Models\Mensa');
+    public function mensa(): BelongsTo {
+        return $this->belongsTo(Mensa::class);
     }
 
-    public function users() {
-        return $this->belongsToMany('App\Models\Signup', 'mensa_user_extra_options', 'mensa_extra_option_id', 'mensa_user_id');
+    public function signups(): BelongsToMany {
+        return $this->belongsToMany(Signup::class, 'signup_extra_options', 'extra_option_id', 'signup_id');
     }
 }

@@ -19,8 +19,8 @@ class CreateMensasTable extends Migration
             $table->softDeletesTz();
             $table->string('title');
             $table->text('description');
-            $table->dateTimeTz('date');
-            $table->dateTimeTz('closing_time');
+            $table->integer('date');
+            $table->integer('closing_time');
             $table->unsignedTinyInteger('max_users');
             $table->boolean('closed')->default(false);
 

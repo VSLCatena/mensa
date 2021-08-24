@@ -7,26 +7,28 @@ class MensaItem {
      * @param string $id
      * @param string $title
      * @param string $description
-     * @param string $date
-     * @param string $closingTime
+     * @param int $date
+     * @param int $closingTime
      * @param bool $isClosed
      * @param int $maxSignups
      * @param int $signups
      * @param int $dishwashers
      * @param SimpleUserItem[] $cooks
+     * @param MenuItemItem[] $menu
      * @param ExtraOptionItem[] $extraOptions
      */
     public function __construct(
         public string $id,
         public string $title,
         public string $description,
-        public string $date,
-        public string $closingTime,
+        public int $date,
+        public int $closingTime,
         public bool $isClosed,
         public int $maxSignups,
         public int $signups,
         public int $dishwashers,
         public array $cooks,
+        public array $menu,
         public array $extraOptions,
     ) {
     }

@@ -9,7 +9,6 @@
     <title>{{ config('app.name', 'Mensa') }}</title>
 
     <!-- Styles -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
@@ -27,13 +26,13 @@
             <v-icon hidden="hidden" large>mdi-brightness-7</v-icon>
         </v-app-bar>
         <v-main>
-            <router-view></router-view>
+            <v-container>
+                <router-view></router-view>
+            </v-container>
         </v-main>
     </v-app>
 
     <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 </html>

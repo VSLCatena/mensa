@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaDetailItem;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
+use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemItem;
 use App\Models\Mensa;
 use App\Models\ExtraOption;
+use App\Models\MenuItem;
 use App\Models\Signup;
 
 trait MensaMapper {
-    use ExtraOptionsMapper, UserMapper;
+    use ExtraOptionsMapper, UserMapper, MenuItemMapper;
 
     /**
      * @param Mensa $mensa
      * @param Signup[] $users
+     * @param MenuItem[] $menu
      * @param ExtraOption[] $options
      * @return MensaItem
      */
-    function mapMensa(Mensa $mensa, array $users, array $options): MensaItem {
+    function mapMensa(Mensa $mensa, array $users, array $menu, array $options): MensaItem {
         $dishwashers = array_filter($users, function ($user) { return $user->dishwasher; });
         $cooks = array_filter($users, function($user) { return $user->cooks; });
 
@@ -33,7 +36,8 @@ trait MensaMapper {
             maxSignups: $mensa->max_users,
             signups: count($users),
             dishwashers: count($dishwashers),
-            cooks: array_map($userSignupMapper, $cooks),
+            cooks: array_values(array_map($userSignupMapper, $cooks)),
+            menu: array_map(function($item) { return self::mapMenuItem($item); }, $menu),
             extraOptions: array_map(function ($option) { return self::mapExtraOptions($option); }, $options),
         );
     }

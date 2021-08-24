@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -43,44 +45,46 @@ use Illuminate\Support\Str;
  * @property-read int|null $users_count
  * @property string $description
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDescription($value)
+ * @method static \Database\Factories\MensaFactory factory(...$parameters)
  */
 class Mensa extends Model
 {
-    protected $keyType = 'string';
+    use HasFactory;
 
+    protected $keyType = 'string';
     public $incrementing = false;
 
     protected $fillable = [
         'id', 'title', 'description', 'date', 'closing_time', 'max_users',
     ];
 
-    public function users() {
-        return $this->hasMany('App\Models\Signup');
+    public function users(): HasMany {
+        return $this->hasMany(Signup::class);
     }
 
-    public function orderedUsers() {
-        return $this->hasMany('App\Models\Signup')
+    public function orderedUsers(): HasMany {
+        return $this->hasMany(Signup::class)
             ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
-            ->join('users', 'users.id', '=', 'mensa_users.id')
+            ->join('users', 'users.id', '=', 'signups.id')
             ->orderBy('cooks', 'DESC')
             ->orderBy('dishwasher', 'DESC')
             ->orderBy('users.name')
-            ->orderBy('mensa_users.is_intro');
+            ->orderBy('signups.is_intro');
     }
 
-    public function extraOptions() {
-        return $this->hasMany('App\Models\ExtraOption');
+    public function extraOptions(): HasMany {
+        return $this->hasMany(ExtraOption::class);
     }
 
-    public function logs(){
-        return $this->hasMany('App\Models\Log');
+    public function logs(): HasMany {
+        return $this->hasMany(Log::class);
     }
 
-//    public function menuItems(){
-//        return $this->hasMany('App\Models\MenuItem')->orderBy('order');
-//    }
+    public function menuItems(): HasMany {
+        return $this->hasMany(MenuItem::class)->orderBy('order');
+    }
 
-    public function isClosed(){
+    public function isClosed(): bool {
         return $this->closed || strtotime($this->closing_time) < time();
     }
 

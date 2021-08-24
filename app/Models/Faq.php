@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Faq
@@ -24,13 +26,16 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $lastEditedBy
+ * @method static \Database\Factories\FaqFactory factory(...$parameters)
  */
 class Faq extends Model
 {
+    use HasFactory;
 
     protected $keyType = 'string';
+    public $incrementing = false;
 
-    public function lastEditedBy(){
-        return $this->belongsTo('App\Models\User', 'last_edited_by');
+    public function lastEditedBy(): BelongsTo {
+        return $this->belongsTo(User::class, 'last_edited_by');
     }
 }

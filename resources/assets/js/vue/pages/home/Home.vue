@@ -1,8 +1,8 @@
 <template>
-    <div class="container">
-        <div class="row">
+    <div class="container mt-3 mb-3">
+        <v-expansion-panels focusable>
             <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" />
-        </div>
+        </v-expansion-panels>
     </div>
 </template>
 

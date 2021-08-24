@@ -55,6 +55,7 @@ class MensaListController extends Controller
             return self::mapMensa(
                 $mensa,
                 $mensa->users->all(),
+                $mensa->menuItems->all(),
                 $mensa->extraOptions->all(),
             );
         });

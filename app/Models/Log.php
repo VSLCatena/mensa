@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\Log
@@ -13,17 +15,20 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Log newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Log query()
  * @mixin \Eloquent
+ * @method static \Database\Factories\LogFactory factory(...$parameters)
  */
 class Log extends Model
 {
+    use HasFactory;
 
     protected $keyType = 'string';
+    public $incrementing = false;
 
-    public function mensa(){
-        return $this->belongsTo('App\Models\Mensa', 'mensa_id');
+    public function mensa(): BelongsTo {
+        return $this->belongsTo(Mensa::class, 'mensa_id');
     }
 
-    public function user(){
-        return $this->belongsTo('App\Models\User', 'lidnummer');
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

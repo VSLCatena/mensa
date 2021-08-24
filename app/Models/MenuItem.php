@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\MenuItem
@@ -20,14 +22,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $order
  * @property string $text
  * @property-read \App\Models\Mensa $mensa
+ * @method static \Database\Factories\MenuItemFactory factory(...$parameters)
  */
 class MenuItem extends Model
 {
+    use HasFactory;
     public $timestamps = false;
 
     protected $keyType = 'string';
+    public $incrementing = false;
 
-    public function mensa(){
-        return $this->belongsTo('App\Models\Mensa');
+    public function mensa(): BelongsTo {
+        return $this->belongsTo(Mensa::class);
     }
 }
