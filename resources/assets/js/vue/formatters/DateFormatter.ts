@@ -37,7 +37,7 @@ export function formatDate(
 
         // 30
         let dayText: string = date.getDate().toString();
-        if (language.language == "en") dayText = formatOrdinal(date.getDay())
+        if (language.language == "en") dayText = formatOrdinal(date.getDate())
         dateBuilder.push(dayText);
 
         // of May

@@ -3171,7 +3171,7 @@ function formatDate(date, options, language) {
 
 
     var dayText = date.getDate().toString();
-    if (language.language == "en") dayText = (0,_NumberFormatter__WEBPACK_IMPORTED_MODULE_1__.formatOrdinal)(date.getDay());
+    if (language.language == "en") dayText = (0,_NumberFormatter__WEBPACK_IMPORTED_MODULE_1__.formatOrdinal)(date.getDate());
     dateBuilder.push(dayText); // of May
 
     var monthText = getMonth(date, language, actualOptions.preferShort);
