@@ -21,16 +21,17 @@ class MensaFactory extends Factory
      */
     public function definition()
     {
-        $date = $this->faker->dateTime()->getTimestamp();
+        $date = $this->faker->dateTimeBetween("-1 month", "+3 months")->getTimestamp();
 
         return [
             'id' => $this->faker->uuid,
             'title' => $this->faker->sentence(3),
-            'description' => $this->faker->sentence(8),
+            'description' => $this->faker->sentence(20),
             'date' => $date,
             'closing_time' => $date,
             'max_users' => $this->faker->numberBetween(5, 50),
-            'closed' => $this->faker->boolean
+            'closed' => $this->faker->boolean,
+            'price' => $this->faker->randomFloat(2, 0, 10)
         ];
     }
 }

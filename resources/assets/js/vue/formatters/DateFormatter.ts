@@ -19,8 +19,8 @@ let defaultOptions: Options = {
 
 export function formatDate(
     date: Date,
+    options: Partial<Options>|null = null,
     language: Language = CurrentLanguage.language,
-    options: Partial<Options>|null = null
 ): string {
     let actualOptions = {...defaultOptions, ...options }
 

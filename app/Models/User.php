@@ -44,6 +44,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereVegetarian($value)
  * @mixin \Eloquent
  * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $user
+ * @property-read int|null $user_count
  */
 class User extends Authenticatable
 {

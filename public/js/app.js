@@ -1846,8 +1846,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _domain_mensa_usecase_GetMensas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../domain/mensa/usecase/GetMensas */ "./resources/assets/js/domain/mensa/usecase/GetMensas.ts");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/MensaItem.vue */ "./resources/assets/js/vue/pages/home/components/MensaItem.vue");
+/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
 var __spreadArray = undefined && undefined.__spreadArray || function (to, from) {
   for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
     to[j] = from[i];
@@ -1859,23 +1860,57 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__.default.extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__.default.extend({
   components: {
     MensaItem: _components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
-  mounted: function mounted() {
-    var _this = this;
-
-    (0,_domain_mensa_usecase_GetMensas__WEBPACK_IMPORTED_MODULE_0__.default)(20).then(function (mensas) {
-      return _this.mensas = __spreadArray([], mensas);
-    })["catch"](function (error) {
-      return console.error(error);
-    });
-  },
   data: function data() {
     return {
-      mensas: []
+      mensas: [],
+      weekOffset: null,
+      loading: true,
+      between: null
     };
+  },
+  computed: {
+    startDate: function startDate() {
+      var between = this.between;
+      if (between == null) return null;
+      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__.formatDate)(between.start, {
+        withTime: false
+      });
+    },
+    endDate: function endDate() {
+      var between = this.between;
+      if (between == null) return null;
+      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__.formatDate)(between.end, {
+        withTime: false
+      });
+    }
+  },
+  watch: {
+    weekOffset: function weekOffset(offset) {
+      var _this = this;
+
+      this.loading = true;
+      (0,_domain_mensa_usecase_GetMensas__WEBPACK_IMPORTED_MODULE_0__.default)(offset).then(function (mensaList) {
+        _this.mensas = __spreadArray([], mensaList.mensas);
+        _this.between = mensaList.between;
+        _this.loading = false;
+      })["catch"](function (error) {
+        console.error(error);
+        _this.loading = false;
+      });
+    }
+  },
+  methods: {
+    offsetWeeks: function offsetWeeks(offset) {
+      this.weekOffset += offset;
+    }
+  },
+  created: function created() {
+    this.weekOffset = 0;
   }
 }));
 
@@ -1892,7 +1927,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _utils_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/DateFormatter */ "./resources/assets/js/vue/utils/DateFormatter.ts");
+/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
+/* harmony import */ var _formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../formatters/StringFormatter */ "./resources/assets/js/vue/formatters/StringFormatter.ts");
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
@@ -1903,10 +1940,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     formattedDate: function formattedDate() {
-      return (0,_utils_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.date);
+      return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.capitalize)((0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.date));
     },
     closingTime: function closingTime() {
-      return (0,_utils_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.closingTime);
+      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.closingTime, {
+        withDate: false
+      });
+    },
+    cooks: function cooks() {
+      return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.formatUsers)(this.mensa.cooks);
     }
   },
   mounted: function mounted() {
@@ -1926,13 +1968,14 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
-/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
+/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuetify/dist/vuetify.min.css */ "./node_modules/vuetify/dist/vuetify.min.css");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _vue_pages_home_Home_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./vue/pages/home/Home.vue */ "./resources/assets/js/vue/pages/home/Home.vue");
 /* harmony import */ var _vue_pages_home_components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./vue/pages/home/components/MensaItem.vue */ "./resources/assets/js/vue/pages/home/components/MensaItem.vue");
+/* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lang/Language */ "./resources/assets/js/lang/Language.ts");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -1946,14 +1989,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-vue__WEBPACK_IMPORTED_MODULE_4__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_5__.default);
-vue__WEBPACK_IMPORTED_MODULE_4__.default.use((vuetify__WEBPACK_IMPORTED_MODULE_6___default()));
+vue__WEBPACK_IMPORTED_MODULE_5__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_6__.default);
+vue__WEBPACK_IMPORTED_MODULE_5__.default.use((vuetify__WEBPACK_IMPORTED_MODULE_7___default()));
 var routes = [{
   path: '/',
   component: _vue_pages_home_Home_vue__WEBPACK_IMPORTED_MODULE_2__.default
@@ -1961,18 +2005,47 @@ var routes = [{
   path: '/mensa',
   component: _vue_pages_home_components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_3__.default
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_5__.default({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__.default({
   mode: 'history',
   routes: routes
 });
-var vuetify = new (vuetify__WEBPACK_IMPORTED_MODULE_6___default())({
+var vuetify = new (vuetify__WEBPACK_IMPORTED_MODULE_7___default())({
   theme: {
     dark: true
   }
 });
-var app = new vue__WEBPACK_IMPORTED_MODULE_4__.default({
+
+vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$ll = function (text, capitalize, language) {
+  if (capitalize === void 0) {
+    capitalize = false;
+  }
+
+  if (language === void 0) {
+    language = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.CurrentLanguage.language;
+  }
+
+  var txt = language.getText(text);
+  if (capitalize) txt = txt.charAt(0).toUpperCase() + txt.slice(1);
+  return txt;
+};
+
+vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$lang = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.default;
+var app = new vue__WEBPACK_IMPORTED_MODULE_5__.default({
   vuetify: vuetify,
-  router: router
+  router: router,
+  methods: {
+    $toggleDarkMode: function $toggleDarkMode() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
+    $toggleLanguage: function $toggleLanguage() {
+      _lang_Language__WEBPACK_IMPORTED_MODULE_4__.CurrentLanguage.language = new _lang_Language__WEBPACK_IMPORTED_MODULE_4__.Language(_lang_Language__WEBPACK_IMPORTED_MODULE_4__.CurrentLanguage.language.language == "nl" ? "en" : "nl");
+    }
+  },
+  computed: {
+    $isDarkMode: function $isDarkMode() {
+      return this.$vuetify.theme.dark;
+    }
+  }
 }).$mount('#app');
 
 /***/ }),
@@ -1995,6 +2068,23 @@ var URL_PATH = "http://localhost:8000";
 var VERSION = "v1";
 var API_BASE_URL = URL_PATH + "/api/" + VERSION;
 var DEBUG = true;
+
+/***/ }),
+
+/***/ "./resources/assets/js/data/mensa/mapper/MapDate.ts":
+/*!**********************************************************!*\
+  !*** ./resources/assets/js/data/mensa/mapper/MapDate.ts ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MapDate)
+/* harmony export */ });
+function MapDate(num) {
+  return new Date(num * 1000);
+}
 
 /***/ }),
 
@@ -2043,37 +2133,58 @@ function MapPrice(data) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ MapMensas),
-/* harmony export */   "MapMensa": () => (/* binding */ MapMensa)
+/* harmony export */   "default": () => (/* binding */ MapMensaList),
+/* harmony export */   "MapBetween": () => (/* binding */ MapBetween)
 /* harmony export */ });
 /* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
 /* harmony import */ var _MapExtraOptions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MapExtraOptions */ "./resources/assets/js/data/mensa/mapper/MapExtraOptions.ts");
 /* harmony import */ var _utils_Result__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../utils/Result */ "./resources/assets/js/utils/Result.ts");
 /* harmony import */ var _MapSimpleUsers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MapSimpleUsers */ "./resources/assets/js/data/mensa/mapper/MapSimpleUsers.ts");
+/* harmony import */ var _MapDate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MapDate */ "./resources/assets/js/data/mensa/mapper/MapDate.ts");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
 
 
-function MapMensas(data) {
-  if (!Array.isArray(data)) return new _utils_Result__WEBPACK_IMPORTED_MODULE_2__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
-  return new _utils_Result__WEBPACK_IMPORTED_MODULE_2__.Success(data.map(function (price) {
-    return MapMensa(price).getOrThrow();
-  }));
+
+function MapMensaList(data) {
+  return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_2__.runCatching)(function () {
+    return {
+      between: MapBetween((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)("between", data.between)).getOrThrow(),
+      mensas: MapMensas((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)("mensas", data.mensas)).getOrThrow()
+    };
+  });
 }
+function MapBetween(data) {
+  return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_2__.runCatching)(function () {
+    return {
+      start: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)("start", data.start)),
+      end: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)("end", data.end))
+    };
+  });
+}
+
+function MapMensas(data) {
+  return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_2__.runCatching)(function () {
+    if (!Array.isArray(data)) throw new Error("data is not of type Array. (" + _typeof(data) + ")");
+    return data.map(function (price) {
+      return MapMensa(price).getOrThrow();
+    });
+  });
+}
+
 function MapMensa(data) {
   return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_2__.runCatching)(function () {
-    console.debug(data.date);
-    console.debug(new Date((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)("sdf", data.date)));
     return {
       id: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('id', data.id),
       title: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('title', data.title),
       description: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('description', data.description),
       extraOptions: (0,_MapExtraOptions__WEBPACK_IMPORTED_MODULE_1__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('extraOptions', data.extraOptions)).getOrThrow(),
-      date: new Date((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('date', data.date) * 1000),
-      closingTime: new Date((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('closingTime', data.closingTime) * 1000),
+      date: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('date', data.date)),
+      closingTime: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('closingTime', data.closingTime)),
       maxSignups: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('maxSignups', data.maxSignups),
+      price: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)("price", data.price),
       signups: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('signups', data.signups),
       cooks: (0,_MapSimpleUsers__WEBPACK_IMPORTED_MODULE_3__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('cooks', data.cooks)).getOrThrow(),
       dishwashers: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('dishwashers', data.dishwashers)
@@ -2283,7 +2394,7 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
 var MensaRepositoryImpl = function () {
   function MensaRepositoryImpl() {}
 
-  MensaRepositoryImpl.prototype.getMensas = function (limit, fromLastId) {
+  MensaRepositoryImpl.prototype.getMensas = function (weekOffset) {
     return __awaiter(this, void 0, void 0, function () {
       var result, e_1;
       return __generator(this, function (_a) {
@@ -2295,8 +2406,7 @@ var MensaRepositoryImpl = function () {
             /*yield*/
             , axios__WEBPACK_IMPORTED_MODULE_2___default().get(_config__WEBPACK_IMPORTED_MODULE_0__.API_BASE_URL + "/mensas", {
               params: {
-                limit: limit,
-                fromLastId: fromLastId
+                weekOffset: weekOffset
               }
             })];
 
@@ -2552,12 +2662,12 @@ var __generator = undefined && undefined.__generator || function (thisArg, body)
 };
 
 
-function GetMensas(limit, fromLastId) {
+function GetMensas(weekOffset) {
   return __awaiter(this, void 0, void 0, function () {
     return __generator(this, function (_a) {
       return [2
       /*return*/
-      , _repository_MensaRepository__WEBPACK_IMPORTED_MODULE_0__.default.getMensas(limit, fromLastId)];
+      , _repository_MensaRepository__WEBPACK_IMPORTED_MODULE_0__.default.getMensas(weekOffset)];
     });
   });
 }
@@ -2575,6 +2685,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
+/* harmony import */ var _Text__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Text */ "./resources/assets/js/lang/Text.ts");
+
+
 var days = {
   "short": {
     monday: {
@@ -2742,7 +2856,9 @@ var months = {
 var combined = {
   days: days,
   months: months
-};
+}; // Make sure it is in the correct format
+
+(0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_0__.LanguageLintCheck)(_Text__WEBPACK_IMPORTED_MODULE_1__.default);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (combined);
 
 /***/ }),
@@ -2762,7 +2878,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _Date__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Date */ "./resources/assets/js/lang/Date.ts");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _Text__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Text */ "./resources/assets/js/lang/Text.ts");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
+
+
 
 
 
@@ -2783,13 +2903,99 @@ var Languages = {
   nl: "nl",
   en: "en"
 };
-var CurrentLanguage = vue__WEBPACK_IMPORTED_MODULE_1__.default.observable({
+var CurrentLanguage = vue__WEBPACK_IMPORTED_MODULE_3__.default.observable({
   language: new Language("nl")
 });
 var language = {
-  date: _Date__WEBPACK_IMPORTED_MODULE_0__.default
-};
+  date: _Date__WEBPACK_IMPORTED_MODULE_0__.default,
+  text: _Text__WEBPACK_IMPORTED_MODULE_1__.default
+}; // Make sure it is in the correct format
+
+(0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_2__.LanguageLintCheck)(language);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (language);
+
+/***/ }),
+
+/***/ "./resources/assets/js/lang/LanguageTypes.ts":
+/*!***************************************************!*\
+  !*** ./resources/assets/js/lang/LanguageTypes.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "LanguageLintCheck": () => (/* binding */ LanguageLintCheck)
+/* harmony export */ });
+// noinspection JSUnusedLocalSymbols
+function LanguageLintCheck(block) {}
+
+/***/ }),
+
+/***/ "./resources/assets/js/lang/Text.ts":
+/*!******************************************!*\
+  !*** ./resources/assets/js/lang/Text.ts ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
+
+var text = {
+  and: {
+    nl: "en",
+    en: "and"
+  },
+  mensa: {
+    mensas_between: {
+      nl: "Mensas tussen",
+      en: "Mensas between"
+    },
+    next_weeks: {
+      nl: "+2 weken",
+      en: "+2 weeks"
+    },
+    previous_weeks: {
+      nl: "-2 weken",
+      en: "+2 weken"
+    },
+    signups: {
+      nl: "Inschrijvingen",
+      en: "Signups"
+    },
+    closingtime: {
+      nl: "Sluittijd",
+      en: "Closing time"
+    },
+    price: {
+      nl: "Prijs",
+      en: "Price"
+    },
+    cooked_by: {
+      nl: "Gekookt door",
+      en: "Cooked by"
+    },
+    dishwashers: {
+      nl: "Afwassers",
+      en: "Dishwashers"
+    },
+    button_signup: {
+      nl: "Inschrijven",
+      en: "Sign up"
+    },
+    button_overview: {
+      nl: "Overzicht",
+      en: "Overview"
+    }
+  }
+}; // Make sure it is in the correct format
+
+(0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_0__.LanguageLintCheck)(text);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (text);
 
 /***/ }),
 
@@ -2904,10 +3110,10 @@ var Failure = function (_super) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/vue/utils/DateFormatter.ts":
-/*!********************************************************!*\
-  !*** ./resources/assets/js/vue/utils/DateFormatter.ts ***!
-  \********************************************************/
+/***/ "./resources/assets/js/vue/formatters/DateFormatter.ts":
+/*!*************************************************************!*\
+  !*** ./resources/assets/js/vue/formatters/DateFormatter.ts ***!
+  \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -2916,7 +3122,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "formatDate": () => (/* binding */ formatDate)
 /* harmony export */ });
 /* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../lang/Language */ "./resources/assets/js/lang/Language.ts");
-/* harmony import */ var _NumberFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NumberFormatter */ "./resources/assets/js/vue/utils/NumberFormatter.ts");
+/* harmony import */ var _NumberFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NumberFormatter */ "./resources/assets/js/vue/formatters/NumberFormatter.ts");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -2942,13 +3148,13 @@ var defaultOptions = {
   withDate: true,
   withTime: true
 };
-function formatDate(date, language, options) {
-  if (language === void 0) {
-    language = _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language;
-  }
-
+function formatDate(date, options, language) {
   if (options === void 0) {
     options = null;
+  }
+
+  if (language === void 0) {
+    language = _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language;
   }
 
   var actualOptions = __assign(__assign({}, defaultOptions), options);
@@ -3079,10 +3285,10 @@ function getMonth(date, language, preferShort) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/vue/utils/NumberFormatter.ts":
-/*!**********************************************************!*\
-  !*** ./resources/assets/js/vue/utils/NumberFormatter.ts ***!
-  \**********************************************************/
+/***/ "./resources/assets/js/vue/formatters/NumberFormatter.ts":
+/*!***************************************************************!*\
+  !*** ./resources/assets/js/vue/formatters/NumberFormatter.ts ***!
+  \***************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3131,6 +3337,50 @@ function formatOrdinalEN(num) {
     default:
       return num + "th";
   }
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/vue/formatters/StringFormatter.ts":
+/*!***************************************************************!*\
+  !*** ./resources/assets/js/vue/formatters/StringFormatter.ts ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "formatUsers": () => (/* binding */ formatUsers),
+/* harmony export */   "capitalize": () => (/* binding */ capitalize)
+/* harmony export */ });
+/* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../lang/Language */ "./resources/assets/js/lang/Language.ts");
+
+function formatUsers(users, language) {
+  if (language === void 0) {
+    language = _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language;
+  }
+
+  switch (users.length) {
+    case 0:
+      return null;
+
+    case 1:
+      return users[0].name;
+  }
+
+  var userText = "";
+
+  for (var x = 0; x < users.length - 1; x++) {
+    userText += ", " + users[x].name;
+  }
+
+  userText += " " + language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.text.and) + " " + users[users.length - 1].name;
+  userText = userText.substr(2);
+  return userText;
+} // user1, user2, user3 and user4
+
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 /***/ }),
@@ -34663,12 +34913,58 @@ var render = function() {
     "div",
     { staticClass: "container mt-3 mb-3" },
     [
+      _c("v-banner", [
+        _c("span", { staticClass: "text--secondary" }, [
+          _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.mensas_between)))
+        ]),
+        _vm._v(" " + _vm._s(_vm.startDate) + "\n        "),
+        _c("span", { staticClass: "text--secondary" }, [
+          _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.and)))
+        ]),
+        _vm._v(" " + _vm._s(_vm.endDate) + "\n    ")
+      ]),
+      _vm._v(" "),
       _c(
         "v-expansion-panels",
-        { attrs: { focusable: "" } },
+        { staticClass: "mt-4", attrs: { focusable: "", accordion: "" } },
         _vm._l(this.mensas, function(mensa) {
           return _c("MensaItem", { key: mensa.id, attrs: { mensa: mensa } })
         }),
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mt-4 d-flex" },
+        [
+          _c(
+            "v-btn",
+            {
+              attrs: { loading: _vm.loading },
+              on: {
+                click: function($event) {
+                  return _vm.offsetWeeks(-2)
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.previous_weeks)))]
+          ),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: { loading: _vm.loading },
+              on: {
+                click: function($event) {
+                  return _vm.offsetWeeks(2)
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.next_weeks)))]
+          )
+        ],
         1
       )
     ],
@@ -34715,13 +35011,20 @@ var render = function() {
                   _vm._v(" "),
                   _c("small", [_vm._v(_vm._s(_vm.formattedDate))])
                 ]),
-                _vm._v(
-                  "\n        " +
-                    _vm._s(_vm.mensa.signups) +
-                    " / " +
-                    _vm._s(_vm.mensa.maxSignups) +
-                    "\n    "
-                )
+                _vm._v(" "),
+                _c("v-spacer"),
+                _vm._v(" "),
+                _c("v-fade-transition", { attrs: { "leave-absolute": "" } }, [
+                  !open
+                    ? _c("span", { staticClass: "flex-grow-0 mr-5" }, [
+                        _vm._v(
+                          _vm._s(_vm.mensa.signups) +
+                            " / " +
+                            _vm._s(_vm.mensa.maxSignups)
+                        )
+                      ])
+                    : _vm._e()
+                ])
               ]
             }
           }
@@ -34729,22 +35032,113 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("v-expansion-panel-content", [
-        _vm._v(
-          "\n        " + _vm._s(_vm.mensa["description"]) + "\n\n        "
-        ),
-        _vm.mensa["signups"] === 1
-          ? _c("span", [_vm._v("Er is 1 inschrijving")])
-          : _c("span", [
-              _vm._v(
-                "Er zijn " + _vm._s(_vm.mensa["signups"]) + " inschrijvingen"
-              )
-            ]),
-        _vm._v(" "),
-        _vm.mensa["signups"] > 0
-          ? _c("div", { staticClass: "btn btn-success" }, [
-              _vm._v("Inschrijven")
-            ])
-          : _vm._e()
+        _c("div", { staticClass: "d-flex flex-column flex-md-row pt-3" }, [
+          _c(
+            "div",
+            { staticClass: "ml-0 ml-md-6 order-md-12" },
+            [
+              _c("v-card", { staticClass: "pa-4", attrs: { outlined: "" } }, [
+                _c("table", { staticClass: "text-no-wrap" }, [
+                  _c("tr", [
+                    _c("td", { staticClass: "pr-2" }, [
+                      _vm._v(
+                        _vm._s(_vm.$ll(_vm.$lang.text.mensa.signups, true)) +
+                          ":"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [
+                      _vm._v(
+                        _vm._s(_vm.mensa.signups) +
+                          " / " +
+                          _vm._s(_vm.mensa.maxSignups)
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _vm.mensa.dishwashers > 0
+                    ? _c("tr", [
+                        _c("td", { staticClass: "pr-2" }, [
+                          _vm._v(
+                            _vm._s(_vm.$ll(_vm.$lang.text.mensa.dishwashers)) +
+                              ":"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(_vm.mensa.dishwashers))])
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", { staticClass: "pr-2" }, [
+                      _vm._v(
+                        _vm._s(
+                          _vm.$ll(_vm.$lang.text.mensa.closingtime, true)
+                        ) + ":"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(_vm.closingTime))])
+                  ]),
+                  _vm._v(" "),
+                  _vm.mensa.price != 0
+                    ? _c("tr", [
+                        _c("td", { staticClass: "pr-2" }, [
+                          _vm._v(
+                            _vm._s(_vm.$ll(_vm.$lang.text.mensa.price, true)) +
+                              ":"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _vm._v("€ " + _vm._s(_vm.mensa.price.toFixed(2)))
+                        ])
+                      ])
+                    : _vm._e()
+                ])
+              ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", [
+            _vm.mensa.cooks.length > 0
+              ? _c("div", { staticClass: "mt-4 mt-md-0 mb-4" }, [
+                  _vm._v(
+                    "\n                    " +
+                      _vm._s(_vm.$ll(_vm.$lang.text.mensa.cooked_by)) +
+                      ": "
+                  ),
+                  _c("span", { staticClass: "text--secondary" }, [
+                    _vm._v(_vm._s(_vm.cooks))
+                  ])
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.mensa.description.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "text--secondary flex-grow-1 mt-4 mt-md-0" },
+                  [_vm._v(_vm._s(_vm.mensa.description))]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "mt-4" },
+              [
+                _c("v-btn", { attrs: { color: "primary" } }, [
+                  _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_signup)))
+                ]),
+                _vm._v(" "),
+                _c("v-btn", { attrs: { outlined: "" } }, [
+                  _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_overview)))
+                ])
+              ],
+              1
+            )
+          ])
+        ])
       ])
     ],
     1

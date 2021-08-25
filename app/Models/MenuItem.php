@@ -23,6 +23,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  * @property-read \App\Models\Mensa $mensa
  * @method static \Database\Factories\MenuItemFactory factory(...$parameters)
+ * @property string|null $created_at
+ * @property string|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereUpdatedAt($value)
  */
 class MenuItem extends Model
 {

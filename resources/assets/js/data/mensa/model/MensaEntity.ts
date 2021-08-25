@@ -10,6 +10,7 @@ export default interface MensaEntity {
     closingTime?: number,
     maxSignups?: number,
     signups?: number,
+    price?: number,
     cooks?: MensaSimpleUserEntity[],
     dishwashers?: number,
 }

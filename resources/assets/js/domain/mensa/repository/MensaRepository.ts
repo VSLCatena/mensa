@@ -1,9 +1,10 @@
 import Mensa from "../model/Mensa";
 import MensaSignup from "../model/MensaSignup";
 import repository from '../../../data/mensa/repository/MensaRepositoryImpl';
+import MensaList from "../model/MensaList";
 
 export interface MensaRepository {
-    getMensas(limit: number, fromId?: string): Promise<Mensa[]>
+    getMensas(weekOffset: number|null): Promise<MensaList>
 
     getMensa(mensaId: string): Promise<Mensa|null>
     addMensa(mensa: Mensa): Promise<Error|null>

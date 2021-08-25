@@ -4,16 +4,14 @@ import { MensaRepository } from '../../../domain/mensa/repository/MensaRepositor
 import { API_BASE_URL } from '../../../config';
 import MapMensas from "../mapper/MapMensas";
 import axios from "axios";
+import MensaList from "../../../domain/mensa/model/MensaList";
 
 class MensaRepositoryImpl implements MensaRepository {
 
-    async getMensas(limit: number, fromLastId?: string): Promise<Mensa[]> {
+    async getMensas(weekOffset: number|null): Promise<MensaList> {
         try {
             let result = await axios.get(`${API_BASE_URL}/mensas`, {
-                params: {
-                    limit: limit,
-                    fromLastId: fromLastId
-                }
+                params: { weekOffset: weekOffset }
             });
 
             return MapMensas(result.data).getOrThrow();

@@ -8,6 +8,7 @@ export default interface Mensa {
     extraOptions: ExtraOption[],
     date: Date,
     closingTime: Date,
+    price: number,
     maxSignups: number,
     signups: number,
     cooks: SimpleUser[],

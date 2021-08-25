@@ -43,7 +43,7 @@ class DatabaseSeeder extends Seeder
                 ->for($mensa)
                 ->create();
 
-            $userList = $users->random(rand(0, $users->count()));
+            $userList = $users->random(rand(0, min($users->count(), $mensa->max_users)));
             foreach ($userList as $user) {
                 /** @var Signup $signup */
                 $signup = Signup::factory()

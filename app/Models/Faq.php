@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User $lastEditedBy
  * @method static \Database\Factories\FaqFactory factory(...$parameters)
+ * @property int $order
+ * @method static \Illuminate\Database\Eloquent\Builder|Faq whereOrder($value)
  */
 class Faq extends Model
 {

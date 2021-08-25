@@ -6,6 +6,7 @@ use App\Models\Mensa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class MensaListController extends Controller
@@ -30,36 +31,37 @@ class MensaListController extends Controller
      */
     public function __invoke(Request $request): JsonResponse {
 
-        $validator = Validator::make($request->all(), [
-            'limit' => ['required', 'integer', 'min:1', 'max:25'],
-            'fromLastId' => ['App\Models\Mensa,id'],
-        ]);
+        $validator = Validator::make($request->all(), ['weekOffset' => ['integer'],]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
 
-        $limit = $request->get('limit');
-
-        $query = Mensa::orderByDesc('date')
-            ->limit($limit);
-
-        if ($request->has('fromLastId')) {
-            $fromLastId = $request->get('fromLastId');
-
-            $dateFrom = Mensa::findOrFail($fromLastId)->date;
-            $query = $query->where('date', '<', $dateFrom);
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        if ($request->has('weekOffset')) {
+            $startOfWeek = $startOfWeek->addWeeks($request->get('weekOffset'));
         }
+        $startTime = $startOfWeek->getTimestamp();
+        $endTime = $startOfWeek->addWeeks(2)->getTimestamp()-1;
 
-        $mensas = $query->get()->map(function ($mensa) {
-            return self::mapMensa(
-                $mensa,
-                $mensa->users->all(),
-                $mensa->menuItems->all(),
-                $mensa->extraOptions->all(),
-            );
-        });
+        $mensas = Mensa::orderBy('date')
+            ->whereBetween('date', [$startTime, $endTime])
+            ->get()
+            ->map(function ($mensa) {
+                return self::mapMensa(
+                    $mensa,
+                    $mensa->users->all(),
+                    $mensa->menuItems->all(),
+                    $mensa->extraOptions->all(),
+                );
+            });
 
-        return response()->json($mensas);
+        return response()->json([
+            "between" => [
+                "start" => $startTime,
+                "end" => $endTime
+            ],
+            "mensas" => $mensas
+        ]);
     }
 }

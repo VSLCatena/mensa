@@ -23,10 +23,10 @@ class SignupFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid,
-            'cooks' => $this->faker->boolean,
-            'dishwasher' => $this->faker->boolean,
+            'cooks' => $this->faker->boolean(15),
+            'dishwasher' => $this->faker->boolean(15),
             'vegetarian' => $this->faker->boolean,
-            'is_intro' => $this->faker->boolean,
+            'is_intro' => $this->faker->boolean(10),
             'allergies' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'extra_info' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'confirmed' => $this->faker->boolean,

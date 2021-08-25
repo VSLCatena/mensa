@@ -11,3 +11,6 @@ export interface LanguageBlock {
 export type LanguageText = {
     [Property in keyof typeof Languages]: string;
 }
+
+// noinspection JSUnusedLocalSymbols
+export function LanguageLintCheck(block: LanguageBlock) {}

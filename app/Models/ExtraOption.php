@@ -26,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\ExtraOptionFactory factory(...$parameters)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $signups
+ * @property-read int|null $signups_count
  */
 class ExtraOption extends Model
 {

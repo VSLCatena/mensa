@@ -1,6 +1,7 @@
 import Date from './Date';
+import Text from './Text';
 import Vue from "vue";
-import {LanguageBlock, LanguageText} from "./LanguageTypes";
+import { LanguageLintCheck, LanguageText} from "./LanguageTypes";
 
 export class Language {
     constructor(
@@ -21,8 +22,12 @@ export const Languages = {
 export const CurrentLanguage = Vue.observable({ language: new Language("nl") });
 
 
-const language: LanguageBlock = {
-    date: Date
+const language = {
+    date: Date,
+    text: Text,
 }
+
+// Make sure it is in the correct format
+LanguageLintCheck(language)
 
 export default language;

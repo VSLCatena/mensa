@@ -35,6 +35,7 @@ trait MensaMapper {
             isClosed: $mensa->isClosed(),
             maxSignups: $mensa->max_users,
             signups: count($users),
+            price: $mensa->price,
             dishwashers: count($dishwashers),
             cooks: array_values(array_map($userSignupMapper, $cooks)),
             menu: array_map(function($item) { return self::mapMenuItem($item); }, $menu),

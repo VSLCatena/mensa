@@ -1,6 +1,7 @@
-import {LanguageBlock} from "./LanguageTypes";
+import {LanguageLintCheck} from "./LanguageTypes";
+import text from "./Text";
 
-let days: LanguageBlock = {
+let days = {
     short: {
         monday: {
             nl: "ma",
@@ -63,7 +64,7 @@ let days: LanguageBlock = {
     }
 }
 
-let months: LanguageBlock = {
+let months = {
     short: {
         january: {
             nl: "jan",
@@ -166,8 +167,12 @@ let months: LanguageBlock = {
     }
 }
 
-const combined: LanguageBlock = {
+const combined = {
     days: days,
     months: months
 }
+
+// Make sure it is in the correct format
+LanguageLintCheck(text)
+
 export default combined;
