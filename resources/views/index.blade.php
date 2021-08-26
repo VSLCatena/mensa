@@ -26,7 +26,10 @@
             <v-divider vertical></v-divider>
             <v-icon large @click="$toggleDarkMode()" class="mx-4">@{{ $isDarkMode ? 'mdi-brightness-7' : 'mdi-brightness-3' }}</v-icon>
             <v-divider vertical></v-divider>
-            <v-btn @click="$toggleLanguage()" text class="mx-4">Toggle</v-btn>
+            <div class="ml-4 py-2" style="height: 100%; cursor: pointer">
+                <img style="height: 100%;" src="{{ asset('images/NL.svg') }}" @click="$toggleLanguage()" v-if="$currentLanguage.language.language !== 'nl'" />
+                <img style="height: 100%;" src="{{ asset('images/GB.svg') }}" @click="$toggleLanguage()" v-if="$currentLanguage.language.language !== 'en'" />
+            </div>
         </v-app-bar>
         <v-main>
             <v-container class="col-12 col-md-offset-1 col-md-10 col-lg-offset-2 col-lg-8 col-xl-offset-3 col-xl-6">

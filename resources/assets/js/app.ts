@@ -53,6 +53,7 @@ Vue.prototype.$ll = function(
 }
 
 Vue.prototype.$lang = lang;
+Vue.prototype.$currentLanguage = CurrentLanguage;
 
 const app = new Vue({
     vuetify,

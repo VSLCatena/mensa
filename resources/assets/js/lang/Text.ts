@@ -16,7 +16,7 @@ const text = {
         },
         previous_weeks: {
             nl: "-2 weken",
-            en: "+2 weken",
+            en: "+2 weeks",
         },
         signups: {
             nl: "Inschrijvingen",

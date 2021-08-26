@@ -2030,6 +2030,7 @@ vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$ll = function (text, capital
 };
 
 vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$lang = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.default;
+vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$currentLanguage = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.CurrentLanguage;
 var app = new vue__WEBPACK_IMPORTED_MODULE_5__.default({
   vuetify: vuetify,
   router: router,
@@ -2961,7 +2962,7 @@ var text = {
     },
     previous_weeks: {
       nl: "-2 weken",
-      en: "+2 weken"
+      en: "+2 weeks"
     },
     signups: {
       nl: "Inschrijvingen",
@@ -34914,14 +34915,58 @@ var render = function() {
     { staticClass: "container mt-3 mb-3" },
     [
       _c("v-banner", [
-        _c("span", { staticClass: "text--secondary" }, [
-          _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.mensas_between)))
-        ]),
-        _vm._v(" " + _vm._s(_vm.startDate) + "\n        "),
-        _c("span", { staticClass: "text--secondary" }, [
-          _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.and)))
-        ]),
-        _vm._v(" " + _vm._s(_vm.endDate) + "\n    ")
+        _c(
+          "div",
+          { staticClass: "d-flex" },
+          [
+            _c("div", [
+              _c("span", { staticClass: "text--secondary" }, [
+                _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.mensas_between)))
+              ]),
+              _vm._v(" " + _vm._s(_vm.startDate) + "\n                "),
+              _c("span", { staticClass: "text--secondary" }, [
+                _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.and)))
+              ]),
+              _vm._v(" " + _vm._s(_vm.endDate) + "\n            ")
+            ]),
+            _vm._v(" "),
+            _c("v-spacer"),
+            _vm._v(" "),
+            _c(
+              "div",
+              [
+                _c(
+                  "v-btn",
+                  {
+                    staticClass: "mr-4",
+                    attrs: { loading: _vm.loading },
+                    on: {
+                      click: function($event) {
+                        return _vm.offsetWeeks(-2)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.previous_weeks)))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { loading: _vm.loading },
+                    on: {
+                      click: function($event) {
+                        return _vm.offsetWeeks(2)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.next_weeks)))]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
       ]),
       _vm._v(" "),
       _c(
@@ -34933,40 +34978,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "mt-4 d-flex" },
-        [
-          _c(
-            "v-btn",
-            {
-              attrs: { loading: _vm.loading },
-              on: {
-                click: function($event) {
-                  return _vm.offsetWeeks(-2)
-                }
-              }
-            },
-            [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.previous_weeks)))]
-          ),
-          _vm._v(" "),
-          _c("v-spacer"),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              attrs: { loading: _vm.loading },
-              on: {
-                click: function($event) {
-                  return _vm.offsetWeeks(2)
-                }
-              }
-            },
-            [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.next_weeks)))]
-          )
-        ],
-        1
-      )
+      _c("div", { staticClass: "mt-4 d-flex" }, [_c("v-spacer")], 1)
     ],
     1
   )

@@ -1,8 +1,17 @@
 <template>
     <div class="container mt-3 mb-3">
         <v-banner>
-            <span class="text--secondary">{{ $ll($lang.text.mensa.mensas_between) }}</span> {{ startDate }}
-            <span class="text--secondary">{{ $ll($lang.text.and) }}</span> {{ endDate }}
+            <div class="d-flex">
+                <div>
+                    <span class="text--secondary">{{ $ll($lang.text.mensa.mensas_between) }}</span> {{ startDate }}
+                    <span class="text--secondary">{{ $ll($lang.text.and) }}</span> {{ endDate }}
+                </div>
+                <v-spacer></v-spacer>
+                <div>
+                    <v-btn @click="offsetWeeks(-2)" :loading="loading" class="mr-4">{{ $ll($lang.text.mensa.previous_weeks) }}</v-btn>
+                    <v-btn @click="offsetWeeks(2)" :loading="loading">{{ $ll($lang.text.mensa.next_weeks) }}</v-btn>
+                </div>
+            </div>
         </v-banner>
 
         <v-expansion-panels focusable accordion class="mt-4">
@@ -10,9 +19,7 @@
         </v-expansion-panels>
 
         <div class="mt-4 d-flex">
-            <v-btn @click="offsetWeeks(-2)" :loading="loading">{{ $ll($lang.text.mensa.previous_weeks) }}</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="offsetWeeks(2)" :loading="loading">{{ $ll($lang.text.mensa.next_weeks) }}</v-btn>
         </div>
     </div>
 </template>
