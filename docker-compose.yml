@@ -1,0 +1,71 @@
+version: '3.8'
+
+x-common-variables: &db_root_password
+    'mensa'
+#<<: *db_root_password
+#MYSQL_ROOT_PASSWORD:*db_root_password
+
+services:
+
+  #MySQL Service
+  db:
+    hostname: db
+    container_name: db
+    image: 'yobasystems/alpine-mariadb:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: *db_root_password
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER:  ${DB_USERNAME}
+      MYSQL_PASSWORD:  ${DB_PASSWORD}
+    volumes:
+      - dbdata:/var/lib/mysql/ # allows you to stop and restart the db service without losing data
+      - ./etc/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - net
+
+  #PHP Service
+  app:
+    hostname: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args: 
+        WWW_UID: 1000 # $(id $USER -u) , default user laravel folder
+        WWW_GID: 33 # can be kept on www-data (33)
+    container_name: app
+    depends_on:
+      - db
+    ports:
+      - 1234:8080
+    command: run #init, composer, artisan
+    volumes:
+      - "./etc/php/local.ini:/usr/local/etc/php/conf.d/local.ini"
+      - .:/data/app:rw
+    networks:
+      - net
+     
+  #phpmyadmin
+  phpmyadmin:
+    image: ghcr.io/linuxserver/phpmyadmin
+    hostname: phpmyadmin
+    container_name: phpmyadmin
+    profiles:
+      - testing
+    environment:
+      PMA_HOST: ${DB_HOST}
+      PMA_USER: root
+      PMA_PASSWORD: *db_root_password
+    ports:
+      - "8082:80"
+    networks:
+      - net
+
+
+
+#Docker Networks
+networks:
+  net:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local
