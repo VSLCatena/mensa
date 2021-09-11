@@ -1,12 +1,10 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     unzip \
     zip \ 
 	libzip-dev \
-    libldb-dev \
-    libldap2-dev \
     libonig-dev \
 	nodejs \
 	npm \
@@ -15,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 	
 	
 # Install extensions
-RUN docker-php-ext-install pdo_mysql mbstring ldap zip
+RUN docker-php-ext-install pdo_mysql mbstring zip
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
