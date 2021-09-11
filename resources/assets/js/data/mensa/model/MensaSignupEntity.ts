@@ -1,12 +1,9 @@
-import UserEntity from "./UserEntity";
-
 export default interface MensaSignupEntity {
     id?: string,
-    mensaId?: string,
-    user?: UserEntity,
-    email?: string,
+    isIntro?: boolean,
     vegetarian?: boolean,
     description?: string,
+    allergies?: string,
     cook?: boolean,
     dishwasher?: boolean,
 }

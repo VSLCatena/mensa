@@ -16,6 +16,7 @@ class CreateExtraOptionsTable extends Migration
         Schema::create('extra_options', function (Blueprint $table) {
             $table->uuid('id');
             $table->foreignUuid('mensa_id')->references('id')->on('mensas')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->integer('order');
             $table->string('description');
             $table->decimal('price');
 

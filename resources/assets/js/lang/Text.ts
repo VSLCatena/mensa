@@ -45,7 +45,61 @@ const text = {
         button_overview: {
             nl: "Overzicht",
             en: "Overview",
+        },
+        menu_title: {
+            nl: "Menu",
+            en: "Menu",
+        },
+        extra_options_title: {
+            nl: "Extra opties",
+            en: "Extra options",
         }
+    },
+    signup: {
+        mensa_at: {
+            nl: "Mensa op",
+            en: "Mensa at",
+        },
+        tab_signup: {
+            nl: "Inschrijving",
+            en: "Signup",
+        },
+        tab_intro: {
+            nl: "Intro",
+            en: "Intro",
+        },
+        add_intro: {
+            nl: '+ intro',
+            en: '+ intro',
+        },
+        field_email: {
+            nl: 'Email',
+            en: 'Email',
+        },
+        field_food_preference: {
+            nl: 'Etens voorkeur',
+            en: 'Food preference',
+        },
+        field_food_meat: {
+            nl: 'Vlees',
+            en: 'Meat',
+        },
+        field_food_vegetarian: {
+            nl: 'Vegetarisch',
+            en: 'Vegetarian',
+        },
+        field_description: {
+            nl: 'Omschrijving',
+            en: 'Description',
+        },
+        field_cook: {
+            nl: 'Is koker',
+            en: 'Is cook',
+        },
+        field_dishwasher: {
+            nl: 'Vrijwillig afwassen',
+            en: 'Voluntair for washing dishes',
+        },
     }
 }
 

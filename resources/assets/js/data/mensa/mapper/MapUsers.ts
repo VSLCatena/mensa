@@ -1,7 +1,7 @@
 import Result, {Failure, runCatching, Success} from "../../../utils/Result";
-import User from "../../../domain/user/model/User";
 import UserEntity from "../model/UserEntity";
 import {requireNotNull} from "../../utils/MappingUtils";
+import {User} from "../../../domain/common/model/User";
 
 export default function MapUsers(data: UserEntity[]): Result<User[]> {
     if (!Array.isArray(data))

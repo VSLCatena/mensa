@@ -1,5 +1,5 @@
-import SimpleUser from "../../domain/mensa/model/SimpleUser";
 import lang, {CurrentLanguage, Language} from "../../lang/Language";
+import {SimpleUser} from "../../domain/common/model/User";
 
 export function formatUsers(users: SimpleUser[], language: Language = CurrentLanguage.language): string|null {
     switch (users.length) {

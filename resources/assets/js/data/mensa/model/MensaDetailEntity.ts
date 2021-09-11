@@ -1,11 +1,11 @@
 import MensaSignupEntity from "./MensaSignupEntity";
-import PriceEntity from "./PriceEntity";
+import MensaExtraOptionsEntity from "./MensaExtraOptionsEntity";
 
 export default interface MensaDetailEntity {
     id: string,
     title: string,
     description: string,
-    prices: PriceEntity[],
+    prices: MensaExtraOptionsEntity[],
     date: string,
     closeTime: string,
     maxSignups: number,

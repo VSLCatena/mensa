@@ -24,6 +24,7 @@ class ExtraOptionFactory extends Factory
         return [
             'id' => $this->faker->uuid,
             'description' => $this->faker->sentence(rand(3, 12)),
+            'order' => $this->faker->numberBetween(0, 100),
             'price' => $this->faker->randomFloat(2, 0, 10)
         ];
     }

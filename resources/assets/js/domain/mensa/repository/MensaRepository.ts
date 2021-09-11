@@ -12,7 +12,7 @@ export interface MensaRepository {
     deleteMensa(mensaId: string): Promise<Error|null>
 
     getSignup(mensaId: string): Promise<MensaSignup|null>
-    signup(signup: MensaSignup): Promise<Error|null>
+    signup(mensa: Mensa, email: string, signups: MensaSignup[]): Promise<Error|null>
     editSignup(signup: MensaSignup): Promise<Error|null>
     signout(mensaId: string): Promise<Error|null>
 }

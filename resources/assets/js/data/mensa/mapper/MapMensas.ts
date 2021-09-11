@@ -7,6 +7,7 @@ import MapSimpleUsers from "./MapSimpleUsers";
 import MensaListEntity, {BetweenEntity} from "../model/MensaListEntity";
 import MensaList, {Between} from "../../../domain/mensa/model/MensaList";
 import MapDate from "./MapDate";
+import MapMenu from "./MapMenu";
 
 
 export default function MapMensaList(data: MensaListEntity): Result<MensaList> {
@@ -44,6 +45,7 @@ function MapMensa(data: MensaEntity): Result<Mensa> {
             id: requireNotNull('id', data.id),
             title: requireNotNull('title', data.title),
             description: requireNotNull('description', data.description),
+            menu: MapMenu(requireNotNull('menu', data.menu)).getOrThrow(),
             extraOptions: MapExtraOptions(requireNotNull('extraOptions', data.extraOptions)).getOrThrow(),
             date: MapDate(requireNotNull('date', data.date)),
             closingTime: MapDate(requireNotNull('closingTime', data.closingTime)),

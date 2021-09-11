@@ -1,7 +1,6 @@
 import {requireNotNull} from "../../utils/MappingUtils";
 import Result, {Failure, runCatching, Success} from "../../../utils/Result";
 import MensaSignup from "../../../domain/mensa/model/MensaSignup";
-import {MapUser} from "./MapUsers";
 import MensaSignupEntity from "../model/MensaSignupEntity";
 
 export default function MapSignups(data: MensaSignupEntity[]): Result<MensaSignup[]> {
@@ -16,10 +15,11 @@ export default function MapSignups(data: MensaSignupEntity[]): Result<MensaSignu
 export function MapSignup(data: MensaSignupEntity): Result<MensaSignup> {
     return runCatching(() => {
         return {
-            user: MapUser(requireNotNull('user', data.user)).getOrThrow(),
-            mensaId: requireNotNull('mensaId', data.mensaId),
+            id: requireNotNull('id', data.id),
+            isIntro: requireNotNull('isIntro', data.isIntro),
             vegetarian: requireNotNull('vegetarian', data.vegetarian),
             description: requireNotNull('description', data.description),
+            allergies: requireNotNull('allergies', data.allergies),
             cook: requireNotNull('cook', data.cook),
             dishwasher: requireNotNull('dishwasher', data.dishwasher),
         }

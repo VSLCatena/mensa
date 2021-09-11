@@ -14,9 +14,10 @@ import Vuetify from "vuetify";
 import 'vuetify/dist/vuetify.min.css';
 import VueRouter from 'vue-router';
 import Home from './vue/pages/home/Home.vue';
-import Mensa from './vue/pages/home/components/MensaItem.vue';
+import Mensa from './vue/components/mensa/MensaItem.vue';
 import {LanguageText} from "./lang/LanguageTypes";
 import lang, {CurrentLanguage, Language} from "./lang/Language";
+import { AnonymousUser, AuthUser } from "./domain/common/model/User";
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -52,6 +53,7 @@ Vue.prototype.$ll = function(
     return txt;
 }
 
+Vue.prototype.$user = Vue.observable(AnonymousUser as AuthUser);
 Vue.prototype.$lang = lang;
 Vue.prototype.$currentLanguage = CurrentLanguage;
 

@@ -34,7 +34,7 @@ class MensaRepositoryImpl implements MensaRepository {
     getSignup(mensaId: string): Promise<MensaSignup | null> {
         throw new Error('Method not implemented.');
     }
-    signup(signup: MensaSignup): Promise<Error | null> {
+    signup(mensa: Mensa, email: string, signups: MensaSignup[]): Promise<Error | null> {
         throw new Error('Method not implemented.');
     }
     editSignup(signup: MensaSignup): Promise<Error | null> {

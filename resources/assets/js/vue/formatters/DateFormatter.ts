@@ -53,7 +53,7 @@ export function formatDate(
         let dateText = dateBuilder.join(' ');
         // ','
         if (actualOptions.withTime) {
-            dateText += ",";
+            dateText += " " + language.getText(Lang.date.at);
         }
 
         builder.push(dateText);

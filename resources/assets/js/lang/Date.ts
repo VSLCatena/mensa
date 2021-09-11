@@ -168,6 +168,10 @@ let months = {
 }
 
 const combined = {
+    at: {
+        nl: "om",
+        en: "at",
+    },
     days: days,
     months: months
 }

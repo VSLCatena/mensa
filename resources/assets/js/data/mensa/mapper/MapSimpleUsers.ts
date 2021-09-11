@@ -1,7 +1,7 @@
 import Result, {Failure, runCatching, Success} from "../../../utils/Result";
-import SimpleUser from "../../../domain/mensa/model/SimpleUser";
 import MensaSimpleUserEntity from "../model/MensaSimpleUserEntity";
 import {requireNotNull} from "../../utils/MappingUtils";
+import {SimpleUser} from "../../../domain/common/model/User";
 
 export default function MapSimpleUsers(data: MensaSimpleUserEntity[]): Result<SimpleUser[]> {
     if (!Array.isArray(data))

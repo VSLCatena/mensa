@@ -1834,10 +1834,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=script&lang=ts&":
-/*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=script&lang=ts& ***!
-  \*************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=script&lang=ts&":
+/*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=script&lang=ts& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -1845,10 +1845,60 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _domain_mensa_usecase_GetMensas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../domain/mensa/usecase/GetMensas */ "./resources/assets/js/domain/mensa/usecase/GetMensas.ts");
+/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../formatters/StringFormatter */ "./resources/assets/js/vue/formatters/StringFormatter.ts");
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__.default.extend({
+  data: function data() {
+    return {
+      infoTabs: null
+    };
+  },
+  props: {
+    mensa: {
+      type: Object,
+      required: true
+    },
+    onSignupClicked: {
+      type: Function,
+      required: false
+    }
+  },
+  computed: {
+    formattedDate: function formattedDate() {
+      return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.capitalize)((0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.date));
+    },
+    closingTime: function closingTime() {
+      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.closingTime, {
+        withDate: false
+      });
+    },
+    cooks: function cooks() {
+      return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.formatUsers)(this.mensa.cooks);
+    }
+  }
+}));
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var _components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/MensaItem.vue */ "./resources/assets/js/vue/pages/home/components/MensaItem.vue");
-/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
+/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
+/* harmony import */ var _domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/MensaSignup */ "./resources/assets/js/domain/mensa/model/MensaSignup.ts");
+/* harmony import */ var _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MensaSignupEntry.vue */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue");
 var __spreadArray = undefined && undefined.__spreadArray || function (to, from) {
   for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
     to[j] = from[i];
@@ -1863,14 +1913,129 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__.default.extend({
   components: {
-    MensaItem: _components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__.default
+    MensaSignupEntry: _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_2__.default
+  },
+  data: function data() {
+    var _a;
+
+    var potentialUser = this.$user;
+    var user = {
+      email: ""
+    };
+
+    if ('email' in potentialUser) {
+      user = potentialUser;
+    }
+
+    return {
+      isOpen: false,
+      mensa: null,
+      email: (_a = this.$user.email) !== null && _a !== void 0 ? _a : '',
+      tab: 0,
+      signup: null,
+      intros: [],
+      user: user
+    };
+  },
+  watch: {
+    intros: function intros(after, before) {
+      if (before.length < after.length) {
+        this.tab = after.length + 1;
+      }
+    }
+  },
+  methods: {
+    open: function open(mensa) {
+      if (this.mensa != mensa) {
+        this.signup = (0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$user);
+        this.intros = [];
+      }
+
+      this.mensa = mensa;
+      this.isOpen = true;
+    },
+    addIntro: function addIntro() {
+      var mensa = this.mensa;
+      if (mensa == null) return;
+      this.intros = __spreadArray(__spreadArray([], this.intros), [(0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$user, true)]);
+    }
+  },
+  computed: {
+    formattedDate: function formattedDate() {
+      var mensa = this.mensa;
+      if (mensa == null) return null;
+      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(mensa.date);
+    }
+  }
+}));
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=script&lang=ts&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=script&lang=ts& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_0__.default.extend({
+  props: {
+    signup: {
+      type: Object,
+      required: true
+    }
+  }
+}));
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=script&lang=ts&":
+/*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=script&lang=ts& ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _domain_mensa_usecase_GetMensas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../domain/mensa/usecase/GetMensas */ "./resources/assets/js/domain/mensa/usecase/GetMensas.ts");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _components_mensa_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/mensa/MensaItem.vue */ "./resources/assets/js/vue/components/mensa/MensaItem.vue");
+/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
+/* harmony import */ var _components_mensa_signup_MensaSignupDialog_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/mensa/signup/MensaSignupDialog.vue */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue");
+var __spreadArray = undefined && undefined.__spreadArray || function (to, from) {
+  for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
+    to[j] = from[i];
+  }
+
+  return to;
+};
+
+
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_4__.default.extend({
+  components: {
+    MensaSignupDialog: _components_mensa_signup_MensaSignupDialog_vue__WEBPACK_IMPORTED_MODULE_3__.default,
+    MensaItem: _components_mensa_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__.default
   },
   data: function data() {
     return {
       mensas: [],
-      weekOffset: null,
+      weekOffset: -1,
       loading: true,
-      between: null
+      between: null,
+      mensaSignup: null
     };
   },
   computed: {
@@ -1907,54 +2072,15 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
   methods: {
     offsetWeeks: function offsetWeeks(offset) {
       this.weekOffset += offset;
+    },
+    onMensaSignup: function onMensaSignup(mensa) {
+      this.$refs.signupDialog.open(mensa);
     }
   },
   created: function created() {
     this.weekOffset = 0;
   }
 }));
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=script&lang=ts&":
-/*!*****************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=script&lang=ts& ***!
-  \*****************************************************************************************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
-/* harmony import */ var _formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../formatters/StringFormatter */ "./resources/assets/js/vue/formatters/StringFormatter.ts");
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: {
-    mensa: {
-      type: Object,
-      required: true
-    }
-  },
-  computed: {
-    formattedDate: function formattedDate() {
-      return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.capitalize)((0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.date));
-    },
-    closingTime: function closingTime() {
-      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.closingTime, {
-        withDate: false
-      });
-    },
-    cooks: function cooks() {
-      return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.formatUsers)(this.mensa.cooks);
-    }
-  },
-  mounted: function mounted() {
-    console.log('Component mounted.');
-  }
-});
 
 /***/ }),
 
@@ -1968,14 +2094,15 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
 /* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_bootstrap__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
-/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
+/* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuetify/dist/vuetify.min.css */ "./node_modules/vuetify/dist/vuetify.min.css");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _vue_pages_home_Home_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./vue/pages/home/Home.vue */ "./resources/assets/js/vue/pages/home/Home.vue");
-/* harmony import */ var _vue_pages_home_components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./vue/pages/home/components/MensaItem.vue */ "./resources/assets/js/vue/pages/home/components/MensaItem.vue");
+/* harmony import */ var _vue_components_mensa_MensaItem_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./vue/components/mensa/MensaItem.vue */ "./resources/assets/js/vue/components/mensa/MensaItem.vue");
 /* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./lang/Language */ "./resources/assets/js/lang/Language.ts");
+/* harmony import */ var _domain_common_model_User__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./domain/common/model/User */ "./resources/assets/js/domain/common/model/User.ts");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -1990,32 +2117,33 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_6__.default);
-vue__WEBPACK_IMPORTED_MODULE_5__.default.use((vuetify__WEBPACK_IMPORTED_MODULE_7___default()));
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use(vue_router__WEBPACK_IMPORTED_MODULE_7__.default);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.use((vuetify__WEBPACK_IMPORTED_MODULE_8___default()));
 var routes = [{
   path: '/',
   component: _vue_pages_home_Home_vue__WEBPACK_IMPORTED_MODULE_2__.default
 }, {
   path: '/mensa',
-  component: _vue_pages_home_components_MensaItem_vue__WEBPACK_IMPORTED_MODULE_3__.default
+  component: _vue_components_mensa_MensaItem_vue__WEBPACK_IMPORTED_MODULE_3__.default
 }];
-var router = new vue_router__WEBPACK_IMPORTED_MODULE_6__.default({
+var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__.default({
   mode: 'history',
   routes: routes
 });
-var vuetify = new (vuetify__WEBPACK_IMPORTED_MODULE_7___default())({
+var vuetify = new (vuetify__WEBPACK_IMPORTED_MODULE_8___default())({
   theme: {
     dark: true
   }
 });
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$ll = function (text, capitalize, language) {
+vue__WEBPACK_IMPORTED_MODULE_6__.default.prototype.$ll = function (text, capitalize, language) {
   if (capitalize === void 0) {
     capitalize = false;
   }
@@ -2029,9 +2157,10 @@ vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$ll = function (text, capital
   return txt;
 };
 
-vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$lang = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.default;
-vue__WEBPACK_IMPORTED_MODULE_5__.default.prototype.$currentLanguage = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.CurrentLanguage;
-var app = new vue__WEBPACK_IMPORTED_MODULE_5__.default({
+vue__WEBPACK_IMPORTED_MODULE_6__.default.prototype.$user = vue__WEBPACK_IMPORTED_MODULE_6__.default.observable(_domain_common_model_User__WEBPACK_IMPORTED_MODULE_5__.AnonymousUser);
+vue__WEBPACK_IMPORTED_MODULE_6__.default.prototype.$lang = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.default;
+vue__WEBPACK_IMPORTED_MODULE_6__.default.prototype.$currentLanguage = _lang_Language__WEBPACK_IMPORTED_MODULE_4__.CurrentLanguage;
+var app = new vue__WEBPACK_IMPORTED_MODULE_6__.default({
   vuetify: vuetify,
   router: router,
   methods: {
@@ -2117,6 +2246,7 @@ function MapPrice(data) {
   return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_1__.runCatching)(function () {
     return {
       id: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('id', data.id),
+      order: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('order', data.order),
       description: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('description', data.description),
       price: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('price', data.price)
     };
@@ -2142,7 +2272,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_Result__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../utils/Result */ "./resources/assets/js/utils/Result.ts");
 /* harmony import */ var _MapSimpleUsers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MapSimpleUsers */ "./resources/assets/js/data/mensa/mapper/MapSimpleUsers.ts");
 /* harmony import */ var _MapDate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MapDate */ "./resources/assets/js/data/mensa/mapper/MapDate.ts");
+/* harmony import */ var _MapMenu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MapMenu */ "./resources/assets/js/data/mensa/mapper/MapMenu.ts");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -2181,6 +2313,7 @@ function MapMensa(data) {
       id: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('id', data.id),
       title: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('title', data.title),
       description: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('description', data.description),
+      menu: (0,_MapMenu__WEBPACK_IMPORTED_MODULE_5__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('menu', data.menu)).getOrThrow(),
       extraOptions: (0,_MapExtraOptions__WEBPACK_IMPORTED_MODULE_1__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('extraOptions', data.extraOptions)).getOrThrow(),
       date: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('date', data.date)),
       closingTime: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('closingTime', data.closingTime)),
@@ -2189,6 +2322,42 @@ function MapMensa(data) {
       signups: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('signups', data.signups),
       cooks: (0,_MapSimpleUsers__WEBPACK_IMPORTED_MODULE_3__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('cooks', data.cooks)).getOrThrow(),
       dishwashers: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('dishwashers', data.dishwashers)
+    };
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/data/mensa/mapper/MapMenu.ts":
+/*!**********************************************************!*\
+  !*** ./resources/assets/js/data/mensa/mapper/MapMenu.ts ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ MapMenu),
+/* harmony export */   "MapMenuItem": () => (/* binding */ MapMenuItem)
+/* harmony export */ });
+/* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
+/* harmony import */ var _utils_Result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/Result */ "./resources/assets/js/utils/Result.ts");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+function MapMenu(data) {
+  if (!Array.isArray(data)) return new _utils_Result__WEBPACK_IMPORTED_MODULE_1__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
+  return new _utils_Result__WEBPACK_IMPORTED_MODULE_1__.Success(data.map(function (price) {
+    return MapMenuItem(price).getOrThrow();
+  }));
+}
+function MapMenuItem(data) {
+  return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_1__.runCatching)(function () {
+    return {
+      id: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('id', data.id),
+      order: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('order', data.order),
+      text: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('description', data.text)
     };
   });
 }
@@ -2452,7 +2621,7 @@ var MensaRepositoryImpl = function () {
     throw new Error('Method not implemented.');
   };
 
-  MensaRepositoryImpl.prototype.signup = function (signup) {
+  MensaRepositoryImpl.prototype.signup = function (mensa, email, signups) {
     throw new Error('Method not implemented.');
   };
 
@@ -2486,6 +2655,56 @@ __webpack_require__.r(__webpack_exports__);
 function requireNotNull(argName, arg) {
   if (arg === null || arg === undefined) throw Error("non-nullable argument '" + argName + "' is null");
   return arg;
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/domain/common/model/User.ts":
+/*!*********************************************************!*\
+  !*** ./resources/assets/js/domain/common/model/User.ts ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AnonymousUser": () => (/* binding */ AnonymousUser)
+/* harmony export */ });
+var AnonymousUser = {
+  isAdmin: false
+};
+
+/***/ }),
+
+/***/ "./resources/assets/js/domain/mensa/model/MensaSignup.ts":
+/*!***************************************************************!*\
+  !*** ./resources/assets/js/domain/mensa/model/MensaSignup.ts ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createEmptySignup": () => (/* binding */ createEmptySignup)
+/* harmony export */ });
+function createEmptySignup(mensaId, user, isIntro) {
+  var _a, _b, _c;
+
+  if (isIntro === void 0) {
+    isIntro = false;
+  }
+
+  var vegetarian = (_a = 'vegetarian' in user ? user.vegetarian : false) !== null && _a !== void 0 ? _a : false;
+  var description = (_b = 'description' in user ? user.description : "") !== null && _b !== void 0 ? _b : "";
+  var allergies = (_c = 'allergies' in user ? user.allergies : "") !== null && _c !== void 0 ? _c : "";
+  return {
+    vegetarian: vegetarian,
+    description: description,
+    allergies: allergies,
+    isIntro: isIntro,
+    cook: false,
+    dishwasher: false
+  };
 }
 
 /***/ }),
@@ -2855,6 +3074,10 @@ var months = {
   }
 };
 var combined = {
+  at: {
+    nl: "om",
+    en: "at"
+  },
   days: days,
   months: months
 }; // Make sure it is in the correct format
@@ -2991,6 +3214,60 @@ var text = {
     button_overview: {
       nl: "Overzicht",
       en: "Overview"
+    },
+    menu_title: {
+      nl: "Menu",
+      en: "Menu"
+    },
+    extra_options_title: {
+      nl: "Extra opties",
+      en: "Extra options"
+    }
+  },
+  signup: {
+    mensa_at: {
+      nl: "Mensa op",
+      en: "Mensa at"
+    },
+    tab_signup: {
+      nl: "Inschrijving",
+      en: "Signup"
+    },
+    tab_intro: {
+      nl: "Intro",
+      en: "Intro"
+    },
+    add_intro: {
+      nl: '+ intro',
+      en: '+ intro'
+    },
+    field_email: {
+      nl: 'Email',
+      en: 'Email'
+    },
+    field_food_preference: {
+      nl: 'Etens voorkeur',
+      en: 'Food preference'
+    },
+    field_food_meat: {
+      nl: 'Vlees',
+      en: 'Meat'
+    },
+    field_food_vegetarian: {
+      nl: 'Vegetarisch',
+      en: 'Vegetarian'
+    },
+    field_description: {
+      nl: 'Omschrijving',
+      en: 'Description'
+    },
+    field_cook: {
+      nl: 'Is koker',
+      en: 'Is cook'
+    },
+    field_dishwasher: {
+      nl: 'Vrijwillig afwassen',
+      en: 'Voluntair for washing dishes'
     }
   }
 }; // Make sure it is in the correct format
@@ -3186,7 +3463,7 @@ function formatDate(date, options, language) {
     var dateText = dateBuilder.join(' '); // ','
 
     if (actualOptions.withTime) {
-      dateText += ",";
+      dateText += " " + language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.date.at);
     }
 
     builder.push(dateText);
@@ -34750,6 +35027,123 @@ module.exports = function (list, options) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/vue/components/mensa/MensaItem.vue":
+/*!****************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/MensaItem.vue ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MensaItem_vue_vue_type_template_id_56859bee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MensaItem.vue?vue&type=template&id=56859bee& */ "./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=template&id=56859bee&");
+/* harmony import */ var _MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MensaItem.vue?vue&type=script&lang=ts& */ "./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__.default,
+  _MensaItem_vue_vue_type_template_id_56859bee___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MensaItem_vue_vue_type_template_id_56859bee___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/vue/components/mensa/MensaItem.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue":
+/*!*******************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue ***!
+  \*******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MensaSignupDialog_vue_vue_type_template_id_7fc72506___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MensaSignupDialog.vue?vue&type=template&id=7fc72506& */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=template&id=7fc72506&");
+/* harmony import */ var _MensaSignupDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MensaSignupDialog.vue?vue&type=script&lang=ts& */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _MensaSignupDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__.default,
+  _MensaSignupDialog_vue_vue_type_template_id_7fc72506___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MensaSignupDialog_vue_vue_type_template_id_7fc72506___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue":
+/*!******************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MensaSignupEntry_vue_vue_type_template_id_c059c7b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MensaSignupEntry.vue?vue&type=template&id=c059c7b8& */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=template&id=c059c7b8&");
+/* harmony import */ var _MensaSignupEntry_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MensaSignupEntry.vue?vue&type=script&lang=ts& */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
+  _MensaSignupEntry_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__.default,
+  _MensaSignupEntry_vue_vue_type_template_id_c059c7b8___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MensaSignupEntry_vue_vue_type_template_id_c059c7b8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/assets/js/vue/pages/home/Home.vue":
 /*!*****************************************************!*\
   !*** ./resources/assets/js/vue/pages/home/Home.vue ***!
@@ -34789,10 +35183,10 @@ component.options.__file = "resources/assets/js/vue/pages/home/Home.vue"
 
 /***/ }),
 
-/***/ "./resources/assets/js/vue/pages/home/components/MensaItem.vue":
-/*!*********************************************************************!*\
-  !*** ./resources/assets/js/vue/pages/home/components/MensaItem.vue ***!
-  \*********************************************************************/
+/***/ "./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=script&lang=ts&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=script&lang=ts& ***!
+  \*****************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34800,31 +35194,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _MensaItem_vue_vue_type_template_id_768f91d8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MensaItem.vue?vue&type=template&id=768f91d8& */ "./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=template&id=768f91d8&");
-/* harmony import */ var _MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MensaItem.vue?vue&type=script&lang=ts& */ "./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=script&lang=ts&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaItem.vue?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=script&lang=ts&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__.default); 
 
+/***/ }),
 
+/***/ "./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts&":
+/*!********************************************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts& ***!
+  \********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../../node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaSignupDialog.vue?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__.default); 
 
+/***/ }),
 
-/* normalize component */
-;
-var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__.default)(
-  _MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__.default,
-  _MensaItem_vue_vue_type_template_id_768f91d8___WEBPACK_IMPORTED_MODULE_0__.render,
-  _MensaItem_vue_vue_type_template_id_768f91d8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
+/***/ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=script&lang=ts&":
+/*!*******************************************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=script&lang=ts& ***!
+  \*******************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/assets/js/vue/pages/home/components/MensaItem.vue"
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupEntry_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../../node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaSignupEntry.vue?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=script&lang=ts&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupEntry_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__.default); 
 
 /***/ }),
 
@@ -34844,19 +35247,54 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=script&lang=ts&":
-/*!**********************************************************************************************!*\
-  !*** ./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=script&lang=ts& ***!
-  \**********************************************************************************************/
+/***/ "./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=template&id=56859bee&":
+/*!***********************************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=template&id=56859bee& ***!
+  \***********************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_56859bee___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_56859bee___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../../node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaItem.vue?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=script&lang=ts&");
- /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__.default); 
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_56859bee___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaItem.vue?vue&type=template&id=56859bee& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=template&id=56859bee&");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=template&id=7fc72506&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=template&id=7fc72506& ***!
+  \**************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupDialog_vue_vue_type_template_id_7fc72506___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupDialog_vue_vue_type_template_id_7fc72506___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupDialog_vue_vue_type_template_id_7fc72506___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaSignupDialog.vue?vue&type=template&id=7fc72506& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=template&id=7fc72506&");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=template&id=c059c7b8&":
+/*!*************************************************************************************************************!*\
+  !*** ./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=template&id=c059c7b8& ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupEntry_vue_vue_type_template_id_c059c7b8___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupEntry_vue_vue_type_template_id_c059c7b8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaSignupEntry_vue_vue_type_template_id_c059c7b8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaSignupEntry.vue?vue&type=template&id=c059c7b8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=template&id=c059c7b8&");
+
 
 /***/ }),
 
@@ -34877,123 +35315,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=template&id=768f91d8&":
-/*!****************************************************************************************************!*\
-  !*** ./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=template&id=768f91d8& ***!
-  \****************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_768f91d8___WEBPACK_IMPORTED_MODULE_0__.render),
-/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_768f91d8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
-/* harmony export */ });
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_768f91d8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaItem.vue?vue&type=template&id=768f91d8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=template&id=768f91d8&");
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=template&id=5150834e&":
-/*!***************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=template&id=5150834e& ***!
-  \***************************************************************************************************************************************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render),
-/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
-/* harmony export */ });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container mt-3 mb-3" },
-    [
-      _c("v-banner", [
-        _c(
-          "div",
-          { staticClass: "d-flex" },
-          [
-            _c("div", [
-              _c("span", { staticClass: "text--secondary" }, [
-                _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.mensas_between)))
-              ]),
-              _vm._v(" " + _vm._s(_vm.startDate) + "\n                "),
-              _c("span", { staticClass: "text--secondary" }, [
-                _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.and)))
-              ]),
-              _vm._v(" " + _vm._s(_vm.endDate) + "\n            ")
-            ]),
-            _vm._v(" "),
-            _c("v-spacer"),
-            _vm._v(" "),
-            _c(
-              "div",
-              [
-                _c(
-                  "v-btn",
-                  {
-                    staticClass: "mr-4",
-                    attrs: { loading: _vm.loading },
-                    on: {
-                      click: function($event) {
-                        return _vm.offsetWeeks(-2)
-                      }
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.previous_weeks)))]
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-btn",
-                  {
-                    attrs: { loading: _vm.loading },
-                    on: {
-                      click: function($event) {
-                        return _vm.offsetWeeks(2)
-                      }
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.next_weeks)))]
-                )
-              ],
-              1
-            )
-          ],
-          1
-        )
-      ]),
-      _vm._v(" "),
-      _c(
-        "v-expansion-panels",
-        { staticClass: "mt-4", attrs: { focusable: "", accordion: "" } },
-        _vm._l(this.mensas, function(mensa) {
-          return _c("MensaItem", { key: mensa.id, attrs: { mensa: mensa } })
-        }),
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "mt-4 d-flex" }, [_c("v-spacer")], 1)
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=template&id=768f91d8&":
-/*!*******************************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/components/MensaItem.vue?vue&type=template&id=768f91d8& ***!
-  \*******************************************************************************************************************************************************************************************************************************************/
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=template&id=56859bee&":
+/*!**************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/MensaItem.vue?vue&type=template&id=56859bee& ***!
+  \**************************************************************************************************************************************************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -35135,13 +35460,135 @@ var render = function() {
                 )
               : _vm._e(),
             _vm._v(" "),
+            _vm.mensa.menu.length > 0 || _vm.mensa.extraOptions.length > 0
+              ? _c(
+                  "div",
+                  { staticClass: "mt-4" },
+                  [
+                    _c(
+                      "v-tabs",
+                      {
+                        model: {
+                          value: _vm.infoTabs,
+                          callback: function($$v) {
+                            _vm.infoTabs = $$v
+                          },
+                          expression: "infoTabs"
+                        }
+                      },
+                      [
+                        _c("v-tabs-slider"),
+                        _vm._v(" "),
+                        _vm.mensa.menu.length > 0
+                          ? _c("v-tab", { key: "menu" }, [
+                              _vm._v(
+                                _vm._s(_vm.$ll(_vm.$lang.text.mensa.menu_title))
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.mensa.extraOptions.length > 0
+                          ? _c("v-tab", { key: "extraOptions" }, [
+                              _vm._v(
+                                _vm._s(
+                                  _vm.$ll(
+                                    _vm.$lang.text.mensa.extra_options_title
+                                  )
+                                )
+                              )
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-tabs-items",
+                      {
+                        staticClass: "mt-2",
+                        model: {
+                          value: _vm.infoTabs,
+                          callback: function($$v) {
+                            _vm.infoTabs = $$v
+                          },
+                          expression: "infoTabs"
+                        }
+                      },
+                      [
+                        _vm.mensa.menu.length > 0
+                          ? _c("v-tab-item", { key: "menu" }, [
+                              _c(
+                                "table",
+                                { staticStyle: { "border-spacing": "0 8px" } },
+                                _vm._l(_vm.mensa.menu, function(item) {
+                                  return _c("tr", [
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "px-2",
+                                        staticStyle: { "vertical-align": "top" }
+                                      },
+                                      [_vm._v("-")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.text))])
+                                  ])
+                                }),
+                                0
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm.mensa.extraOptions.length > 0
+                          ? _c("v-tab-item", { key: "extraOptions" }, [
+                              _c(
+                                "table",
+                                { staticStyle: { "border-spacing": "0 8px" } },
+                                _vm._l(_vm.mensa.extraOptions, function(item) {
+                                  return _c("tr", [
+                                    _c(
+                                      "td",
+                                      {
+                                        staticClass: "px-2",
+                                        staticStyle: { "vertical-align": "top" }
+                                      },
+                                      [_vm._v("-")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("td", [_vm._v(_vm._s(item.description))])
+                                  ])
+                                }),
+                                0
+                              )
+                            ])
+                          : _vm._e()
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "div",
-              { staticClass: "mt-4" },
+              { staticClass: "mt-6" },
               [
-                _c("v-btn", { attrs: { color: "primary" } }, [
-                  _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_signup)))
-                ]),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: {
+                      color: "primary",
+                      disabled: _vm.mensa.signups >= _vm.mensa.maxSignups
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.onSignupClicked(_vm.mensa)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_signup)))]
+                ),
                 _vm._v(" "),
                 _c("v-btn", { attrs: { outlined: "" } }, [
                   _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_overview)))
@@ -35152,6 +35599,311 @@ var render = function() {
           ])
         ])
       ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=template&id=7fc72506&":
+/*!*****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupDialog.vue?vue&type=template&id=7fc72506& ***!
+  \*****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: { "max-width": "800", transition: "dialog-bottom-transition" },
+      model: {
+        value: _vm.isOpen,
+        callback: function($$v) {
+          _vm.isOpen = $$v
+        },
+        expression: "isOpen"
+      }
+    },
+    [
+      _vm.mensa != null
+        ? _c(
+            "v-card",
+            { attrs: { outlined: "" } },
+            [
+              _c("v-card-title", [
+                _vm._v(
+                  _vm._s(_vm.$ll(_vm.$lang.text.signup.mensa_at)) +
+                    " " +
+                    _vm._s(_vm.formattedDate)
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-tabs",
+                {
+                  attrs: { "show-arrows": "" },
+                  model: {
+                    value: _vm.tab,
+                    callback: function($$v) {
+                      _vm.tab = $$v
+                    },
+                    expression: "tab"
+                  }
+                },
+                [
+                  _c("v-tabs-slider"),
+                  _vm._v(" "),
+                  _c("v-tab", { key: "0" }, [
+                    _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.signup.tab_signup)))
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.intros.length, function(i) {
+                    return _c("v-tab", { key: i + 1 }, [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(_vm.$ll(_vm.$lang.text.signup.tab_intro))
+                      ),
+                      _vm.intros.length > 1
+                        ? _c("span", [_vm._v(" #" + _vm._s(i))])
+                        : _vm._e()
+                    ])
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-tab",
+                    {
+                      key: "1",
+                      on: {
+                        click: function($event) {
+                          return _vm.addIntro()
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.signup.add_intro)))]
+                  )
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-tabs-items",
+                {
+                  model: {
+                    value: _vm.tab,
+                    callback: function($$v) {
+                      _vm.tab = $$v
+                    },
+                    expression: "tab"
+                  }
+                },
+                [
+                  _c(
+                    "v-tab-item",
+                    { key: "0", staticClass: "pa-5" },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          label: _vm.$ll(_vm.$lang.text.signup.field_email)
+                        },
+                        model: {
+                          value: _vm.email,
+                          callback: function($$v) {
+                            _vm.email = $$v
+                          },
+                          expression: "email"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("MensaSignupEntry", { attrs: { signup: _vm.signup } })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.intros, function(intro, index) {
+                    return _c(
+                      "v-tab-item",
+                      { key: index + 2 },
+                      [_c("MensaSignupEntry", { attrs: { signup: intro } })],
+                      1
+                    )
+                  }),
+                  _vm._v(" "),
+                  _c("v-tab-item", { key: "1" })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                { staticClass: "justify-end" },
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.isOpen = false
+                        }
+                      }
+                    },
+                    [_vm._v("Close")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=template&id=c059c7b8&":
+/*!****************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue?vue&type=template&id=c059c7b8& ***!
+  \****************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm._v(
+      "\n\n    " +
+        _vm._s(_vm.signup.isIntro) +
+        "\n    vegetarian: boolean,\n    isIntro: boolean,\n    description: string,\n    cook: boolean,\n    dishwasher: boolean,\n"
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=template&id=5150834e&":
+/*!***************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/vue/pages/home/Home.vue?vue&type=template&id=5150834e& ***!
+  \***************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "container mt-3 mb-3" },
+    [
+      _c("MensaSignupDialog", { ref: "signupDialog" }),
+      _vm._v(" "),
+      _c("v-banner", [
+        _c(
+          "div",
+          { staticClass: "d-flex" },
+          [
+            _c("div", [
+              _c("span", { staticClass: "text--secondary" }, [
+                _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.mensas_between)))
+              ]),
+              _vm._v(" " + _vm._s(_vm.startDate) + "\n                "),
+              _c("span", { staticClass: "text--secondary" }, [
+                _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.and)))
+              ]),
+              _vm._v(" " + _vm._s(_vm.endDate) + "\n            ")
+            ]),
+            _vm._v(" "),
+            _c("v-spacer"),
+            _vm._v(" "),
+            _c(
+              "div",
+              [
+                _c(
+                  "v-btn",
+                  {
+                    staticClass: "mr-4",
+                    attrs: { loading: _vm.loading },
+                    on: {
+                      click: function($event) {
+                        return _vm.offsetWeeks(-2)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.previous_weeks)))]
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { loading: _vm.loading },
+                    on: {
+                      click: function($event) {
+                        return _vm.offsetWeeks(2)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.next_weeks)))]
+                )
+              ],
+              1
+            )
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "v-expansion-panels",
+        { staticClass: "mt-4", attrs: { focusable: "", accordion: "" } },
+        _vm._l(this.mensas, function(mensa) {
+          return _c("MensaItem", {
+            key: mensa.id,
+            attrs: { mensa: mensa, "on-signup-clicked": _vm.onMensaSignup }
+          })
+        }),
+        1
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "mt-4 d-flex" }, [_c("v-spacer")], 1)
     ],
     1
   )

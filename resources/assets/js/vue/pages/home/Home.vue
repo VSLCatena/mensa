@@ -1,5 +1,6 @@
 <template>
     <div class="container mt-3 mb-3">
+        <MensaSignupDialog ref="signupDialog" />
         <v-banner>
             <div class="d-flex">
                 <div>
@@ -15,7 +16,7 @@
         </v-banner>
 
         <v-expansion-panels focusable accordion class="mt-4">
-            <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" />
+            <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" :on-signup-clicked="onMensaSignup" />
         </v-expansion-panels>
 
         <div class="mt-4 d-flex">
@@ -28,27 +29,29 @@
     import GetMensas from "../../../domain/mensa/usecase/GetMensas";
     import Mensa from "../../../domain/mensa/model/Mensa";
     import Vue from 'vue';
-    import MensaItem from './components/MensaItem.vue';
+    import MensaItem from '../../components/mensa/MensaItem.vue';
     import {Between} from "../../../domain/mensa/model/MensaList";
     import {formatDate} from "../../formatters/DateFormatter";
+    import MensaSignupDialog from "../../components/mensa/signup/MensaSignupDialog.vue";
 
     export default Vue.extend({
-        components: {MensaItem},
-        data() {
+        components: {MensaSignupDialog, MensaItem},
+        data: function() {
             return {
                 mensas: [] as Mensa[],
-                weekOffset: null as number|null,
+                weekOffset: -1,
                 loading: true,
                 between: null as Between|null,
+                mensaSignup: null as Mensa|null,
             }
         },
         computed: {
-            startDate: function() {
+            startDate: function(): string|null {
                 let between = this.between;
                 if (between == null) return null;
                 return formatDate(between.start, { withTime: false });
             },
-            endDate: function() {
+            endDate: function(): string|null {
                 let between = this.between;
                 if (between == null) return null;
                 return formatDate(between.end, { withTime: false });
@@ -73,6 +76,9 @@
         methods: {
             offsetWeeks: function (offset: number) {
                 this.weekOffset += offset;
+            },
+            onMensaSignup: function (mensa: Mensa) {
+                (this.$refs.signupDialog as any).open(mensa);
             }
         },
         created() {
