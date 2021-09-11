@@ -7,27 +7,6 @@ x-common-variables: &db_root_password
 
 services:
 
-  #ldap Service
-  ldap:
-    hostname: ${ADLDAP_CONTROLLERS}
-    container_name: ldap
-    image: 'osixia/openldap:latest'
-    environment:
-      LDAP_LOG_LEVEL: 256
-      LDAP_DOMAIN: ${ADLDAP_CONTROLLERS}
-      LDAP_ADMIN_PASSWORD: ${ADLDAP_ADMIN_PASSWORD}
-      LDAP_CONFIG_PASSWORD: ${ADLDAP_ADMIN_PASSWORD}
-      LDAP_BASE_DN: ${ADLDAP_BASEDN}
-      LDAP_READONLY_USER: 'True'
-      LDAP_READONLY_USER_USERNAME: ${ADLDAP_ADMIN_USERNAME}
-      LDAP_READONLY_USER_PASSWORD: ${ADLDAP_ADMIN_PASSWORD}
-      LDAP_RFC2307BIS_SCHEMA: 'True'
-    command: --loglevel debug
-    profiles:
-      - testing
-    networks:
-      - net
-    
   #MySQL Service
   db:
     hostname: db
@@ -64,22 +43,7 @@ services:
       - .:/data/app:rw
     networks:
       - net
-    
-  #phpldapadmin Service
-  phpldapadmin:
-    hostname: phpldapadmin
-    container_name: phpldapadmin
-    profiles:
-      - testing
-    image: 'osixia/phpldapadmin:latest'
-    environment:
-      PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'${ADLDAP_CONTROLLERS}': [{'server': [{'port': 389}]}, {'login': [{'bind_id': 'cn=admin,${ADLDAP_BASEDN}'}, {'bind_pass': '${ADLDAP_ADMIN_PASSWORD}'}, {'attr': 'cn'}, {'fallback_dn': True}]}]}]"
-      PHPLDAPADMIN_HTTPS: "false"
-    ports:
-      - 8081:80
-    networks:
-      - net  
-    
+     
   #phpmyadmin
   phpmyadmin:
     image: ghcr.io/linuxserver/phpmyadmin
