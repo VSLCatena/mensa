@@ -53,11 +53,12 @@ if [ "$1" = 'init' ]; then
 elif [ "$1" = 'run' ]; then
   run
 elif [ "$1" = 'composer' ]; then
-  cd /data
-  php /data/composer.phar  "${@:(2):(-1)}"
+  shift #shift and remove arg 'composer' 
+  php /data/composer.phar --working-dir=/data/app "${@}"
 elif [ "$1" = 'artisan' ]; then
+  shift #shift and remove arg 'artisan' 
   cd /data/app
-  php artisan "${@:(2):(-1)}"
+  php /data/app/artisan "${@}"
 else
-	echo "Not sure what to do; k tnx bye"
+  echo "Not sure what to do; k tnx bye"
 fi
