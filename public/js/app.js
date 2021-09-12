@@ -1958,6 +1958,7 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
         this.signup = (0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$user);
         this.intros = [];
         this.tab = 0;
+        this.step = 1;
       }
 
       this.mensa = mensa;

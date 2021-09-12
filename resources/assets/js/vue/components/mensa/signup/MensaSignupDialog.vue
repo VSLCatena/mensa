@@ -97,6 +97,7 @@
                     this.signup = createEmptySignup(mensa.id, this.$user);
                     this.intros = [];
                     this.tab = 0;
+                    this.step = 1;
                 }
 
                 this.mensa = mensa;
