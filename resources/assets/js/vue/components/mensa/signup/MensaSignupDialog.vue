@@ -4,7 +4,7 @@
             <v-toolbar>
                 <v-card-title>{{ $ll($lang.text.signup.mensa_at) }} {{ formattedDate }}</v-card-title>
             </v-toolbar>
-            <div v-if="step === 1">
+            <v-form ref="signupForm" v-if="step === 1">
                 <v-tabs v-model="tab" show-arrows>
                     <v-tabs-slider></v-tabs-slider>
                     <v-tab :key="0">{{ $ll($lang.text.signup.tab_signup)}}</v-tab>
@@ -22,7 +22,7 @@
                         <MensaSignupEntry :signup="intro" />
                     </v-tab-item>
                 </v-tabs-items>
-            </div>
+            </v-form>
             <div v-if="step === 2">
                 <v-text-field
                     :label="$ll($lang.text.signup.field_email)"
@@ -37,7 +37,7 @@
                 <v-btn text @click="deleteIntro()" v-if="tab !== 0 && step === 1">{{ $ll($lang.text.signup.remove_intro) }}</v-btn>
                 <v-btn text @click="step = 1" v-if="step === 2">{{ $ll($lang.text.general.previous) }}</v-btn>
                 <v-spacer></v-spacer>
-                <v-btn text @click="step = 2" v-if="step === 1">{{ $ll($lang.text.general.next) }}</v-btn>
+                <v-btn text @click="toEmail()" v-if="step === 1">{{ $ll($lang.text.general.next) }}</v-btn>
                 <v-btn text @click="isOpen = false">{{ $ll($lang.text.general.close) }}</v-btn>
             </v-card-actions>
         </v-card>
@@ -113,6 +113,11 @@
                 let intros = [...this.intros];
                 intros.splice(this.tab - 1, 1);
                 this.intros = intros;
+            },
+            toEmail: function() {
+                if (this.$refs.signupForm.validate()) {
+                    this.step = 2;
+                }
             }
         },
         computed: {

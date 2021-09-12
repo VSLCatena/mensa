@@ -2,6 +2,7 @@ import {requireNotNull} from "../../utils/MappingUtils";
 import Result, {Failure, runCatching, Success} from "../../../utils/Result";
 import MensaSignup from "../../../domain/mensa/model/MensaSignup";
 import MensaSignupEntity from "../model/MensaSignupEntity";
+import {MapFoodPreference} from "./MapFoodPreference";
 
 export default function MapSignups(data: MensaSignupEntity[]): Result<MensaSignup[]> {
     if (!Array.isArray(data))
@@ -17,7 +18,7 @@ export function MapSignup(data: MensaSignupEntity): Result<MensaSignup> {
         return {
             id: requireNotNull('id', data.id),
             isIntro: requireNotNull('isIntro', data.isIntro),
-            vegetarian: requireNotNull('vegetarian', data.vegetarian),
+            foodPreference: MapFoodPreference(data.foodPreference).getOrThrow(),
             description: requireNotNull('description', data.description),
             allergies: requireNotNull('allergies', data.allergies),
             cook: requireNotNull('cook', data.cook),

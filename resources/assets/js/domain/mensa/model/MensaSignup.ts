@@ -1,8 +1,9 @@
 import {User} from "../../common/model/User";
+import FoodPreference from "./FoodPreference";
 
 export default interface MensaSignup {
     id: string,
-    vegetarian: boolean,
+    foodPreference: FoodPreference|null,
     isIntro: boolean,
     description: string,
     allergies: string,
@@ -17,12 +18,12 @@ export function createEmptySignup(
     user: User,
     isIntro: boolean = false
 ): NewMensaSignup {
-    let vegetarian = ('vegetarian' in user ? user.vegetarian : false) ?? false;
+    let foodPreference = ('foodPreference' in user ? user.foodPreference : null) ?? null;
     let description = ('description' in user ? user.description : "") ?? "";
     let allergies = ('allergies' in user ? user.allergies : "") ?? "";
 
     return {
-        vegetarian: vegetarian,
+        foodPreference: foodPreference,
         description: description,
         allergies: allergies,
         isIntro: isIntro,

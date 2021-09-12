@@ -1975,6 +1975,11 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
 
       intros.splice(this.tab - 1, 1);
       this.intros = intros;
+    },
+    toEmail: function toEmail() {
+      if (this.$refs.signupForm.validate()) {
+        this.step = 2;
+      }
     }
   },
   computed: {
@@ -1999,11 +2004,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../utils/ValidationRules */ "./resources/assets/js/utils/ValidationRules.ts");
+/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../lang/Language */ "./resources/assets/js/lang/Language.ts");
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_1__.default.extend({
+
+
+var foodOptions = [{
+  value: _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.VEGETARIAN,
+  text: _lang_Language__WEBPACK_IMPORTED_MODULE_2__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_2__.default.text.signup.field_food_vegetarian)
+}, {
+  value: _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.MEAT,
+  text: _lang_Language__WEBPACK_IMPORTED_MODULE_2__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_2__.default.text.signup.field_food_meat)
+}];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__.default.extend({
   props: {
     signup: {
       type: Object,
@@ -2012,7 +2028,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      foodOptions: [],
+      foodOptions: foodOptions,
       foodChosen: null,
       MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH,
       validations: {
@@ -2021,19 +2037,6 @@ __webpack_require__.r(__webpack_exports__);
         description: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.description
       }
     };
-  },
-  mounted: function mounted() {
-    this.foodOptions = [this.optionVegetarian, this.optionMeat];
-  },
-  watch: {
-    vegetarianChosen: function vegetarianChosen(option) {
-      this.signup.vegetarian = option == this.optionVegetarian;
-    },
-    signup: function signup(after, before) {
-      if (before !== after) {
-        this.foodChosen = null;
-      }
-    }
   },
   computed: {
     optionVegetarian: function optionVegetarian() {
@@ -2728,6 +2731,28 @@ var AnonymousUser = {
 
 /***/ }),
 
+/***/ "./resources/assets/js/domain/mensa/model/FoodPreference.ts":
+/*!******************************************************************!*\
+  !*** ./resources/assets/js/domain/mensa/model/FoodPreference.ts ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var FoodPreference;
+
+(function (FoodPreference) {
+  FoodPreference[FoodPreference["VEGETARIAN"] = 0] = "VEGETARIAN";
+  FoodPreference[FoodPreference["MEAT"] = 1] = "MEAT";
+})(FoodPreference || (FoodPreference = {}));
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FoodPreference);
+
+/***/ }),
+
 /***/ "./resources/assets/js/domain/mensa/model/MensaSignup.ts":
 /*!***************************************************************!*\
   !*** ./resources/assets/js/domain/mensa/model/MensaSignup.ts ***!
@@ -2746,11 +2771,11 @@ function createEmptySignup(mensaId, user, isIntro) {
     isIntro = false;
   }
 
-  var vegetarian = (_a = 'vegetarian' in user ? user.vegetarian : false) !== null && _a !== void 0 ? _a : false;
+  var foodPreference = (_a = 'foodPreference' in user ? user.foodPreference : null) !== null && _a !== void 0 ? _a : null;
   var description = (_b = 'description' in user ? user.description : "") !== null && _b !== void 0 ? _b : "";
   var allergies = (_c = 'allergies' in user ? user.allergies : "") !== null && _c !== void 0 ? _c : "";
   return {
-    vegetarian: vegetarian,
+    foodPreference: foodPreference,
     description: description,
     allergies: allergies,
     isIntro: isIntro,
@@ -3532,7 +3557,7 @@ var Validations = {
     return value && EmailRule.test(value) || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.email.invalid);
   }, MaxStringLengthValidation],
   foodOptions: [function (value) {
-    return !!value || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.required);
+    return value === 0 || value === 1 || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.required);
   }],
   allergies: [MaxStringLengthValidation],
   description: [MaxStringLengthValidation]
@@ -35812,7 +35837,8 @@ var render = function() {
               _vm._v(" "),
               _vm.step === 1
                 ? _c(
-                    "div",
+                    "v-form",
+                    { ref: "signupForm" },
                     [
                       _c(
                         "v-tabs",
@@ -35990,7 +36016,7 @@ var render = function() {
                           attrs: { text: "" },
                           on: {
                             click: function($event) {
-                              _vm.step = 2
+                              return _vm.toEmail()
                             }
                           }
                         },
@@ -36051,15 +36077,17 @@ var render = function() {
         attrs: {
           label: _vm.$ll(_vm.$lang.text.signup.field_food_preference),
           items: _vm.foodOptions,
+          "item-text": "text",
+          "item-value": "value",
           rules: _vm.validations.foodOptions,
           "hide-details": "auto"
         },
         model: {
-          value: _vm.foodChosen,
+          value: _vm.signup.foodPreference,
           callback: function($$v) {
-            _vm.foodChosen = $$v
+            _vm.$set(_vm.signup, "foodPreference", $$v)
           },
-          expression: "foodChosen"
+          expression: "signup.foodPreference"
         }
       }),
       _vm._v(" "),
@@ -36100,7 +36128,9 @@ var render = function() {
       _c("v-checkbox", {
         staticClass: "mt-6",
         attrs: {
-          label: _vm.$ll(_vm.$lang.text.signup.field_dishwasher),
+          label:
+            _vm.$ll(_vm.$lang.text.signup.field_dishwasher) +
+            (_vm.signup.dishwasher ? " ❤" : ""),
           "hide-details": "auto"
         },
         model: {

@@ -3,7 +3,9 @@
         <v-select
             :label="$ll($lang.text.signup.field_food_preference)"
             :items="foodOptions"
-            v-model="foodChosen"
+            item-text="text"
+            item-value="value"
+            v-model="signup.foodPreference"
             :rules="validations.foodOptions"
             hide-details="auto"></v-select>
 
@@ -24,7 +26,7 @@
             class="my-4" />
 
         <v-checkbox
-            :label="$ll($lang.text.signup.field_dishwasher)"
+            :label="$ll($lang.text.signup.field_dishwasher) + (signup.dishwasher ? ' ❤' : '')"
             v-model="signup.dishwasher"
             hide-details="auto"
             class="mt-6" />
@@ -41,7 +43,20 @@
 <script lang="ts">
 import Vue, {PropType} from 'vue';
 import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
-import {Validations, MAX_STRING_LENGTH} from "../../../../utils/ValidationRules";
+import {MAX_STRING_LENGTH, Validations} from "../../../../utils/ValidationRules";
+import FoodPreference from "../../../../domain/mensa/model/FoodPreference";
+import Language, {CurrentLanguage} from "../../../../lang/Language";
+
+const foodOptions = [
+    {
+        value: FoodPreference.VEGETARIAN,
+        text: CurrentLanguage.language.getText(Language.text.signup.field_food_vegetarian),
+    },
+    {
+        value: FoodPreference.MEAT,
+        text: CurrentLanguage.language.getText(Language.text.signup.field_food_meat),
+    }
+];
 
 export default Vue.extend({
     props: {
@@ -51,7 +66,7 @@ export default Vue.extend({
         },
     },
     data: () => ({
-        foodOptions: [] as string[],
+        foodOptions: foodOptions,
         foodChosen: null as string | null,
         MAX_STRING_LENGTH: MAX_STRING_LENGTH,
         validations: {
@@ -60,19 +75,6 @@ export default Vue.extend({
             description: Validations.description,
         }
     }),
-    mounted() {
-        this.foodOptions = [this.optionVegetarian, this.optionMeat];
-    },
-    watch: {
-        vegetarianChosen: function(option: string) {
-            this.signup.vegetarian = option == this.optionVegetarian;
-        },
-        signup: function(after: MensaSignup, before: MensaSignup) {
-            if (before !== after) {
-                this.foodChosen = null;
-            }
-        }
-    },
     computed: {
         optionVegetarian: function(): string {
             return this.$ll(this.$lang.text.signup.field_food_vegetarian);

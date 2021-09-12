@@ -21,8 +21,8 @@ export const Validations = {
         MaxStringLengthValidation
     ],
     foodOptions: [
-        (value: string|null) => {
-            return !!value ||
+        (value: number) => {
+            return (value === 0 || value === 1) ||
                 CurrentLanguage.language.getText($lang.validation.general.required)
         }
     ],

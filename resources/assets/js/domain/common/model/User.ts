@@ -1,9 +1,11 @@
+import FoodPreference from "../../mensa/model/FoodPreference";
+
 export interface FullUser extends SimpleUser, UserEmail {
     id: string,
     name: string,
     email: string,
     isAdmin: boolean,
-    vegetarian: boolean,
+    foodPreference: FoodPreference|null,
     description: string,
     allergies: string,
 }
@@ -22,7 +24,7 @@ export interface User {
     name?: string,
     email?: string,
     isAdmin?: boolean,
-    vegetarian?: boolean,
+    foodPreference?: FoodPreference|null,
     description?: string,
     allergies?: string,
 }
