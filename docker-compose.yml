@@ -26,6 +26,8 @@ services:
   #PHP Service
   app:
     hostname: app
+    # before pulling the image do this or it wont work --> export CR_PAT=YOUR_TOKEN; echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+    #image: 'ghcr.io/vslcatena/mensa:feature-docker' 
     build:
       context: .
       dockerfile: Dockerfile

@@ -19,7 +19,7 @@ RUN docker-php-ext-install pdo_mysql mbstring zip
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 #install NPM
-RUN curl -fsSL https://deb.nodesource.com/setup_15.x | bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
 RUN npm install -g agentkeepalive --save
 RUN npm install -g yarn
 RUN npm install -g npm
