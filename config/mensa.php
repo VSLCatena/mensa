@@ -40,10 +40,10 @@ return [
         'price' => env('MENSA_CONSUMPTIONS_PRICE'),
     ],
 
-    'ldap' => [
-        'admin_group' => env('MENSA_LDAP_ADMIN_GROUP'),
-        'allowed_group' => env('MENSA_LDAP_ALLOWED_GROUP'),
-        'user_base' => env('MENSA_LDAP_USER_BASEDN'),
+    'remote_user' => [
+        'admin_group_id' => env('REMOTE_USER_ADMIN_GROUP_ID'),
+        'update_time' => env('REMOTE_USER_UPDATE_TIME'),
+        'email_suffix' => env('remote_user_email_suffix'),
     ],
 
     'url' => [
@@ -53,12 +53,10 @@ return [
     'service_users' => [
         'users' => [
             [
-                'lidnummer' => 'bar_soos',
                 'name' => 'Bar soos',
                 'token' => env('MENSA_ACCOUNTURL_BAR001'),
             ],
             [
-                'lidnummer' => 'bar_fz',
                 'name' => 'Bar filmzaal',
                 'token' => env('MENSA_ACCOUNTURL_BAR002'),
             ]
