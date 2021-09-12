@@ -1,6 +1,20 @@
 import {LanguageLintCheck} from "./LanguageTypes";
 
 const text = {
+    general: {
+        close: {
+            nl: "Sluit",
+            en: "Close",
+        },
+        next: {
+            nl: 'Volgende',
+            en: 'Next',
+        },
+        previous: {
+            nl: 'Vorige',
+            en: 'Previous',
+        }
+    },
     and: {
         nl: "en",
         en: "and"
@@ -57,8 +71,8 @@ const text = {
     },
     signup: {
         mensa_at: {
-            nl: "Mensa op",
-            en: "Mensa at",
+            nl: "Inschrijving voor mensa op",
+            en: "Singup for mensa at",
         },
         tab_signup: {
             nl: "Inschrijving",
@@ -72,9 +86,13 @@ const text = {
             nl: '+ intro',
             en: '+ intro',
         },
+        remove_intro: {
+            nl: 'Verwijder intro',
+            en: 'Delete intro',
+        },
         field_email: {
-            nl: 'Email',
-            en: 'Email',
+            nl: 'Email opgegeven bij Catena',
+            en: 'Email registered at Catena',
         },
         field_food_preference: {
             nl: 'Etens voorkeur',
@@ -88,9 +106,13 @@ const text = {
             nl: 'Vegetarisch',
             en: 'Vegetarian',
         },
+        field_allergies: {
+            nl: 'Allergieën',
+            en: 'Allergies',
+        },
         field_description: {
-            nl: 'Omschrijving',
-            en: 'Description',
+            nl: 'Extra info',
+            en: 'Extra information',
         },
         field_cook: {
             nl: 'Is koker',

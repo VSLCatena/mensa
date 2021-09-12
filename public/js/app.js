@@ -1895,10 +1895,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../formatters/DateFormatter */ "./resources/assets/js/vue/formatters/DateFormatter.ts");
 /* harmony import */ var _domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/MensaSignup */ "./resources/assets/js/domain/mensa/model/MensaSignup.ts");
 /* harmony import */ var _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MensaSignupEntry.vue */ "./resources/assets/js/vue/components/mensa/signup/MensaSignupEntry.vue");
+/* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/ValidationRules */ "./resources/assets/js/utils/ValidationRules.ts");
 var __spreadArray = undefined && undefined.__spreadArray || function (to, from) {
   for (var i = 0, il = from.length, j = to.length; i < il; i++, j++) {
     to[j] = from[i];
@@ -1911,13 +1912,12 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__.default.extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_4__.default.extend({
   components: {
     MensaSignupEntry: _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_2__.default
   },
   data: function data() {
-    var _a;
-
     var potentialUser = this.$user;
     var user = {
       email: ""
@@ -1930,17 +1930,25 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
     return {
       isOpen: false,
       mensa: null,
-      email: (_a = this.$user.email) !== null && _a !== void 0 ? _a : '',
+      email: user.email,
+      step: 1,
       tab: 0,
       signup: null,
       intros: [],
-      user: user
+      user: user,
+      validation: {
+        email: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_3__.Validations.email
+      }
     };
   },
   watch: {
     intros: function intros(after, before) {
-      if (before.length < after.length) {
-        this.tab = after.length + 1;
+      var _this = this;
+
+      if (after.length > before.length) {
+        this.$nextTick(function () {
+          _this.tab = _this.intros.length;
+        });
       }
     }
   },
@@ -1949,6 +1957,7 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
       if (this.mensa != mensa) {
         this.signup = (0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$user);
         this.intros = [];
+        this.tab = 0;
       }
 
       this.mensa = mensa;
@@ -1958,6 +1967,14 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
       var mensa = this.mensa;
       if (mensa == null) return;
       this.intros = __spreadArray(__spreadArray([], this.intros), [(0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$user, true)]);
+    },
+    deleteIntro: function deleteIntro() {
+      this.tab -= 1;
+
+      var intros = __spreadArray([], this.intros);
+
+      intros.splice(this.tab - 1, 1);
+      this.intros = intros;
     }
   },
   computed: {
@@ -1982,13 +1999,48 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../utils/ValidationRules */ "./resources/assets/js/utils/ValidationRules.ts");
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_0__.default.extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_1__.default.extend({
   props: {
     signup: {
       type: Object,
       required: true
+    }
+  },
+  data: function data() {
+    return {
+      foodOptions: [],
+      foodChosen: null,
+      MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH,
+      validations: {
+        foodOptions: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.foodOptions,
+        allergies: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.allergies,
+        description: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.description
+      }
+    };
+  },
+  mounted: function mounted() {
+    this.foodOptions = [this.optionVegetarian, this.optionMeat];
+  },
+  watch: {
+    vegetarianChosen: function vegetarianChosen(option) {
+      this.signup.vegetarian = option == this.optionVegetarian;
+    },
+    signup: function signup(after, before) {
+      if (before !== after) {
+        this.foodChosen = null;
+      }
+    }
+  },
+  computed: {
+    optionVegetarian: function optionVegetarian() {
+      return this.$ll(this.$lang.text.signup.field_food_vegetarian);
+    },
+    optionMeat: function optionMeat() {
+      return this.$ll(this.$lang.text.signup.field_food_meat);
     }
   }
 }));
@@ -3103,8 +3155,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Date__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Date */ "./resources/assets/js/lang/Date.ts");
 /* harmony import */ var _Text__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Text */ "./resources/assets/js/lang/Text.ts");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
+/* harmony import */ var _Validation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Validation */ "./resources/assets/js/lang/Validation.ts");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
+
 
 
 
@@ -3127,15 +3181,16 @@ var Languages = {
   nl: "nl",
   en: "en"
 };
-var CurrentLanguage = vue__WEBPACK_IMPORTED_MODULE_3__.default.observable({
+var CurrentLanguage = vue__WEBPACK_IMPORTED_MODULE_4__.default.observable({
   language: new Language("nl")
 });
 var language = {
   date: _Date__WEBPACK_IMPORTED_MODULE_0__.default,
-  text: _Text__WEBPACK_IMPORTED_MODULE_1__.default
+  text: _Text__WEBPACK_IMPORTED_MODULE_1__.default,
+  validation: _Validation__WEBPACK_IMPORTED_MODULE_2__.default
 }; // Make sure it is in the correct format
 
-(0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_2__.LanguageLintCheck)(language);
+(0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_3__.LanguageLintCheck)(language);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (language);
 
 /***/ }),
@@ -3151,6 +3206,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "LanguageLintCheck": () => (/* binding */ LanguageLintCheck)
 /* harmony export */ });
+// This is only used for lint checks
 // noinspection JSUnusedLocalSymbols
 function LanguageLintCheck(block) {}
 
@@ -3170,6 +3226,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
 
 var text = {
+  general: {
+    close: {
+      nl: "Sluit",
+      en: "Close"
+    },
+    next: {
+      nl: 'Volgende',
+      en: 'Next'
+    },
+    previous: {
+      nl: 'Vorige',
+      en: 'Previous'
+    }
+  },
   and: {
     nl: "en",
     en: "and"
@@ -3226,8 +3296,8 @@ var text = {
   },
   signup: {
     mensa_at: {
-      nl: "Mensa op",
-      en: "Mensa at"
+      nl: "Inschrijving voor mensa op",
+      en: "Singup for mensa at"
     },
     tab_signup: {
       nl: "Inschrijving",
@@ -3241,9 +3311,13 @@ var text = {
       nl: '+ intro',
       en: '+ intro'
     },
+    remove_intro: {
+      nl: 'Verwijder intro',
+      en: 'Delete intro'
+    },
     field_email: {
-      nl: 'Email',
-      en: 'Email'
+      nl: 'Email opgegeven bij Catena',
+      en: 'Email registered at Catena'
     },
     field_food_preference: {
       nl: 'Etens voorkeur',
@@ -3257,9 +3331,13 @@ var text = {
       nl: 'Vegetarisch',
       en: 'Vegetarian'
     },
+    field_allergies: {
+      nl: 'Allergieën',
+      en: 'Allergies'
+    },
     field_description: {
-      nl: 'Omschrijving',
-      en: 'Description'
+      nl: 'Extra info',
+      en: 'Extra information'
     },
     field_cook: {
       nl: 'Is koker',
@@ -3274,6 +3352,43 @@ var text = {
 
 (0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_0__.LanguageLintCheck)(text);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (text);
+
+/***/ }),
+
+/***/ "./resources/assets/js/lang/Validation.ts":
+/*!************************************************!*\
+  !*** ./resources/assets/js/lang/Validation.ts ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _LanguageTypes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LanguageTypes */ "./resources/assets/js/lang/LanguageTypes.ts");
+
+var validation = {
+  general: {
+    required: {
+      nl: 'Veld is verplicht',
+      en: 'Field is required'
+    },
+    max_length_reached: {
+      nl: 'De maximum lengte van 191 characters is bereikt',
+      en: 'The maximum length of 191 characters has been reached'
+    }
+  },
+  email: {
+    invalid: {
+      nl: 'Moet een correcte email zijn',
+      en: "Must be a valid email address"
+    }
+  }
+}; // Make sure it is in the correct format
+
+(0,_LanguageTypes__WEBPACK_IMPORTED_MODULE_0__.LanguageLintCheck)(validation);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validation);
 
 /***/ }),
 
@@ -3385,6 +3500,43 @@ var Failure = function (_super) {
 }(ResultType);
 
 
+
+/***/ }),
+
+/***/ "./resources/assets/js/utils/ValidationRules.ts":
+/*!******************************************************!*\
+  !*** ./resources/assets/js/utils/ValidationRules.ts ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MAX_STRING_LENGTH": () => (/* binding */ MAX_STRING_LENGTH),
+/* harmony export */   "EmailRule": () => (/* binding */ EmailRule),
+/* harmony export */   "Validations": () => (/* binding */ Validations)
+/* harmony export */ });
+/* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lang/Language */ "./resources/assets/js/lang/Language.ts");
+
+var MAX_STRING_LENGTH = 191;
+var EmailRule = /^(?!\.)("([^"\r\\]|\\["\r\\])*"|([-a-z0-9!#$%&'*+\/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$/;
+
+var MaxStringLengthValidation = function MaxStringLengthValidation(value) {
+  return !value || value.length <= MAX_STRING_LENGTH || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.max_length_reached);
+};
+
+var Validations = {
+  email: [function (value) {
+    return !!value || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.required);
+  }, function (value) {
+    return value && EmailRule.test(value) || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.email.invalid);
+  }, MaxStringLengthValidation],
+  foodOptions: [function (value) {
+    return !!value || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.required);
+  }],
+  allergies: [MaxStringLengthValidation],
+  description: [MaxStringLengthValidation]
+};
 
 /***/ }),
 
@@ -35644,82 +35796,117 @@ var render = function() {
             "v-card",
             { attrs: { outlined: "" } },
             [
-              _c("v-card-title", [
-                _vm._v(
-                  _vm._s(_vm.$ll(_vm.$lang.text.signup.mensa_at)) +
-                    " " +
-                    _vm._s(_vm.formattedDate)
-                )
-              ]),
-              _vm._v(" "),
               _c(
-                "v-tabs",
-                {
-                  attrs: { "show-arrows": "" },
-                  model: {
-                    value: _vm.tab,
-                    callback: function($$v) {
-                      _vm.tab = $$v
-                    },
-                    expression: "tab"
-                  }
-                },
+                "v-toolbar",
                 [
-                  _c("v-tabs-slider"),
-                  _vm._v(" "),
-                  _c("v-tab", { key: "0" }, [
-                    _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.signup.tab_signup)))
-                  ]),
-                  _vm._v(" "),
-                  _vm._l(_vm.intros.length, function(i) {
-                    return _c("v-tab", { key: i + 1 }, [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(_vm.$ll(_vm.$lang.text.signup.tab_intro))
-                      ),
-                      _vm.intros.length > 1
-                        ? _c("span", [_vm._v(" #" + _vm._s(i))])
-                        : _vm._e()
-                    ])
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-tab",
-                    {
-                      key: "1",
-                      on: {
-                        click: function($event) {
-                          return _vm.addIntro()
-                        }
-                      }
-                    },
-                    [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.signup.add_intro)))]
-                  )
+                  _c("v-card-title", [
+                    _vm._v(
+                      _vm._s(_vm.$ll(_vm.$lang.text.signup.mensa_at)) +
+                        " " +
+                        _vm._s(_vm.formattedDate)
+                    )
+                  ])
                 ],
-                2
+                1
               ),
               _vm._v(" "),
-              _c("v-divider"),
+              _vm.step === 1
+                ? _c(
+                    "div",
+                    [
+                      _c(
+                        "v-tabs",
+                        {
+                          attrs: { "show-arrows": "" },
+                          model: {
+                            value: _vm.tab,
+                            callback: function($$v) {
+                              _vm.tab = $$v
+                            },
+                            expression: "tab"
+                          }
+                        },
+                        [
+                          _c("v-tabs-slider"),
+                          _vm._v(" "),
+                          _c("v-tab", { key: 0 }, [
+                            _vm._v(
+                              _vm._s(_vm.$ll(_vm.$lang.text.signup.tab_signup))
+                            )
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(_vm.intros.length, function(i) {
+                            return _c("v-tab", { key: i }, [
+                              _vm._v(
+                                "\n                    " +
+                                  _vm._s(
+                                    _vm.$ll(_vm.$lang.text.signup.tab_intro)
+                                  )
+                              ),
+                              _vm.intros.length > 1
+                                ? _c("span", [_vm._v(" #" + _vm._s(i))])
+                                : _vm._e()
+                            ])
+                          })
+                        ],
+                        2
+                      ),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-tabs-items",
+                        {
+                          model: {
+                            value: _vm.tab,
+                            callback: function($$v) {
+                              _vm.tab = $$v
+                            },
+                            expression: "tab"
+                          }
+                        },
+                        [
+                          _c(
+                            "v-tab-item",
+                            { key: 0, staticClass: "pa-5" },
+                            [
+                              _c("MensaSignupEntry", {
+                                attrs: { signup: _vm.signup }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _vm._l(_vm.intros, function(intro, index) {
+                            return _c(
+                              "v-tab-item",
+                              { key: index + 1, staticClass: "pa-5" },
+                              [
+                                _c("MensaSignupEntry", {
+                                  attrs: { signup: intro }
+                                })
+                              ],
+                              1
+                            )
+                          })
+                        ],
+                        2
+                      )
+                    ],
+                    1
+                  )
+                : _vm._e(),
               _vm._v(" "),
-              _c(
-                "v-tabs-items",
-                {
-                  model: {
-                    value: _vm.tab,
-                    callback: function($$v) {
-                      _vm.tab = $$v
-                    },
-                    expression: "tab"
-                  }
-                },
-                [
-                  _c(
-                    "v-tab-item",
-                    { key: "0", staticClass: "pa-5" },
+              _vm.step === 2
+                ? _c(
+                    "div",
                     [
                       _c("v-text-field", {
+                        staticClass: "pa-5",
                         attrs: {
-                          label: _vm.$ll(_vm.$lang.text.signup.field_email)
+                          label: _vm.$ll(_vm.$lang.text.signup.field_email),
+                          rules: _vm.validation.email,
+                          "hide-details": "auto"
                         },
                         model: {
                           value: _vm.email,
@@ -35728,31 +35915,89 @@ var render = function() {
                           },
                           expression: "email"
                         }
-                      }),
-                      _vm._v(" "),
-                      _c("MensaSignupEntry", { attrs: { signup: _vm.signup } })
+                      })
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _vm._l(_vm.intros, function(intro, index) {
-                    return _c(
-                      "v-tab-item",
-                      { key: index + 2 },
-                      [_c("MensaSignupEntry", { attrs: { signup: intro } })],
-                      1
-                    )
-                  }),
-                  _vm._v(" "),
-                  _c("v-tab-item", { key: "1" })
-                ],
-                2
-              ),
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _c(
                 "v-card-actions",
-                { staticClass: "justify-end" },
                 [
+                  (_vm.intros.length < 1 || _vm.$user.isAdmin) && _vm.step === 1
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.addIntro()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.$ll(_vm.$lang.text.signup.add_intro))
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.tab !== 0 && _vm.step === 1
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteIntro()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.$ll(_vm.$lang.text.signup.remove_intro))
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.step === 2
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.step = 1
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.$ll(_vm.$lang.text.general.previous))
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _vm.step === 1
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.step = 2
+                            }
+                          }
+                        },
+                        [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.general.next)))]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c(
                     "v-btn",
                     {
@@ -35763,7 +36008,7 @@ var render = function() {
                         }
                       }
                     },
-                    [_vm._v("Close")]
+                    [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.general.close)))]
                   )
                 ],
                 1
@@ -35799,13 +36044,93 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._v(
-      "\n\n    " +
-        _vm._s(_vm.signup.isIntro) +
-        "\n    vegetarian: boolean,\n    isIntro: boolean,\n    description: string,\n    cook: boolean,\n    dishwasher: boolean,\n"
-    )
-  ])
+  return _c(
+    "div",
+    [
+      _c("v-select", {
+        attrs: {
+          label: _vm.$ll(_vm.$lang.text.signup.field_food_preference),
+          items: _vm.foodOptions,
+          rules: _vm.validations.foodOptions,
+          "hide-details": "auto"
+        },
+        model: {
+          value: _vm.foodChosen,
+          callback: function($$v) {
+            _vm.foodChosen = $$v
+          },
+          expression: "foodChosen"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-text-field", {
+        staticClass: "mt-8 mb-4",
+        attrs: {
+          label: _vm.$ll(_vm.$lang.text.signup.field_allergies),
+          rules: _vm.validations.allergies,
+          counter: _vm.MAX_STRING_LENGTH,
+          "hide-details": "auto"
+        },
+        model: {
+          value: _vm.signup.allergies,
+          callback: function($$v) {
+            _vm.$set(_vm.signup, "allergies", $$v)
+          },
+          expression: "signup.allergies"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-text-field", {
+        staticClass: "my-4",
+        attrs: {
+          label: _vm.$ll(_vm.$lang.text.signup.field_description),
+          rules: _vm.validations.description,
+          counter: _vm.MAX_STRING_LENGTH,
+          "hide-details": "auto"
+        },
+        model: {
+          value: _vm.signup.description,
+          callback: function($$v) {
+            _vm.$set(_vm.signup, "description", $$v)
+          },
+          expression: "signup.description"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-checkbox", {
+        staticClass: "mt-6",
+        attrs: {
+          label: _vm.$ll(_vm.$lang.text.signup.field_dishwasher),
+          "hide-details": "auto"
+        },
+        model: {
+          value: _vm.signup.dishwasher,
+          callback: function($$v) {
+            _vm.$set(_vm.signup, "dishwasher", $$v)
+          },
+          expression: "signup.dishwasher"
+        }
+      }),
+      _vm._v(" "),
+      _vm.$user.isAdmin
+        ? _c("v-checkbox", {
+            staticClass: "mt-4",
+            attrs: {
+              label: _vm.$ll(_vm.$lang.text.signup.field_cook),
+              "hide-details": "auto"
+            },
+            model: {
+              value: _vm.signup.cook,
+              callback: function($$v) {
+                _vm.$set(_vm.signup, "cook", $$v)
+              },
+              expression: "signup.cook"
+            }
+          })
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

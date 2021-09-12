@@ -1,5 +1,6 @@
 import Date from './Date';
 import Text from './Text';
+import Validation from './Validation'
 import Vue from "vue";
 import { LanguageLintCheck, LanguageText} from "./LanguageTypes";
 
@@ -25,6 +26,7 @@ export const CurrentLanguage = Vue.observable({ language: new Language("nl") });
 const language = {
     date: Date,
     text: Text,
+    validation: Validation,
 }
 
 // Make sure it is in the correct format
