@@ -6,12 +6,14 @@
             item-text="text"
             item-value="value"
             v-model="signup.foodPreference"
+            :disabled="!enabled"
             :rules="validations.foodOptions"
             hide-details="auto"></v-select>
 
         <v-text-field
             :label="$ll($lang.text.signup.field_allergies)"
             v-model="signup.allergies"
+            :disabled="!enabled"
             :rules="validations.allergies"
             :counter="MAX_STRING_LENGTH"
             hide-details="auto"
@@ -20,6 +22,7 @@
         <v-text-field
             :label="$ll($lang.text.signup.field_description)"
             v-model="signup.description"
+            :disabled="!enabled"
             :rules="validations.description"
             :counter="MAX_STRING_LENGTH"
             hide-details="auto"
@@ -28,6 +31,7 @@
         <v-checkbox
             :label="$ll($lang.text.signup.field_dishwasher) + (signup.dishwasher ? ' ❤' : '')"
             v-model="signup.dishwasher"
+            :disabled="!enabled"
             hide-details="auto"
             class="mt-6" />
 
@@ -35,6 +39,7 @@
             v-if="$user.isAdmin"
             :label="$ll($lang.text.signup.field_cook)"
             v-model="signup.cook"
+            :disabled="!enabled"
             hide-details="auto"
             class="mt-4" />
     </div>
@@ -64,6 +69,10 @@ export default Vue.extend({
             type: Object as PropType<MensaSignup>,
             required: true
         },
+        enabled: {
+            type: Boolean,
+            required: false,
+        }
     },
     data: () => ({
         foodOptions: foodOptions,

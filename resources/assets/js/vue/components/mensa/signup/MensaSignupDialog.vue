@@ -1,5 +1,5 @@
 <template>
-    <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition">
+    <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition" :persistent="loading">
         <v-card outlined v-if="mensa != null">
             <v-toolbar>
                 <v-card-title>{{ $ll($lang.text.signup.mensa_at) }} {{ formattedDate }}</v-card-title>
@@ -16,39 +16,35 @@
 
                 <v-tabs-items v-model="tab">
                     <v-tab-item :key="0" class="pa-5">
-                        <MensaSignupEntry :signup="signup" />
+                        <MensaSignupEntry :signup="signup" :enabled="!loading" />
                     </v-tab-item>
                     <v-tab-item v-for="(intro, index) in intros" :key="index + 1" class="pa-5">
-                        <MensaSignupEntry :signup="intro" />
+                        <MensaSignupEntry :signup="intro" :enabled="!loading" />
                     </v-tab-item>
                 </v-tabs-items>
             </v-form>
-            <div v-if="step === 2">
+            <v-form ref="emailForm" v-if="step === 2">
                 <v-text-field
                     :label="$ll($lang.text.signup.field_email)"
+                    :disabled="loading"
                     v-model="email"
                     :rules="validation.email"
                     hide-details="auto"
                     class="pa-5" />
-            </div>
+            </v-form>
 
             <v-card-actions>
-                <v-btn text @click="addIntro()" v-if="(intros.length < 1 || $user.isAdmin) && step === 1">{{ $ll($lang.text.signup.add_intro) }}</v-btn>
-                <v-btn text @click="deleteIntro()" v-if="tab !== 0 && step === 1">{{ $ll($lang.text.signup.remove_intro) }}</v-btn>
+                <v-btn text :loading="loading" @click="addIntro()" v-if="(intros.length < 1 || $user.isAdmin) && step === 1">{{ $ll($lang.text.signup.add_intro) }}</v-btn>
+                <v-btn text :loading="loading" @click="deleteIntro()" v-if="tab !== 0 && step === 1">{{ $ll($lang.text.signup.remove_intro) }}</v-btn>
                 <v-btn text @click="step = 1" v-if="step === 2">{{ $ll($lang.text.general.previous) }}</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text @click="toEmail()" v-if="step === 1">{{ $ll($lang.text.general.next) }}</v-btn>
-                <v-btn text @click="isOpen = false">{{ $ll($lang.text.general.close) }}</v-btn>
+                <v-btn text :loading="loading" @click="sendSignup()" v-if="step === 2">{{ $ll($lang.text.signup.button_signup) }}</v-btn>
+                <v-btn text :loading="loading" @click="isOpen = false">{{ $ll($lang.text.general.close) }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
 </template>
-
-<!--<v-text-field-->
-<!--    v-model="email"-->
-<!--    :label="$ll($lang.text.signup.field_email)"-->
-<!--    class="mx-5"-->
-<!--&gt;</v-text-field>-->
 
 <script lang="ts">
     import Vue from 'vue';
@@ -79,7 +75,8 @@
                 user: user,
                 validation: {
                     email: Validations.email,
-                }
+                },
+                loading: false
             }
         },
         watch: {
@@ -102,6 +99,7 @@
 
                 this.mensa = mensa;
                 this.isOpen = true;
+                this.loading = false;
             },
             addIntro: function () {
                 let mensa = this.mensa;
@@ -118,6 +116,11 @@
             toEmail: function() {
                 if (this.$refs.signupForm.validate()) {
                     this.step = 2;
+                }
+            },
+            sendSignup: function() {
+                if (this.$refs.emailForm.validate()) {
+                    this.loading = true;
                 }
             }
         },

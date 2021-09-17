@@ -90,6 +90,10 @@ const text = {
             nl: 'Verwijder intro',
             en: 'Delete intro',
         },
+        button_signup: {
+            nl: 'Inschrijven',
+            en: 'Sign up',
+        },
         field_email: {
             nl: 'Email opgegeven bij Catena',
             en: 'Email registered at Catena',

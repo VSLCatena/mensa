@@ -1938,7 +1938,8 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
       user: user,
       validation: {
         email: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_3__.Validations.email
-      }
+      },
+      loading: false
     };
   },
   watch: {
@@ -1963,6 +1964,7 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
 
       this.mensa = mensa;
       this.isOpen = true;
+      this.loading = false;
     },
     addIntro: function addIntro() {
       var mensa = this.mensa;
@@ -1980,6 +1982,11 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from) 
     toEmail: function toEmail() {
       if (this.$refs.signupForm.validate()) {
         this.step = 2;
+      }
+    },
+    sendSignup: function sendSignup() {
+      if (this.$refs.emailForm.validate()) {
+        this.loading = true;
       }
     }
   },
@@ -2025,6 +2032,10 @@ var foodOptions = [{
     signup: {
       type: Object,
       required: true
+    },
+    enabled: {
+      type: Boolean,
+      required: false
     }
   },
   data: function data() {
@@ -3340,6 +3351,10 @@ var text = {
     remove_intro: {
       nl: 'Verwijder intro',
       en: 'Delete intro'
+    },
+    button_signup: {
+      nl: 'Inschrijven',
+      en: 'Sign up'
     },
     field_email: {
       nl: 'Email opgegeven bij Catena',
@@ -35807,7 +35822,11 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { "max-width": "800", transition: "dialog-bottom-transition" },
+      attrs: {
+        "max-width": "800",
+        transition: "dialog-bottom-transition",
+        persistent: _vm.loading
+      },
       model: {
         value: _vm.isOpen,
         callback: function($$v) {
@@ -35898,7 +35917,10 @@ var render = function() {
                             { key: 0, staticClass: "pa-5" },
                             [
                               _c("MensaSignupEntry", {
-                                attrs: { signup: _vm.signup }
+                                attrs: {
+                                  signup: _vm.signup,
+                                  enabled: !_vm.loading
+                                }
                               })
                             ],
                             1
@@ -35910,7 +35932,10 @@ var render = function() {
                               { key: index + 1, staticClass: "pa-5" },
                               [
                                 _c("MensaSignupEntry", {
-                                  attrs: { signup: intro }
+                                  attrs: {
+                                    signup: intro,
+                                    enabled: !_vm.loading
+                                  }
                                 })
                               ],
                               1
@@ -35926,12 +35951,14 @@ var render = function() {
               _vm._v(" "),
               _vm.step === 2
                 ? _c(
-                    "div",
+                    "v-form",
+                    { ref: "emailForm" },
                     [
                       _c("v-text-field", {
                         staticClass: "pa-5",
                         attrs: {
                           label: _vm.$ll(_vm.$lang.text.signup.field_email),
+                          disabled: _vm.loading,
                           rules: _vm.validation.email,
                           "hide-details": "auto"
                         },
@@ -35955,7 +35982,7 @@ var render = function() {
                     ? _c(
                         "v-btn",
                         {
-                          attrs: { text: "" },
+                          attrs: { text: "", loading: _vm.loading },
                           on: {
                             click: function($event) {
                               return _vm.addIntro()
@@ -35974,7 +36001,7 @@ var render = function() {
                     ? _c(
                         "v-btn",
                         {
-                          attrs: { text: "" },
+                          attrs: { text: "", loading: _vm.loading },
                           on: {
                             click: function($event) {
                               return _vm.deleteIntro()
@@ -36025,10 +36052,29 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
+                  _vm.step === 2
+                    ? _c(
+                        "v-btn",
+                        {
+                          attrs: { text: "", loading: _vm.loading },
+                          on: {
+                            click: function($event) {
+                              return _vm.sendSignup()
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            _vm._s(_vm.$ll(_vm.$lang.text.signup.button_signup))
+                          )
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c(
                     "v-btn",
                     {
-                      attrs: { text: "" },
+                      attrs: { text: "", loading: _vm.loading },
                       on: {
                         click: function($event) {
                           _vm.isOpen = false
@@ -36080,6 +36126,7 @@ var render = function() {
           items: _vm.foodOptions,
           "item-text": "text",
           "item-value": "value",
+          disabled: !_vm.enabled,
           rules: _vm.validations.foodOptions,
           "hide-details": "auto"
         },
@@ -36096,6 +36143,7 @@ var render = function() {
         staticClass: "mt-8 mb-4",
         attrs: {
           label: _vm.$ll(_vm.$lang.text.signup.field_allergies),
+          disabled: !_vm.enabled,
           rules: _vm.validations.allergies,
           counter: _vm.MAX_STRING_LENGTH,
           "hide-details": "auto"
@@ -36113,6 +36161,7 @@ var render = function() {
         staticClass: "my-4",
         attrs: {
           label: _vm.$ll(_vm.$lang.text.signup.field_description),
+          disabled: !_vm.enabled,
           rules: _vm.validations.description,
           counter: _vm.MAX_STRING_LENGTH,
           "hide-details": "auto"
@@ -36132,6 +36181,7 @@ var render = function() {
           label:
             _vm.$ll(_vm.$lang.text.signup.field_dishwasher) +
             (_vm.signup.dishwasher ? " ❤" : ""),
+          disabled: !_vm.enabled,
           "hide-details": "auto"
         },
         model: {
@@ -36148,6 +36198,7 @@ var render = function() {
             staticClass: "mt-4",
             attrs: {
               label: _vm.$ll(_vm.$lang.text.signup.field_cook),
+              disabled: !_vm.enabled,
               "hide-details": "auto"
             },
             model: {
