@@ -1,4 +1,4 @@
-import Result, {Failure, runCatching, Success} from "../../../utils/Result";
+import Result, {Failure, runCatching, Success} from "../../../domain/common/utils/Result";
 import UserEntity from "../model/UserEntity";
 import {requireNotNull} from "../../utils/MappingUtils";
 import {User} from "../../../domain/common/model/User";

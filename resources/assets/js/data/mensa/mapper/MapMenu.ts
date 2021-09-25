@@ -1,7 +1,7 @@
 import {requireNotNull} from "../../utils/MappingUtils";
 import ExtraOption from "../../../domain/mensa/model/ExtraOption";
 import MensaExtraOptionsEntity from "../model/MensaExtraOptionsEntity";
-import Result, {Failure, runCatching, Success} from "../../../utils/Result";
+import Result, {Failure, runCatching, Success} from "../../../domain/common/utils/Result";
 import MensaMenuEntity from "../model/MensaMenuEntity";
 import MensaMenuItem from "../../../domain/mensa/model/MensaMenuItem";
 

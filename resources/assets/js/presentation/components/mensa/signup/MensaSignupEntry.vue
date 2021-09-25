@@ -48,7 +48,7 @@
 <script lang="ts">
 import Vue, {PropType} from 'vue';
 import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
-import {MAX_STRING_LENGTH, Validations} from "../../../../utils/ValidationRules";
+import {MAX_STRING_LENGTH, Validations} from "../../../utils/ValidationRules";
 import FoodPreference, {SortedFoodPreferences} from "../../../../domain/mensa/model/FoodPreference";
 import Mensa from "../../../../domain/mensa/model/Mensa";
 

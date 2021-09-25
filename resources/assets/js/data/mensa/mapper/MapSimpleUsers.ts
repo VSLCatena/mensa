@@ -1,4 +1,4 @@
-import Result, {Failure, runCatching, Success} from "../../../utils/Result";
+import Result, {Failure, runCatching, Success} from "../../../domain/common/utils/Result";
 import MensaSimpleUserEntity from "../model/MensaSimpleUserEntity";
 import {requireNotNull} from "../../utils/MappingUtils";
 import {SimpleUser} from "../../../domain/common/model/User";

@@ -1,4 +1,4 @@
-import {LanguageLintCheck} from "./LanguageTypes";
+import {LanguageLintCheck} from "./LanguageText";
 
 const validation = {
     general: {

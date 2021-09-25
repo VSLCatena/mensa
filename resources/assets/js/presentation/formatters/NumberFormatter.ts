@@ -1,4 +1,5 @@
-import {CurrentLanguage, Language} from "../../lang/Language";
+import {CurrentLanguage} from "../lang/Language";
+import Language from "../../domain/common/model/Language";
 
 
 export function formatOrdinal(num: number, language: Language = CurrentLanguage.language): string {

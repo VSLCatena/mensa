@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+const Dotenv = require('dotenv-webpack');
 
 require('vuetifyjs-mix-extension');
 
@@ -16,4 +17,9 @@ require('vuetifyjs-mix-extension');
 mix.ts('resources/assets/js/app.ts', 'public/js')
     .vuetify()
     .vue()
-    .sass('resources/assets/sass/app.scss', 'public/css');
+    .sass('resources/assets/sass/app.scss', 'public/css')
+    .webpackConfig({
+        plugins: [
+            new Dotenv()
+        ]
+    });

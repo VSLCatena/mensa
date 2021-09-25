@@ -33,7 +33,7 @@ export function runCatching<T>(call: () => T): Result<T> {
     try {
         return new Success(call());
     } catch (e) {
-        return new Failure(e)
+        return new Failure(e as Error);
     }
 }
 

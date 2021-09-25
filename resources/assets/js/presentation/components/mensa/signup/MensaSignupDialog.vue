@@ -53,7 +53,7 @@
     import {createEmptySignup, NewMensaSignup} from "../../../../domain/mensa/model/MensaSignup";
     import { UserEmail } from "../../../../domain/common/model/User";
     import MensaSignupEntry from "./MensaSignupEntry.vue";
-    import {Validations} from "../../../../utils/ValidationRules";
+    import {Validations} from "../../../utils/ValidationRules";
 
     export default Vue.extend({
         components: {MensaSignupEntry},

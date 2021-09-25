@@ -1,4 +1,4 @@
-import Result, {runCatching} from "../../../utils/Result";
+import Result, {runCatching} from "../../../domain/common/utils/Result";
 import FoodPreference from "../../../domain/mensa/model/FoodPreference";
 import {requireNotNull} from "../../utils/MappingUtils";
 

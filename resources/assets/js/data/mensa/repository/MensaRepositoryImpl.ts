@@ -1,7 +1,7 @@
 import Mensa from '../../../domain/mensa/model/Mensa';
 import MensaSignup from '../../../domain/mensa/model/MensaSignup';
 import { MensaRepository } from '../../../domain/mensa/repository/MensaRepository';
-import { API_BASE_URL } from '../../../config';
+import Config from '../../../Config';
 import MapMensas from "../mapper/MapMensas";
 import axios from "axios";
 import MensaList from "../../../domain/mensa/model/MensaList";
@@ -10,7 +10,7 @@ class MensaRepositoryImpl implements MensaRepository {
 
     async getMensas(weekOffset: number|null): Promise<MensaList> {
         try {
-            let result = await axios.get(`${API_BASE_URL}/mensas`, {
+            let result = await axios.get(`${Config.API_BASE_URL}/mensas`, {
                 params: { weekOffset: weekOffset }
             });
 

@@ -1,5 +1,6 @@
-import Lang, {CurrentLanguage, Language} from "../../lang/Language";
+import Lang, {CurrentLanguage, translatedText} from "../lang/Language";
 import {formatOrdinal} from "./NumberFormatter";
+import Language from "../../domain/common/model/Language";
 
 export interface Options {
     withDay: boolean;
@@ -53,7 +54,7 @@ export function formatDate(
         let dateText = dateBuilder.join(' ');
         // ','
         if (actualOptions.withTime) {
-            dateText += " " + language.getText(Lang.date.at);
+            dateText += " " + translatedText(language, Lang.date.at);
         }
 
         builder.push(dateText);
@@ -74,19 +75,19 @@ function getDay(date: Date, language: Language, preferShort: boolean = false): s
     let days = preferShort ? Lang.date.days.short : Lang.date.days.long;
     switch (date.getDay()) {
         case 0:
-            return language.getText(days.sunday);
+            return translatedText(language, days.sunday);
         case 1:
-            return language.getText(days.monday);
+            return translatedText(language, days.monday);
         case 2:
-            return language.getText(days.tuesday);
+            return translatedText(language, days.tuesday);
         case 3:
-            return language.getText(days.wednesday);
+            return translatedText(language, days.wednesday);
         case 4:
-            return language.getText(days.thursday);
+            return translatedText(language, days.thursday);
         case 5:
-            return language.getText(days.friday);
+            return translatedText(language, days.friday);
         case 6:
-            return language.getText(days.saturday);
+            return translatedText(language, days.saturday);
         default:
             throw new Error("Unknown day");
     }
@@ -97,29 +98,29 @@ function getMonth(date: Date, language: Language, preferShort: boolean = false):
 
     switch (date.getMonth()) {
         case 0:
-            return language.getText(months.january);
+            return translatedText(language, months.january);
         case 1:
-            return language.getText(months.february);
+            return translatedText(language, months.february);
         case 2:
-            return language.getText(months.march);
+            return translatedText(language, months.march);
         case 3:
-            return language.getText(months.april);
+            return translatedText(language, months.april);
         case 4:
-            return language.getText(months.may);
+            return translatedText(language, months.may);
         case 5:
-            return language.getText(months.june);
+            return translatedText(language, months.june);
         case 6:
-            return language.getText(months.july);
+            return translatedText(language, months.july);
         case 7:
-            return language.getText(months.august);
+            return translatedText(language, months.august);
         case 8:
-            return language.getText(months.september);
+            return translatedText(language, months.september);
         case 9:
-            return language.getText(months.october);
+            return translatedText(language, months.october);
         case 10:
-            return language.getText(months.november);
+            return translatedText(language, months.november);
         case 11:
-            return language.getText(months.december);
+            return translatedText(language, months.december);
         default:
             throw new Error("Unknown month");
     }

@@ -7,17 +7,19 @@
 
 import './bootstrap';
 
-// window.Vue = require('vue');
-
 import Vue from 'vue';
 import Vuetify from "vuetify";
 import 'vuetify/dist/vuetify.min.css';
 import VueRouter from 'vue-router';
-import Home from './vue/pages/home/Home.vue';
-import Mensa from './vue/components/mensa/MensaItem.vue';
-import {LanguageText} from "./lang/LanguageTypes";
-import lang, {CurrentLanguage, Language} from "./lang/Language";
+import App from "./presentation/App.vue";
+import Home from './presentation/pages/home/Home.vue';
+import Mensa from './presentation/components/mensa/MensaItem.vue';
+import {LanguageText} from "./presentation/lang/LanguageText";
+import lang, {CurrentLanguage, translatedText} from "./presentation/lang/Language";
 import { AnonymousUser, AuthUser } from "./domain/common/model/User";
+import Language from "./domain/common/model/Language";
+import GetDarkMode from "./domain/storage/usecase/GetDarkMode";
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -39,38 +41,26 @@ const router = new VueRouter({
 
 const vuetify = new Vuetify({
     theme: {
-        dark: true
+        dark: GetDarkMode()
     }
 });
 
+
+Vue.prototype.$user = Vue.observable(AnonymousUser as AuthUser);
+Vue.prototype.$lang = lang;
+Vue.prototype.$currentLanguage = CurrentLanguage;
 Vue.prototype.$ll = function(
     text: LanguageText,
     capitalize: boolean = false,
     language: Language = CurrentLanguage.language
 ): string {
-    let txt = language.getText(text);
+    let txt = translatedText(language, text);
     if (capitalize) txt = txt.charAt(0).toUpperCase() + txt.slice(1);
     return txt;
 }
 
-Vue.prototype.$user = Vue.observable(AnonymousUser as AuthUser);
-Vue.prototype.$lang = lang;
-Vue.prototype.$currentLanguage = CurrentLanguage;
-
 const app = new Vue({
     vuetify,
     router,
-    methods: {
-        $toggleDarkMode: function() {
-            this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
-        },
-        $toggleLanguage: function() {
-            CurrentLanguage.language = new Language(CurrentLanguage.language.language == "nl" ? "en": "nl")
-        }
-    },
-    computed: {
-        $isDarkMode: function(): boolean {
-            return this.$vuetify.theme.dark;
-        }
-    }
+    components: {App},
 }).$mount('#app');

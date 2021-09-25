@@ -1,4 +1,4 @@
-import {LanguageLintCheck} from "./LanguageTypes";
+import {LanguageLintCheck} from "./LanguageText";
 
 const text = {
     general: {
@@ -18,6 +18,26 @@ const text = {
     and: {
         nl: "en",
         en: "and"
+    },
+    menu: {
+        account: {
+            nl: "Account",
+            en: "Account",
+        },
+        switch_language: {
+            nl: "Switch to English",
+            en: "Wissel naar Nederlands",
+        },
+        switch_theme: {
+            to_dark: {
+                nl: "Wissel naar donker thema",
+                en: "Switch to dark theme",
+            },
+            to_light: {
+                nl: "Wissel naar licht thema",
+                en: "Switch to light theme",
+            }
+        }
     },
     mensa: {
         mensas_between: {

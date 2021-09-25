@@ -1,4 +1,4 @@
-import Result, {runCatching} from "../../../utils/Result";
+import Result, {runCatching} from "../../../domain/common/utils/Result";
 import {requireNotNull} from "../../utils/MappingUtils";
 import MapExtraOptions from "./MapExtraOptions";
 import MensaDetail from "../../../domain/mensa/model/MensaDetail";

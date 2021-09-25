@@ -1,7 +1,6 @@
-import {LanguageText} from "./resources/assets/js/lang/LanguageTypes";
-import Translations, {Language} from "./resources/assets/js/lang/Language";
+import {LanguageText} from "./resources/assets/js/presentation/lang/LanguageText";
+import Translations, {Language} from "./resources/assets/js/presentation/lang/Language";
 import {AuthUser} from "./resources/assets/js/domain/common/model/User";
-import {LanguageBlock} from "./resources/assets/js/lang/LanguageTypes";
 
 declare module '*.vue' {
   import type { DefineComponent } from 'vue'

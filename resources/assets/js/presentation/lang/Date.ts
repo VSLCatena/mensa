@@ -1,4 +1,4 @@
-import {LanguageLintCheck} from "./LanguageTypes";
+import {LanguageLintCheck} from "./LanguageText";
 import text from "./Text";
 
 let days = {

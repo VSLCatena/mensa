@@ -1,4 +1,4 @@
-import {Languages} from "./Language";
+import {SupportedLanguages} from "../../domain/common/model/Language";
 
 export interface ILanguage {
     readonly [key: string]: string;
@@ -9,7 +9,7 @@ export interface LanguageBlock {
 }
 
 export type LanguageText = {
-    [Property in keyof typeof Languages]: string;
+    [Property in keyof typeof SupportedLanguages]: string;
 }
 
 // This is only used for lint checks

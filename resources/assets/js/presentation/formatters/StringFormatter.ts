@@ -1,5 +1,6 @@
-import lang, {CurrentLanguage, Language} from "../../lang/Language";
+import lang, {CurrentLanguage, translatedText} from "../lang/Language";
 import {SimpleUser} from "../../domain/common/model/User";
+import Language from "../../domain/common/model/Language";
 
 export function formatUsers(users: SimpleUser[], language: Language = CurrentLanguage.language): string|null {
     switch (users.length) {
@@ -15,7 +16,7 @@ export function formatUsers(users: SimpleUser[], language: Language = CurrentLan
         userText += ", " + users[x].name;
     }
 
-    userText += " " + language.getText(lang.text.and) + " " + users[users.length-1].name;
+    userText += " " + translatedText(language, lang.text.and) + " " + users[users.length-1].name;
     userText = userText.substr(2);
 
     return userText;

@@ -15,6 +15,7 @@
         "chokidar": "^3.5.2",
         "cross-env": "^7.0.3",
         "deepmerge": "^4.2.2",
+        "dotenv-webpack": "^7.0.3",
         "jquery": "^3.6",
         "laravel-mix": "^6.0",
         "lodash": "^4.17.21",
@@ -30,6 +31,8 @@
         "vuetifyjs-mix-extension": "^0.0.20"
     },
     "dependencies": {
+        "@types/js-cookie": "^2.2.7",
+        "js-cookie": "^3.0.1",
         "vue-router": "^3.5.1"
     }
 }
