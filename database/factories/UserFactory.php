@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'allergies' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'extra_info' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'mensa_admin' => $this->faker->boolean,
-            'vegetarian' => $this->faker->boolean,
+            'food_preference' => $this->faker->randomElement([0, 1, 2, 4]),
             'remote_last_check' => $this->faker->dateTime->getTimestamp(),
             'remote_principal_name' => ''
         ];

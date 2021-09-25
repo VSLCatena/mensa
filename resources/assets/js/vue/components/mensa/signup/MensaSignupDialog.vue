@@ -16,10 +16,10 @@
 
                 <v-tabs-items v-model="tab">
                     <v-tab-item :key="0" class="pa-5">
-                        <MensaSignupEntry :signup="signup" :enabled="!loading" />
+                        <MensaSignupEntry :mensa="mensa" :signup="signup" :enabled="!loading" />
                     </v-tab-item>
                     <v-tab-item v-for="(intro, index) in intros" :key="index + 1" class="pa-5">
-                        <MensaSignupEntry :signup="intro" :enabled="!loading" />
+                        <MensaSignupEntry :mensa="mensa" :signup="intro" :enabled="!loading" />
                     </v-tab-item>
                 </v-tabs-items>
             </v-form>

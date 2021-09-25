@@ -15,6 +15,7 @@ class MensaItem {
      * @param int $dishwashers
      * @param float $price
      * @param SimpleUserItem[] $cooks
+     * @param string[] $foodOptions
      * @param MenuItemItem[] $menu
      * @param ExtraOptionItem[] $extraOptions
      */
@@ -30,6 +31,7 @@ class MensaItem {
         public float $price,
         public int $dishwashers,
         public array $cooks,
+        public array $foodOptions,
         public array $menu,
         public array $extraOptions,
     ) {

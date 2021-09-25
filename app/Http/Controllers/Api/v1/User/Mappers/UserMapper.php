@@ -13,7 +13,7 @@ trait UserMapper {
             email: $user->email,
             allergies: $user->allergies,
             extraInfo: $user->extra_info,
-            vegetarian: $user->vegetarian,
+            foodPreference: $user->food_preference,
             mensaAdmin: $user->mensa_admin
         );
     }

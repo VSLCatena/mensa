@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -69,13 +70,13 @@ class SignupController extends Controller {
 
 
         $validator = Validator::make($request->all(), [
-            'cooks' => ['boolean'],
-            'dishwasher' => ['boolean', 'required'],
-            'vegetarian' => ['boolean', 'required'],
-            'is_intro' => ['boolean', 'required'],
-            'allergies' => ['string'],
-            'extra_info' => ['string'],
-            'user' => ['required', 'string']
+            '*.cooks' => ['boolean'],
+            '*.dishwasher' => ['boolean', 'required'],
+            '*.food_option' => ['integer', 'required', Rule::in([1, 2, 4])],
+            '*.is_intro' => ['boolean', 'required'],
+            '*.allergies' => ['string'],
+            '*.extra_info' => ['string'],
+            '*.user' => ['required', 'string']
         ]);
         if ($validator->fails()) return response()->json([ "errors" => $validator->errors()]);
 
@@ -94,7 +95,7 @@ class SignupController extends Controller {
             'id' => Str::uuid(),
             'cooks' => $request->get('cooks', false),
             'dishwasher' => $request->get('dishwasher'),
-            'vegetarian' => $request->get('vegetarian'),
+            'food_option' => $request->get('food_option'),
             'is_intro' => $request->get('is_intro'),
             'allergies' => $request->get('allergies'),
             'extra_info' => $request->get('extra_info'),
@@ -139,7 +140,7 @@ class SignupController extends Controller {
         $validator = Validator::make($request->all(), [
             'cooks' => ['boolean'],
             'dishwasher' => ['boolean'],
-            'vegetarian' => ['boolean'],
+            'food_option' => ['integer', Rule::in([1, 2, 4])],
             'allergies' => ['string'],
             'extra_info' => ['string'],
         ]);
@@ -155,7 +156,7 @@ class SignupController extends Controller {
         }
 
         if ($request->has('dishwasher')) $signup->dishwasher = $request->get('dishwasher');
-        if ($request->has('vegetarian')) $signup->vegetarian = $request->get('vegetarian');
+        if ($request->has('food_option')) $signup->food_option = $request->get('food_option');
         if ($request->has('allergies')) $signup->allergies = $request->get('allergies');
         if ($request->has('extra_info')) $signup->extra_info = $request->get('extra_info');
 

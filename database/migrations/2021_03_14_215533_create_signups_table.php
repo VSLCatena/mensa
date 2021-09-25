@@ -19,7 +19,7 @@ class CreateSignupsTable extends Migration
             $table->softDeletesTz();
             $table->boolean('cooks');
             $table->boolean('dishwasher');
-            $table->boolean('vegetarian');
+            $table->tinyInteger('food_option')->unsigned();
             $table->boolean('is_intro');
             $table->string('allergies')->nullable();
             $table->string('extra_info')->nullable();

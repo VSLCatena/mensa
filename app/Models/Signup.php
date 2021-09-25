@@ -11,16 +11,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * App\Models\Signup
  *
- * @property int $id
+ * @property string $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property int $cooks
  * @property int $dishwasher
- * @property int $vegetarian
+ * @property int $food_option
  * @property int $is_intro
- * @property string $allergies
- * @property string $extra_info
+ * @property string|null $allergies
+ * @property string|null $extra_info
  * @property int $confirmed
  * @property float $paid
  * @property string $confirmation_code
@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property-read int|null $extra_options_count
  * @property-read \App\Models\Mensa $mensa
  * @property-read \App\Models\User $user
+ * @method static \Database\Factories\SignupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Signup newQuery()
  * @method static \Illuminate\Database\Query\Builder|Signup onlyTrashed()
@@ -42,17 +43,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereDishwasher($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereExtraInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Signup whereFoodOption($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereIsIntro($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereMensaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup wherePaid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Signup whereVegetarian($value)
  * @method static \Illuminate\Database\Query\Builder|Signup withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Signup withoutTrashed()
  * @mixin \Eloquent
- * @method static \Database\Factories\SignupFactory factory(...$parameters)
  */
 class Signup extends Model
 {
@@ -61,7 +61,7 @@ class Signup extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = ['id', 'cooks', 'dishwasher', 'vegetarian', 'is_intro', 'allergies', 'extra_info', 'confirmed', 'confirmation_code', 'user_id', 'mensa_id'];
+    protected $fillable = ['id', 'cooks', 'dishwasher', 'food_option', 'is_intro', 'allergies', 'extra_info', 'confirmed', 'confirmation_code', 'user_id', 'mensa_id'];
 
     protected $dates = ['deleted_at'];
 

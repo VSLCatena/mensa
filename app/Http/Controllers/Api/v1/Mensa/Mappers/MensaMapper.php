@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
+use App\Http\Controllers\Api\v1\Mensa\Models\FoodOptions;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaDetailItem;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
-use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemItem;
 use App\Models\Mensa;
 use App\Models\ExtraOption;
 use App\Models\MenuItem;
 use App\Models\Signup;
 
 trait MensaMapper {
-    use ExtraOptionsMapper, UserMapper, MenuItemMapper;
+    use ExtraOptionsMapper, UserMapper, MenuItemMapper, FoodOptionsMapper;
 
     /**
      * @param Mensa $mensa
@@ -37,7 +37,9 @@ trait MensaMapper {
             signups: count($users),
             price: $mensa->price,
             dishwashers: count($dishwashers),
+
             cooks: array_values(array_map($userSignupMapper, $cooks)),
+            foodOptions: self::mapFoodOptions($mensa->food_options),
             menu: array_map(function($item) { return self::mapMenuItem($item); }, $menu),
             extraOptions: array_map(function ($option) { return self::mapExtraOptions($option); }, $options),
         );

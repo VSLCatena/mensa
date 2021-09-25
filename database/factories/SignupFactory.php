@@ -25,7 +25,7 @@ class SignupFactory extends Factory
             'id' => $this->faker->uuid,
             'cooks' => $this->faker->boolean(15),
             'dishwasher' => $this->faker->boolean(15),
-            'vegetarian' => $this->faker->boolean,
+            'food_option' => $this->faker->randomElement([1, 2, 4]),
             'is_intro' => $this->faker->boolean(10),
             'allergies' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'extra_info' => $this->faker->boolean ? $this->faker->sentence(10) : null,

@@ -22,6 +22,7 @@ class CreateMensasTable extends Migration
             $table->integer('date');
             $table->integer('closing_time');
             $table->unsignedTinyInteger('max_users');
+            $table->tinyInteger('food_options')->unsigned();
             $table->boolean('closed')->default(false);
             $table->float('price');
 

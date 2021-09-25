@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Http\Controllers\Api\v1\Mensa\Models\FoodOptions;
 use App\Models\Mensa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -30,6 +31,7 @@ class MensaFactory extends Factory
             'date' => $date,
             'closing_time' => $date,
             'max_users' => $this->faker->numberBetween(5, 50),
+            'food_options' => $this->faker->numberBetween(1, 7),
             'closed' => $this->faker->boolean,
             'price' => $this->faker->randomFloat(2, 0, 10)
         ];

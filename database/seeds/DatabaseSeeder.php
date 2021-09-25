@@ -17,32 +17,41 @@ class DatabaseSeeder extends Seeder
      * @return void
      */
     public function run() {
+        $this->command->info('-- Starting Mensa seeder --');
         $this->mensaSeeder();
+        $this->command->info('-- Starting Faq seeder --');
         $this->faqSeeder();
     }
 
     private function mensaSeeder() {
         $faker = Faker\Factory::create();
 
+        $this->command->info('- Creating users -');
         $users = User::factory()
             ->count(50)
             ->create();
 
+        $this->command->info('- Creating mensas -');
         $mensas = Mensa::factory()
             ->count(20)
             ->create();
 
-        foreach ($mensas as $mensa) {
+        foreach ($mensas as $key => $mensa) {
+            $this->command->info("- Seeding mensa $mensa->id ($key/20) -");
+
+            $this->command->info('Creating menu items');
             MenuItem::factory()
                 ->count($faker->numberBetween(0, 5))
                 ->for($mensa)
                 ->create();
 
+            $this->command->info('Creating extra options');
             $extraOptions = ExtraOption::factory()
                 ->count($faker->numberBetween(0, 5))
                 ->for($mensa)
                 ->create();
 
+            $this->command->info('Signup a random amount of users');
             $userList = $users->random(rand(0, min($users->count(), $mensa->max_users)));
             foreach ($userList as $user) {
                 /** @var Signup $signup */

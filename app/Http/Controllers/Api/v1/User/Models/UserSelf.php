@@ -8,7 +8,7 @@ class UserSelf {
         public string $email,
         public string|null $allergies,
         public string|null $extraInfo,
-        public bool|null $vegetarian,
+        public int $foodPreference,
         public bool $mensaAdmin
     ) {
     }

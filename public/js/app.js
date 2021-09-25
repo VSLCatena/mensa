@@ -2012,23 +2012,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../utils/ValidationRules */ "./resources/assets/js/utils/ValidationRules.ts");
 /* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
-/* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../lang/Language */ "./resources/assets/js/lang/Language.ts");
 
 
 
-
-var foodOptions = [{
-  value: _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.VEGETARIAN,
-  text: _lang_Language__WEBPACK_IMPORTED_MODULE_2__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_2__.default.text.signup.field_food_vegetarian)
-}, {
-  value: _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.MEAT,
-  text: _lang_Language__WEBPACK_IMPORTED_MODULE_2__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_2__.default.text.signup.field_food_meat)
-}];
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__.default.extend({
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__.default.extend({
   props: {
+    mensa: {
+      type: Object,
+      required: true
+    },
     signup: {
       type: Object,
       required: true
@@ -2040,7 +2035,6 @@ var foodOptions = [{
   },
   data: function data() {
     return {
-      foodOptions: foodOptions,
       foodChosen: null,
       MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH,
       validations: {
@@ -2051,11 +2045,26 @@ var foodOptions = [{
     };
   },
   computed: {
-    optionVegetarian: function optionVegetarian() {
-      return this.$ll(this.$lang.text.signup.field_food_vegetarian);
+    foodOptions: function foodOptions() {
+      var _this = this;
+
+      var available = _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.SortedFoodPreferences.filter(function (value) {
+        return _this.mensa.foodOptions.includes(value);
+      });
+      var options = this.allFoodOptions;
+      return available.map(function (option) {
+        return {
+          value: option,
+          text: options[option]
+        };
+      });
     },
-    optionMeat: function optionMeat() {
-      return this.$ll(this.$lang.text.signup.field_food_meat);
+    allFoodOptions: function allFoodOptions() {
+      return {
+        VEGAN: this.$ll(this.$lang.text.signup.field_food_vegan),
+        VEGETARIAN: this.$ll(this.$lang.text.signup.field_food_vegetarian),
+        MEAT: this.$ll(this.$lang.text.signup.field_food_meat)
+      };
     }
   }
 }));
@@ -2322,6 +2331,54 @@ function MapPrice(data) {
 
 /***/ }),
 
+/***/ "./resources/assets/js/data/mensa/mapper/MapFoodPreference.ts":
+/*!********************************************************************!*\
+  !*** ./resources/assets/js/data/mensa/mapper/MapFoodPreference.ts ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "MapFoodPreferences": () => (/* binding */ MapFoodPreferences),
+/* harmony export */   "MapFoodPreference": () => (/* binding */ MapFoodPreference)
+/* harmony export */ });
+/* harmony import */ var _utils_Result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/Result */ "./resources/assets/js/utils/Result.ts");
+/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+
+function MapFoodPreferences(preferences) {
+  return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
+    if (!Array.isArray(preferences)) throw new Error("data is not of type Array. (" + _typeof(preferences) + ")");
+    return preferences.map(function (preference) {
+      return (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_2__.requireNotNull)('foodPreferences', MapFoodPreference(preference).getOrThrow());
+    });
+  });
+}
+function MapFoodPreference(foodPreference) {
+  return (0,_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
+    switch (foodPreference) {
+      case 'vegan':
+        return _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.VEGAN;
+
+      case 'vegetarian':
+        return _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.VEGETARIAN;
+
+      case 'meat':
+        return _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.MEAT;
+
+      default:
+        return null;
+    }
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/assets/js/data/mensa/mapper/MapMensas.ts":
 /*!************************************************************!*\
   !*** ./resources/assets/js/data/mensa/mapper/MapMensas.ts ***!
@@ -2340,7 +2397,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MapSimpleUsers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MapSimpleUsers */ "./resources/assets/js/data/mensa/mapper/MapSimpleUsers.ts");
 /* harmony import */ var _MapDate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MapDate */ "./resources/assets/js/data/mensa/mapper/MapDate.ts");
 /* harmony import */ var _MapMenu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MapMenu */ "./resources/assets/js/data/mensa/mapper/MapMenu.ts");
+/* harmony import */ var _MapFoodPreference__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MapFoodPreference */ "./resources/assets/js/data/mensa/mapper/MapFoodPreference.ts");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -2380,6 +2439,7 @@ function MapMensa(data) {
       id: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('id', data.id),
       title: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('title', data.title),
       description: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('description', data.description),
+      foodOptions: (0,_MapFoodPreference__WEBPACK_IMPORTED_MODULE_6__.MapFoodPreferences)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('foodOptions', data.foodOptions)).getOrThrow(),
       menu: (0,_MapMenu__WEBPACK_IMPORTED_MODULE_5__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('menu', data.menu)).getOrThrow(),
       extraOptions: (0,_MapExtraOptions__WEBPACK_IMPORTED_MODULE_1__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('extraOptions', data.extraOptions)).getOrThrow(),
       date: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__.default)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('date', data.date)),
@@ -2752,15 +2812,18 @@ var AnonymousUser = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SortedFoodPreferences": () => (/* binding */ SortedFoodPreferences),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 var FoodPreference;
 
 (function (FoodPreference) {
-  FoodPreference[FoodPreference["VEGETARIAN"] = 0] = "VEGETARIAN";
-  FoodPreference[FoodPreference["MEAT"] = 1] = "MEAT";
+  FoodPreference["VEGAN"] = "VEGAN";
+  FoodPreference["VEGETARIAN"] = "VEGETARIAN";
+  FoodPreference["MEAT"] = "MEAT";
 })(FoodPreference || (FoodPreference = {}));
 
+var SortedFoodPreferences = [FoodPreference.VEGAN, FoodPreference.VEGETARIAN, FoodPreference.MEAT];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FoodPreference);
 
 /***/ }),
@@ -3364,13 +3427,17 @@ var text = {
       nl: 'Etens voorkeur',
       en: 'Food preference'
     },
-    field_food_meat: {
-      nl: 'Vlees',
-      en: 'Meat'
+    field_food_vegan: {
+      nl: 'Veganistisch',
+      en: 'Vegan'
     },
     field_food_vegetarian: {
       nl: 'Vegetarisch',
       en: 'Vegetarian'
+    },
+    field_food_meat: {
+      nl: 'Vlees',
+      en: 'Meat'
     },
     field_allergies: {
       nl: 'Allergieën',
@@ -3558,6 +3625,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Validations": () => (/* binding */ Validations)
 /* harmony export */ });
 /* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lang/Language */ "./resources/assets/js/lang/Language.ts");
+/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+
 
 var MAX_STRING_LENGTH = 191;
 var EmailRule = /^(?!\.)("([^"\r\\]|\\["\r\\])*"|([-a-z0-9!#$%&'*+\/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$/;
@@ -3573,7 +3642,7 @@ var Validations = {
     return value && EmailRule.test(value) || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.email.invalid);
   }, MaxStringLengthValidation],
   foodOptions: [function (value) {
-    return value === 0 || value === 1 || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.required);
+    return value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.VEGAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.VEGETARIAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.default.MEAT || _lang_Language__WEBPACK_IMPORTED_MODULE_0__.CurrentLanguage.language.getText(_lang_Language__WEBPACK_IMPORTED_MODULE_0__.default.validation.general.required);
   }],
   allergies: [MaxStringLengthValidation],
   description: [MaxStringLengthValidation]
@@ -35918,6 +35987,7 @@ var render = function() {
                             [
                               _c("MensaSignupEntry", {
                                 attrs: {
+                                  mensa: _vm.mensa,
                                   signup: _vm.signup,
                                   enabled: !_vm.loading
                                 }
@@ -35933,6 +36003,7 @@ var render = function() {
                               [
                                 _c("MensaSignupEntry", {
                                   attrs: {
+                                    mensa: _vm.mensa,
                                     signup: intro,
                                     enabled: !_vm.loading
                                   }

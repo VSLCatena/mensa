@@ -10,7 +10,7 @@ class SignupItem {
      * @param SimpleUserItem $user
      * @param string $allergies
      * @param string $extraInfo
-     * @param bool $vegetarian
+     * @param int $food_option
      * @param bool $cooks
      * @param bool $dishwasher
      */
@@ -19,7 +19,7 @@ class SignupItem {
         public SimpleUserItem $user,
         public string $allergies,
         public string $extraInfo,
-        public bool $vegetarian,
+        public int $food_option,
         public bool $cooks,
         public bool $dishwasher
     ) {

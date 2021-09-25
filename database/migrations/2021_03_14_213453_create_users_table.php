@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('allergies')->nullable();
             $table->string('extra_info')->nullable();
             $table->boolean('mensa_admin')->default(false);
-            $table->boolean('vegetarian')->nullable();
+            $table->tinyInteger('food_preference')->nullable();
             $table->integer('remote_last_check')->useCurrent();
             $table->string('remote_principal_name');
             $table->rememberToken();

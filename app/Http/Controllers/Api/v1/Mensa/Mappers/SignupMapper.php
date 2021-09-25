@@ -21,7 +21,7 @@ trait SignupMapper {
             user: self::mapUser($user ?? $signup->user),
             allergies: $signup->allergies,
             extraInfo: $signup->extra_info,
-            vegetarian: $signup->vegetarian,
+            food_option: $signup->food_option,
             cooks: $signup->cooks,
             dishwasher: $signup->dishwasher
         );

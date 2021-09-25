@@ -49,33 +49,30 @@
 import Vue, {PropType} from 'vue';
 import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
 import {MAX_STRING_LENGTH, Validations} from "../../../../utils/ValidationRules";
-import FoodPreference from "../../../../domain/mensa/model/FoodPreference";
-import Language, {CurrentLanguage} from "../../../../lang/Language";
+import FoodPreference, {SortedFoodPreferences} from "../../../../domain/mensa/model/FoodPreference";
+import Mensa from "../../../../domain/mensa/model/Mensa";
 
-const foodOptions = [
-    {
-        value: FoodPreference.VEGETARIAN,
-        text: CurrentLanguage.language.getText(Language.text.signup.field_food_vegetarian),
-    },
-    {
-        value: FoodPreference.MEAT,
-        text: CurrentLanguage.language.getText(Language.text.signup.field_food_meat),
-    }
-];
+interface FoodOption {
+    value: FoodPreference,
+    text: string
+}
 
 export default Vue.extend({
     props: {
+        mensa: {
+            type: Object as PropType<Mensa>,
+            required: true,
+        },
         signup: {
             type: Object as PropType<MensaSignup>,
-            required: true
+            required: true,
         },
         enabled: {
             type: Boolean,
             required: false,
-        }
+        },
     },
     data: () => ({
-        foodOptions: foodOptions,
         foodChosen: null as string | null,
         MAX_STRING_LENGTH: MAX_STRING_LENGTH,
         validations: {
@@ -85,11 +82,23 @@ export default Vue.extend({
         }
     }),
     computed: {
-        optionVegetarian: function(): string {
-            return this.$ll(this.$lang.text.signup.field_food_vegetarian);
+        foodOptions: function(): FoodOption[] {
+            let available = SortedFoodPreferences.filter(value => this.mensa.foodOptions.includes(value));
+            let options = this.allFoodOptions;
+
+            return available.map(function(option: FoodPreference): FoodOption {
+                return {
+                    value: option,
+                    text: options[option]
+                }
+            });
         },
-        optionMeat: function(): string {
-            return this.$ll(this.$lang.text.signup.field_food_meat);
+        allFoodOptions: function(): { [Property in FoodPreference]: string } {
+            return {
+                VEGAN: this.$ll(this.$lang.text.signup.field_food_vegan),
+                VEGETARIAN: this.$ll(this.$lang.text.signup.field_food_vegetarian),
+                MEAT: this.$ll(this.$lang.text.signup.field_food_meat),
+            }
         }
     }
 });

@@ -19,14 +19,17 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $allergies
  * @property string|null $extra_info
  * @property int $mensa_admin
- * @property int|null $vegetarian
- * @property string $remote_last_check
+ * @property int|null $food_preference
+ * @property int $remote_last_check
  * @property string $remote_principal_name
  * @property string|null $remember_token
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $user
+ * @property-read int|null $user_count
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
@@ -34,6 +37,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereExtraInfo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFoodPreference($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereMensaAdmin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
@@ -41,11 +45,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRemoteLastCheck($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRemotePrincipalName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereVegetarian($value)
  * @mixin \Eloquent
- * @method static \Database\Factories\UserFactory factory(...$parameters)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $user
- * @property-read int|null $user_count
  */
 class User extends Authenticatable
 {

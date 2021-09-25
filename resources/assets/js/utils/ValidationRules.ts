@@ -1,4 +1,5 @@
 import $lang, {CurrentLanguage} from "../lang/Language";
+import FoodPreference from "../domain/mensa/model/FoodPreference";
 
 export const MAX_STRING_LENGTH = 191
 export const EmailRule = /^(?!\.)("([^"\r\\]|\\["\r\\])*"|([-a-z0-9!#$%&'*+\/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$/;
@@ -21,9 +22,12 @@ export const Validations = {
         MaxStringLengthValidation
     ],
     foodOptions: [
-        (value: number) => {
-            return (value === 0 || value === 1) ||
-                CurrentLanguage.language.getText($lang.validation.general.required)
+        (value: string) => {
+            return (
+                value == FoodPreference.VEGAN ||
+                value == FoodPreference.VEGETARIAN ||
+                value == FoodPreference.MEAT
+                ) || CurrentLanguage.language.getText($lang.validation.general.required)
         }
     ],
     allergies: [

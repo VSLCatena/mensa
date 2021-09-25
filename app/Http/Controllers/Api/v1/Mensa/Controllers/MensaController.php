@@ -63,7 +63,8 @@ class MensaController extends Controller
             'description' => ['string', 'required'],
             'date' => ['date_format:'.\DateTime::RFC3339, 'required'],
             'closing_time' => ['date_format:'.\DateTime::RFC3339, 'required'],
-            'max_users' => ['integer', 'min:0', 'max:999', 'required']
+            'max_users' => ['integer', 'min:0', 'max:999', 'required'],
+            'food_options' => ['integer', 'min:1', 'max:7', 'required'],
         ]);
         if ($validator->fails()) return response()->json([ "errors" => $validator->errors()]);
 
@@ -73,6 +74,7 @@ class MensaController extends Controller
             'description' => $request->get('description'),
             'date' => Carbon::parse($request->get('date')),
             'closing_time' => Carbon::parse($request->get('closing_time')),
+            'food_options' => $request->get('food_options'),
             'max_users' => $request->get('max_users'),
             'closed' => false
         ]);
@@ -97,7 +99,8 @@ class MensaController extends Controller
             'date' => ['date_format:'.\DateTime::RFC3339],
             'closing_time' => ['date_format:'.\DateTime::RFC3339],
             'max_users' => ['integer', 'min:0', 'max:999'],
-            'closed' => ['boolean']
+            'closed' => ['boolean'],
+            'food_options' => ['integer', 'min:1', 'max:7', 'required'],
         ]);
         if ($validator->fails()) return response()->json([ "errors" => $validator->errors()]);
 
@@ -107,6 +110,7 @@ class MensaController extends Controller
         if ($request->has('closing_time')) $mensa->closing_time = Carbon::parse($request->get('closing_time'));
         if ($request->has('max_users')) $mensa->max_users = $request->get('max_users');
         if ($request->has('closed')) $mensa->closed = $request->get('closed');
+        if ($request->has('food_options')) $mensa->food_options = $request->get('food_options');
 
         $mensa->save();
         return null;

@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
  * @property int $date
  * @property int $closing_time
  * @property int $max_users
+ * @property int $food_options
  * @property int $closed
  * @property float $price
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExtraOption[] $extraOptions
@@ -42,6 +43,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereFoodOptions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereMaxUsers($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Mensa wherePrice($value)
@@ -66,7 +68,7 @@ class Mensa extends Model
 
     public function orderedUsers(): HasMany {
         return $this->hasMany(Signup::class)
-            ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.vegetarian as vegetarian, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
+            ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.food_option as food_option, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
             ->join('users', 'users.id', '=', 'signups.id')
             ->orderBy('cooks', 'DESC')
             ->orderBy('dishwasher', 'DESC')

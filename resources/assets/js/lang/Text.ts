@@ -102,13 +102,17 @@ const text = {
             nl: 'Etens voorkeur',
             en: 'Food preference',
         },
-        field_food_meat: {
-            nl: 'Vlees',
-            en: 'Meat',
+        field_food_vegan: {
+            nl: 'Veganistisch',
+            en: 'Vegan',
         },
         field_food_vegetarian: {
             nl: 'Vegetarisch',
             en: 'Vegetarian',
+        },
+        field_food_meat: {
+            nl: 'Vlees',
+            en: 'Meat',
         },
         field_allergies: {
             nl: 'Allergieën',

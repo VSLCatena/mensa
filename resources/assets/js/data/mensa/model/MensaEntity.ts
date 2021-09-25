@@ -6,6 +6,7 @@ export default interface MensaEntity {
     id?: string,
     title?: string,
     description?: string,
+    foodOptions?: string[],
     menu?: MensaMenuEntity[],
     extraOptions?: ExtraOption[],
     date?: number,
