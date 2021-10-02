@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -35,7 +36,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         parent::report($exception);
     }
@@ -47,8 +48,14 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
+        // For some reason exceptions skip middlewares, so we re-do the json header for api requests here. We put the
+        // scope to v1 only just so it is encapsulated to v1, which will allow more flexibility in the future.
+        if (str_starts_with($request->path(), 'api/v1/')) {
+            $request->headers->set('Accept', 'application/json');
+        }
+
         if($this->isHttpException($exception))
         {
             switch ($exception->getStatusCode())
