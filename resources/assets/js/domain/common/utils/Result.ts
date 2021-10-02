@@ -27,6 +27,22 @@ abstract class ResultType<T> {
 
         return null;
     }
+
+    public map<T, N>(fn: (value: T) => N): Result<N> {
+        if (this instanceof Success) {
+            return new Success(fn(this.value));
+        } else {
+            return this as unknown as Failure<N>;
+        }
+    }
+
+    public asPromise(): Promise<T> {
+        if (this instanceof Success) {
+            return Promise.resolve(this.value);
+        } else {
+            return Promise.reject((this as Failure<T>).error)
+        }
+    }
 }
 
 export function runCatching<T>(call: () => T): Result<T> {

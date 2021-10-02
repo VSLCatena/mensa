@@ -5,19 +5,16 @@ import Config from '../../../Config';
 import MapMensas from "../mapper/MapMensas";
 import axios from "axios";
 import MensaList from "../../../domain/mensa/model/MensaList";
+import MapResponse from "../../utils/MapResponse";
 
 class MensaRepositoryImpl implements MensaRepository {
 
     async getMensas(weekOffset: number|null): Promise<MensaList> {
-        try {
-            let result = await axios.get(`${Config.API_BASE_URL}/mensas`, {
-                params: { weekOffset: weekOffset }
-            });
-
-            return MapMensas(result.data).getOrThrow();
-        } catch (e) {
-            return Promise.reject(e);
-        }
+        return axios.get(`${Config.API_BASE_URL}/mensas`, {
+            params: { weekOffset: weekOffset }
+        })
+            .then(MapResponse)
+            .then(value => MapMensas(value).asPromise());
     }
     getMensa(mensaId: string): Promise<Mensa | null> {
         throw new Error('Method not implemented.');

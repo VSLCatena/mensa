@@ -1,4 +1,5 @@
-import Lang, {CurrentLanguage, translatedText} from "../lang/Language";
+import Vue from 'vue';
+import Lang, {translatedText} from "../lang/Language";
 import {formatOrdinal} from "./NumberFormatter";
 import Language from "../../domain/common/model/Language";
 
@@ -21,7 +22,7 @@ let defaultOptions: Options = {
 export function formatDate(
     date: Date,
     options: Partial<Options>|null = null,
-    language: Language = CurrentLanguage.language,
+    language: Language = Vue.prototype.$local.language,
 ): string {
     let actualOptions = {...defaultOptions, ...options }
 

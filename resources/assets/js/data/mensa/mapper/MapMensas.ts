@@ -8,7 +8,7 @@ import MensaListEntity, {BetweenEntity} from "../model/MensaListEntity";
 import MensaList, {Between} from "../../../domain/mensa/model/MensaList";
 import MapDate from "./MapDate";
 import MapMenu from "./MapMenu";
-import {MapFoodPreferences} from "./MapFoodPreference";
+import {MapFoodPreferences} from "../../common/MapFoodPreference";
 
 
 export default function MapMensaList(data: MensaListEntity): Result<MensaList> {

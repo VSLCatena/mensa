@@ -110,7 +110,7 @@ abstract class RemoteUserLookup {
         $user->name = $remoteUser->name;
         $user->email = $remoteUser->email;
         $user->mensa_admin = $remoteUser->mensa_admin;
-        $user->remote_last_check = Carbon::now();
+        $user->remote_last_check = Carbon::now()->getTimestamp();
         $user->save();
 
         return $user;

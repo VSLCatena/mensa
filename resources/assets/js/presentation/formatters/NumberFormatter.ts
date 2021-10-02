@@ -1,8 +1,7 @@
-import {CurrentLanguage} from "../lang/Language";
+import Vue from 'vue';
 import Language from "../../domain/common/model/Language";
 
-
-export function formatOrdinal(num: number, language: Language = CurrentLanguage.language): string {
+export function formatOrdinal(num: number, language: Language = Vue.prototype.$local.language): string {
     switch (language.language) {
         case "nl":
             return formatOrdinalNL(num)

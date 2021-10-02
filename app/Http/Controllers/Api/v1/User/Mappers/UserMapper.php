@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1\User\Mappers;
 
+use App\Http\Controllers\Api\v1\Common\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\User\Models\UserSelf;
 use App\Models\User;
 
 trait UserMapper {
+    use FoodOptionsMapper;
+
     function mapUser(User $user) {
         return new UserSelf(
             id: $user->id,
@@ -13,8 +16,8 @@ trait UserMapper {
             email: $user->email,
             allergies: $user->allergies,
             extraInfo: $user->extra_info,
-            foodPreference: $user->food_preference,
-            mensaAdmin: $user->mensa_admin
+            foodPreference: $this->mapFoodOption($user->food_preference),
+            isAdmin: $user->mensa_admin
         );
     }
 }

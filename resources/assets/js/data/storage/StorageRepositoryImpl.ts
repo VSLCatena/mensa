@@ -4,6 +4,7 @@ import Language, {SupportedLanguages} from "../../domain/common/model/Language";
 
 const DARK_MODE_KEY = "DARK_MODE_KEY";
 const LANGUAGE_KEY = "LANGUAGE_KEY";
+const TOKEN_KEY = "TOKEN_KEY";
 
 class StorageRepositoryImpl implements StorageRepository {
     getDarkMode(): boolean {
@@ -25,6 +26,18 @@ class StorageRepositoryImpl implements StorageRepository {
 
     setLanguage(language: Language): void {
         Cookies.set(LANGUAGE_KEY, language.language);
+    }
+
+    getUserToken(): string|undefined {
+        return Cookies.get(TOKEN_KEY);
+    }
+
+    setUserToken(token: string | null) {
+        if (token == null) {
+            Cookies.remove(TOKEN_KEY);
+        } else {
+            Cookies.set(TOKEN_KEY, token);
+        }
     }
 }
 

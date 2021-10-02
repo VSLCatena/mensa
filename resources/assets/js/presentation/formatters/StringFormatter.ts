@@ -1,8 +1,9 @@
-import lang, {CurrentLanguage, translatedText} from "../lang/Language";
+import Vue from 'vue';
+import lang, {translatedText} from "../lang/Language";
 import {SimpleUser} from "../../domain/common/model/User";
 import Language from "../../domain/common/model/Language";
 
-export function formatUsers(users: SimpleUser[], language: Language = CurrentLanguage.language): string|null {
+export function formatUsers(users: SimpleUser[], language: Language = Vue.prototype.$local.language): string|null {
     switch (users.length) {
         case 0:
             return null;

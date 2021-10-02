@@ -1,6 +1,6 @@
-import Result, {runCatching} from "../../../domain/common/utils/Result";
-import FoodPreference from "../../../domain/mensa/model/FoodPreference";
-import {requireNotNull} from "../../utils/MappingUtils";
+import Result, {runCatching} from "../../domain/common/utils/Result";
+import FoodPreference from "../../domain/mensa/model/FoodPreference";
+import {requireNotNull} from "../utils/MappingUtils";
 
 export function MapFoodPreferences(preferences: string[]): Result<FoodPreference[]> {
     return runCatching(() => {

@@ -12,10 +12,10 @@
 */
 
 
-Route::get('v1/login/token', 'Api\v1\User\Controllers\GenerateTokenController');
 
 Route::prefix("v1")->middleware('jsonRequests')->group(function(){
     Route::get('login/url', 'Api\v1\User\Controllers\GetAuthorizationUrlController');
+    Route::get('login/token', 'Api\v1\User\Controllers\GenerateTokenController');
 
     Route::get('mensas', 'Api\v1\Mensa\Controllers\MensaListController');
     Route::get('mensae', 'Api\v1\Mensa\Controllers\MensaListController');

@@ -6,8 +6,8 @@ export interface FullUser extends SimpleUser, UserEmail {
     email: string,
     isAdmin: boolean,
     foodPreference: FoodPreference|null,
-    description: string,
-    allergies: string,
+    description: string|null,
+    allergies: string|null,
 }
 
 export interface SimpleUser extends User {
@@ -25,8 +25,8 @@ export interface User {
     email?: string,
     isAdmin?: boolean,
     foodPreference?: FoodPreference|null,
-    description?: string,
-    allergies?: string,
+    description?: string|null,
+    allergies?: string|null,
 }
 
 export type AuthUser = FullUser | Anonymous

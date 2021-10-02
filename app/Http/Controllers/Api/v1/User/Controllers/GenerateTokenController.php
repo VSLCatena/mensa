@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use App\Contracts\RemoteUserLookup;
-use App\Http\Controllers\Api\v1\Utils\User\UserLookup;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -18,9 +17,9 @@ class GenerateTokenController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param UserLookup $userLookup
+     * @param RemoteUserLookup $userLookup
      */
-    public function __construct(private UserLookup $userLookup)
+    public function __construct(private RemoteUserLookup $userLookup)
     {
     }
 

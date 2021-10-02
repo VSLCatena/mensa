@@ -34,7 +34,7 @@
             </v-form>
 
             <v-card-actions>
-                <v-btn text :loading="loading" @click="addIntro()" v-if="(intros.length < 1 || $user.isAdmin) && step === 1">{{ $ll($lang.text.signup.add_intro) }}</v-btn>
+                <v-btn text :loading="loading" @click="addIntro()" v-if="(intros.length < 1 || $local.user.isAdmin) && step === 1">{{ $ll($lang.text.signup.add_intro) }}</v-btn>
                 <v-btn text :loading="loading" @click="deleteIntro()" v-if="tab !== 0 && step === 1">{{ $ll($lang.text.signup.remove_intro) }}</v-btn>
                 <v-btn text @click="step = 1" v-if="step === 2">{{ $ll($lang.text.general.previous) }}</v-btn>
                 <v-spacer></v-spacer>
@@ -58,7 +58,7 @@
     export default Vue.extend({
         components: {MensaSignupEntry},
         data: function() {
-            let potentialUser = this.$user;
+            let potentialUser = this.$local.user;
             let user = { email: "" } as UserEmail;
             if ('email' in potentialUser) {
                 user = potentialUser as UserEmail;
@@ -91,7 +91,7 @@
         methods: {
             open: function (mensa: Mensa) {
                 if (this.mensa != mensa) {
-                    this.signup = createEmptySignup(mensa.id, this.$user);
+                    this.signup = createEmptySignup(mensa.id, this.$local.user);
                     this.intros = [];
                     this.tab = 0;
                     this.step = 1;
@@ -105,7 +105,7 @@
                 let mensa = this.mensa;
                 if (mensa == null) return;
 
-                this.intros = [...this.intros, createEmptySignup(mensa.id, this.$user, true)];
+                this.intros = [...this.intros, createEmptySignup(mensa.id, this.$local.user, true)];
             },
             deleteIntro: function () {
                 this.tab -= 1;

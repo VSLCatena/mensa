@@ -14,11 +14,11 @@ import VueRouter from 'vue-router';
 import App from "./presentation/App.vue";
 import Home from './presentation/pages/home/Home.vue';
 import Mensa from './presentation/components/mensa/MensaItem.vue';
-import {LanguageText} from "./presentation/lang/LanguageText";
-import lang, {CurrentLanguage, translatedText} from "./presentation/lang/Language";
-import { AnonymousUser, AuthUser } from "./domain/common/model/User";
-import Language from "./domain/common/model/Language";
+import lang, { translate } from "./presentation/lang/Language";
 import GetDarkMode from "./domain/storage/usecase/GetDarkMode";
+import LoginToken from "./presentation/pages/login/LoginToken.vue";
+import GetSelf from "./domain/user/usecase/GetSelf";
+import {defaultData} from "./Local";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,7 +31,8 @@ Vue.use(Vuetify);
 
 const routes = [
     { path: '/', component: Home },
-    { path: '/mensa', component: Mensa }
+    { path: '/mensa', component: Mensa },
+    { path: '/login/token', component: LoginToken }
 ]
 
 const router = new VueRouter({
@@ -46,21 +47,17 @@ const vuetify = new Vuetify({
 });
 
 
-Vue.prototype.$user = Vue.observable(AnonymousUser as AuthUser);
+Vue.prototype.$local = Vue.observable(defaultData());
 Vue.prototype.$lang = lang;
-Vue.prototype.$currentLanguage = CurrentLanguage;
-Vue.prototype.$ll = function(
-    text: LanguageText,
-    capitalize: boolean = false,
-    language: Language = CurrentLanguage.language
-): string {
-    let txt = translatedText(language, text);
-    if (capitalize) txt = txt.charAt(0).toUpperCase() + txt.slice(1);
-    return txt;
-}
+Vue.prototype.$ll = translate;
 
 const app = new Vue({
     vuetify,
     router,
     components: {App},
 }).$mount('#app');
+
+GetSelf().then(user => {
+    app.$local.user = user;
+    console.debug(user);
+});

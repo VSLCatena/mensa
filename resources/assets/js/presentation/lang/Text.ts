@@ -13,6 +13,18 @@ const text = {
         previous: {
             nl: 'Vorige',
             en: 'Previous',
+        },
+        yes: {
+            nl: 'Ja',
+            en: 'Yes',
+        },
+        no: {
+            nl: 'Nee',
+            en: 'No',
+        },
+        cancel: {
+            nl: 'Annuleer',
+            en: 'Cancel',
         }
     },
     and: {
@@ -87,6 +99,52 @@ const text = {
         extra_options_title: {
             nl: "Extra opties",
             en: "Extra options",
+        }
+    },
+    login: {
+        title: {
+            nl: "Login",
+            en: "Login",
+        },
+        login_button: {
+            nl: 'Klik hier om in te loggen',
+            en: 'Click here to log in',
+        },
+        logout_button: {
+            nl: 'Log uit',
+            en: 'Log out',
+        },
+        logout_title: {
+            nl: 'Uitloggen',
+            en: 'Log out',
+        },
+        logout_confirm: {
+            nl: 'Weet je zeker dat je wilt uitloggen?',
+            en: 'Are you sure you want to log out?',
+        },
+        login_info: {
+            nl: 'Inloggen verloopt via Microsoft. Dit doe je door in te loggen met <accountnaam>@vslcatena.nl en je Catena wachtwoord.',
+            en: 'Logging in happens through Microsoft. You can do this by logging in with <accountname>@vslcatena.nl and your Catena password',
+        },
+        forgot_password: {
+            nl: "Wachtwoord vergeten",
+            en: "Forgot password",
+        },
+        email: {
+            nl: "Email",
+            en: "Email"
+        },
+        password: {
+            nl: "Wachtwoord",
+            en: "Password",
+        },
+        logging_in: {
+            nl: "Logging in",
+            en: "Logging in",
+        },
+        error: {
+            nl: "Er ging iets in bij het inloggen, probeer het later opnieuw.",
+            en: "Something went wrong trying to log in, try again later",
         }
     },
     signup: {

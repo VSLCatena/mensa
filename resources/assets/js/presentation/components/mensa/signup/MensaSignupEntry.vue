@@ -36,7 +36,7 @@
             class="mt-6" />
 
         <v-checkbox
-            v-if="$user.isAdmin"
+            v-if="$local.user.isAdmin"
             :label="$ll($lang.text.signup.field_cook)"
             v-model="signup.cook"
             :disabled="!enabled"

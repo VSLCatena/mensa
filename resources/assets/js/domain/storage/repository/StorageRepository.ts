@@ -7,6 +7,9 @@ export interface StorageRepository {
 
     getLanguage(): Language
     setLanguage(language: Language): void
+
+    getUserToken(): string|undefined
+    setUserToken(token: string|null): void
 }
 
 export default repository;
