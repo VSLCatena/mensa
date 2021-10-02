@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class MensaListController extends Controller
 {
@@ -34,7 +35,7 @@ class MensaListController extends Controller
         $validator = Validator::make($request->all(), ['weekOffset' => ['integer'],]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
         $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);

@@ -65,8 +65,9 @@ class SignupController extends Controller {
      */
     public function newSignup(Request $request, string $mensaId): ?JsonResponse {
         $mensa = Mensa::findOrFail($mensaId);
-        if ($mensa->users_count >= $mensa->max_users)
+        if ($mensa->users_count >= $mensa->max_users) {
             abort(Response::HTTP_BAD_REQUEST, "Mensa is already at its maximum users");
+        }
 
 
         $validator = Validator::make($request->all(), [
@@ -78,7 +79,7 @@ class SignupController extends Controller {
             '*.extra_info' => ['string'],
             '*.user' => ['required', 'string']
         ]);
-        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()]);
+        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()], Response::HTTP_BAD_REQUEST);
 
 
         $user = $this->lookupUser($request->get('user'));
@@ -145,7 +146,9 @@ class SignupController extends Controller {
             'extra_info' => ['string'],
         ]);
 
-        if ($validator->fails()) return response()->json([ 'errors' => $validator->errors() ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        }
 
 
         if ($request->has('cooks')) {

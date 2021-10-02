@@ -19,7 +19,7 @@ export function MapSignup(data: MensaSignupEntity): Result<MensaSignup> {
             id: requireNotNull('id', data.id),
             isIntro: requireNotNull('isIntro', data.isIntro),
             foodPreference: MapFoodPreference(data.foodPreference).getOrThrow(),
-            description: requireNotNull('description', data.description),
+            extraInfo: requireNotNull('extraInfo', data.extraInfo),
             allergies: requireNotNull('allergies', data.allergies),
             cook: requireNotNull('cook', data.cook),
             dishwasher: requireNotNull('dishwasher', data.dishwasher),

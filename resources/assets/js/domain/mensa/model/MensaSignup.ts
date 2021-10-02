@@ -5,7 +5,7 @@ export default interface MensaSignup {
     id: string,
     foodPreference: FoodPreference|null,
     isIntro: boolean,
-    description: string,
+    extraInfo: string,
     allergies: string,
     cook: boolean,
     dishwasher: boolean,
@@ -18,13 +18,19 @@ export function createEmptySignup(
     user: User,
     isIntro: boolean = false
 ): NewMensaSignup {
-    let foodPreference = ('foodPreference' in user ? user.foodPreference : null) ?? null;
-    let description = ('description' in user ? user.description : "") ?? "";
-    let allergies = ('allergies' in user ? user.allergies : "") ?? "";
+    let foodPreference: FoodPreference|null = null;
+    let extraInfo: string = "";
+    let allergies: string = "";
+
+    if (!isIntro) {
+        foodPreference = ('foodPreference' in user ? user.foodPreference : null) ?? null;
+        extraInfo = ('extraInfo' in user ? user.extraInfo : "") ?? "";
+        allergies = ('allergies' in user ? user.allergies : "") ?? "";
+    }
 
     return {
         foodPreference: foodPreference,
-        description: description,
+        extraInfo: extraInfo,
         allergies: allergies,
         isIntro: isIntro,
         cook: false,

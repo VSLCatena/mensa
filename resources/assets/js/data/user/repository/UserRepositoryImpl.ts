@@ -4,7 +4,7 @@ import Config from "../../../Config";
 import MapAuthorizationUri from "../mapper/MapAuthorizationUri";
 import MapResponse from "../../utils/MapResponse";
 import MapToken from "../mapper/MapToken";
-import {FullUser} from "../../../domain/common/model/User";
+import {FullUser, UpdatableUser} from "../../../domain/common/model/User";
 import {MapFullUser, MapUser} from "../../mensa/mapper/MapUsers";
 import WithAuthHeader from "../../utils/WithAuthHeader";
 
@@ -15,6 +15,24 @@ class UserRepositoryImpl implements UserRepository {
         })
             .then(MapResponse)
             .then(value => MapFullUser(value).asPromise())
+    }
+
+    updateSelf(authToken: string, user: UpdatableUser) {
+        let params = {};
+
+        if (user.allergies !== undefined) params = {...params, allergies: user.allergies };
+        if (user.extraInfo !== undefined) params = {...params, extraInfo: user.extraInfo };
+        if (user.foodPreference !== undefined) {
+            let preference: string|null = user.foodPreference;
+            if (preference != null) {
+                preference = preference.toLowerCase();
+            }
+            params = {...params, foodPreference: preference };
+        }
+
+        return axios.patch(`${Config.API_BASE_URL}/user/self/update`, params, {
+            headers: WithAuthHeader(authToken)
+        });
     }
 
     exchangeToken(token: string): Promise<string> {

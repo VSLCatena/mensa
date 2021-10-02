@@ -20,23 +20,24 @@
             class="mt-8 mb-4" />
 
         <v-text-field
-            :label="$ll($lang.text.signup.field_description)"
-            v-model="signup.description"
+            :label="$ll($lang.text.signup.field_extraInfo)"
+            v-model="signup.extraInfo"
             :disabled="!enabled"
-            :rules="validations.description"
+            :rules="validations.extraInfo"
             :counter="MAX_STRING_LENGTH"
             hide-details="auto"
             class="my-4" />
 
         <v-checkbox
             :label="$ll($lang.text.signup.field_dishwasher) + (signup.dishwasher ? ' ❤' : '')"
+            v-if="!signup.isIntro"
             v-model="signup.dishwasher"
             :disabled="!enabled"
             hide-details="auto"
             class="mt-6" />
 
         <v-checkbox
-            v-if="$local.user.isAdmin"
+            v-if="$local.user.isAdmin && !signup.isIntro"
             :label="$ll($lang.text.signup.field_cook)"
             v-model="signup.cook"
             :disabled="!enabled"
@@ -76,9 +77,9 @@ export default Vue.extend({
         foodChosen: null as string | null,
         MAX_STRING_LENGTH: MAX_STRING_LENGTH,
         validations: {
-            foodOptions: Validations.foodOptions,
-            allergies: Validations.allergies,
-            description: Validations.description,
+            foodOptions: [Validations.Required, ...Validations.foodOptions],
+            allergies: [Validations.MaxStringLengthValidation],
+            extraInfo: [Validations.MaxStringLengthValidation],
         }
     }),
     computed: {
@@ -95,9 +96,9 @@ export default Vue.extend({
         },
         allFoodOptions: function(): { [Property in FoodPreference]: string } {
             return {
-                VEGAN: this.$ll(this.$lang.text.signup.field_food_vegan),
-                VEGETARIAN: this.$ll(this.$lang.text.signup.field_food_vegetarian),
-                MEAT: this.$ll(this.$lang.text.signup.field_food_meat),
+                VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
+                VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
+                MEAT: this.$ll(this.$lang.text.foodOptions.meat),
             }
         }
     }

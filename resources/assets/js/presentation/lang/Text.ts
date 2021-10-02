@@ -14,6 +14,10 @@ const text = {
             nl: 'Vorige',
             en: 'Previous',
         },
+        save: {
+            nl: 'Opslaan',
+            en: 'Save',
+        },
         yes: {
             nl: 'Ja',
             en: 'Yes',
@@ -114,14 +118,6 @@ const text = {
             nl: 'Log uit',
             en: 'Log out',
         },
-        logout_title: {
-            nl: 'Uitloggen',
-            en: 'Log out',
-        },
-        logout_confirm: {
-            nl: 'Weet je zeker dat je wilt uitloggen?',
-            en: 'Are you sure you want to log out?',
-        },
         login_info: {
             nl: 'Inloggen verloopt via Microsoft. Dit doe je door in te loggen met <accountnaam>@vslcatena.nl en je Catena wachtwoord.',
             en: 'Logging in happens through Microsoft. You can do this by logging in with <accountname>@vslcatena.nl and your Catena password',
@@ -129,14 +125,6 @@ const text = {
         forgot_password: {
             nl: "Wachtwoord vergeten",
             en: "Forgot password",
-        },
-        email: {
-            nl: "Email",
-            en: "Email"
-        },
-        password: {
-            nl: "Wachtwoord",
-            en: "Password",
         },
         logging_in: {
             nl: "Logging in",
@@ -146,6 +134,22 @@ const text = {
             nl: "Er ging iets in bij het inloggen, probeer het later opnieuw.",
             en: "Something went wrong trying to log in, try again later",
         }
+    },
+    profile: {
+        title: {
+            nl: 'Hey',
+            en: 'Hey',
+        }
+    },
+    logout: {
+        title: {
+            nl: 'Uitloggen',
+            en: 'Log out',
+        },
+        confirm: {
+            nl: 'Weet je zeker dat je wilt uitloggen?',
+            en: 'Are you sure you want to log out?',
+        },
     },
     signup: {
         mensa_at: {
@@ -180,23 +184,11 @@ const text = {
             nl: 'Etens voorkeur',
             en: 'Food preference',
         },
-        field_food_vegan: {
-            nl: 'Veganistisch',
-            en: 'Vegan',
-        },
-        field_food_vegetarian: {
-            nl: 'Vegetarisch',
-            en: 'Vegetarian',
-        },
-        field_food_meat: {
-            nl: 'Vlees',
-            en: 'Meat',
-        },
         field_allergies: {
             nl: 'Allergieën',
             en: 'Allergies',
         },
-        field_description: {
+        field_extraInfo: {
             nl: 'Extra info',
             en: 'Extra information',
         },
@@ -207,6 +199,24 @@ const text = {
         field_dishwasher: {
             nl: 'Vrijwillig afwassen',
             en: 'Voluntair for washing dishes',
+        },
+    },
+    foodOptions: {
+        none: {
+            nl: 'Geen',
+            en: 'None',
+        },
+        vegan: {
+            nl: 'Veganistisch',
+            en: 'Vegan',
+        },
+        vegetarian: {
+            nl: 'Vegetarisch',
+            en: 'Vegetarian',
+        },
+        meat: {
+            nl: 'Vlees',
+            en: 'Meat',
         },
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Common;
+namespace App\Http\Controllers\Api\v1\Common\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\FoodOptions;
+use App\Http\Controllers\Api\v1\Common\Models\FoodOptions;
 
 trait FoodOptionsMapper {
 
@@ -25,12 +25,32 @@ trait FoodOptionsMapper {
         return $options;
     }
 
-    function mapFoodOption(int|null $foodOption): int|null {
+    function mapFoodOption(int|null $foodOption): string|null {
         if ($foodOption == null) return null;
 
         foreach ($this->availableOptions as $key => $value) {
             if ($foodOption & $key) return $value;
         }
         return null;
+    }
+
+    function mapFoodOptionsBack(array $foodOptions): int {
+        $options = 0;
+
+        foreach ($this->availableOptions as $key => $value) {
+            if (array_has($foodOptions, $value)) $options += $key;
+        }
+
+        return $options;
+    }
+
+    function mapFoodOptionBack(string|null $foodOption): int {
+        if ($foodOption == null) return 0;
+
+        foreach ($this->availableOptions as $key => $value) {
+            if ($foodOption == $value) return $key;
+        }
+
+        return 0;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Common\FoodOptionsMapper;
+use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaDetailItem;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
 use App\Models\Mensa;

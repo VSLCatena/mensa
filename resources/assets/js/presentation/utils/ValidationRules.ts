@@ -11,35 +11,28 @@ const MaxStringLengthValidation =
             translatedText(Vue.prototype.$local.language, $lang.validation.general.max_length_reached)
     };
 
+const Required =
+    (value: string|null) => !!value || translatedText(Vue.prototype.$local.language, $lang.validation.general.required)
+
 export const Validations = {
     email: [
-        (value: string|null) => {
-            return !!value || translatedText(Vue.prototype.$local.language, $lang.validation.general.required)
-        },
         (value: string|null) => {
             return (value && EmailRule.test(value)) ||
                 translatedText(Vue.prototype.$local.language, $lang.validation.email.invalid)
         },
         MaxStringLengthValidation
     ],
-    password: [
-        (value: string|null) => {
-            return !!value || translatedText(Vue.prototype.$local.language, $lang.validation.general.required)
-        },
-    ],
     foodOptions: [
-        (value: string) => {
+        (value: string|null) => {
+            if (value == null) return true;
+
             return (
                 value == FoodPreference.VEGAN ||
                 value == FoodPreference.VEGETARIAN ||
                 value == FoodPreference.MEAT
-                ) || translatedText(Vue.prototype.$local.language, $lang.validation.general.required)
+                ) || translatedText(Vue.prototype.$local.language, $lang.validation.general.invalid)
         }
     ],
-    allergies: [
-        MaxStringLengthValidation
-    ],
-    description: [
-        MaxStringLengthValidation
-    ]
+    Required: Required,
+    MaxStringLengthValidation: MaxStringLengthValidation
 }

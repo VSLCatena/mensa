@@ -2258,12 +2258,11 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
       this.intros = __spreadArray(__spreadArray([], this.intros, true), [(0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$local.user, true)], false);
     },
     deleteIntro: function deleteIntro() {
-      this.tab -= 1;
-
       var intros = __spreadArray([], this.intros, true);
 
       intros.splice(this.tab - 1, 1);
       this.intros = intros;
+      this.tab -= 1;
     },
     toEmail: function toEmail() {
       if (this.$refs.signupForm.validate()) {
@@ -2301,6 +2300,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/ValidationRules */ "./resources/assets/js/presentation/utils/ValidationRules.ts");
 /* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+var __spreadArray = undefined && undefined.__spreadArray || function (to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+};
+
 
 
 
@@ -2324,9 +2333,9 @@ __webpack_require__.r(__webpack_exports__);
       foodChosen: null,
       MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH,
       validations: {
-        foodOptions: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.foodOptions,
-        allergies: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.allergies,
-        description: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.description
+        foodOptions: __spreadArray([_utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.Required], _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.foodOptions, true),
+        allergies: [_utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.MaxStringLengthValidation],
+        extraInfo: [_utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.MaxStringLengthValidation]
       }
     };
   },
@@ -2347,9 +2356,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     allFoodOptions: function allFoodOptions() {
       return {
-        VEGAN: this.$ll(this.$lang.text.signup.field_food_vegan),
-        VEGETARIAN: this.$ll(this.$lang.text.signup.field_food_vegetarian),
-        MEAT: this.$ll(this.$lang.text.signup.field_food_meat)
+        VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
+        VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
+        MEAT: this.$ll(this.$lang.text.foodOptions.meat)
       };
     }
   }
@@ -2381,7 +2390,8 @@ __webpack_require__.r(__webpack_exports__);
     close: {
       type: Function,
       required: true
-    }
+    },
+    isOpen: Boolean
   },
   data: function data() {
     return {
@@ -2389,22 +2399,21 @@ __webpack_require__.r(__webpack_exports__);
       loginUrl: null,
       email: "",
       password: "",
-      MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH,
-      validations: {
-        email: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.email,
-        password: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.password
-      }
+      MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH
     };
   },
-  mounted: function mounted() {
-    var _this = this;
+  watch: {
+    isOpen: function isOpen(open) {
+      var _this = this;
 
-    this.loginUrl = null;
-    this.loading = true;
-    (0,_domain_user_usecase_GetLoginUrl__WEBPACK_IMPORTED_MODULE_1__["default"])().then(function (value) {
-      _this.loading = false;
-      _this.loginUrl = value;
-    });
+      if (open) return;
+      this.loginUrl = null;
+      this.loading = true;
+      (0,_domain_user_usecase_GetLoginUrl__WEBPACK_IMPORTED_MODULE_1__["default"])().then(function (value) {
+        _this.loading = false;
+        _this.loginUrl = value;
+      });
+    }
   },
   methods: {
     login: function login() {
@@ -2431,30 +2440,64 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/ValidationRules */ "./resources/assets/js/presentation/utils/ValidationRules.ts");
 /* harmony import */ var _domain_user_usecase_Logout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../domain/user/usecase/Logout */ "./resources/assets/js/domain/user/usecase/Logout.ts");
 /* harmony import */ var _domain_common_model_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../domain/common/model/User */ "./resources/assets/js/domain/common/model/User.ts");
+/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _domain_user_usecase_UpdateSelf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../domain/user/usecase/UpdateSelf */ "./resources/assets/js/domain/user/usecase/UpdateSelf.ts");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
+var __spreadArray = undefined && undefined.__spreadArray || function (to, from, pack) {
+  if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+    if (ar || !(i in from)) {
+      if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+      ar[i] = from[i];
+    }
+  }
+  return to.concat(ar || Array.prototype.slice.call(from));
+};
 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].extend({
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_5__["default"].extend({
   props: {
     close: {
       type: Function,
       required: true
-    }
+    },
+    isOpen: Boolean
   },
   data: function data() {
     return {
       logoutConfirmation: false,
-      email: "",
-      password: "",
+      enabled: true,
+      allergies: "",
+      extraInfo: "",
+      foodPreference: null,
       MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH,
       validations: {
-        email: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.email,
-        password: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.password
+        foodOptions: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.foodOptions,
+        allergies: [_utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.MaxStringLengthValidation],
+        description: [_utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.Validations.MaxStringLengthValidation]
       }
     };
   },
@@ -2463,6 +2506,76 @@ __webpack_require__.r(__webpack_exports__);
       (0,_domain_user_usecase_Logout__WEBPACK_IMPORTED_MODULE_1__["default"])();
       this.logoutConfirmation = false;
       this.$local.user = _domain_common_model_User__WEBPACK_IMPORTED_MODULE_2__.AnonymousUser;
+    },
+    save: function save() {
+      var _this = this;
+
+      var _a, _b;
+
+      this.enabled = false;
+      var user = this.$local.user;
+      var newUser = {};
+      if (((_a = user.allergies) !== null && _a !== void 0 ? _a : "") != this.allergies) newUser = __assign(__assign({}, newUser), {
+        allergies: this.allergies
+      });
+      if (((_b = user.extraInfo) !== null && _b !== void 0 ? _b : "") != this.extraInfo) newUser = __assign(__assign({}, newUser), {
+        extraInfo: this.extraInfo
+      });
+      if (user.foodPreference != this.foodPreference) newUser = __assign(__assign({}, newUser), {
+        foodPreference: this.foodPreference
+      });
+      (0,_domain_user_usecase_UpdateSelf__WEBPACK_IMPORTED_MODULE_4__["default"])(newUser).then(function () {
+        _this.$local.user = __assign(__assign({}, _this.$local.user), newUser);
+        _this.enabled = true;
+      })["catch"](function () {
+        _this.enabled = true;
+      });
+    },
+    resetData: function resetData() {
+      var _a, _b, _c;
+
+      var user = this.$local.user;
+      this.allergies = (_a = user.allergies) !== null && _a !== void 0 ? _a : "";
+      this.extraInfo = (_b = user.extraInfo) !== null && _b !== void 0 ? _b : "";
+      this.foodPreference = (_c = user.foodPreference) !== null && _c !== void 0 ? _c : null;
+    }
+  },
+  mounted: function mounted() {
+    this.resetData();
+  },
+  watch: {
+    isOpen: function isOpen(_isOpen) {
+      if (!_isOpen) return;
+      this.resetData();
+    }
+  },
+  computed: {
+    foodOptions: function foodOptions() {
+      var options = this.allFoodOptions;
+      var sorted = _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_3__.SortedFoodPreferences.map(function (option) {
+        return {
+          value: option,
+          text: options[option]
+        };
+      });
+      return __spreadArray([{
+        value: null,
+        text: options.NONE
+      }], sorted, true);
+    },
+    allFoodOptions: function allFoodOptions() {
+      return {
+        NONE: this.$ll(this.$lang.text.foodOptions.none),
+        VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
+        VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
+        MEAT: this.$ll(this.$lang.text.foodOptions.meat)
+      };
+    },
+    hasSettingsChanged: function hasSettingsChanged() {
+      var _a, _b;
+
+      var user = this.$local.user;
+      return ((_a = user.allergies) !== null && _a !== void 0 ? _a : "") != this.allergies || ((_b = user.extraInfo) !== null && _b !== void 0 ? _b : "") != this.extraInfo || user.foodPreference != this.foodPreference;
     }
   }
 }));
@@ -2508,8 +2621,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isLoggedIn: function isLoggedIn() {
-      console.debug("sdf");
-      console.debug(this.$local.user);
       return this.$local.user != _domain_common_model_User__WEBPACK_IMPORTED_MODULE_2__.AnonymousUser;
     }
   }
@@ -3082,7 +3193,7 @@ function MapFullUser(data) {
       email: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.requireNotNull)('email', data.email),
       isAdmin: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.requireNotNull)('isAdmin', data.isAdmin),
       foodPreference: (0,_common_MapFoodPreference__WEBPACK_IMPORTED_MODULE_2__.MapFoodPreference)(data.foodPreference).getOrNull(),
-      description: (_a = data.description) !== null && _a !== void 0 ? _a : null,
+      extraInfo: (_a = data.extraInfo) !== null && _a !== void 0 ? _a : null,
       allergies: (_b = data.allergies) !== null && _b !== void 0 ? _b : null
     };
   });
@@ -3472,6 +3583,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mapper_MapToken__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../mapper/MapToken */ "./resources/assets/js/data/user/mapper/MapToken.ts");
 /* harmony import */ var _mensa_mapper_MapUsers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../mensa/mapper/MapUsers */ "./resources/assets/js/data/mensa/mapper/MapUsers.ts");
 /* harmony import */ var _utils_WithAuthHeader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../utils/WithAuthHeader */ "./resources/assets/js/data/utils/WithAuthHeader.ts");
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 
 
 
@@ -3488,6 +3615,32 @@ var UserRepositoryImpl = function () {
       headers: (0,_utils_WithAuthHeader__WEBPACK_IMPORTED_MODULE_6__["default"])(authToken)
     }).then(_utils_MapResponse__WEBPACK_IMPORTED_MODULE_3__["default"]).then(function (value) {
       return (0,_mensa_mapper_MapUsers__WEBPACK_IMPORTED_MODULE_5__.MapFullUser)(value).asPromise();
+    });
+  };
+
+  UserRepositoryImpl.prototype.updateSelf = function (authToken, user) {
+    var params = {};
+    if (user.allergies !== undefined) params = __assign(__assign({}, params), {
+      allergies: user.allergies
+    });
+    if (user.extraInfo !== undefined) params = __assign(__assign({}, params), {
+      extraInfo: user.extraInfo
+    });
+
+    if (user.foodPreference !== undefined) {
+      var preference = user.foodPreference;
+
+      if (preference != null) {
+        preference = preference.toLowerCase();
+      }
+
+      params = __assign(__assign({}, params), {
+        foodPreference: preference
+      });
+    }
+
+    return axios__WEBPACK_IMPORTED_MODULE_0___default().patch(_Config__WEBPACK_IMPORTED_MODULE_1__["default"].API_BASE_URL + "/user/self/update", params, {
+      headers: (0,_utils_WithAuthHeader__WEBPACK_IMPORTED_MODULE_6__["default"])(authToken)
     });
   };
 
@@ -4146,12 +4299,19 @@ function createEmptySignup(mensaId, user, isIntro) {
     isIntro = false;
   }
 
-  var foodPreference = (_a = 'foodPreference' in user ? user.foodPreference : null) !== null && _a !== void 0 ? _a : null;
-  var description = (_b = 'description' in user ? user.description : "") !== null && _b !== void 0 ? _b : "";
-  var allergies = (_c = 'allergies' in user ? user.allergies : "") !== null && _c !== void 0 ? _c : "";
+  var foodPreference = null;
+  var extraInfo = "";
+  var allergies = "";
+
+  if (!isIntro) {
+    foodPreference = (_a = 'foodPreference' in user ? user.foodPreference : null) !== null && _a !== void 0 ? _a : null;
+    extraInfo = (_b = 'extraInfo' in user ? user.extraInfo : "") !== null && _b !== void 0 ? _b : "";
+    allergies = (_c = 'allergies' in user ? user.allergies : "") !== null && _c !== void 0 ? _c : "";
+  }
+
   return {
     foodPreference: foodPreference,
-    description: description,
+    extraInfo: extraInfo,
     allergies: allergies,
     isIntro: isIntro,
     cook: false,
@@ -5186,6 +5346,178 @@ function Logout() {
 
 /***/ }),
 
+/***/ "./resources/assets/js/domain/user/usecase/UpdateSelf.ts":
+/*!***************************************************************!*\
+  !*** ./resources/assets/js/domain/user/usecase/UpdateSelf.ts ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ UpdateSelf)
+/* harmony export */ });
+/* harmony import */ var _repository_UserRepository__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../repository/UserRepository */ "./resources/assets/js/domain/user/repository/UserRepository.ts");
+/* harmony import */ var _common_usecase_WithAuthentication__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/usecase/WithAuthentication */ "./resources/assets/js/domain/common/usecase/WithAuthentication.ts");
+var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = undefined && undefined.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+
+
+function UpdateSelf(user) {
+  return __awaiter(this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+      return [2
+      /*return*/
+      , (0,_common_usecase_WithAuthentication__WEBPACK_IMPORTED_MODULE_1__["default"])(function (token) {
+        return _repository_UserRepository__WEBPACK_IMPORTED_MODULE_0__["default"].updateSelf(token, user);
+      }).then(function () {})];
+    });
+  });
+}
+
+/***/ }),
+
 /***/ "./resources/assets/js/presentation/formatters/DateFormatter.ts":
 /*!**********************************************************************!*\
   !*** ./resources/assets/js/presentation/formatters/DateFormatter.ts ***!
@@ -5752,6 +6084,10 @@ var text = {
       nl: 'Vorige',
       en: 'Previous'
     },
+    save: {
+      nl: 'Opslaan',
+      en: 'Save'
+    },
     yes: {
       nl: 'Ja',
       en: 'Yes'
@@ -5852,14 +6188,6 @@ var text = {
       nl: 'Log uit',
       en: 'Log out'
     },
-    logout_title: {
-      nl: 'Uitloggen',
-      en: 'Log out'
-    },
-    logout_confirm: {
-      nl: 'Weet je zeker dat je wilt uitloggen?',
-      en: 'Are you sure you want to log out?'
-    },
     login_info: {
       nl: 'Inloggen verloopt via Microsoft. Dit doe je door in te loggen met <accountnaam>@vslcatena.nl en je Catena wachtwoord.',
       en: 'Logging in happens through Microsoft. You can do this by logging in with <accountname>@vslcatena.nl and your Catena password'
@@ -5868,14 +6196,6 @@ var text = {
       nl: "Wachtwoord vergeten",
       en: "Forgot password"
     },
-    email: {
-      nl: "Email",
-      en: "Email"
-    },
-    password: {
-      nl: "Wachtwoord",
-      en: "Password"
-    },
     logging_in: {
       nl: "Logging in",
       en: "Logging in"
@@ -5883,6 +6203,22 @@ var text = {
     error: {
       nl: "Er ging iets in bij het inloggen, probeer het later opnieuw.",
       en: "Something went wrong trying to log in, try again later"
+    }
+  },
+  profile: {
+    title: {
+      nl: 'Hey',
+      en: 'Hey'
+    }
+  },
+  logout: {
+    title: {
+      nl: 'Uitloggen',
+      en: 'Log out'
+    },
+    confirm: {
+      nl: 'Weet je zeker dat je wilt uitloggen?',
+      en: 'Are you sure you want to log out?'
     }
   },
   signup: {
@@ -5918,23 +6254,11 @@ var text = {
       nl: 'Etens voorkeur',
       en: 'Food preference'
     },
-    field_food_vegan: {
-      nl: 'Veganistisch',
-      en: 'Vegan'
-    },
-    field_food_vegetarian: {
-      nl: 'Vegetarisch',
-      en: 'Vegetarian'
-    },
-    field_food_meat: {
-      nl: 'Vlees',
-      en: 'Meat'
-    },
     field_allergies: {
       nl: 'Allergieën',
       en: 'Allergies'
     },
-    field_description: {
+    field_extraInfo: {
       nl: 'Extra info',
       en: 'Extra information'
     },
@@ -5945,6 +6269,24 @@ var text = {
     field_dishwasher: {
       nl: 'Vrijwillig afwassen',
       en: 'Voluntair for washing dishes'
+    }
+  },
+  foodOptions: {
+    none: {
+      nl: 'Geen',
+      en: 'None'
+    },
+    vegan: {
+      nl: 'Veganistisch',
+      en: 'Vegan'
+    },
+    vegetarian: {
+      nl: 'Vegetarisch',
+      en: 'Vegetarian'
+    },
+    meat: {
+      nl: 'Vlees',
+      en: 'Meat'
     }
   }
 }; // Make sure it is in the correct format
@@ -5972,6 +6314,10 @@ var validation = {
     required: {
       nl: 'Veld is verplicht',
       en: 'Field is required'
+    },
+    invalid: {
+      nl: 'Veld verwacht specifieke waarde(s)',
+      en: 'Field expects specific value(s)'
     },
     max_length_reached: {
       nl: 'De maximum lengte van 191 characters is bereikt',
@@ -6017,20 +6363,20 @@ var MaxStringLengthValidation = function MaxStringLengthValidation(value) {
   return !value || value.length <= MAX_STRING_LENGTH || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.max_length_reached);
 };
 
+var Required = function Required(value) {
+  return !!value || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.required);
+};
+
 var Validations = {
   email: [function (value) {
-    return !!value || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.required);
-  }, function (value) {
     return value && EmailRule.test(value) || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.email.invalid);
   }, MaxStringLengthValidation],
-  password: [function (value) {
-    return !!value || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.required);
-  }],
   foodOptions: [function (value) {
-    return value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGETARIAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].MEAT || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.required);
+    if (value == null) return true;
+    return value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGETARIAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].MEAT || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.invalid);
   }],
-  allergies: [MaxStringLengthValidation],
-  description: [MaxStringLengthValidation]
+  Required: Required,
+  MaxStringLengthValidation: MaxStringLengthValidation
 };
 
 /***/ }),
@@ -38915,40 +39261,42 @@ var render = function() {
       _c("v-text-field", {
         staticClass: "my-4",
         attrs: {
-          label: _vm.$ll(_vm.$lang.text.signup.field_description),
+          label: _vm.$ll(_vm.$lang.text.signup.field_extraInfo),
           disabled: !_vm.enabled,
-          rules: _vm.validations.description,
+          rules: _vm.validations.extraInfo,
           counter: _vm.MAX_STRING_LENGTH,
           "hide-details": "auto"
         },
         model: {
-          value: _vm.signup.description,
+          value: _vm.signup.extraInfo,
           callback: function($$v) {
-            _vm.$set(_vm.signup, "description", $$v)
+            _vm.$set(_vm.signup, "extraInfo", $$v)
           },
-          expression: "signup.description"
+          expression: "signup.extraInfo"
         }
       }),
       _vm._v(" "),
-      _c("v-checkbox", {
-        staticClass: "mt-6",
-        attrs: {
-          label:
-            _vm.$ll(_vm.$lang.text.signup.field_dishwasher) +
-            (_vm.signup.dishwasher ? " ❤" : ""),
-          disabled: !_vm.enabled,
-          "hide-details": "auto"
-        },
-        model: {
-          value: _vm.signup.dishwasher,
-          callback: function($$v) {
-            _vm.$set(_vm.signup, "dishwasher", $$v)
-          },
-          expression: "signup.dishwasher"
-        }
-      }),
+      !_vm.signup.isIntro
+        ? _c("v-checkbox", {
+            staticClass: "mt-6",
+            attrs: {
+              label:
+                _vm.$ll(_vm.$lang.text.signup.field_dishwasher) +
+                (_vm.signup.dishwasher ? " ❤" : ""),
+              disabled: !_vm.enabled,
+              "hide-details": "auto"
+            },
+            model: {
+              value: _vm.signup.dishwasher,
+              callback: function($$v) {
+                _vm.$set(_vm.signup, "dishwasher", $$v)
+              },
+              expression: "signup.dishwasher"
+            }
+          })
+        : _vm._e(),
       _vm._v(" "),
-      _vm.$local.user.isAdmin
+      _vm.$local.user.isAdmin && !_vm.signup.isIntro
         ? _c("v-checkbox", {
             staticClass: "mt-4",
             attrs: {
@@ -39102,8 +39450,74 @@ var render = function() {
         "v-toolbar",
         [
           _c("v-card-title", [
-            _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.login.title)))
+            _vm._v(
+              _vm._s(_vm.$ll(_vm.$lang.text.profile.title)) +
+                " " +
+                _vm._s(_vm.$local.user.name)
+            )
           ])
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-form",
+        { ref: "loginForm", staticClass: "px-5 pt-3" },
+        [
+          _c("v-select", {
+            attrs: {
+              label: _vm.$ll(_vm.$lang.text.signup.field_food_preference),
+              items: _vm.foodOptions,
+              "item-text": "text",
+              "item-value": "value",
+              disabled: !_vm.enabled,
+              rules: _vm.validations.foodOptions,
+              "hide-details": "auto"
+            },
+            model: {
+              value: _vm.foodPreference,
+              callback: function($$v) {
+                _vm.foodPreference = $$v
+              },
+              expression: "foodPreference"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            staticClass: "mt-8 mb-4",
+            attrs: {
+              label: _vm.$ll(_vm.$lang.text.signup.field_allergies),
+              disabled: !_vm.enabled,
+              rules: _vm.validations.allergies,
+              counter: _vm.MAX_STRING_LENGTH,
+              "hide-details": "auto"
+            },
+            model: {
+              value: _vm.allergies,
+              callback: function($$v) {
+                _vm.allergies = $$v
+              },
+              expression: "allergies"
+            }
+          }),
+          _vm._v(" "),
+          _c("v-text-field", {
+            staticClass: "my-4",
+            attrs: {
+              label: _vm.$ll(_vm.$lang.text.signup.field_extraInfo),
+              disabled: !_vm.enabled,
+              rules: _vm.validations.extraInfo,
+              counter: _vm.MAX_STRING_LENGTH,
+              "hide-details": "auto"
+            },
+            model: {
+              value: _vm.extraInfo,
+              callback: function($$v) {
+                _vm.extraInfo = $$v
+              },
+              expression: "extraInfo"
+            }
+          })
         ],
         1
       ),
@@ -39157,11 +39571,11 @@ var render = function() {
                 "v-card",
                 [
                   _c("v-card-title", { staticClass: "text-h5" }, [
-                    _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.login.logout_title)))
+                    _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.logout.title)))
                   ]),
                   _vm._v(" "),
                   _c("v-card-text", [
-                    _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.login.logout_confirm)))
+                    _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.logout.confirm)))
                   ]),
                   _vm._v(" "),
                   _c(
@@ -39205,6 +39619,23 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "v-btn",
+            {
+              attrs: {
+                text: "",
+                disabled: !_vm.hasSettingsChanged,
+                loading: !_vm.enabled
+              },
+              on: {
+                click: function($event) {
+                  return _vm.save()
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.general.save)))]
+          ),
           _vm._v(" "),
           _c(
             "v-btn",
@@ -39262,8 +39693,12 @@ var render = function() {
     },
     [
       _vm.isLoggedIn
-        ? _c("ProfileView", { attrs: { close: _vm.close } })
-        : _c("LoginView", { attrs: { close: _vm.close } })
+        ? _c("ProfileView", {
+            attrs: { isOpen: _vm.isOpen && _vm.isLoggedIn, close: _vm.close }
+          })
+        : _c("LoginView", {
+            attrs: { isOpen: _vm.isOpen && !_vm.isLoggedIn, close: _vm.close }
+          })
     ],
     1
   )

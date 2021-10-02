@@ -16,7 +16,7 @@ export function MapFullUser(data: FullUserEntity): Result<FullUser> {
             email: requireNotNull('email', data.email),
             isAdmin: requireNotNull('isAdmin', data.isAdmin),
             foodPreference: MapFoodPreference(data.foodPreference).getOrNull(),
-            description: data.description ?? null,
+            extraInfo: data.extraInfo ?? null,
             allergies: data.allergies ?? null
         }
     })

@@ -4,6 +4,6 @@ export default interface FullUserEntity {
     email?: string,
     isAdmin?: boolean,
     foodPreference?: string,
-    description?: string,
+    extraInfo?: string,
     allergies?: string,
 }

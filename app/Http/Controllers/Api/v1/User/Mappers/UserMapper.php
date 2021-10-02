@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\User\Mappers;
 
-use App\Http\Controllers\Api\v1\Common\FoodOptionsMapper;
+use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\User\Models\UserSelf;
 use App\Models\User;
 

@@ -66,7 +66,7 @@ class MensaController extends Controller
             'max_users' => ['integer', 'min:0', 'max:999', 'required'],
             'food_options' => ['integer', 'min:1', 'max:7', 'required'],
         ]);
-        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()]);
+        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()], Response::HTTP_BAD_REQUEST);
 
         $mensa = Mensa::create([
             'id' => Str::uuid(),
@@ -102,7 +102,7 @@ class MensaController extends Controller
             'closed' => ['boolean'],
             'food_options' => ['integer', 'min:1', 'max:7', 'required'],
         ]);
-        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()]);
+        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()], Response::HTTP_BAD_REQUEST);
 
         if ($request->has('title')) $mensa->title = $request->get('title');
         if ($request->has('description')) $mensa->description = $request->get('description');

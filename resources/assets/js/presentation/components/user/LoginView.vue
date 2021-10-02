@@ -27,7 +27,8 @@ export default Vue.extend({
         close: {
             type: Function,
             required: true
-        }
+        },
+        isOpen: Boolean
     },
     data: function() {
         return {
@@ -35,21 +36,21 @@ export default Vue.extend({
             loginUrl: null as string|null,
             email: "",
             password: "",
-            MAX_STRING_LENGTH: MAX_STRING_LENGTH,
-            validations: {
-                email: Validations.email,
-                password: Validations.password,
-            }
+            MAX_STRING_LENGTH: MAX_STRING_LENGTH
         }
     },
-    mounted: function() {
-        this.loginUrl = null;
-        this.loading = true;
-        GetLoginUrl()
-            .then(value => {
-                this.loading = false;
-                this.loginUrl = value;
-            });
+    watch: {
+        isOpen: function(open: boolean) {
+            if (open) return;
+
+            this.loginUrl = null;
+            this.loading = true;
+            GetLoginUrl()
+                .then(value => {
+                    this.loading = false;
+                    this.loginUrl = value;
+                });
+        }
     },
     methods: {
         login: function() {

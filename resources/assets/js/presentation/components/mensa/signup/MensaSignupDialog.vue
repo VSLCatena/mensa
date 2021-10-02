@@ -108,10 +108,10 @@
                 this.intros = [...this.intros, createEmptySignup(mensa.id, this.$local.user, true)];
             },
             deleteIntro: function () {
-                this.tab -= 1;
                 let intros = [...this.intros];
                 intros.splice(this.tab - 1, 1);
                 this.intros = intros;
+                this.tab -= 1;
             },
             toEmail: function() {
                 if (this.$refs.signupForm.validate()) {

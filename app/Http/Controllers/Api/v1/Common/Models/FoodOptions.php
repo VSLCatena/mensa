@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1\Mensa\Models;
+namespace App\Http\Controllers\Api\v1\Common\Models;
 
 class FoodOptions {
     const VEGAN = 1 << 0;

@@ -6,9 +6,11 @@ export interface FullUser extends SimpleUser, UserEmail {
     email: string,
     isAdmin: boolean,
     foodPreference: FoodPreference|null,
-    description: string|null,
+    extraInfo: string|null,
     allergies: string|null,
 }
+
+export type UpdatableUser = Partial<Omit<FullUser, 'id' | 'name' | 'email' | 'isAdmin'>>;
 
 export interface SimpleUser extends User {
     id: string,
@@ -25,7 +27,7 @@ export interface User {
     email?: string,
     isAdmin?: boolean,
     foodPreference?: FoodPreference|null,
-    description?: string|null,
+    extraInfo?: string|null,
     allergies?: string|null,
 }
 

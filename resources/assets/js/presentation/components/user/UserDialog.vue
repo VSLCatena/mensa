@@ -1,7 +1,7 @@
 <template>
     <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition">
-        <ProfileView v-if="isLoggedIn" :close="close" />
-        <LoginView v-else :close="close" />
+        <ProfileView v-if="isLoggedIn" :isOpen="isOpen && isLoggedIn" :close="close" />
+        <LoginView v-else :isOpen="isOpen && !isLoggedIn" :close="close" />
     </v-dialog>
 </template>
 
@@ -28,8 +28,6 @@ export default Vue.extend({
     },
     computed: {
         isLoggedIn: function(): boolean {
-            console.debug("sdf");
-            console.debug(this.$local.user);
             return this.$local.user != AnonymousUser
         }
     }

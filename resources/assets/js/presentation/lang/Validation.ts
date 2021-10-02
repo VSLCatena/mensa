@@ -6,6 +6,10 @@ const validation = {
             nl: 'Veld is verplicht',
             en: 'Field is required',
         },
+        invalid: {
+            nl: 'Veld verwacht specifieke waarde(s)',
+            en: 'Field expects specific value(s)',
+        },
         max_length_reached: {
             nl: 'De maximum lengte van 191 characters is bereikt',
             en: 'The maximum length of 191 characters has been reached',
