@@ -16,18 +16,23 @@ class ConfirmController extends Controller
 
     public function confirm($code){
         $mensaUsers = MensaUser::where('confirmation_code', $code)->get();
-        if(count($mensaUsers) < 0){
+        if(count($mensaUsers) < 1){
             return redirect(route('home'))->with('error', 'Inschrijving niet gevonden!');
         }
 
+        $confirmedAny = false;
         foreach($mensaUsers as $mensaUser) {
-            if ($mensaUser->confirmed) {
-                return redirect(route('home'))->with('error', 'Deze inschrijving is al bevestigd!');
-            }
+            if ($mensaUser->confirmed) continue;
 
+            $confirmedAny = true;
             $mensaUser->confirmed = true;
             $mensaUser->save();
         }
+
+        if (!$confirmedAny) {
+            return redirect(route('home'))->with('error', 'Deze inschrijving is al bevestigd!');
+        }
+
         // Log the confirmation
         if(count($mensaUsers) == 1){
             $this->log($mensaUser->mensa, $mensaUser->user->name.' heeft hun inschrijving bevestigd.');
