@@ -1,11 +1,11 @@
-import FoodPreference from "../../mensa/model/FoodPreference";
+import FoodOption from "../../mensa/model/FoodOption";
 
 export interface FullUser extends SimpleUser, UserEmail {
     id: string,
     name: string,
     email: string,
     isAdmin: boolean,
-    foodPreference: FoodPreference|null,
+    foodPreference: FoodOption|null,
     extraInfo: string|null,
     allergies: string|null,
 }
@@ -26,7 +26,7 @@ export interface User {
     name?: string,
     email?: string,
     isAdmin?: boolean,
-    foodPreference?: FoodPreference|null,
+    foodPreference?: FoodOption|null,
     extraInfo?: string|null,
     allergies?: string|null,
 }

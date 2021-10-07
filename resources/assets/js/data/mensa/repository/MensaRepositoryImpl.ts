@@ -31,8 +31,11 @@ class MensaRepositoryImpl implements MensaRepository {
     getSignup(mensaId: string): Promise<MensaSignup | null> {
         throw new Error('Method not implemented.');
     }
-    signup(mensa: Mensa, email: string, signups: MensaSignup[]): Promise<Error | null> {
-        throw new Error('Method not implemented.');
+    signup(mensa: Mensa, email: string, signups: Partial<MensaSignup>[]): Promise<void> {
+        return axios.post(`${Config.API_BASE_URL}/mensa/${mensa.id}/signup`, {
+            email: email,
+            signups: signups
+        }).then(() => {})
     }
     editSignup(signup: MensaSignup): Promise<Error | null> {
         throw new Error('Method not implemented.');

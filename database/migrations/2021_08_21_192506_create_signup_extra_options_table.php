@@ -15,7 +15,7 @@ class CreateSignupExtraOptionsTable extends Migration
     {
         Schema::create('signup_extra_options', function (Blueprint $table) {
             $table->timestampsTz();
-            $table->foreignUuid('signup_id')->references('id')->on('signups')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('signup_id')->references('id')->on('signups')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignUuid('extra_option_id')->references('id')->on('extra_options')->cascadeOnUpdate()->cascadeOnDelete();
             $table->primary(array('signup_id', 'extra_option_id'));
         });

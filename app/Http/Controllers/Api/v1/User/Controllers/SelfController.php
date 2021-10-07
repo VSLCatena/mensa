@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
+use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 use App\Http\Controllers\Api\v1\User\Mappers\UserMapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class SelfController extends Controller
         $validator = Validator::make($request->all(), [
             'allergies' => ['string'],
             'extraInfo' => ['string'],
-            'foodPreference' => ['string', 'nullable', Rule::in(['vegan', 'vegetarian', 'meat'])],
+            'foodPreference' => ['string', 'nullable', Rule::in(FoodOption::allNames())],
         ]);
 
         if ($validator->fails()) {
@@ -64,7 +65,7 @@ class SelfController extends Controller
         if ($request->has('allergies')) $user->allergies = $request->get('allergies');
         if ($request->has('extraInfo')) $user->extra_info = $request->get('extraInfo');
         if ($request->has('foodPreference'))
-            $user->food_preference = $this->mapFoodOptionBack($request->get('foodPreference'));
+            $user->food_preference = $this->mapFoodOptionFromNameToInt($request->get('foodPreference'));
 
         $user->save();
 

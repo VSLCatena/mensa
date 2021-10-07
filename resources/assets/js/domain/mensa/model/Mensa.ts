@@ -1,13 +1,13 @@
 import ExtraOption from "./ExtraOption";
 import {SimpleUser} from "../../common/model/User";
 import MensaMenuItem from "./MensaMenuItem";
-import FoodPreference from "./FoodPreference";
+import FoodOption from "./FoodOption";
 
 export default interface Mensa {
     id: string,
     title: string,
     description: string,
-    foodOptions: FoodPreference[],
+    foodOptions: FoodOption[],
     menu: MensaMenuItem[],
     extraOptions: ExtraOption[],
     date: Date,

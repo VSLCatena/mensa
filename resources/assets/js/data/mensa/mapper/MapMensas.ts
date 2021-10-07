@@ -1,6 +1,6 @@
 import Mensa from "../../../domain/mensa/model/Mensa";
 import MensaEntity from "../model/MensaEntity";
-import {requireNotNull} from "../../utils/MappingUtils";
+import {checkIsArray, requireNotNull} from "../../utils/MappingUtils";
 import MapExtraOptions from "./MapExtraOptions";
 import Result, { runCatching } from "../../../domain/common/utils/Result";
 import MapSimpleUsers from "./MapSimpleUsers";
@@ -8,7 +8,7 @@ import MensaListEntity, {BetweenEntity} from "../model/MensaListEntity";
 import MensaList, {Between} from "../../../domain/mensa/model/MensaList";
 import MapDate from "./MapDate";
 import MapMenu from "./MapMenu";
-import {MapFoodPreferences} from "../../common/MapFoodPreference";
+import {MapFoodOptions} from "../../common/MapFoodOption";
 
 
 export default function MapMensaList(data: MensaListEntity): Result<MensaList> {
@@ -31,9 +31,7 @@ export function MapBetween(data: BetweenEntity): Result<Between> {
 
 function MapMensas(data: MensaEntity[]): Result<Mensa[]> {
     return runCatching(() => {
-        if (!Array.isArray(data))
-            throw new Error("data is not of type Array. ("+(typeof data)+")");
-
+        checkIsArray('mensas', data);
         return data.map(function(price: any) {
             return MapMensa(price).getOrThrow();
         });
@@ -46,7 +44,7 @@ function MapMensa(data: MensaEntity): Result<Mensa> {
             id: requireNotNull('id', data.id),
             title: requireNotNull('title', data.title),
             description: requireNotNull('description', data.description),
-            foodOptions: MapFoodPreferences(requireNotNull('foodOptions', data.foodOptions)).getOrThrow(),
+            foodOptions: MapFoodOptions(requireNotNull('foodOptions', data.foodOptions)).getOrThrow(),
             menu: MapMenu(requireNotNull('menu', data.menu)).getOrThrow(),
             extraOptions: MapExtraOptions(requireNotNull('extraOptions', data.extraOptions)).getOrThrow(),
             date: MapDate(requireNotNull('date', data.date)),

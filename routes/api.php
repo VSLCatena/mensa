@@ -24,8 +24,7 @@ Route::prefix("v1")->middleware('jsonRequests')->group(function(){
     Route::delete('mensa/{mensaId}', 'Api\v1\Mensa\Controllers\MensaController@deleteMensa');
 
     Route::get('mensa/{mensaId}/signups', 'Api\v1\Mensa\Controllers\SignupController@getSignups');
-    Route::post('mensa/{mensaId}/signup', 'Api\v1\Mensa\Controllers\SignupController@newSignup');
-    Route::patch('mensa/{mensaId}/signup/{signupId}', 'Api\v1\Mensa\Controllers\SignupController@updateSignup');
+    Route::post('mensa/{mensaId}/signup', 'Api\v1\Mensa\Controllers\SignupController@signup');
     Route::patch('mensa/{mensaId}/signup/{signupId}/confirm', 'Api\v1\Mensa\Controllers\SignupController@confirmSignup');
     Route::delete('mensa/{mensaId}/signup/{signupId}', 'Api\v1\Mensa\Controllers\SignupController@deleteSignup');
 

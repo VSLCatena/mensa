@@ -39,7 +39,7 @@ trait MensaMapper {
             dishwashers: count($dishwashers),
 
             cooks: array_values(array_map($userSignupMapper, $cooks)),
-            foodOptions: self::mapFoodOptions($mensa->food_options),
+            foodOptions: self::mapFoodOptionsFromIntToNames($mensa->food_options),
             menu: array_map(function($item) { return self::mapMenuItem($item); }, $menu),
             extraOptions: array_map(function ($option) { return self::mapExtraOptions($option); }, $options),
         );

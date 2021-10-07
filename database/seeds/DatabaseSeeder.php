@@ -28,16 +28,16 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('- Creating users -');
         $users = User::factory()
-            ->count(50)
+            ->count(30)
             ->create();
 
         $this->command->info('- Creating mensas -');
         $mensas = Mensa::factory()
-            ->count(20)
+            ->count(50)
             ->create();
 
         foreach ($mensas as $key => $mensa) {
-            $this->command->info("- Seeding mensa $mensa->id ($key/20) -");
+            $this->command->info("- Seeding mensa $mensa->id ($key/50) -");
 
             $this->command->info('Creating menu items');
             MenuItem::factory()

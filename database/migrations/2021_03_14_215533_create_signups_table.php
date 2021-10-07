@@ -14,7 +14,8 @@ class CreateSignupsTable extends Migration
     public function up()
     {
         Schema::create('signups', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->bigIncrements('id');
+            $table->uuid('signup_id');
             $table->timestampsTz();
             $table->softDeletesTz();
             $table->boolean('cooks');
@@ -27,10 +28,10 @@ class CreateSignupsTable extends Migration
             $table->double('paid')->default(0.0);
             $table->uuid('confirmation_code');
 
-            $table->primary('id');
             $table->foreignUuid('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignUuid('mensa_id')->references('id')->on('mensas')->cascadeOnUpdate()->cascadeOnDelete();
 
+            $table->index('signup_id');
             $table->index('confirmed');
             $table->index('created_at');
             $table->index('deleted_at');

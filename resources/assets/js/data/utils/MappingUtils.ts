@@ -6,6 +6,11 @@ export function requireNotNull<T>(argName: string, arg: T|null|undefined): T {
     return arg;
 }
 
+export function checkIsArray(argName: string, arg: unknown) {
+    if (!Array.isArray(arg))
+        throw new Error(`${argName} is not of type Array. (${typeof arg})`);
+}
+
 
 interface Mapper <I,O> {
     (input: I): O;

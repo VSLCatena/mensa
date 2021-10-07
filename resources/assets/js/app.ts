@@ -57,7 +57,4 @@ const app = new Vue({
     components: {App},
 }).$mount('#app');
 
-GetSelf().then(user => {
-    app.$local.user = user;
-    console.debug(user);
-});
+GetSelf().then(user => {app.$local.user = user;});

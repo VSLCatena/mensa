@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Signup
  *
- * @property string $id
+ * @property int $id
+ * @property string $signup_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
@@ -48,6 +51,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereIsIntro($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereMensaId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup wherePaid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Signup whereSignupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|Signup withTrashed()

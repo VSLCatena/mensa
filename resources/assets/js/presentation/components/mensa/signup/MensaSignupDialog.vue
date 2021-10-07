@@ -50,29 +50,24 @@
     import Vue from 'vue';
     import Mensa from "../../../../domain/mensa/model/Mensa";
     import {formatDate} from "../../../formatters/DateFormatter";
-    import {createEmptySignup, NewMensaSignup} from "../../../../domain/mensa/model/MensaSignup";
-    import { UserEmail } from "../../../../domain/common/model/User";
+    import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
     import MensaSignupEntry from "./MensaSignupEntry.vue";
     import {Validations} from "../../../utils/ValidationRules";
+    import {User} from "../../../../domain/common/model/User";
+    import SignupMensa from "../../../../domain/mensa/usecase/SignupMensa";
 
     export default Vue.extend({
         components: {MensaSignupEntry},
         data: function() {
-            let potentialUser = this.$local.user;
-            let user = { email: "" } as UserEmail;
-            if ('email' in potentialUser) {
-                user = potentialUser as UserEmail;
-            }
 
             return {
                 isOpen: false,
                 mensa: null as Mensa|null,
-                email: user.email,
+                email: "",
                 step: 1,
                 tab: 0,
-                signup: null as NewMensaSignup|null,
-                intros: [] as NewMensaSignup[],
-                user: user,
+                signup: null as Partial<MensaSignup>|null,
+                intros: [] as Partial<MensaSignup>[],
                 validation: {
                     email: Validations.email,
                 },
@@ -91,21 +86,28 @@
         methods: {
             open: function (mensa: Mensa) {
                 if (this.mensa != mensa) {
-                    this.signup = createEmptySignup(mensa.id, this.$local.user);
-                    this.intros = [];
-                    this.tab = 0;
-                    this.step = 1;
+                    this.clearDialog(mensa);
                 }
 
                 this.mensa = mensa;
                 this.isOpen = true;
                 this.loading = false;
+                this.tab = 0;
+                this.step = 1;
+
+                this.email = this.$local.user?.email ?? "";
+            },
+            clearDialog: function(mensa: Mensa) {
+                this.signup = this.createEmptySignup(mensa, this.$local.user);
+                this.intros = [];
+                this.tab = 0;
+                this.step = 1;
             },
             addIntro: function () {
                 let mensa = this.mensa;
                 if (mensa == null) return;
 
-                this.intros = [...this.intros, createEmptySignup(mensa.id, this.$local.user, true)];
+                this.intros = [...this.intros, this.createEmptySignup(mensa, this.$local.user, true)];
             },
             deleteIntro: function () {
                 let intros = [...this.intros];
@@ -119,9 +121,52 @@
                 }
             },
             sendSignup: function() {
-                if (this.$refs.emailForm.validate()) {
-                    this.loading = true;
+                if (!this.$refs.emailForm.validate()) {
+                    return;
                 }
+                if (this.mensa == null || this.signup == null) return;
+
+                this.loading = true;
+                SignupMensa(this.mensa, this.email, [this.signup, ...this.intros])
+                    .then(() => {
+                        this.loading = false;
+                        this.isOpen = false;
+                        let mensa = this.mensa;
+                        if (mensa != null) this.clearDialog(mensa);
+                    })
+                    .catch(() => {
+                        this.loading = false;
+                    });
+            },
+            createEmptySignup: function(
+                mensa: Mensa,
+                user: User,
+                isIntro: boolean = false
+            ): MensaSignup {
+                let signup: MensaSignup = {
+                    foodOption: null,
+                    isIntro: isIntro,
+                    allergies: "",
+                    extraInfo: "",
+                }
+
+                if (!isIntro) {
+                    if ('foodPreference' in user && user.foodPreference != null
+                        && mensa.foodOptions.indexOf(user.foodPreference) != -1) {
+                        signup.foodOption = user.foodPreference;
+                    }
+
+                    signup.extraInfo = ('extraInfo' in user ? user.extraInfo : "") ?? "";
+                    signup.allergies = ('allergies' in user ? user.allergies : "") ?? "";
+                    signup.cook = false;
+                    signup.dishwasher = false;
+                }
+
+                if (mensa.foodOptions.length == 1) {
+                    signup.foodOption = mensa.foodOptions[0];
+                }
+
+                return signup;
             }
         },
         computed: {

@@ -16,7 +16,7 @@ trait UserMapper {
             email: $user->email,
             allergies: $user->allergies,
             extraInfo: $user->extra_info,
-            foodPreference: $this->mapFoodOption($user->food_preference),
+            foodPreference: $this->mapFoodOptionFromIntToName($user->food_preference),
             isAdmin: $user->mensa_admin
         );
     }

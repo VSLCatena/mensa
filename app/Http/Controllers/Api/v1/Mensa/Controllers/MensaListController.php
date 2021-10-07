@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
 use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
+use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
 use App\Models\Mensa;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -35,7 +36,10 @@ class MensaListController extends Controller
         $validator = Validator::make($request->all(), ['weekOffset' => ['integer'],]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
+            return response()->json([
+                "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
+                "errors" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
         }
 
         $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);

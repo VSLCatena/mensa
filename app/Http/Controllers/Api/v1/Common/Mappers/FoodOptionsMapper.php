@@ -2,53 +2,59 @@
 
 namespace App\Http\Controllers\Api\v1\Common\Mappers;
 
-use App\Http\Controllers\Api\v1\Common\Models\FoodOptions;
+use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 
 trait FoodOptionsMapper {
 
-    private array $availableOptions = array(
-        FoodOptions::VEGAN => 'vegan',
-        FoodOptions::VEGETARIAN => 'vegetarian',
-        FoodOptions::MEAT => 'meat',
-    );
-
     /**
      * @param $foodOptions int
-     * @return int[]
+     * @return string[]
      */
-    function mapFoodOptions(int $foodOptions): array {
+    function mapFoodOptionsFromIntToNames(int $foodOptions): array {
         $options = array();
-        foreach ($this->availableOptions as $key => $value) {
-            if ($foodOptions & $key) $options[] = $value;
+        foreach (FoodOption::$All as $option) {
+            if ($foodOptions & $option->value) $options[] = $option->name;
         }
 
         return $options;
     }
 
-    function mapFoodOption(int|null $foodOption): string|null {
+    /**
+     * @param int|null $foodOption
+     * @return string|null
+     */
+    function mapFoodOptionFromIntToName(int|null $foodOption): string|null {
         if ($foodOption == null) return null;
 
-        foreach ($this->availableOptions as $key => $value) {
-            if ($foodOption & $key) return $value;
+        foreach (FoodOption::$All as $option) {
+            if ($foodOption & $option->value) return $option->name;
         }
         return null;
     }
 
-    function mapFoodOptionsBack(array $foodOptions): int {
+    /**
+     * @param string[] $foodOptions
+     * @return int
+     */
+    function mapFoodOptionsFromNamesToInt(array $foodOptions): int {
         $options = 0;
 
-        foreach ($this->availableOptions as $key => $value) {
-            if (array_has($foodOptions, $value)) $options += $key;
+        foreach (FoodOption::$All as $option) {
+            if (array_has($foodOptions, $option->name)) $options += $option->value;
         }
 
         return $options;
     }
 
-    function mapFoodOptionBack(string|null $foodOption): int {
+    /**
+     * @param string|null $foodOption
+     * @return int
+     */
+    function mapFoodOptionFromNameToInt(string|null $foodOption): int {
         if ($foodOption == null) return 0;
 
-        foreach ($this->availableOptions as $key => $value) {
-            if ($foodOption == $value) return $key;
+        foreach (FoodOption::$All as $option) {
+            if ($foodOption == $option->name) return $option->value;
         }
 
         return 0;

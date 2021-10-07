@@ -39,18 +39,14 @@ export default Vue.extend({
             MAX_STRING_LENGTH: MAX_STRING_LENGTH
         }
     },
-    watch: {
-        isOpen: function(open: boolean) {
-            if (open) return;
-
-            this.loginUrl = null;
-            this.loading = true;
-            GetLoginUrl()
-                .then(value => {
-                    this.loading = false;
-                    this.loginUrl = value;
-                });
-        }
+    mounted: function() {
+        this.loginUrl = null;
+        this.loading = true;
+        GetLoginUrl()
+            .then(value => {
+                this.loading = false;
+                this.loginUrl = value;
+            });
     },
     methods: {
         login: function() {

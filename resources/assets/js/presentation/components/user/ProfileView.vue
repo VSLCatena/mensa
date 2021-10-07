@@ -60,11 +60,11 @@ import {MAX_STRING_LENGTH, Validations} from "../../utils/ValidationRules";
 import GetLoginUrl from "../../../domain/user/usecase/GetLoginUrl";
 import Logout from "../../../domain/user/usecase/Logout";
 import {AnonymousUser, UpdatableUser} from "../../../domain/common/model/User";
-import FoodPreference, {SortedFoodPreferences} from "../../../domain/mensa/model/FoodPreference";
+import FoodOption, {SortedFoodOptions} from "../../../domain/mensa/model/FoodOption";
 import UpdateSelf from "../../../domain/user/usecase/UpdateSelf";
 
-interface FoodOption {
-    value: FoodPreference|null,
+interface FoodOptionSelection {
+    value: FoodOption|null,
     text: string
 }
 
@@ -82,7 +82,7 @@ export default Vue.extend({
             enabled: true,
             allergies: "",
             extraInfo: "",
-            foodPreference: null as FoodPreference|null,
+            foodPreference: null as FoodOption|null,
             MAX_STRING_LENGTH: MAX_STRING_LENGTH,
             validations: {
                 foodOptions: Validations.foodOptions,
@@ -132,10 +132,10 @@ export default Vue.extend({
         }
     },
     computed: {
-        foodOptions: function(): FoodOption[] {
+        foodOptions: function(): FoodOptionSelection[] {
             let options = this.allFoodOptions;
 
-            let sorted = SortedFoodPreferences.map(function(option: FoodPreference): FoodOption {
+            let sorted = SortedFoodOptions.map(function(option: FoodOption): FoodOptionSelection {
                 return {
                     value: option,
                     text: options[option]
@@ -143,16 +143,16 @@ export default Vue.extend({
             });
 
             return [
-                {value: null, text: options.NONE },
+                {value: null, text: options.none },
                 ...sorted
             ]
         },
-        allFoodOptions: function(): { [Property in FoodPreference]: string } & {NONE:string} {
+        allFoodOptions: function(): { [Property in FoodOption]: string } & {none:string} {
             return {
-                NONE: this.$ll(this.$lang.text.foodOptions.none),
-                VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
-                VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
-                MEAT: this.$ll(this.$lang.text.foodOptions.meat),
+                none: this.$ll(this.$lang.text.foodOptions.none),
+                vegan: this.$ll(this.$lang.text.foodOptions.vegan),
+                vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
+                meat: this.$ll(this.$lang.text.foodOptions.meat),
             }
         },
         hasSettingsChanged: function(): boolean {

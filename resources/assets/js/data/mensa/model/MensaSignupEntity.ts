@@ -1,7 +1,7 @@
 export default interface MensaSignupEntity {
     id?: string,
     isIntro?: boolean,
-    foodPreference?: string,
+    foodOption?: string,
     extraInfo?: string,
     allergies?: string,
     cook?: boolean,

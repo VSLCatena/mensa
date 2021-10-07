@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
 
 use App\Contracts\RemoteUserLookup;
+use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Mensa\Mappers\SignupMapper;
+use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
 use App\Models\Mensa;
 use App\Models\Signup;
 use App\Models\User;
@@ -16,6 +18,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -23,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SignupController extends Controller {
-    use SignupMapper;
+    use SignupMapper, FoodOptionsMapper;
 
     private RemoteUserLookup $remoteLookup;
 
@@ -63,119 +66,164 @@ class SignupController extends Controller {
      * @param string $mensaId
      * @return Response|null
      */
-    public function newSignup(Request $request, string $mensaId): ?JsonResponse {
+    public function signup(Request $request, string $mensaId): ?JsonResponse {
+        /** @var Mensa $mensa */
         $mensa = Mensa::findOrFail($mensaId);
-        if ($mensa->users_count >= $mensa->max_users) {
-            abort(Response::HTTP_BAD_REQUEST, "Mensa is already at its maximum users");
+
+        $user = $this->currentUser();
+        $isAdmin = $user != null && $user->mensa_admin;
+
+        /* Check if the email is valid */
+        $validator = Validator::make($request->all(), [
+            'email' => ['string', 'email:rfc,dns', 'required'],
+            'signup_id' => ['exists:signup,signup_id'],
+            'signups' => ['required'],
+            'override_user_limit' => [$isAdmin ? 'boolean' : 'prohibited']
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
+                "errors" => $validator->errors()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $signupUser = $this->lookupUser($request->get('email'));
+        $overrideUserLimit = $request->get('override_user_limit', false);
+        $email = $request->get('email');
+
+        // If there is a previous signup, the id's need to match so we know the overriding is on purpose
+        $previousSignups = Signup::whereMensaId($mensaId)->whereUserId($signupUser->id);
+        if ($previousSignups->count() > 0
+            && (
+                !$request->has('signup_id')
+                || $request->get('signup_id') != $previousSignups->first()->signup_id
+            )
+        ) {
+            return response()->json([
+                "error_code" => ErrorMessages::SIGNUP_IDS_NOT_MATCHING
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $signupId = $previousSignups->first()?->signup_id ?? Str::uuid();
+        $confirmationId = $previousSignups->first()?->confirmation_code ?? Str::uuid();
+        $isConfirmed = $isAdmin ?: $previousSignups->first()?->confirmed ?? $user?->email == $email;
+
+
+        /* Here we map all the signups */
+        /** @var Signup[] $signups */
+        $signups = [];
+        $errors = new MessageBag();
+        array_map(function (array $data) use ($mensa, $isAdmin, &$signups, &$errors) {
+            $signup = $this->getSignup($mensa, $data, $isAdmin);
+            if ($signup instanceof MessageBag) {
+                $errors = $errors->merge($signup);
+            } else {
+                $signups[] = $signup;
+            }
+        }, $request['signups']);
+
+        if ($errors->isNotEmpty()) {
+            return response()->json([
+                "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
+                "errors" => $errors->messages()
+            ], Response::HTTP_BAD_REQUEST);
         }
 
+        /* Some sanity checks */
+        // Would it still fit in the mensa? (mensaCurrent - previousSignups + newSignups <= mensaMax)
+        if (
+            $overrideUserLimit &&
+            $mensa->users_count - $previousSignups->count() + count($signups) > $mensa->max_users
+        ) {
+            return response()->json([
+                "error_code" => ErrorMessages::SIGNUP_MAX_USERS_REACHED
+            ]);
+        }
 
-        $validator = Validator::make($request->all(), [
-            '*.cooks' => ['boolean'],
-            '*.dishwasher' => ['boolean', 'required'],
-            '*.food_option' => ['integer', 'required', Rule::in([1, 2, 4])],
-            '*.is_intro' => ['boolean', 'required'],
-            '*.allergies' => ['string'],
-            '*.extra_info' => ['string'],
-            '*.user' => ['required', 'string']
-        ]);
-        if ($validator->fails()) return response()->json([ "errors" => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        // 1, and only 1 main user:
+        $mainCount = count(array_filter($signups, function (Signup $signup) { return !$signup->is_intro; }));
+        if ($mainCount != 1) {
+            return response()->json([
+                "error_code" => ErrorMessages::SIGNUP_ONE_MAIN_ONLY
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        // intros can't be cooks or washing dishes
+        foreach ($signups as $signup) {
+            if ($signup->is_intro && ($signup->cooks || $signup->dishwasher)) {
+                return response()->json([
+                    "error_code" => ErrorMessages::SIGNUP_INTRO_DISHES_COOKS
+                ], Response::HTTP_BAD_REQUEST);
+            }
+        }
 
+        /* And persist to the db */
+        // Delete previous signups
+        $previousSignups->delete();
+        // Save new signups
+        foreach ($signups as $signup) {
+            $signup->mensa()->associate($mensa);
+            $signup->user()->associate($signupUser);
+            $signup->signup_id = $signupId;
+            $signup->confirmation_code = $confirmationId;
+            $signup->confirmed = $isConfirmed;
+            $signup->save();
+        }
 
-        $user = $this->lookupUser($request->get('user'));
-        $currentUser = $this->currentUser();
-        $currentUserAdmin = $currentUser != null && $currentUser->mensa_admin;
-
-        $signups = $this->lookupSignups($mensa, $user);
-        $mainSignups = array_filter($signups, function($signup) { return $signup->is_intro == false; });
-        $introSignups = array_filter($signups, function($signup) { return $signup->is_intro == true; });
-
-
-        // Create a new signup after validation
-        $newSignup = new Signup([
-            'id' => Str::uuid(),
-            'cooks' => $request->get('cooks', false),
-            'dishwasher' => $request->get('dishwasher'),
-            'food_option' => $request->get('food_option'),
-            'is_intro' => $request->get('is_intro'),
-            'allergies' => $request->get('allergies'),
-            'extra_info' => $request->get('extra_info'),
-            'confirmed' => $currentUser?->id == $user->id || $currentUserAdmin,
-            'confirmation_code' => Str::uuid(),
-            'user_id' => $user->id,
-            'mensa_id' => $mensa->id,
-        ]);
-
-        // Check if there already exists a main user, and if so we abort
-        if (!$newSignup->is_intro && count($mainSignups) > 0)
-            abort(Response::HTTP_BAD_REQUEST, 'Signup already exists');
-
-        // If the user is not a mensa admin, and there is already an intro, we abort
-        if ($newSignup->is_intro && count($introSignups) > 0 && !$currentUserAdmin)
-            abort(Response::HTTP_BAD_REQUEST, 'Signup already exists');
-
-        // A normal user can't assign himself/someone else as cook
-        if ($newSignup->cooks && !$currentUserAdmin)
-            abort(Auth::check() ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED,
-                "You don't have the permission to add people as cook");
-
-        $newSignup->save();
         return null;
     }
 
-    /**
-     * @param Request $request
-     * @param string $mensaId
-     * @param string $signupId
-     * @return JsonResponse|null
-     */
-    public function updateSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse {
-        $signup = Signup::findOrFail($signupId);
-        if ($signup->mensa_id != $mensaId) throw new ModelNotFoundException();
 
-        $currentUser = $this->currentUser();
-        $currentUserAdmin = $currentUser != null && $currentUser->mensa_admin;
+    private function getSignup(Mensa $mensa, array $userData, $isAdmin): Signup|MessageBag {
+        $allowedFoodOptions = $this->mapFoodOptionsFromIntToNames($mensa->food_options);
 
-        Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
+        $rules = [
+            'foodOption' => ['string', Rule::in($allowedFoodOptions), 'required'],
+            'isIntro' => ['boolean', 'required'],
+            'allergies' => ['string', 'nullable'],
+            'extraInfo' => ['string', 'nullable'],
+        ];
 
-        $validator = Validator::make($request->all(), [
-            'cooks' => ['boolean'],
-            'dishwasher' => ['boolean'],
-            'food_option' => ['integer', Rule::in([1, 2, 4])],
-            'allergies' => ['string'],
-            'extra_info' => ['string'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        // Intros are not allowed to be cooks or dishwashers. Main users require a dishwasher, and admins can use cooks
+        if ($userData['isIntro']) {
+            $rules = array_merge($rules, [
+                'cooks' => ['prohibited'],
+                'dishwasher' => ['prohibited'],
+            ]);
+        } else {
+            $rules = array_merge($rules, [
+                'cooks' => ['boolean', $isAdmin ? 'nullable' : 'prohibited'],
+                'dishwasher' => ['boolean', 'required'],
+            ]);
         }
 
+        $validator = Validator::make($userData, $rules);
+        if ($validator->fails()) return $validator->errors();
 
-        if ($request->has('cooks')) {
-            if (!$currentUserAdmin)
-                abort($currentUser != null ? Response::HTTP_UNAUTHORIZED : Response::HTTP_FORBIDDEN);
+        $signup = new Signup();
+        $signup->cooks = isset($userData['cooks']) ? $userData['cooks'] : false;
+        $signup->dishwasher = isset($userData['dishwasher']) ? $userData['dishwasher'] : false;
+        $signup->food_option = $this->mapFoodOptionFromNameToInt($userData['foodOption']);
+        $signup->is_intro = $userData['isIntro'];
+        $signup->allergies = $userData['allergies'] ?: "";
+        $signup->extra_info = $userData['extraInfo'] ?: "";
 
-            $signup->cooks = $request->get('cooks');
-        }
-
-        if ($request->has('dishwasher')) $signup->dishwasher = $request->get('dishwasher');
-        if ($request->has('food_option')) $signup->food_option = $request->get('food_option');
-        if ($request->has('allergies')) $signup->allergies = $request->get('allergies');
-        if ($request->has('extra_info')) $signup->extra_info = $request->get('extra_info');
-
-        $signup->save();
-        return null;
+        return $signup;
     }
 
     public function confirmSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse {
         $signup = Signup::findOrFail($signupId);
-        if ($signup->mensa_id != $mensaId) throw new ModelNotFoundException();
+        if ($signup->mensa_id != $mensaId) {
+            return response()->json([
+                "error_code" => ErrorMessages::SIGNUP_NOT_EXIST
+            ], Response::HTTP_NOT_FOUND);
+        }
 
         $currentUser = $this->currentUser();
         Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
 
-        if ($signup->confirmed)
-            abort(Response::HTTP_BAD_REQUEST, 'Already confirmed');
+        if ($signup->confirmed) {
+            return response()->json([
+                "error_code" => ErrorMessages::SIGNUP_ALREADY_CONFIRMED
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
         $signup->confirmed = true;
         $signup->save();
@@ -185,7 +233,11 @@ class SignupController extends Controller {
 
     public function deleteSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse {
         $signup = Signup::findOrFail($signupId);
-        if ($signup->mensa_id != $mensaId) throw new ModelNotFoundException();
+        if ($signup->mensa_id != $mensaId) {
+            return response()->json([
+                "error_code" => ErrorMessages::SIGNUP_NOT_EXIST
+            ], Response::HTTP_NOT_FOUND);
+        }
 
         $currentUser = $this->currentUser();
         Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
@@ -193,7 +245,6 @@ class SignupController extends Controller {
         $signup->delete();
         return null;
     }
-
 
     private function currentUser(): ?User {
         try {

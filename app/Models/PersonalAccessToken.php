@@ -3,7 +3,6 @@
 
 namespace App\Models;
 
-
 /**
  * App\Models\PersonalAccessToken
  *

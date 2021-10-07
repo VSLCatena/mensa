@@ -5,7 +5,7 @@
             :items="foodOptions"
             item-text="text"
             item-value="value"
-            v-model="signup.foodPreference"
+            v-model="signup.foodOption"
             :disabled="!enabled"
             :rules="validations.foodOptions"
             hide-details="auto"></v-select>
@@ -50,11 +50,11 @@
 import Vue, {PropType} from 'vue';
 import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
 import {MAX_STRING_LENGTH, Validations} from "../../../utils/ValidationRules";
-import FoodPreference, {SortedFoodPreferences} from "../../../../domain/mensa/model/FoodPreference";
+import FoodOption, {SortedFoodOptions} from "../../../../domain/mensa/model/FoodOption";
 import Mensa from "../../../../domain/mensa/model/Mensa";
 
-interface FoodOption {
-    value: FoodPreference,
+interface FoodOptionSelection {
+    value: FoodOption,
     text: string
 }
 
@@ -83,22 +83,22 @@ export default Vue.extend({
         }
     }),
     computed: {
-        foodOptions: function(): FoodOption[] {
-            let available = SortedFoodPreferences.filter(value => this.mensa.foodOptions.includes(value));
+        foodOptions: function(): FoodOptionSelection[] {
+            let available = SortedFoodOptions.filter(value => this.mensa.foodOptions.includes(value));
             let options = this.allFoodOptions;
 
-            return available.map(function(option: FoodPreference): FoodOption {
+            return available.map(function(option: FoodOption): FoodOptionSelection {
                 return {
                     value: option,
                     text: options[option]
                 }
             });
         },
-        allFoodOptions: function(): { [Property in FoodPreference]: string } {
+        allFoodOptions: function(): { [Property in FoodOption]: string } {
             return {
-                VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
-                VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
-                MEAT: this.$ll(this.$lang.text.foodOptions.meat),
+                vegan: this.$ll(this.$lang.text.foodOptions.vegan),
+                vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
+                meat: this.$ll(this.$lang.text.foodOptions.meat),
             }
         }
     }

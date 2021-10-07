@@ -2181,9 +2181,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../formatters/DateFormatter */ "./resources/assets/js/presentation/formatters/DateFormatter.ts");
-/* harmony import */ var _domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/MensaSignup */ "./resources/assets/js/domain/mensa/model/MensaSignup.ts");
-/* harmony import */ var _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MensaSignupEntry.vue */ "./resources/assets/js/presentation/components/mensa/signup/MensaSignupEntry.vue");
-/* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/ValidationRules */ "./resources/assets/js/presentation/utils/ValidationRules.ts");
+/* harmony import */ var _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MensaSignupEntry.vue */ "./resources/assets/js/presentation/components/mensa/signup/MensaSignupEntry.vue");
+/* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../utils/ValidationRules */ "./resources/assets/js/presentation/utils/ValidationRules.ts");
+/* harmony import */ var _domain_mensa_usecase_SignupMensa__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../domain/mensa/usecase/SignupMensa */ "./resources/assets/js/domain/mensa/usecase/SignupMensa.ts");
 var __spreadArray = undefined && undefined.__spreadArray || function (to, from, pack) {
   if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
     if (ar || !(i in from)) {
@@ -2201,29 +2201,19 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_4__["default"].extend({
   components: {
-    MensaSignupEntry: _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    MensaSignupEntry: _MensaSignupEntry_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
-    var potentialUser = this.$local.user;
-    var user = {
-      email: ""
-    };
-
-    if ('email' in potentialUser) {
-      user = potentialUser;
-    }
-
     return {
       isOpen: false,
       mensa: null,
-      email: user.email,
+      email: "",
       step: 1,
       tab: 0,
       signup: null,
       intros: [],
-      user: user,
       validation: {
-        email: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_3__.Validations.email
+        email: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_2__.Validations.email
       },
       loading: false
     };
@@ -2241,21 +2231,29 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
   },
   methods: {
     open: function open(mensa) {
+      var _a, _b;
+
       if (this.mensa != mensa) {
-        this.signup = (0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$local.user);
-        this.intros = [];
-        this.tab = 0;
-        this.step = 1;
+        this.clearDialog(mensa);
       }
 
       this.mensa = mensa;
       this.isOpen = true;
       this.loading = false;
+      this.tab = 0;
+      this.step = 1;
+      this.email = (_b = (_a = this.$local.user) === null || _a === void 0 ? void 0 : _a.email) !== null && _b !== void 0 ? _b : "";
+    },
+    clearDialog: function clearDialog(mensa) {
+      this.signup = this.createEmptySignup(mensa, this.$local.user);
+      this.intros = [];
+      this.tab = 0;
+      this.step = 1;
     },
     addIntro: function addIntro() {
       var mensa = this.mensa;
       if (mensa == null) return;
-      this.intros = __spreadArray(__spreadArray([], this.intros, true), [(0,_domain_mensa_model_MensaSignup__WEBPACK_IMPORTED_MODULE_1__.createEmptySignup)(mensa.id, this.$local.user, true)], false);
+      this.intros = __spreadArray(__spreadArray([], this.intros, true), [this.createEmptySignup(mensa, this.$local.user, true)], false);
     },
     deleteIntro: function deleteIntro() {
       var intros = __spreadArray([], this.intros, true);
@@ -2270,9 +2268,53 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
       }
     },
     sendSignup: function sendSignup() {
-      if (this.$refs.emailForm.validate()) {
-        this.loading = true;
+      var _this = this;
+
+      if (!this.$refs.emailForm.validate()) {
+        return;
       }
+
+      if (this.mensa == null || this.signup == null) return;
+      this.loading = true;
+      (0,_domain_mensa_usecase_SignupMensa__WEBPACK_IMPORTED_MODULE_3__["default"])(this.mensa, this.email, __spreadArray([this.signup], this.intros, true)).then(function () {
+        _this.loading = false;
+        _this.isOpen = false;
+        var mensa = _this.mensa;
+        if (mensa != null) _this.clearDialog(mensa);
+      })["catch"](function () {
+        _this.loading = false;
+      });
+    },
+    createEmptySignup: function createEmptySignup(mensa, user, isIntro) {
+      var _a, _b;
+
+      if (isIntro === void 0) {
+        isIntro = false;
+      }
+
+      var signup = {
+        foodOption: null,
+        isIntro: isIntro,
+        allergies: "",
+        extraInfo: ""
+      };
+
+      if (!isIntro) {
+        if ('foodPreference' in user && user.foodPreference != null && mensa.foodOptions.indexOf(user.foodPreference) != -1) {
+          signup.foodOption = user.foodPreference;
+        }
+
+        signup.extraInfo = (_a = 'extraInfo' in user ? user.extraInfo : "") !== null && _a !== void 0 ? _a : "";
+        signup.allergies = (_b = 'allergies' in user ? user.allergies : "") !== null && _b !== void 0 ? _b : "";
+        signup.cook = false;
+        signup.dishwasher = false;
+      }
+
+      if (mensa.foodOptions.length == 1) {
+        signup.foodOption = mensa.foodOptions[0];
+      }
+
+      return signup;
     }
   },
   computed: {
@@ -2299,7 +2341,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/ValidationRules */ "./resources/assets/js/presentation/utils/ValidationRules.ts");
-/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/mensa/model/FoodOption */ "./resources/assets/js/domain/mensa/model/FoodOption.ts");
 var __spreadArray = undefined && undefined.__spreadArray || function (to, from, pack) {
   if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
     if (ar || !(i in from)) {
@@ -2343,7 +2385,7 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
     foodOptions: function foodOptions() {
       var _this = this;
 
-      var available = _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__.SortedFoodPreferences.filter(function (value) {
+      var available = _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__.SortedFoodOptions.filter(function (value) {
         return _this.mensa.foodOptions.includes(value);
       });
       var options = this.allFoodOptions;
@@ -2356,9 +2398,9 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
     },
     allFoodOptions: function allFoodOptions() {
       return {
-        VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
-        VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
-        MEAT: this.$ll(this.$lang.text.foodOptions.meat)
+        vegan: this.$ll(this.$lang.text.foodOptions.vegan),
+        vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
+        meat: this.$ll(this.$lang.text.foodOptions.meat)
       };
     }
   }
@@ -2402,18 +2444,15 @@ __webpack_require__.r(__webpack_exports__);
       MAX_STRING_LENGTH: _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__.MAX_STRING_LENGTH
     };
   },
-  watch: {
-    isOpen: function isOpen(open) {
-      var _this = this;
+  mounted: function mounted() {
+    var _this = this;
 
-      if (open) return;
-      this.loginUrl = null;
-      this.loading = true;
-      (0,_domain_user_usecase_GetLoginUrl__WEBPACK_IMPORTED_MODULE_1__["default"])().then(function (value) {
-        _this.loading = false;
-        _this.loginUrl = value;
-      });
-    }
+    this.loginUrl = null;
+    this.loading = true;
+    (0,_domain_user_usecase_GetLoginUrl__WEBPACK_IMPORTED_MODULE_1__["default"])().then(function (value) {
+      _this.loading = false;
+      _this.loginUrl = value;
+    });
   },
   methods: {
     login: function login() {
@@ -2444,7 +2483,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_ValidationRules__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/ValidationRules */ "./resources/assets/js/presentation/utils/ValidationRules.ts");
 /* harmony import */ var _domain_user_usecase_Logout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../domain/user/usecase/Logout */ "./resources/assets/js/domain/user/usecase/Logout.ts");
 /* harmony import */ var _domain_common_model_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../domain/common/model/User */ "./resources/assets/js/domain/common/model/User.ts");
-/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../domain/mensa/model/FoodOption */ "./resources/assets/js/domain/mensa/model/FoodOption.ts");
 /* harmony import */ var _domain_user_usecase_UpdateSelf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../domain/user/usecase/UpdateSelf */ "./resources/assets/js/domain/user/usecase/UpdateSelf.ts");
 var __assign = undefined && undefined.__assign || function () {
   __assign = Object.assign || function (t) {
@@ -2552,7 +2591,7 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
   computed: {
     foodOptions: function foodOptions() {
       var options = this.allFoodOptions;
-      var sorted = _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_3__.SortedFoodPreferences.map(function (option) {
+      var sorted = _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_3__.SortedFoodOptions.map(function (option) {
         return {
           value: option,
           text: options[option]
@@ -2560,15 +2599,15 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
       });
       return __spreadArray([{
         value: null,
-        text: options.NONE
+        text: options.none
       }], sorted, true);
     },
     allFoodOptions: function allFoodOptions() {
       return {
-        NONE: this.$ll(this.$lang.text.foodOptions.none),
-        VEGAN: this.$ll(this.$lang.text.foodOptions.vegan),
-        VEGETARIAN: this.$ll(this.$lang.text.foodOptions.vegetarian),
-        MEAT: this.$ll(this.$lang.text.foodOptions.meat)
+        none: this.$ll(this.$lang.text.foodOptions.none),
+        vegan: this.$ll(this.$lang.text.foodOptions.vegan),
+        vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
+        meat: this.$ll(this.$lang.text.foodOptions.meat)
       };
     },
     hasSettingsChanged: function hasSettingsChanged() {
@@ -2906,50 +2945,47 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_10__["default"]({
 }).$mount('#app');
 (0,_domain_user_usecase_GetSelf__WEBPACK_IMPORTED_MODULE_8__["default"])().then(function (user) {
   app.$local.user = user;
-  console.debug(user);
 });
 
 /***/ }),
 
-/***/ "./resources/assets/js/data/common/MapFoodPreference.ts":
-/*!**************************************************************!*\
-  !*** ./resources/assets/js/data/common/MapFoodPreference.ts ***!
-  \**************************************************************/
+/***/ "./resources/assets/js/data/common/MapFoodOption.ts":
+/*!**********************************************************!*\
+  !*** ./resources/assets/js/data/common/MapFoodOption.ts ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "MapFoodPreferences": () => (/* binding */ MapFoodPreferences),
-/* harmony export */   "MapFoodPreference": () => (/* binding */ MapFoodPreference)
+/* harmony export */   "MapFoodOptions": () => (/* binding */ MapFoodOptions),
+/* harmony export */   "MapFoodOption": () => (/* binding */ MapFoodOption)
 /* harmony export */ });
 /* harmony import */ var _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../domain/common/utils/Result */ "./resources/assets/js/domain/common/utils/Result.ts");
-/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../domain/mensa/model/FoodOption */ "./resources/assets/js/domain/mensa/model/FoodOption.ts");
 /* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 
 
-
-function MapFoodPreferences(preferences) {
+function MapFoodOptions(preferences) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
-    if (!Array.isArray(preferences)) throw new Error("data is not of type Array. (" + _typeof(preferences) + ")");
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_2__.checkIsArray)('foodOptions', preferences);
     return preferences.map(function (preference) {
-      return (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_2__.requireNotNull)('foodPreferences', MapFoodPreference(preference).getOrThrow());
+      return (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_2__.requireNotNull)('foodPreferences', MapFoodOption(preference).getOrThrow());
     });
   });
 }
-function MapFoodPreference(foodPreference) {
+function MapFoodOption(foodPreference) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
     switch (foodPreference) {
       case 'vegan':
-        return _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGAN;
+        return _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__["default"].VEGAN;
 
       case 'vegetarian':
-        return _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGETARIAN;
+        return _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__["default"].VEGETARIAN;
 
       case 'meat':
-        return _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].MEAT;
+        return _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__["default"].MEAT;
 
       default:
         return null;
@@ -2990,15 +3026,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
 /* harmony import */ var _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../domain/common/utils/Result */ "./resources/assets/js/domain/common/utils/Result.ts");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 
 
 function MapExtraOptions(data) {
-  if (!Array.isArray(data)) return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
-  return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.Success(data.map(function (price) {
-    return MapPrice(price).getOrThrow();
-  }));
+  return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.runCatching)(function () {
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.checkIsArray)('extraOptions', data);
+    return data.map(function (price) {
+      return MapPrice(price).getOrThrow();
+    });
+  });
 }
 function MapPrice(data) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.runCatching)(function () {
@@ -3031,9 +3067,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MapSimpleUsers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MapSimpleUsers */ "./resources/assets/js/data/mensa/mapper/MapSimpleUsers.ts");
 /* harmony import */ var _MapDate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MapDate */ "./resources/assets/js/data/mensa/mapper/MapDate.ts");
 /* harmony import */ var _MapMenu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./MapMenu */ "./resources/assets/js/data/mensa/mapper/MapMenu.ts");
-/* harmony import */ var _common_MapFoodPreference__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/MapFoodPreference */ "./resources/assets/js/data/common/MapFoodPreference.ts");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+/* harmony import */ var _common_MapFoodOption__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../common/MapFoodOption */ "./resources/assets/js/data/common/MapFoodOption.ts");
 
 
 
@@ -3060,7 +3094,7 @@ function MapBetween(data) {
 
 function MapMensas(data) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_2__.runCatching)(function () {
-    if (!Array.isArray(data)) throw new Error("data is not of type Array. (" + _typeof(data) + ")");
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.checkIsArray)('mensas', data);
     return data.map(function (price) {
       return MapMensa(price).getOrThrow();
     });
@@ -3073,7 +3107,7 @@ function MapMensa(data) {
       id: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('id', data.id),
       title: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('title', data.title),
       description: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('description', data.description),
-      foodOptions: (0,_common_MapFoodPreference__WEBPACK_IMPORTED_MODULE_6__.MapFoodPreferences)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('foodOptions', data.foodOptions)).getOrThrow(),
+      foodOptions: (0,_common_MapFoodOption__WEBPACK_IMPORTED_MODULE_6__.MapFoodOptions)((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('foodOptions', data.foodOptions)).getOrThrow(),
       menu: (0,_MapMenu__WEBPACK_IMPORTED_MODULE_5__["default"])((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('menu', data.menu)).getOrThrow(),
       extraOptions: (0,_MapExtraOptions__WEBPACK_IMPORTED_MODULE_1__["default"])((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('extraOptions', data.extraOptions)).getOrThrow(),
       date: (0,_MapDate__WEBPACK_IMPORTED_MODULE_4__["default"])((0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.requireNotNull)('date', data.date)),
@@ -3103,15 +3137,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
 /* harmony import */ var _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../domain/common/utils/Result */ "./resources/assets/js/domain/common/utils/Result.ts");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 
 
 function MapMenu(data) {
-  if (!Array.isArray(data)) return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
-  return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.Success(data.map(function (price) {
-    return MapMenuItem(price).getOrThrow();
-  }));
+  return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.runCatching)(function () {
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_0__.checkIsArray)('mensaMenu', data);
+    return data.map(function (price) {
+      return MapMenuItem(price).getOrThrow();
+    });
+  });
 }
 function MapMenuItem(data) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_1__.runCatching)(function () {
@@ -3139,15 +3173,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../domain/common/utils/Result */ "./resources/assets/js/domain/common/utils/Result.ts");
 /* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 
 
 function MapSimpleUsers(data) {
-  if (!Array.isArray(data)) return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
-  return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.Success(data.map(function (price) {
-    return MapSimpleUser(price).getOrThrow();
-  }));
+  return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.checkIsArray)('simpleUsers', data);
+    return data.map(function (price) {
+      return MapSimpleUser(price).getOrThrow();
+    });
+  });
 }
 function MapSimpleUser(data) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
@@ -3177,9 +3211,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../domain/common/utils/Result */ "./resources/assets/js/domain/common/utils/Result.ts");
 /* harmony import */ var _utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/MappingUtils */ "./resources/assets/js/data/utils/MappingUtils.ts");
-/* harmony import */ var _common_MapFoodPreference__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/MapFoodPreference */ "./resources/assets/js/data/common/MapFoodPreference.ts");
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
+/* harmony import */ var _common_MapFoodOption__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/MapFoodOption */ "./resources/assets/js/data/common/MapFoodOption.ts");
 
 
 
@@ -3192,17 +3224,19 @@ function MapFullUser(data) {
       name: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.requireNotNull)('name', data.name),
       email: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.requireNotNull)('email', data.email),
       isAdmin: (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.requireNotNull)('isAdmin', data.isAdmin),
-      foodPreference: (0,_common_MapFoodPreference__WEBPACK_IMPORTED_MODULE_2__.MapFoodPreference)(data.foodPreference).getOrNull(),
+      foodPreference: (0,_common_MapFoodOption__WEBPACK_IMPORTED_MODULE_2__.MapFoodOption)(data.foodPreference).getOrNull(),
       extraInfo: (_a = data.extraInfo) !== null && _a !== void 0 ? _a : null,
       allergies: (_b = data.allergies) !== null && _b !== void 0 ? _b : null
     };
   });
 }
 function MapUsers(data) {
-  if (!Array.isArray(data)) return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
-  return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.Success(data.map(function (price) {
-    return MapUser(price).getOrThrow();
-  }));
+  return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.checkIsArray)('users', data);
+    return data.map(function (price) {
+      return MapUser(price).getOrThrow();
+    });
+  });
 }
 function MapUser(data) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
@@ -3215,10 +3249,12 @@ function MapUser(data) {
   });
 }
 function MapSimpleUsers(data) {
-  if (!Array.isArray(data)) return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.Failure(Error("data is not of type Array. (" + _typeof(data) + ")"));
-  return new _domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.Success(data.map(function (price) {
-    return MapSimpleUser(price).getOrThrow();
-  }));
+  return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
+    (0,_utils_MappingUtils__WEBPACK_IMPORTED_MODULE_1__.checkIsArray)('mensaSimpleUser', data);
+    return data.map(function (price) {
+      return MapSimpleUser(price).getOrThrow();
+    });
+  });
 }
 function MapSimpleUser(data) {
   return (0,_domain_common_utils_Result__WEBPACK_IMPORTED_MODULE_0__.runCatching)(function () {
@@ -3435,7 +3471,10 @@ var MensaRepositoryImpl = function () {
   };
 
   MensaRepositoryImpl.prototype.signup = function (mensa, email, signups) {
-    throw new Error('Method not implemented.');
+    return axios__WEBPACK_IMPORTED_MODULE_2___default().post(_Config__WEBPACK_IMPORTED_MODULE_0__["default"].API_BASE_URL + "/mensa/" + mensa.id + "/signup", {
+      email: email,
+      signups: signups
+    }).then(function () {});
   };
 
   MensaRepositoryImpl.prototype.editSignup = function (signup) {
@@ -3857,11 +3896,17 @@ function MapResponse(response) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "requireNotNull": () => (/* binding */ requireNotNull)
+/* harmony export */   "requireNotNull": () => (/* binding */ requireNotNull),
+/* harmony export */   "checkIsArray": () => (/* binding */ checkIsArray)
 /* harmony export */ });
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function requireNotNull(argName, arg) {
   if (arg === null || arg === undefined) throw Error("non-nullable argument '" + argName + "' is null");
   return arg;
+}
+function checkIsArray(argName, arg) {
+  if (!Array.isArray(arg)) throw new Error(argName + " is not of type Array. (" + _typeof(arg) + ")");
 }
 
 /***/ }),
@@ -4256,68 +4301,28 @@ var Failure = function (_super) {
 
 /***/ }),
 
-/***/ "./resources/assets/js/domain/mensa/model/FoodPreference.ts":
-/*!******************************************************************!*\
-  !*** ./resources/assets/js/domain/mensa/model/FoodPreference.ts ***!
-  \******************************************************************/
+/***/ "./resources/assets/js/domain/mensa/model/FoodOption.ts":
+/*!**************************************************************!*\
+  !*** ./resources/assets/js/domain/mensa/model/FoodOption.ts ***!
+  \**************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SortedFoodPreferences": () => (/* binding */ SortedFoodPreferences),
+/* harmony export */   "SortedFoodOptions": () => (/* binding */ SortedFoodOptions),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-var FoodPreference;
+var FoodOption;
 
-(function (FoodPreference) {
-  FoodPreference["VEGAN"] = "VEGAN";
-  FoodPreference["VEGETARIAN"] = "VEGETARIAN";
-  FoodPreference["MEAT"] = "MEAT";
-})(FoodPreference || (FoodPreference = {}));
+(function (FoodOption) {
+  FoodOption["VEGAN"] = "vegan";
+  FoodOption["VEGETARIAN"] = "vegetarian";
+  FoodOption["MEAT"] = "meat";
+})(FoodOption || (FoodOption = {}));
 
-var SortedFoodPreferences = [FoodPreference.VEGAN, FoodPreference.VEGETARIAN, FoodPreference.MEAT];
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FoodPreference);
-
-/***/ }),
-
-/***/ "./resources/assets/js/domain/mensa/model/MensaSignup.ts":
-/*!***************************************************************!*\
-  !*** ./resources/assets/js/domain/mensa/model/MensaSignup.ts ***!
-  \***************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "createEmptySignup": () => (/* binding */ createEmptySignup)
-/* harmony export */ });
-function createEmptySignup(mensaId, user, isIntro) {
-  var _a, _b, _c;
-
-  if (isIntro === void 0) {
-    isIntro = false;
-  }
-
-  var foodPreference = null;
-  var extraInfo = "";
-  var allergies = "";
-
-  if (!isIntro) {
-    foodPreference = (_a = 'foodPreference' in user ? user.foodPreference : null) !== null && _a !== void 0 ? _a : null;
-    extraInfo = (_b = 'extraInfo' in user ? user.extraInfo : "") !== null && _b !== void 0 ? _b : "";
-    allergies = (_c = 'allergies' in user ? user.allergies : "") !== null && _c !== void 0 ? _c : "";
-  }
-
-  return {
-    foodPreference: foodPreference,
-    extraInfo: extraInfo,
-    allergies: allergies,
-    isIntro: isIntro,
-    cook: false,
-    dishwasher: false
-  };
-}
+var SortedFoodOptions = [FoodOption.VEGAN, FoodOption.VEGETARIAN, FoodOption.MEAT];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FoodOption);
 
 /***/ }),
 
@@ -4500,6 +4505,174 @@ function GetMensas(weekOffset) {
       return [2
       /*return*/
       , _repository_MensaRepository__WEBPACK_IMPORTED_MODULE_0__["default"].getMensas(weekOffset)];
+    });
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/assets/js/domain/mensa/usecase/SignupMensa.ts":
+/*!*****************************************************************!*\
+  !*** ./resources/assets/js/domain/mensa/usecase/SignupMensa.ts ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ SignupMensa)
+/* harmony export */ });
+/* harmony import */ var _repository_MensaRepository__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../repository/MensaRepository */ "./resources/assets/js/domain/mensa/repository/MensaRepository.ts");
+var __awaiter = undefined && undefined.__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = undefined && undefined.__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
+
+function SignupMensa(mensa, email, signups) {
+  return __awaiter(this, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+      return [2
+      /*return*/
+      , _repository_MensaRepository__WEBPACK_IMPORTED_MODULE_0__["default"].signup(mensa, email, signups)];
     });
   });
 }
@@ -6352,7 +6525,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _lang_Language__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lang/Language */ "./resources/assets/js/presentation/lang/Language.ts");
-/* harmony import */ var _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../domain/mensa/model/FoodPreference */ "./resources/assets/js/domain/mensa/model/FoodPreference.ts");
+/* harmony import */ var _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../domain/mensa/model/FoodOption */ "./resources/assets/js/domain/mensa/model/FoodOption.ts");
 
 
 
@@ -6373,7 +6546,7 @@ var Validations = {
   }, MaxStringLengthValidation],
   foodOptions: [function (value) {
     if (value == null) return true;
-    return value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].VEGETARIAN || value == _domain_mensa_model_FoodPreference__WEBPACK_IMPORTED_MODULE_1__["default"].MEAT || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.invalid);
+    return value == _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__["default"].VEGAN || value == _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__["default"].VEGETARIAN || value == _domain_mensa_model_FoodOption__WEBPACK_IMPORTED_MODULE_1__["default"].MEAT || (0,_lang_Language__WEBPACK_IMPORTED_MODULE_0__.translatedText)(vue__WEBPACK_IMPORTED_MODULE_2__["default"].prototype.$local.language, _lang_Language__WEBPACK_IMPORTED_MODULE_0__["default"].validation.general.invalid);
   }],
   Required: Required,
   MaxStringLengthValidation: MaxStringLengthValidation
@@ -39232,11 +39405,11 @@ var render = function() {
           "hide-details": "auto"
         },
         model: {
-          value: _vm.signup.foodPreference,
+          value: _vm.signup.foodOption,
           callback: function($$v) {
-            _vm.$set(_vm.signup, "foodPreference", $$v)
+            _vm.$set(_vm.signup, "foodOption", $$v)
           },
-          expression: "signup.foodPreference"
+          expression: "signup.foodOption"
         }
       }),
       _vm._v(" "),

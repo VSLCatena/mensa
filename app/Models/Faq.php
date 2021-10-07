@@ -9,26 +9,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\Faq
  *
+ * @property string $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $question
+ * @property string $answer
+ * @property int $order
+ * @property-read \App\Models\User $lastEditedBy
+ * @method static \Database\Factories\FaqFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Faq newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Faq newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Faq query()
  * @method static \Illuminate\Database\Eloquent\Builder|Faq whereAnswer($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Faq whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Faq whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Faq whereLastEditedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Faq whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Faq whereQuestion($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Faq whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property int $id
- * @property string $question
- * @property string $answer
- * @property string $last_edited_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User $lastEditedBy
- * @method static \Database\Factories\FaqFactory factory(...$parameters)
- * @property int $order
- * @method static \Illuminate\Database\Eloquent\Builder|Faq whereOrder($value)
  */
 class Faq extends Model
 {

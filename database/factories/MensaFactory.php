@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Http\Controllers\Api\v1\Common\Models\FoodOptions;
 use App\Models\Mensa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 

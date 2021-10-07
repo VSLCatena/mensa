@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import $lang, {translatedText} from "../lang/Language";
-import FoodPreference from "../../domain/mensa/model/FoodPreference";
+import FoodOption from "../../domain/mensa/model/FoodOption";
 
 export const MAX_STRING_LENGTH = 191
 export const EmailRule = /^(?!\.)("([^"\r\\]|\\["\r\\])*"|([-a-z0-9!#$%&'*+\/=?^_`{|}~]|(?<!\.)\.)*)(?<!\.)@[a-z0-9][\w\.-]*[a-z0-9]\.[a-z][a-z\.]*[a-z]$/;
@@ -27,9 +27,9 @@ export const Validations = {
             if (value == null) return true;
 
             return (
-                value == FoodPreference.VEGAN ||
-                value == FoodPreference.VEGETARIAN ||
-                value == FoodPreference.MEAT
+                value == FoodOption.VEGAN ||
+                value == FoodOption.VEGETARIAN ||
+                value == FoodOption.MEAT
                 ) || translatedText(Vue.prototype.$local.language, $lang.validation.general.invalid)
         }
     ],
