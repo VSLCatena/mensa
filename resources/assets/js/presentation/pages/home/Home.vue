@@ -15,7 +15,7 @@
             </div>
         </v-banner>
 
-        <v-expansion-panels focusable accordion class="mt-4">
+        <v-expansion-panels focusable accordion v-model="openedItem" class="mt-4">
             <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" :on-signup-clicked="onMensaSignup" />
         </v-expansion-panels>
 
@@ -38,6 +38,7 @@
         components: {MensaSignupDialog, MensaItem},
         data: function() {
             return {
+                openedItem: null,
                 mensas: [] as Mensa[],
                 weekOffset: -1,
                 loading: true,
@@ -63,6 +64,7 @@
 
                 GetMensas(offset)
                     .then(mensaList => {
+                        this.openedItem = null;
                         this.mensas = [...mensaList.mensas];
                         this.between = mensaList.between;
                         this.loading = false;

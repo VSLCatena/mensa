@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,6 +33,7 @@ class MensaListController extends Controller
      * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse {
+        $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
 
         $validator = Validator::make($request->all(), ['weekOffset' => ['integer'],]);
 
@@ -52,12 +54,13 @@ class MensaListController extends Controller
         $mensas = Mensa::orderBy('date')
             ->whereBetween('date', [$startTime, $endTime])
             ->get()
-            ->map(function ($mensa) {
+            ->map(function ($mensa) use ($user) {
                 return self::mapMensa(
                     $mensa,
                     $mensa->users->all(),
                     $mensa->menuItems->all(),
                     $mensa->extraOptions->all(),
+                    $user != null
                 );
             });
 

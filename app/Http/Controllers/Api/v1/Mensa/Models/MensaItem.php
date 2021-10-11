@@ -11,7 +11,7 @@ class MensaItem {
      * @param int $closingTime
      * @param bool $isClosed
      * @param int $maxSignups
-     * @param int $signups
+     * @param int|SimpleUserItem[] $signups
      * @param int $dishwashers
      * @param float $price
      * @param SimpleUserItem[] $cooks
@@ -27,7 +27,7 @@ class MensaItem {
         public int $closingTime,
         public bool $isClosed,
         public int $maxSignups,
-        public int $signups,
+        public int|array $signups,
         public float $price,
         public int $dishwashers,
         public array $cooks,

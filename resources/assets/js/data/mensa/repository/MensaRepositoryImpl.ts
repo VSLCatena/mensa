@@ -6,11 +6,13 @@ import MapMensas from "../mapper/MapMensas";
 import axios from "axios";
 import MensaList from "../../../domain/mensa/model/MensaList";
 import MapResponse from "../../utils/MapResponse";
+import {OptionalAuthHeader} from "../../utils/WithAuthHeader";
 
 class MensaRepositoryImpl implements MensaRepository {
 
-    async getMensas(weekOffset: number|null): Promise<MensaList> {
+    async getMensas(weekOffset: number|null, authToken: string|null): Promise<MensaList> {
         return axios.get(`${Config.API_BASE_URL}/mensas`, {
+            headers: OptionalAuthHeader(authToken),
             params: { weekOffset: weekOffset }
         })
             .then(MapResponse)
@@ -31,8 +33,9 @@ class MensaRepositoryImpl implements MensaRepository {
     getSignup(mensaId: string): Promise<MensaSignup | null> {
         throw new Error('Method not implemented.');
     }
-    signup(mensa: Mensa, email: string, signups: Partial<MensaSignup>[]): Promise<void> {
+    signup(mensa: Mensa, email: string, signups: Partial<MensaSignup>[], authToken: string|null): Promise<void> {
         return axios.post(`${Config.API_BASE_URL}/mensa/${mensa.id}/signup`, {
+            headers: OptionalAuthHeader(authToken),
             email: email,
             signups: signups
         }).then(() => {})

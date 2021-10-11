@@ -25,8 +25,8 @@
                     </v-list-item>
                     <v-list-item @click="toggleLanguage()" selectable>
                         <v-list-item-icon>
-                            <img style="width: 24px; height: 24px" :src="nlimage" v-if="currentLanguage !== 'en'" />
-                            <img style="width: 24px; height: 24px" :src="enimage" v-if="currentLanguage !== 'nl'" />
+                            <img style="width: 24px; height: 24px" :src="enimage" v-if="currentLanguage !== 'en'" />
+                            <img style="width: 24px; height: 24px" :src="nlimage" v-if="currentLanguage !== 'nl'" />
                         </v-list-item-icon>
                         <v-list-item-content>
                             {{ $ll($lang.text.menu.switch_language) }}

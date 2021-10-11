@@ -88,6 +88,20 @@ const text = {
             nl: "Afwassers",
             en: "Dishwashers",
         },
+        dishwasher_count: {
+            zero: {
+                nl: '%s afwassers',
+                en: '%s dishwashers',
+            },
+            one: {
+                nl: '%s afwasser',
+                en: '%s dishwasher',
+            },
+            many: {
+                nl: '%s afwassers',
+                en: '%s dishwashers',
+            }
+        },
         button_signup: {
             nl: "Inschrijven",
             en: "Sign up",

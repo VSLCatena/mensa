@@ -110,6 +110,7 @@ export default Vue.extend({
                 .then(() => {
                     this.$local.user = {...this.$local.user, ...newUser };
                     this.enabled = true;
+                    this.close();
                 }).catch(() => {
                     this.enabled = true;
                 });

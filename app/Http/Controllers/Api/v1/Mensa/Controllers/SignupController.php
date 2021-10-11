@@ -198,8 +198,8 @@ class SignupController extends Controller {
         if ($validator->fails()) return $validator->errors();
 
         $signup = new Signup();
-        $signup->cooks = isset($userData['cooks']) ? $userData['cooks'] : false;
-        $signup->dishwasher = isset($userData['dishwasher']) ? $userData['dishwasher'] : false;
+        $signup->cooks = $userData['cooks'] ?? false;
+        $signup->dishwasher = $userData['dishwasher'] ?? false;
         $signup->food_option = $this->mapFoodOptionFromNameToInt($userData['foodOption']);
         $signup->is_intro = $userData['isIntro'];
         $signup->allergies = $userData['allergies'] ?: "";
@@ -250,6 +250,7 @@ class SignupController extends Controller {
         try {
             return $this->remoteLookup->currentUpdatedIfNecessary();
         } catch (ClientExceptionInterface) { abort(Response::HTTP_BAD_GATEWAY); }
+        return null; // For lint
     }
 
     /**
@@ -292,6 +293,7 @@ class SignupController extends Controller {
             return $user;
         } catch (ClientExceptionInterface) {
             abort(Response::HTTP_BAD_GATEWAY);
+            throw new \Error(); // For lint
         }
     }
 }
