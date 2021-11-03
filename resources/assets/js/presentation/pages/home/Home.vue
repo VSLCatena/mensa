@@ -1,6 +1,7 @@
 <template>
     <div class="container mt-3 mb-3">
         <MensaSignupDialog ref="signupDialog" />
+        <MensaOverviewDialog ref="overviewDialog" />
         <v-banner>
             <div class="d-flex">
                 <div>
@@ -16,7 +17,7 @@
         </v-banner>
 
         <v-expansion-panels focusable accordion v-model="openedItem" class="mt-4">
-            <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" :on-signup-clicked="onMensaSignup" />
+            <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" :on-signup-clicked="onSignupMensaClicked" :on-overview-clicked="onMensaOverviewClicked" />
         </v-expansion-panels>
 
         <div class="mt-4 d-flex">
@@ -33,9 +34,11 @@
     import {Between} from "../../../domain/mensa/model/MensaList";
     import {formatDate} from "../../formatters/DateFormatter";
     import MensaSignupDialog from "../../components/mensa/signup/MensaSignupDialog.vue";
+    import MensaOverviewDialog from "../../components/mensa/signup/MensaOverviewDialog";
+    import {AuthUser, User} from "../../../domain/common/model/User";
 
     export default Vue.extend({
-        components: {MensaSignupDialog, MensaItem},
+        components: {MensaOverviewDialog, MensaSignupDialog, MensaItem},
         data: function() {
             return {
                 openedItem: null,
@@ -56,10 +59,30 @@
                 let between = this.between;
                 if (between == null) return null;
                 return formatDate(between.end, { withTime: false });
+            },
+            currentUser: function(): AuthUser {
+                return this.$local.user;
             }
         },
         watch: {
             weekOffset: function (offset) {
+                this.retrieveMensas(offset);
+            },
+            currentUser: function () {
+                this.retrieveMensas(this.weekOffset);
+            }
+        },
+        methods: {
+            offsetWeeks: function (offset: number) {
+                this.weekOffset += offset;
+            },
+            onSignupMensaClicked: function (mensa: Mensa) {
+                (this.$refs.signupDialog as any).open(mensa);
+            },
+            onMensaOverviewClicked: function (mensa: Mensa) {
+                (this.$refs.overviewDialog as any).open(mensa);
+            },
+            retrieveMensas: function(offset: number) {
                 this.loading = true;
 
                 GetMensas(offset)
@@ -73,14 +96,6 @@
                         console.error(error);
                         this.loading = false;
                     })
-            }
-        },
-        methods: {
-            offsetWeeks: function (offset: number) {
-                this.weekOffset += offset;
-            },
-            onMensaSignup: function (mensa: Mensa) {
-                (this.$refs.signupDialog as any).open(mensa);
             }
         },
         created() {

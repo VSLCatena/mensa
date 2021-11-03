@@ -170,6 +170,14 @@ const text = {
             nl: "Inschrijving voor mensa op",
             en: "Singup for mensa at",
         },
+        signups_for: {
+            nl: "Inschrijvingen voor de mensa op",
+            en: "Signups for the mensa at",
+        },
+        signups_currently: {
+            nl: "Mensen momenteel ingeschreven:",
+            en: "People currently signed up:",
+        },
         tab_signup: {
             nl: "Inschrijving",
             en: "Signup",

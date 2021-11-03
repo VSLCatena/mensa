@@ -72,7 +72,7 @@
 
                     <div class="mt-6">
                         <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">{{ $ll($lang.text.mensa.button_signup) }}</v-btn>
-                        <v-btn outlined>{{ $ll($lang.text.mensa.button_overview) }}</v-btn>
+                        <v-btn outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">{{ $ll($lang.text.mensa.button_overview) }}</v-btn>
                     </div>
                 </div>
             </div>
@@ -86,6 +86,7 @@
     import Vue, { PropType } from "vue";
     import {capitalize, formatUsers} from "../../formatters/StringFormatter";
     import {LanguageText} from "../../lang/LanguageText";
+    import {AnonymousUser} from "../../../domain/common/model/User";
 
     export default Vue.extend({
         data: function() {
@@ -101,9 +102,16 @@
             onSignupClicked: {
                 type: Function,
                 required: false
+            },
+            onOverviewClicked: {
+                type: Function,
+                required: false
             }
         },
         computed: {
+            isLoggedIn: function(): boolean {
+                return this.$local.user != AnonymousUser;
+            },
             formattedDate: function(): string {
                 return capitalize(formatDate(this.mensa.date));
             },

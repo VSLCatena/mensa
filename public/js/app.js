@@ -2130,12 +2130,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../formatters/DateFormatter */ "./resources/assets/js/presentation/formatters/DateFormatter.ts");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../formatters/StringFormatter */ "./resources/assets/js/presentation/formatters/StringFormatter.ts");
+/* harmony import */ var _domain_common_model_User__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../domain/common/model/User */ "./resources/assets/js/domain/common/model/User.ts");
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_2__["default"].extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].extend({
   data: function data() {
     return {
       infoTabs: null
@@ -2149,9 +2151,16 @@ __webpack_require__.r(__webpack_exports__);
     onSignupClicked: {
       type: Function,
       required: false
+    },
+    onOverviewClicked: {
+      type: Function,
+      required: false
     }
   },
   computed: {
+    isLoggedIn: function isLoggedIn() {
+      return this.$local.user != _domain_common_model_User__WEBPACK_IMPORTED_MODULE_2__.AnonymousUser;
+    },
     formattedDate: function formattedDate() {
       return (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_1__.capitalize)((0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_0__.formatDate)(this.mensa.date));
     },
@@ -2202,6 +2211,57 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return users.toString();
+    }
+  }
+}));
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=script&lang=ts&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=script&lang=ts& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var _formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../formatters/StringFormatter */ "./resources/assets/js/presentation/formatters/StringFormatter.ts");
+/* harmony import */ var _domain_common_model_User__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../domain/common/model/User */ "./resources/assets/js/domain/common/model/User.ts");
+/* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../formatters/DateFormatter */ "./resources/assets/js/presentation/formatters/DateFormatter.ts");
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_3__["default"].extend({
+  data: function data() {
+    return {
+      isOpen: false,
+      mensa: null
+    };
+  },
+  methods: {
+    open: function open(mensa) {
+      if (Number.isInteger(mensa.signups)) return;
+      this.mensa = mensa;
+      this.isOpen = true;
+    }
+  },
+  computed: {
+    names: function names() {
+      var _a, _b;
+
+      var signups = (_a = this.mensa) === null || _a === void 0 ? void 0 : _a.signups;
+      if (Number.isInteger(signups) || this.$local.user == _domain_common_model_User__WEBPACK_IMPORTED_MODULE_1__.AnonymousUser) return "";
+      return (_b = (0,_formatters_StringFormatter__WEBPACK_IMPORTED_MODULE_0__.formatUsers)(signups)) !== null && _b !== void 0 ? _b : "";
+    },
+    formattedDate: function formattedDate() {
+      var mensa = this.mensa;
+      if (mensa == null || this.$local.user == _domain_common_model_User__WEBPACK_IMPORTED_MODULE_1__.AnonymousUser) return null;
+      return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__.formatDate)(mensa.date);
     }
   }
 }));
@@ -2721,10 +2781,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _domain_mensa_usecase_GetMensas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../domain/mensa/usecase/GetMensas */ "./resources/assets/js/domain/mensa/usecase/GetMensas.ts");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
 /* harmony import */ var _components_mensa_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/mensa/MensaItem.vue */ "./resources/assets/js/presentation/components/mensa/MensaItem.vue");
 /* harmony import */ var _formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../formatters/DateFormatter */ "./resources/assets/js/presentation/formatters/DateFormatter.ts");
 /* harmony import */ var _components_mensa_signup_MensaSignupDialog_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/mensa/signup/MensaSignupDialog.vue */ "./resources/assets/js/presentation/components/mensa/signup/MensaSignupDialog.vue");
+/* harmony import */ var _components_mensa_signup_MensaOverviewDialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/mensa/signup/MensaOverviewDialog */ "./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue");
 var __spreadArray = undefined && undefined.__spreadArray || function (to, from, pack) {
   if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
     if (ar || !(i in from)) {
@@ -2740,8 +2801,10 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
 
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_4__["default"].extend({
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (vue__WEBPACK_IMPORTED_MODULE_5__["default"].extend({
   components: {
+    MensaOverviewDialog: _components_mensa_signup_MensaOverviewDialog__WEBPACK_IMPORTED_MODULE_4__["default"],
     MensaSignupDialog: _components_mensa_signup_MensaSignupDialog_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     MensaItem: _components_mensa_MensaItem_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
@@ -2769,10 +2832,30 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
       return (0,_formatters_DateFormatter__WEBPACK_IMPORTED_MODULE_2__.formatDate)(between.end, {
         withTime: false
       });
+    },
+    currentUser: function currentUser() {
+      return this.$local.user;
     }
   },
   watch: {
     weekOffset: function weekOffset(offset) {
+      this.retrieveMensas(offset);
+    },
+    currentUser: function currentUser() {
+      this.retrieveMensas(this.weekOffset);
+    }
+  },
+  methods: {
+    offsetWeeks: function offsetWeeks(offset) {
+      this.weekOffset += offset;
+    },
+    onSignupMensaClicked: function onSignupMensaClicked(mensa) {
+      this.$refs.signupDialog.open(mensa);
+    },
+    onMensaOverviewClicked: function onMensaOverviewClicked(mensa) {
+      this.$refs.overviewDialog.open(mensa);
+    },
+    retrieveMensas: function retrieveMensas(offset) {
       var _this = this;
 
       this.loading = true;
@@ -2785,14 +2868,6 @@ var __spreadArray = undefined && undefined.__spreadArray || function (to, from, 
         console.error(error);
         _this.loading = false;
       });
-    }
-  },
-  methods: {
-    offsetWeeks: function offsetWeeks(offset) {
-      this.weekOffset += offset;
-    },
-    onMensaSignup: function onMensaSignup(mensa) {
-      this.$refs.signupDialog.open(mensa);
     }
   },
   created: function created() {
@@ -6487,6 +6562,14 @@ var text = {
     mensa_at: {
       nl: "Inschrijving voor mensa op",
       en: "Singup for mensa at"
+    },
+    signups_for: {
+      nl: "Inschrijvingen voor de mensa op",
+      en: "Signups for the mensa at"
+    },
+    signups_currently: {
+      nl: "Mensen momenteel ingeschreven:",
+      en: "People currently signed up:"
     },
     tab_signup: {
       nl: "Inschrijving",
@@ -38085,6 +38168,45 @@ component.options.__file = "resources/assets/js/presentation/components/mensa/Me
 
 /***/ }),
 
+/***/ "./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue":
+/*!******************************************************************************************!*\
+  !*** ./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _MensaOverviewDialog_vue_vue_type_template_id_0ab50aaf___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf& */ "./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf&");
+/* harmony import */ var _MensaOverviewDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MensaOverviewDialog.vue?vue&type=script&lang=ts& */ "./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=script&lang=ts&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _MensaOverviewDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _MensaOverviewDialog_vue_vue_type_template_id_0ab50aaf___WEBPACK_IMPORTED_MODULE_0__.render,
+  _MensaOverviewDialog_vue_vue_type_template_id_0ab50aaf___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/assets/js/presentation/components/mensa/signup/MensaSignupDialog.vue":
 /*!****************************************************************************************!*\
   !*** ./resources/assets/js/presentation/components/mensa/signup/MensaSignupDialog.vue ***!
@@ -38390,6 +38512,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=script&lang=ts&":
+/*!*******************************************************************************************************************!*\
+  !*** ./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=script&lang=ts& ***!
+  \*******************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaOverviewDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../../../node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaOverviewDialog.vue?vue&type=script&lang=ts& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/ts-loader/index.js??clonedRuleSet-6[0].rules[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=script&lang=ts&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_ts_loader_index_js_clonedRuleSet_6_0_rules_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaOverviewDialog_vue_vue_type_script_lang_ts___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/assets/js/presentation/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts&":
 /*!*****************************************************************************************************************!*\
   !*** ./resources/assets/js/presentation/components/mensa/signup/MensaSignupDialog.vue?vue&type=script&lang=ts& ***!
@@ -38532,6 +38670,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_0d8bb8e6___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaItem_vue_vue_type_template_id_0d8bb8e6___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaItem.vue?vue&type=template&id=0d8bb8e6& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/MensaItem.vue?vue&type=template&id=0d8bb8e6&");
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf&":
+/*!*************************************************************************************************************************!*\
+  !*** ./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf& ***!
+  \*************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaOverviewDialog_vue_vue_type_template_id_0ab50aaf___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaOverviewDialog_vue_vue_type_template_id_0ab50aaf___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_MensaOverviewDialog_vue_vue_type_template_id_0ab50aaf___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf&");
 
 
 /***/ }),
@@ -39166,15 +39321,129 @@ var render = function() {
                   [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_signup)))]
                 ),
                 _vm._v(" "),
-                _c("v-btn", { attrs: { outlined: "" } }, [
-                  _vm._v(_vm._s(_vm.$ll(_vm.$lang.text.mensa.button_overview)))
-                ])
+                _vm.isLoggedIn
+                  ? _c(
+                      "v-btn",
+                      {
+                        attrs: { outlined: "" },
+                        on: {
+                          click: function($event) {
+                            return _vm.onOverviewClicked(_vm.mensa)
+                          }
+                        }
+                      },
+                      [
+                        _vm._v(
+                          _vm._s(_vm.$ll(_vm.$lang.text.mensa.button_overview))
+                        )
+                      ]
+                    )
+                  : _vm._e()
               ],
               1
             )
           ])
         ])
       ])
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf&":
+/*!****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/assets/js/presentation/components/mensa/signup/MensaOverviewDialog.vue?vue&type=template&id=0ab50aaf& ***!
+  \****************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    {
+      attrs: {
+        "max-width": "800",
+        transition: "dialog-bottom-transition",
+        persistent: _vm.loading
+      },
+      model: {
+        value: _vm.isOpen,
+        callback: function($$v) {
+          _vm.isOpen = $$v
+        },
+        expression: "isOpen"
+      }
+    },
+    [
+      _vm.mensa != null
+        ? _c(
+            "v-card",
+            { attrs: { outlined: "" } },
+            [
+              _c(
+                "v-toolbar",
+                [
+                  _c("v-card-title", [
+                    _vm._v(
+                      _vm._s(_vm.$ll(_vm.$lang.text.signup.signups_for)) +
+                        " " +
+                        _vm._s(_vm.formattedDate)
+                    )
+                  ])
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "px-3 pt-3" }, [
+                _vm._v(
+                  "\n            " +
+                    _vm._s(_vm.$ll(_vm.$lang.text.signup.signups_currently))
+                ),
+                _c("br"),
+                _vm._v(" "),
+                _c("span", { staticClass: "text--secondary" }, [
+                  _vm._v(_vm._s(_vm.names))
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.isOpen = false
+                        }
+                      }
+                    },
+                    [_vm._v(_vm._s(_vm.$ll(_vm.$lang.text.general.close)))]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        : _vm._e()
     ],
     1
   )
@@ -40017,6 +40286,8 @@ var render = function() {
     [
       _c("MensaSignupDialog", { ref: "signupDialog" }),
       _vm._v(" "),
+      _c("MensaOverviewDialog", { ref: "overviewDialog" }),
+      _vm._v(" "),
       _c("v-banner", [
         _c(
           "div",
@@ -40088,7 +40359,11 @@ var render = function() {
         _vm._l(this.mensas, function(mensa) {
           return _c("MensaItem", {
             key: mensa.id,
-            attrs: { mensa: mensa, "on-signup-clicked": _vm.onMensaSignup }
+            attrs: {
+              mensa: mensa,
+              "on-signup-clicked": _vm.onSignupMensaClicked,
+              "on-overview-clicked": _vm.onMensaOverviewClicked
+            }
           })
         }),
         1

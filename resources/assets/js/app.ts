@@ -33,7 +33,7 @@ const routes = [
     { path: '/', component: Home },
     { path: '/mensa', component: Mensa },
     { path: '/login/token', component: LoginToken }
-]
+];
 
 const router = new VueRouter({
     mode: 'history',
