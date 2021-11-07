@@ -12,7 +12,7 @@ declare module '@vue/runtime-core' {
 
   interface ComponentCustomProperties {
     $local: Local,
-    $lang: Translations,
+    $lang: typeof Translations,
     $ll: (text: LanguageText, capitalize: boolean, language: Language) => string,
   }
 }
@@ -20,7 +20,7 @@ declare module '@vue/runtime-core' {
 declare module 'vue/types/vue' {
   interface Vue {
     $local: Local,
-    $lang: Translations,
+    $lang: typeof Translations,
     $ll: (text: LanguageText, capitalize?: boolean, language?: Language) => string,
   }
 }

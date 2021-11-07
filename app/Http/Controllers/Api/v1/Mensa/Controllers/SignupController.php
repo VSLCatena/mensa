@@ -41,7 +41,7 @@ class SignupController extends Controller {
     }
 
 
-    public function getSignups(Request $request, string $mensaId): ?JsonResponse {
+    public function getSignup(Request $request, string $mensaId): ?JsonResponse {
         $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
 
         if ($request->has('confirmation_code')) {
@@ -92,6 +92,18 @@ class SignupController extends Controller {
 
         // If there is a previous signup, the id's need to match so we know the overriding is on purpose
         $previousSignups = Signup::whereMensaId($mensaId)->whereUserId($signupUser->id);
+        if ($previousSignups->count() > 0) {
+            if ($request->isMethod(Request::METHOD_POST)) {
+                abort(Response::HTTP_BAD_REQUEST);
+                throw new \Error(); // For lint
+            }
+        } else {
+            if ($request->isMethod(Request::METHOD_PUT)) {
+                abort(Response::HTTP_BAD_REQUEST);
+                throw new \Error(); // For lint
+            }
+        }
+
         if ($previousSignups->count() > 0
             && (
                 !$request->has('signup_id')
@@ -105,14 +117,13 @@ class SignupController extends Controller {
         $signupId = $previousSignups->first()?->signup_id ?? Str::uuid();
         $confirmationId = $previousSignups->first()?->confirmation_code ?? Str::uuid();
         $isConfirmed = $isAdmin ?: $previousSignups->first()?->confirmed ?? $user?->email == $email;
-
-
+        
         /* Here we map all the signups */
         /** @var Signup[] $signups */
         $signups = [];
         $errors = new MessageBag();
         array_map(function (array $data) use ($mensa, $isAdmin, &$signups, &$errors) {
-            $signup = $this->getSignup($mensa, $data, $isAdmin);
+            $signup = $this->getSingleSignup($mensa, $data, $isAdmin);
             if ($signup instanceof MessageBag) {
                 $errors = $errors->merge($signup);
             } else {
@@ -170,8 +181,7 @@ class SignupController extends Controller {
         return null;
     }
 
-
-    private function getSignup(Mensa $mensa, array $userData, $isAdmin): Signup|MessageBag {
+    private function getSingleSignup(Mensa $mensa, array $userData, $isAdmin): Signup|MessageBag {
         $allowedFoodOptions = $this->mapFoodOptionsFromIntToNames($mensa->food_options);
 
         $rules = [

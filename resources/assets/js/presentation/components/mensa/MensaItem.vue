@@ -69,12 +69,14 @@
                             </v-tab-item>
                         </v-tabs-items>
                     </div>
-
-                    <div class="mt-6">
-                        <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">{{ $ll($lang.text.mensa.button_signup) }}</v-btn>
-                        <v-btn outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">{{ $ll($lang.text.mensa.button_overview) }}</v-btn>
-                    </div>
                 </div>
+            </div>
+
+            <div class="mt-6 d-flex">
+                <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">{{ $ll($lang.text.mensa.button_signup) }}</v-btn>
+                <v-btn class="ml-2" outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">{{ $ll($lang.text.mensa.button_overview) }}</v-btn>
+                <v-spacer />
+                <v-btn class="pa-2" style="min-width: 0" outlined v-if="$local.user.isAdmin" @click="onEditClicked(mensa)"><v-icon>mdi-square-edit-outline</v-icon></v-btn>
             </div>
         </v-expansion-panel-content>
     </v-expansion-panel>
@@ -104,6 +106,10 @@
                 required: false
             },
             onOverviewClicked: {
+                type: Function,
+                required: false
+            },
+            onEditClicked: {
                 type: Function,
                 required: false
             }

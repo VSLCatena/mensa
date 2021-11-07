@@ -50,11 +50,11 @@
     import Vue from 'vue';
     import Mensa from "../../../../domain/mensa/model/Mensa";
     import {formatDate} from "../../../formatters/DateFormatter";
-    import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
-    import MensaSignupEntry from "./MensaSignupEntry.vue";
+    import MensaSignup from "../../../../domain/signup/model/MensaSignup";
+    import MensaSignupEntry from "./signup/MensaSignupEntry.vue";
     import {Validations} from "../../../utils/ValidationRules";
     import {User} from "../../../../domain/common/model/User";
-    import SignupMensa from "../../../../domain/mensa/usecase/SignupMensa";
+    import SignupMensa from "../../../../domain/signup/usecase/SignupMensa";
 
     export default Vue.extend({
         components: {MensaSignupEntry},
@@ -66,8 +66,8 @@
                 email: "",
                 step: 1,
                 tab: 0,
-                signup: null as Partial<MensaSignup>|null,
-                intros: [] as Partial<MensaSignup>[],
+                signup: null as MensaSignup|null,
+                intros: [] as MensaSignup[],
                 validation: {
                     email: Validations.email,
                 },

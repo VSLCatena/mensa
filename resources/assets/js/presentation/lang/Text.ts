@@ -117,6 +117,36 @@ const text = {
         extra_options_title: {
             nl: "Extra opties",
             en: "Extra options",
+        },
+        edit: {
+            title: {
+                nl: "Mensa aanpassen van",
+                en: "Edit the mensa of",
+            },
+            field_title: {
+                nl: "Titel",
+                en: "Title",
+            },
+            field_description: {
+                nl: "Omschrijving",
+                en: "Description",
+            },
+            field_date: {
+                nl: "Datum",
+                en: "Date",
+            },
+            field_closing_time: {
+                nl: "Sluittijd",
+                en: "Closing time",
+            },
+            field_max_signups: {
+                nl: "Max. inschrijvingen",
+                en: "Max. signups",
+            },
+            field_price: {
+                nl: "Prijs",
+                en: "Price",
+            }
         }
     },
     login: {

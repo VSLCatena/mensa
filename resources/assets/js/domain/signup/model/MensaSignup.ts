@@ -1,4 +1,4 @@
-import FoodOption from "./FoodOption";
+import FoodOption from "../../mensa/model/FoodOption";
 
 export default interface MensaSignup {
     foodOption: FoodOption|null,

@@ -1,6 +1,6 @@
 import {checkIsArray, requireNotNull} from "../../utils/MappingUtils";
 import Result, {Failure, runCatching, Success} from "../../../domain/common/utils/Result";
-import MensaSignup from "../../../domain/mensa/model/MensaSignup";
+import MensaSignup from "../../../domain/signup/model/MensaSignup";
 import MensaSignupEntity from "../model/MensaSignupEntity";
 import {MapFoodOption} from "../../common/MapFoodOption";
 

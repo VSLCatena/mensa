@@ -1,7 +1,8 @@
 <template>
     <div class="container mt-3 mb-3">
-        <MensaSignupDialog ref="signupDialog" />
-        <MensaOverviewDialog ref="overviewDialog" />
+        <MensaSignupDialog ref="mensaSignupDialog" />
+        <MensaOverviewDialog ref="mensaOverviewDialog" />
+        <MensaEditDialog ref="mensaEditDialog" />
         <v-banner>
             <div class="d-flex">
                 <div>
@@ -17,7 +18,12 @@
         </v-banner>
 
         <v-expansion-panels focusable accordion v-model="openedItem" class="mt-4">
-            <MensaItem v-for="mensa in this.mensas" :key="mensa.id" :mensa="mensa" :on-signup-clicked="onSignupMensaClicked" :on-overview-clicked="onMensaOverviewClicked" />
+            <MensaItem
+                v-for="mensa in this.mensas" :key="mensa.id"
+                :mensa="mensa"
+                :on-signup-clicked="onSignupMensaClicked"
+                :on-overview-clicked="onMensaOverviewClicked"
+                :on-edit-clicked="onMensaEditClicked" />
         </v-expansion-panels>
 
         <div class="mt-4 d-flex">
@@ -33,12 +39,13 @@
     import MensaItem from '../../components/mensa/MensaItem.vue';
     import {Between} from "../../../domain/mensa/model/MensaList";
     import {formatDate} from "../../formatters/DateFormatter";
-    import MensaSignupDialog from "../../components/mensa/signup/MensaSignupDialog.vue";
-    import MensaOverviewDialog from "../../components/mensa/signup/MensaOverviewDialog";
-    import {AuthUser, User} from "../../../domain/common/model/User";
+    import MensaSignupDialog from "../../components/mensa/dialogs/MensaSignupDialog.vue";
+    import MensaOverviewDialog from "../../components/mensa/dialogs/MensaOverviewDialog.vue";
+    import {AuthUser} from "../../../domain/common/model/User";
+    import MensaEditDialog from "../../components/mensa/dialogs/MensaEditDialog.vue";
 
     export default Vue.extend({
-        components: {MensaOverviewDialog, MensaSignupDialog, MensaItem},
+        components: {MensaEditDialog, MensaOverviewDialog, MensaSignupDialog, MensaItem},
         data: function() {
             return {
                 openedItem: null,
@@ -77,10 +84,13 @@
                 this.weekOffset += offset;
             },
             onSignupMensaClicked: function (mensa: Mensa) {
-                (this.$refs.signupDialog as any).open(mensa);
+                (this.$refs.mensaSignupDialog as any).open(mensa);
             },
             onMensaOverviewClicked: function (mensa: Mensa) {
-                (this.$refs.overviewDialog as any).open(mensa);
+                (this.$refs.mensaOverviewDialog as any).open(mensa);
+            },
+            onMensaEditClicked: function (mensa: Mensa) {
+                (this.$refs.mensaEditDialog as any).open(mensa);
             },
             retrieveMensas: function(offset: number) {
                 this.loading = true;

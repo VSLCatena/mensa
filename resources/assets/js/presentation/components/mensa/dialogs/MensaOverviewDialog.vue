@@ -1,5 +1,5 @@
 <template>
-    <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition" :persistent="loading">
+    <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition">
         <v-card outlined v-if="mensa != null">
             <v-toolbar>
                 <v-card-title>{{ $ll($lang.text.signup.signups_for) }} {{ formattedDate }}</v-card-title>

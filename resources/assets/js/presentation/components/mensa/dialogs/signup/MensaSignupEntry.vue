@@ -48,10 +48,10 @@
 
 <script lang="ts">
 import Vue, {PropType} from 'vue';
-import MensaSignup from "../../../../domain/mensa/model/MensaSignup";
-import {MAX_STRING_LENGTH, Validations} from "../../../utils/ValidationRules";
-import FoodOption, {SortedFoodOptions} from "../../../../domain/mensa/model/FoodOption";
-import Mensa from "../../../../domain/mensa/model/Mensa";
+import MensaSignup from "../../../../../domain/signup/model/MensaSignup";
+import {MAX_STRING_LENGTH, Validations} from "../../../../utils/ValidationRules";
+import FoodOption, {SortedFoodOptions} from "../../../../../domain/mensa/model/FoodOption";
+import Mensa from "../../../../../domain/mensa/model/Mensa";
 
 interface FoodOptionSelection {
     value: FoodOption,
