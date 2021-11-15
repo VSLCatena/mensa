@@ -73,10 +73,10 @@
         },
         watch: {
             weekOffset: function (offset) {
-                this.retrieveMensas(offset);
+                this.retrieveMensas(offset, true);
             },
             currentUser: function () {
-                this.retrieveMensas(this.weekOffset);
+                this.retrieveMensas(this.weekOffset, false);
             }
         },
         methods: {
@@ -92,12 +92,12 @@
             onMensaEditClicked: function (mensa: Mensa) {
                 (this.$refs.mensaEditDialog as any).open(mensa);
             },
-            retrieveMensas: function(offset: number) {
+            retrieveMensas: function(offset: number, clearItem: boolean) {
                 this.loading = true;
 
                 GetMensas(offset)
                     .then(mensaList => {
-                        this.openedItem = null;
+                        if (clearItem) this.openedItem = null;
                         this.mensas = [...mensaList.mensas];
                         this.between = mensaList.between;
                         this.loading = false;

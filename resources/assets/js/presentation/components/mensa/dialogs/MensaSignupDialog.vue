@@ -1,19 +1,20 @@
 <template>
     <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition" :persistent="loading">
-        <v-card outlined v-if="mensa != null">
+        <v-card v-if="mensa != null">
             <v-toolbar>
                 <v-card-title>{{ $ll($lang.text.signup.mensa_at) }} {{ formattedDate }}</v-card-title>
+                <template v-slot:extension v-if="step === 1">
+                    <v-tabs v-model="tab" show-arrows>
+                        <v-tabs-slider></v-tabs-slider>
+                        <v-tab :key="0">{{ $ll($lang.text.signup.tab_signup)}}</v-tab>
+                        <v-tab v-for="i in intros.length" :key="i">
+                            {{ $ll($lang.text.signup.tab_intro)}}<span v-if="intros.length > 1">&nbsp;#{{ i }}</span>
+                        </v-tab>
+                    </v-tabs>
+                </template>
             </v-toolbar>
+            <div class="px-3 pt-3">
             <v-form ref="signupForm" v-if="step === 1">
-                <v-tabs v-model="tab" show-arrows>
-                    <v-tabs-slider></v-tabs-slider>
-                    <v-tab :key="0">{{ $ll($lang.text.signup.tab_signup)}}</v-tab>
-                    <v-tab v-for="i in intros.length" :key="i">
-                        {{ $ll($lang.text.signup.tab_intro)}}<span v-if="intros.length > 1">&nbsp;#{{ i }}</span>
-                    </v-tab>
-                </v-tabs>
-                <v-divider></v-divider>
-
                 <v-tabs-items v-model="tab">
                     <v-tab-item :key="0" class="pa-5">
                         <MensaSignupEntry :mensa="mensa" :signup="signup" :enabled="!loading" />
@@ -32,7 +33,7 @@
                     hide-details="auto"
                     class="pa-5" />
             </v-form>
-
+            </div>
             <v-card-actions>
                 <v-btn text :loading="loading" @click="addIntro()" v-if="(intros.length < 1 || $local.user.isAdmin) && step === 1">{{ $ll($lang.text.signup.add_intro) }}</v-btn>
                 <v-btn text :loading="loading" @click="deleteIntro()" v-if="tab !== 0 && step === 1">{{ $ll($lang.text.signup.remove_intro) }}</v-btn>

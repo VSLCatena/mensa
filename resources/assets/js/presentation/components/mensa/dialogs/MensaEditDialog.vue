@@ -1,74 +1,110 @@
 <template>
     <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition" :persistent="loading">
-        <v-card outlined v-if="mensa != null">
+        <v-card v-if="mensa != null">
             <v-toolbar>
                 <v-card-title>{{ $ll($lang.text.mensa.edit.title) }} {{ formatDate(mensa.date) }}</v-card-title>
+                <template v-slot:extension>
+                    <v-tabs v-model="tab" show-arrows>
+                        <v-tabs-slider></v-tabs-slider>
+                        <v-tab :key="0">{{ $ll($lang.text.mensa.edit.tabs.general)}}</v-tab>
+                        <v-tab :key="1">{{ $ll($lang.text.mensa.edit.tabs.menu)}}</v-tab>
+                        <v-tab :key="2">{{ $ll($lang.text.mensa.edit.tabs.prices)}}</v-tab>
+                        <v-tab :key="3">{{ $ll($lang.text.mensa.edit.tabs.signups)}}</v-tab>
+                    </v-tabs>
+                </template>
             </v-toolbar>
             <div class="px-3 pt-3">
                 <v-form ref="mensaEditForm">
-                    <v-text-field
-                        :label="$ll($lang.text.mensa.edit.field_title)"
-                        v-model="mensa.title"
-                        :disabled="loading"
-                        :rules="validations.title"
-                        :counter="MAX_STRING_LENGTH"
-                        hide-details="auto"
-                        class="mt-8 mb-4" />
-
-                    <v-text-field
-                        :label="$ll($lang.text.mensa.edit.field_description)"
-                        v-model="mensa.description"
-                        :disabled="loading"
-                        :rules="validations.title"
-                        :counter="MAX_STRING_LENGTH"
-                        hide-details="auto"
-                        class="mt-8 mb-4" />
-
-                    <v-menu
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        v-model="dateModal"
-                        offset-y
-                        min-width="auto">
-                        <template v-slot:activator="{ on, attrs }">
+                    <v-tabs-items v-model="tab">
+                        <v-tab-item :key="0" class="pa-5">
                             <v-text-field
-                                ref="date"
-                                :label="$ll($lang.text.mensa.edit.field_date)"
-                                v-model="formattedDate"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                                class="mt-8 mb-4" />
-                        </template>
-                        <DateTimePicker
-                            :on-date-time-picked="onDatePicked"
-                            :on-close="() => this.dateModal = false"
-                            :original-date="mensa.date" />
-                    </v-menu>
+                                    :label="$ll($lang.text.mensa.edit.field_title)"
+                                    v-model="mensa.title"
+                                    :disabled="loading"
+                                    :rules="validations.title"
+                                    :counter="MAX_STRING_LENGTH"
+                                    hide-details="auto"
+                                    class="mt-8 mb-4" />
 
-                    <v-menu
-                        :close-on-content-click="false"
-                        transition="scale-transition"
-                        v-model="closingTimeModal"
-                        offset-y
-                        min-width="auto">
-                        <template v-slot:activator="{ on, attrs }">
                             <v-text-field
-                                ref="closingTime"
-                                :label="$ll($lang.text.mensa.edit.field_closing_time)"
-                                v-model="formattedClosingTime"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                                class="mt-8 mb-4" />
-                        </template>
-                        <DateTimePicker
-                            :on-date-time-picked="onClosingTimePicked"
-                            :on-close="() => this.closingTimeModal = false"
-                            :original-date="mensa.closingTime" />
-                    </v-menu>
+                                    :label="$ll($lang.text.mensa.edit.field_description)"
+                                    v-model="mensa.description"
+                                    :disabled="loading"
+                                    :rules="validations.title"
+                                    :counter="MAX_STRING_LENGTH"
+                                    hide-details="auto"
+                                    class="mt-8 mb-4" />
+
+                            <v-menu
+                                    :close-on-content-click="false"
+                                    transition="scale-transition"
+                                    v-model="dateModal"
+                                    offset-y
+                                    min-width="auto">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                            ref="date"
+                                            :label="$ll($lang.text.mensa.edit.field_date)"
+                                            v-model="formattedDate"
+                                            prepend-icon="mdi-calendar"
+                                            readonly
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            class="mt-8 mb-4" />
+                                </template>
+                                <DateTimePicker
+                                        :on-date-time-picked="onDatePicked"
+                                        :on-close="() => this.dateModal = false"
+                                        :original-date="mensa.date" />
+                            </v-menu>
+
+                            <v-menu
+                                    :close-on-content-click="false"
+                                    transition="scale-transition"
+                                    v-model="closingTimeModal"
+                                    offset-y
+                                    min-width="auto">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                            ref="closingTime"
+                                            :label="$ll($lang.text.mensa.edit.field_closing_time)"
+                                            v-model="formattedClosingTime"
+                                            prepend-icon="mdi-calendar"
+                                            readonly
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            class="mt-8 mb-4" />
+                                </template>
+                                <DateTimePicker
+                                        :on-date-time-picked="onClosingTimePicked"
+                                        :on-close="() => this.closingTimeModal = false"
+                                        :original-date="mensa.closingTime" />
+                            </v-menu>
+                        </v-tab-item>
+                        <v-tab-item :key="1" class="pa-5">
+                        </v-tab-item>
+                        <v-tab-item :key="2" class="pa-5">
+                        </v-tab-item>
+                        <v-tab-item :key="3" class="px-5">
+                            <v-list two-line>
+                                <template v-for="(item, index) in mensa.signups">
+                                    <v-list-item :key="item.id">
+                                        <v-list-item-content>
+                                            <v-list-item-title v-text="item.name"></v-list-item-title>
+                                            <v-list-item-subtitle
+                                                    class="text--primary"
+                                                    v-text="item.foodPreference"
+                                            ></v-list-item-subtitle>
+                                        </v-list-item-content>
+                                        <v-list-item-action>
+                                            <v-icon class="text--secondary">mdi-square-edit-outline</v-icon>
+                                        </v-list-item-action>
+                                    </v-list-item>
+                                    <v-divider v-if="index < mensa.signups.length - 1" :key="index"></v-divider>
+                                </template>
+                            </v-list>
+                        </v-tab-item>
+                    </v-tabs-items>
                 </v-form>
             </div>
             <v-card-actions>
@@ -96,6 +132,7 @@ export default Vue.extend({
         return {
             isOpen: false,
             loading: false,
+            tab: 0,
             mensa: null as Mensa|null,
             dateModal: false,
             closingTimeModal: false,

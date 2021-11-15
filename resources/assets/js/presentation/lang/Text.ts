@@ -146,6 +146,24 @@ const text = {
             field_price: {
                 nl: "Prijs",
                 en: "Price",
+            },
+            tabs: {
+                general: {
+                    nl: "Algemeen",
+                    en: "General",
+                },
+                menu: {
+                    nl: "Menu",
+                    en: "Menu",
+                },
+                prices: {
+                    nl: "Prijzen",
+                    en: "Prices",
+                },
+                signups: {
+                    nl: "Inschrijvingen",
+                    en: "Signups"
+                }
             }
         }
     },
@@ -271,9 +289,9 @@ const text = {
             en: 'Meat',
         },
     }
-}
+};
 
 // Make sure it is in the correct format
-LanguageLintCheck(text)
+LanguageLintCheck(text);
 
 export default text;
