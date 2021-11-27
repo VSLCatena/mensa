@@ -16,7 +16,6 @@ export function MapPrice(data: MensaExtraOptionsEntity): Result<ExtraOption> {
     return runCatching(() => {
         return {
             id: requireNotNull('id', data.id),
-            order: requireNotNull('order', data.order),
             description: requireNotNull('description', data.description),
             price: requireNotNull('price', data.price),
         }

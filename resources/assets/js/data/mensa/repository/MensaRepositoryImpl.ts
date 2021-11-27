@@ -7,6 +7,7 @@ import axios from "axios";
 import MensaList from "../../../domain/mensa/model/MensaList";
 import MapResponse from "../../utils/MapResponse";
 import WithAuthHeader, {OptionalAuthHeader} from "../../utils/WithAuthHeader";
+import EditMensa from "../../../domain/mensa/model/EditMensa";
 
 class MensaRepositoryImpl implements MensaRepository {
 
@@ -26,16 +27,16 @@ class MensaRepositoryImpl implements MensaRepository {
         throw new Error('Method not implemented.');
     }
 
-    addMensa(mensa: Mensa, authToken: string): Promise<void> {
+    addMensa(mensa: EditMensa, authToken: string): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    editMensa(mensa: Mensa, authToken: string): Promise<void> {
+    editMensa(mensa: EditMensa, authToken: string): Promise<void> {
         throw new Error('Method not implemented.');
     }
 
-    deleteMensa(mensa: Mensa, authToken: string): Promise<void> {
-        return axios.delete(`${Config.API_BASE_URL}/mensa/${mensa.id}`, {
+    deleteMensa(mensaId: String, authToken: string): Promise<void> {
+        return axios.delete(`${Config.API_BASE_URL}/mensa/${mensaId}`, {
             headers: WithAuthHeader(authToken),
         }).then(MapResponse);
     }

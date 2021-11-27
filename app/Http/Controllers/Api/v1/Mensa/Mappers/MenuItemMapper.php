@@ -14,7 +14,6 @@ trait MenuItemMapper {
     function mapMenuItem($menuItem): MenuItemItem {
         return new MenuItemItem(
             id: $menuItem->id,
-            order: $menuItem->order,
             text: $menuItem->text
         );
     }

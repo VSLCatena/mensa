@@ -52,17 +52,17 @@
 
                         <v-tabs-items v-model="infoTabs" class="mt-2">
                             <v-tab-item key="menu" v-if="mensa.menu.length > 0">
-                                <table style="border-spacing: 0 8px;">
+                                <table class="horizontal-spacing">
                                     <tr v-for="item in mensa.menu">
-                                        <td style="vertical-align: top" class="px-2">-</td>
+                                        <td class="px-2 vertical-top-align">-</td>
                                         <td class="text--secondary">{{ item.text }}</td>
                                     </tr>
                                 </table>
                             </v-tab-item>
                             <v-tab-item key="extraOptions" v-if="mensa.extraOptions.length > 0">
-                                <table style="border-spacing: 0 8px;">
+                                <table class="horizontal-spacing">
                                     <tr v-for="item in mensa.extraOptions">
-                                        <td style="vertical-align: top" class="px-2">-</td>
+                                        <td class="px-2 vertical-top-align">-</td>
                                         <td class="text--secondary">{{ item.description }}</td>
                                     </tr>
                                 </table>
@@ -76,7 +76,7 @@
                 <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">{{ $ll($lang.text.mensa.button_signup) }}</v-btn>
                 <v-btn class="ml-2" outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">{{ $ll($lang.text.mensa.button_overview) }}</v-btn>
                 <v-spacer />
-                <v-btn class="pa-2" style="min-width: 0" outlined v-if="$local.user.isAdmin" @click="onEditClicked(mensa)"><v-icon>mdi-square-edit-outline</v-icon></v-btn>
+                <v-btn class="pa-2 edit-button" outlined v-if="$local.user.isAdmin" @click="onEditClicked(mensa)"><v-icon>mdi-square-edit-outline</v-icon></v-btn>
             </div>
         </v-expansion-panel-content>
     </v-expansion-panel>
@@ -160,3 +160,15 @@
         },
     });
 </script>
+
+<style lang="css">
+    .horizontal-spacing {
+        border-spacing: 0 8px;
+    }
+    .vertical-top-align {
+        vertical-align: top;
+    }
+    .edit-button {
+        min-width: 0 !important;
+    }
+</style>

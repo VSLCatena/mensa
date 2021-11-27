@@ -19,6 +19,7 @@ import GetDarkMode from "./domain/storage/usecase/GetDarkMode";
 import LoginToken from "./presentation/pages/login/LoginToken.vue";
 import GetSelf from "./domain/user/usecase/GetSelf";
 import {defaultData} from "./Local";
+import GetAppConfig from "./domain/appconfig/usecase/GetAppConfig";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -57,4 +58,5 @@ const app = new Vue({
     components: {App},
 }).$mount('#app');
 
+GetAppConfig().then();
 GetSelf().then(user => {app.$local.user = user;});

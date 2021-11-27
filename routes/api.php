@@ -32,6 +32,8 @@ Route::prefix("v1")->middleware('jsonRequests')->group(function(){
     Route::get('user/self', 'Api\v1\User\Controllers\SelfController@getSelf');
     Route::patch('user/self/update', 'Api\v1\User\Controllers\SelfController@updateSelf');
 
+    Route::get('appconfig', 'Api\v1\AppConfig\Controllers\AppConfigController');
+
 });
 
 Route::fallback(function () {

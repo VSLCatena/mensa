@@ -18,7 +18,6 @@ export function MapMenuItem(data: MensaMenuEntity): Result<MensaMenuItem> {
     return runCatching(() => {
         return {
             id: requireNotNull('id', data.id),
-            order: requireNotNull('order', data.order),
             text: requireNotNull('description', data.text),
         }
     });

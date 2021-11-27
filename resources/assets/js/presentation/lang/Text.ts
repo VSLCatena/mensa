@@ -143,9 +143,25 @@ const text = {
                 nl: "Max. inschrijvingen",
                 en: "Max. signups",
             },
-            field_price: {
-                nl: "Prijs",
-                en: "Price",
+            field_menu_label: {
+                nl: "Menu item",
+                en: "Menu item"
+            },
+            field_base_price: {
+                nl: "Basis prijs",
+                en: "Base price",
+            },
+            field_extra_options: {
+                nl: "Extra opties",
+                en: "Extra options",
+            },
+            field_extra_option_price_label: {
+                nl: "Extra optie prijs",
+                en: "Extra option price",
+            },
+            field_extra_option_description_label: {
+                nl: "Extra optie beschrijving",
+                en: "Extra option description",
             },
             tabs: {
                 general: {

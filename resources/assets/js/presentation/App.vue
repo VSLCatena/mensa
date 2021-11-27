@@ -25,8 +25,8 @@
                     </v-list-item>
                     <v-list-item @click="toggleLanguage()" selectable>
                         <v-list-item-icon>
-                            <img style="width: 24px; height: 24px" :src="enimage" v-if="currentLanguage !== 'en'" />
-                            <img style="width: 24px; height: 24px" :src="nlimage" v-if="currentLanguage !== 'nl'" />
+                            <img class="lang-flag" :src="enimage" v-if="currentLanguage !== 'en'" />
+                            <img class="lang-flag" :src="nlimage" v-if="currentLanguage !== 'nl'" />
                         </v-list-item-icon>
                         <v-list-item-content>
                             {{ $ll($lang.text.menu.switch_language) }}
@@ -90,3 +90,10 @@ export default Vue.extend({
     }
 });
 </script>
+
+<style lang="css">
+    .lang-flag {
+        width: 24px;
+        height: 24px;
+    }
+</style>
