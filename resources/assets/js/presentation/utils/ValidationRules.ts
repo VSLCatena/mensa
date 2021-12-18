@@ -33,6 +33,24 @@ export const Validations = {
                 ) || translatedText(Vue.prototype.$local.language, $lang.validation.general.invalid)
         }
     ],
+    price: [
+        (value: string|null) => {
+            if (value == null) return true;
+            return !isNaN(parseFloat(value));
+        }
+    ],
+    date: [
+        (value: string|null) => {
+            if (value == null) return true;
+            return true;
+        }
+    ],
+    integer: [
+        (value: string|null) => {
+            if (value == null) return true;
+            return !isNaN(parseInt(value));
+        }
+    ],
     Required: Required,
     MaxStringLengthValidation: MaxStringLengthValidation
 }

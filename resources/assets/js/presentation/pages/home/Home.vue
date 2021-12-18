@@ -90,7 +90,7 @@
                 (this.$refs.mensaOverviewDialog as any).open(mensa);
             },
             onMensaEditClicked: function (mensa: Mensa) {
-                (this.$refs.mensaEditDialog as any).open(mensa);
+                (this.$refs.mensaEditDialog as any).open(mensa, mensa.signups);
             },
             retrieveMensas: function(offset: number, clearItem: boolean) {
                 this.loading = true;

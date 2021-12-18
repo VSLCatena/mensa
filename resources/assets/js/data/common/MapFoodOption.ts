@@ -6,7 +6,7 @@ export function MapFoodOptions(preferences: string[]): Result<FoodOption[]> {
     return runCatching(() => {
         checkIsArray('foodOptions', preferences);
         return preferences.map(function(preference: any) {
-            return requireNotNull('foodPreferences', MapFoodOption(preference).getOrThrow());
+            return requireNotNull('foodOptions', MapFoodOption(preference).getOrThrow());
         });
     })
 }

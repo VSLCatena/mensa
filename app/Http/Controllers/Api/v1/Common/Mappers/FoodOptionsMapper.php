@@ -40,7 +40,7 @@ trait FoodOptionsMapper {
         $options = 0;
 
         foreach (FoodOption::$All as $option) {
-            if (array_has($foodOptions, $option->name)) $options += $option->value;
+            if (in_array($option->name, $foodOptions)) $options += $option->value;
         }
 
         return $options;

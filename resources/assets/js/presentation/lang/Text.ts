@@ -155,6 +155,14 @@ const text = {
                 nl: "Extra opties",
                 en: "Extra options",
             },
+            field_food_preference: {
+                nl: 'Aangeboden etensvoorkeuren',
+                en: 'Possible foodoptions',
+            },
+            error_food_preference: {
+                nl: 'Minimaal één etens optie moet geselecteerd zijn',
+                en: 'At least one food option must be selected',
+            },
             field_extra_option_price_label: {
                 nl: "Extra optie prijs",
                 en: "Extra option price",

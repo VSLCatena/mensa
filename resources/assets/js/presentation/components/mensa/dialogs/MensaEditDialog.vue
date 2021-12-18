@@ -30,7 +30,7 @@
                                     :label="$ll($lang.text.mensa.edit.field_description)"
                                     v-model="editor.description"
                                     :disabled="loading"
-                                    :rules="validations.title"
+                                    :rules="validations.description"
                                     :counter="MAX_STRING_LENGTH"
                                     hide-details="auto"
                                     class="mt-8 mb-4" />
@@ -39,6 +39,7 @@
                                     :close-on-content-click="false"
                                     transition="scale-transition"
                                     v-model="dateModal"
+                                    :disabled="loading"
                                     offset-y
                                     min-width="auto">
                                 <template v-slot:activator="{ on, attrs }">
@@ -47,6 +48,7 @@
                                             :label="$ll($lang.text.mensa.edit.field_date)"
                                             v-model="formattedDate"
                                             prepend-icon="mdi-calendar"
+                                            :disabled="loading"
                                             readonly
                                             v-bind="attrs"
                                             v-on="on"
@@ -62,6 +64,7 @@
                                     :close-on-content-click="false"
                                     transition="scale-transition"
                                     v-model="closingTimeModal"
+                                    :disabled="loading"
                                     offset-y
                                     min-width="auto">
                                 <template v-slot:activator="{ on, attrs }">
@@ -70,6 +73,8 @@
                                             :label="$ll($lang.text.mensa.edit.field_closing_time)"
                                             v-model="formattedClosingTime"
                                             prepend-icon="mdi-calendar"
+                                            :disabled="loading"
+                                            :rules="validations.closingTime"
                                             readonly
                                             v-bind="attrs"
                                             v-on="on"
@@ -80,6 +85,29 @@
                                         :on-close="() => this.closingTimeModal = false"
                                         :original-date="editor.closingTime" />
                             </v-menu>
+                            <v-row class="mb-0">
+                                <v-col class="pb-0" v-text="$ll($lang.text.mensa.edit.field_food_preference)" />
+                            </v-row>
+                            <v-row class="my-0">
+                                <v-col
+                                    class="py-0"
+                                    cols="12" md="4" sm="12"
+                                    v-for="(value, key) in allFoodOptions"
+                                    :key="item">
+                                    <v-checkbox
+                                        v-model="editor.foodOptions"
+                                        :disabled="loading"
+                                        :label="value"
+                                        :value="key" />
+                                </v-col>
+                            </v-row>
+                            <v-row class="mt-0">
+                                <v-col
+                                    class="pt-0 error--text"
+                                    v-if="foodOptionError"
+                                    v-text="$ll($lang.text.mensa.edit.error_food_preference)"
+                                ></v-col>
+                            </v-row>
                         </v-tab-item>
                         <v-tab-item :key="1" class="pa-5">
                             <v-list>
@@ -110,6 +138,7 @@
                                 step="0.01"
                                 v-model="editor.price" />
 
+                            <v-divider v-if="editor.extraOptions.length > 0"></v-divider>
                             <v-list>
                                 <draggable v-model="editor.extraOptions" group="extraOptions" handle=".handle">
                                     <template v-for="(item, index) in editor.extraOptions">
@@ -128,7 +157,7 @@
                                                     <v-icon>mdi-delete</v-icon>
                                                 </v-list-item-icon>
                                             </v-list-item>
-                                            <v-divider v-if="index < editor.extraOptions.length - 1"></v-divider>
+                                            <v-divider></v-divider>
                                         </div>
                                     </template>
                                 </draggable>
@@ -150,7 +179,7 @@
                                             <v-icon class="text--secondary">mdi-square-edit-outline</v-icon>
                                         </v-list-item-action>
                                     </v-list-item>
-                                    <v-divider v-if="index < mensa.signups.length - 1" :key="index"></v-divider>
+                                    <v-divider></v-divider>
                                 </template>
                             </v-list>
                         </v-tab-item>
@@ -173,11 +202,8 @@ import {MAX_STRING_LENGTH, Validations} from "../../../utils/ValidationRules";
 import DateTimePicker from "../../common/DateTimePicker.vue";
 import UpdateMensa from "../../../../domain/mensa/usecase/UpdateMensa";
 import draggable from 'vuedraggable';
-import clone from 'just-clone';
-import EditMensa, {PartialExtraOption, PartialMensaMenuItem} from "../../../../domain/mensa/model/EditMensa";
+import EditMensa from "../../../../domain/mensa/model/EditMensa";
 import { v4 as uuidv4 } from "uuid";
-import MensaMenuItem from "../../../../domain/mensa/model/MensaMenuItem";
-import ExtraOption from "../../../../domain/mensa/model/ExtraOption";
 import FoodOption from "../../../../domain/mensa/model/FoodOption";
 import MensaSignup from "../../../../domain/signup/model/MensaSignup";
 
@@ -205,16 +231,17 @@ export default Vue.extend({
             closingTimeModal: false,
             MAX_STRING_LENGTH: MAX_STRING_LENGTH,
             validations: {
-                title: [Validations.MaxStringLengthValidation],
+                title: [Validations.Required, Validations.MaxStringLengthValidation],
                 description: [Validations.MaxStringLengthValidation],
-                date: [],
-                closingTime: [],
-                maxSignups: [],
-                price: [],
+                foodOptions: [Validations.Required, ...Validations.foodOptions],
+                date: [Validations.Required],
+                closingTime: [Validations.Required],
+                maxSignups: [Validations.Required, ...Validations.integer],
+                price: [Validations.Required, ...Validations.price],
                 menuItem: [Validations.MaxStringLengthValidation]
             },
             editor: {
-                id: null as string|null,
+                id: undefined as string|undefined,
                 title: "" as string,
                 description: "" as string,
                 foodOptions: [] as FoodOption[],
@@ -225,6 +252,7 @@ export default Vue.extend({
                 price: 0.0,
                 maxSignups: 0
             },
+            foodOptionError: false,
             signups: undefined as MensaSignup[]|undefined
         }
     },
@@ -251,7 +279,7 @@ export default Vue.extend({
             this.signups = signups;
 
             this.editor = {
-                id: mensa.id ?? null,
+                id: mensa.id,
                 title: mensa.title,
                 description: mensa.description,
                 foodOptions: mensa.foodOptions,
@@ -266,21 +294,44 @@ export default Vue.extend({
             this.isOpen = true;
         },
         save: function () {
+            if (!(this.$refs.mensaEditForm as undefined as any).validate()) {
+                return;
+            }
+
+            if (this.editor.foodOptions.length <= 0) {
+                // TODO food options check
+                return
+            }
+
             this.loading = true;
 
-            // TODO
-            // mensa.menu = this.tempMenu?.map(item => item.item) ?? [];
-            // mensa.extraOptions = this.tempExtraOptions?.map(item => item.item) ?? [];
+            let menu = this.editor.menu
+                .map(item => ({ id: item.id, text: item.text }));
+            let extraOptions = this.editor.extraOptions
+                .map(item => ({ id: item.id, description: item.description, price: item.price}));
 
-            // UpdateMensa(mensa)
-            //     .then(value => {
-            //         this.loading = false;
-            //         // TODO
-            //     })
-            //     .catch(error => {
-            //         this.loading = false
-            //         // TODO
-            //     })
+            let mensa: EditMensa = {
+                id: this.editor.id,
+                title: this.editor.title,
+                description: this.editor.description,
+                foodOptions: this.editor.foodOptions,
+                menu: menu,
+                extraOptions: extraOptions,
+                date: this.editor.date,
+                closingTime: this.editor.closingTime,
+                price: this.editor.price,
+                maxSignups: this.editor.maxSignups
+            }
+
+            UpdateMensa(mensa)
+                .then(value => {
+                    this.loading = false;
+                    this.isOpen = false
+                })
+                .catch(error => {
+                    this.loading = false
+                    console.error(error)
+                })
         },
         onDatePicked: function (date: Date) {
             this.editor.date = date;
@@ -303,12 +354,24 @@ export default Vue.extend({
         },
         formatDate: formatDate
     },
+    watch: {
+        'editor.foodOptions': function(newOptions) {
+            this.foodOptionError = newOptions.length <= 0;
+        }
+    },
     computed: {
         formattedDate: function(): string {
             return formatDate(this.editor.date);
         },
         formattedClosingTime: function(): string {
             return formatDate(this.editor.closingTime);
+        },
+        allFoodOptions: function(): { [Property in FoodOption]: string } {
+            return {
+                vegan: this.$ll(this.$lang.text.foodOptions.vegan),
+                vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
+                meat: this.$ll(this.$lang.text.foodOptions.meat),
+            }
         }
     }
 });

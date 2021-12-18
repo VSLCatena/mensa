@@ -3,9 +3,9 @@ import WithAuthentication, {Strategy} from "../../common/usecase/WithAuthenticat
 import EditMensa from "../model/EditMensa";
 import MapMensaRequest from "../mapper/MapMensaRequest";
 
-export default async function UpdateMensa(mensa: EditMensa): Promise<void> {
+export default async function AddMensa(mensa: EditMensa): Promise<void> {
     return WithAuthentication(
-        token => repository.editMensa(MapMensaRequest(mensa), token!!),
+        token => repository.addMensa(MapMensaRequest(mensa), token!!),
         Strategy.AUTH_REQUIRED
     );
 }

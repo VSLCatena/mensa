@@ -62,7 +62,7 @@ abstract class RemoteUserLookup {
      * @throws ClientExceptionInterface
      */
     function currentUpdatedIfNecessary(): ?User {
-        $user = Auth::guard('sanctum')->user() ?? Auth::user();
+        $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
         if ($user == null) return null;
 
         return $this->getUpdatedUserIfNecessary($user);

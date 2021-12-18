@@ -8,6 +8,7 @@ import MensaList from "../../../domain/mensa/model/MensaList";
 import MapResponse from "../../utils/MapResponse";
 import WithAuthHeader, {OptionalAuthHeader} from "../../utils/WithAuthHeader";
 import EditMensa from "../../../domain/mensa/model/EditMensa";
+import MensaRequestModel from "../model/MensaRequestModel";
 
 class MensaRepositoryImpl implements MensaRepository {
 
@@ -27,12 +28,24 @@ class MensaRepositoryImpl implements MensaRepository {
         throw new Error('Method not implemented.');
     }
 
-    addMensa(mensa: EditMensa, authToken: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    addMensa(mensa: MensaRequestModel, authToken: string): Promise<void> {
+        return axios.post(`${Config.API_BASE_URL}/mensa/new`, mensa, {
+            headers: WithAuthHeader(authToken)
+        })
+            .then(MapResponse)
+            .then();
     }
 
-    editMensa(mensa: EditMensa, authToken: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    editMensa(mensa: MensaRequestModel, authToken: string): Promise<void> {
+        if (!('id' in mensa)) {
+            throw Error("ID not found in mensa");
+        }
+
+        return axios.patch(`${Config.API_BASE_URL}/mensa/${mensa.id}`, mensa, {
+            headers: WithAuthHeader(authToken)
+        })
+            .then(MapResponse)
+            .then();
     }
 
     deleteMensa(mensaId: String, authToken: string): Promise<void> {

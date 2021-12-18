@@ -17,29 +17,29 @@ class MensaPolicy
      * @return bool
      */
     public function create(User $user): bool {
-        return $user->mensa_admin;
+        return $this->isMensaAdmin($user);
     }
 
     /**
      * Determine whether the user can edit soft parts of the mensa.
      *
-     * @param User $user
+     * @param User|null $user
      * @param Mensa $mensa
      * @return bool
      */
-    public function softEdit(User $user, Mensa $mensa): bool {
-        return $user->mensa_admin || $this->isCook($user, $mensa);
+    public function softEdit(?User $user, Mensa $mensa): bool {
+        return $this->hardEdit($user, $mensa) || $this->isCook($user, $mensa);
     }
 
     /**
      * Determine whether the user can edit hard parts of the mensa.
      *
-     * @param User $user
+     * @param User|null $user
      * @param Mensa $mensa
      * @return bool
      */
-    public function hardEdit(User $user, Mensa $mensa): bool {
-        return $user->mensa_admin;
+    public function hardEdit(?User $user, Mensa $mensa): bool {
+        return $this->isMensaAdmin($user);
     }
 
     /**
@@ -49,7 +49,7 @@ class MensaPolicy
      * @return bool
      */
     public function delete(User $user, Mensa $mensa): bool {
-        return $user->mensa_admin;
+        return $this->isMensaAdmin($user);
     }
 
     /**
@@ -60,7 +60,7 @@ class MensaPolicy
      * @return bool
      */
     public function seeOverview(User $user, Mensa $mensa): bool {
-        return $user->mensa_admin || $this->isCook($user, $mensa);
+        return $this->isMensaAdmin($user) || $this->isCook($user, $mensa);
     }
 
     /**
@@ -72,5 +72,9 @@ class MensaPolicy
      */
     private function isCook(User $user, Mensa $mensa): bool {
         return $mensa->users()->where('cooks', '1')->where('id', $user->id)->count() > 0;
+    }
+
+    private function isMensaAdmin(?User $user): bool {
+        return optional($user)->mensa_admin == true;
     }
 }

@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Mensa;
+use App\Models\Signup;
+use App\Policies\MensaPolicy;
+use App\Policies\SignupPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -13,8 +17,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Models\Mensa' => 'App\Policies\MensaPolicy',
-        'App\Models\Signup' => 'App\Policies\SignupPolicy',
+        Mensa::class => MensaPolicy::class,
+        Signup::class => SignupPolicy::class,
     ];
 
     /**
