@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Socialite;
 
 
@@ -25,7 +26,7 @@ class AzureProvider extends AbstractProvider
     protected function getAuthUrl($state)
     {
         return $this->buildAuthUrlFromBase(
-            'https://login.microsoftonline.com/'.($this->config['tenant_id'] ?: 'common').'/oauth2/v2.0/authorize',
+            'https://login.microsoftonline.com/' . ($this->config['tenant_id'] ?: 'common') . '/oauth2/v2.0/authorize',
             $state
         );
     }
@@ -35,7 +36,7 @@ class AzureProvider extends AbstractProvider
      */
     protected function getTokenUrl()
     {
-        return 'https://login.microsoftonline.com/'.($this->config['tenant_id'] ?: 'common').'/oauth2/v2.0/token';
+        return 'https://login.microsoftonline.com/' . ($this->config['tenant_id'] ?: 'common') . '/oauth2/v2.0/token';
     }
 
     public function getAccessToken($code)
@@ -57,7 +58,7 @@ class AzureProvider extends AbstractProvider
         $response = $this->getHttpClient()->get($this->graphUrl, [
             'headers' => [
                 'Accept' => 'application/json',
-                'Authorization' => 'Bearer '.$token,
+                'Authorization' => 'Bearer ' . $token,
             ],
         ]);
 
@@ -79,7 +80,8 @@ class AzureProvider extends AbstractProvider
      * {@inheritdoc}
      * We also add the scope to read all groups
      */
-    public function getScopes(): array {
+    public function getScopes(): array
+    {
         return array_merge(parent::getScopes(), ['https://graph.microsoft.com/GroupMember.Read.All']);
     }
 

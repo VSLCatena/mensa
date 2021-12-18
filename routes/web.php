@@ -1,5 +1,5 @@
 <?php
 
-Route::fallback(function() {
+Route::fallback(function () {
     return view('index');
 });

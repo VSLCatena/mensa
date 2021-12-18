@@ -31,12 +31,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MenuItem extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
 
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public function mensa(): BelongsTo {
+    public function mensa(): BelongsTo
+    {
         return $this->belongsTo(Mensa::class);
     }
 }

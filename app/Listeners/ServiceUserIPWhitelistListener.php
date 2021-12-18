@@ -20,14 +20,14 @@ class ServiceUserIPWhitelistListener
     /**
      * Handle the event.
      *
-     * @param  object  $event
+     * @param object $event
      * @return void
      */
     public function handle($event)
     {
         // If the user is a service user, and isn't in the list of whitelisted IPs,
         // then we just want to immediately log out
-        if($event->user->service_user && !in_array(Request::ip(), config('mensa.service_users.whitelisted_ips'))){
+        if ($event->user->service_user && !in_array(Request::ip(), config('mensa.service_users.whitelisted_ips'))) {
             Auth::logout();
         }
     }

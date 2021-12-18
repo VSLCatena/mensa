@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SigninCancelled extends Mailable
 {
@@ -30,7 +29,7 @@ class SigninCancelled extends Mailable
      */
     public function build()
     {
-        $this->subject('Uitschrijving voor de mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false));
+        $this->subject('Uitschrijving voor de mensa op ' . formatDate($this->mensaUser->mensa->date, false, false, false));
         return $this->markdown('emails.signin.cancelled', ['mensaUser' => $this->mensaUser]);
     }
 }

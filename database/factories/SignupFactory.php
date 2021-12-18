@@ -5,7 +5,8 @@ namespace Database\Factories;
 use App\Models\Signup;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SignupFactory extends Factory {
+class SignupFactory extends Factory
+{
     private static $id = 1;
     /**
      * The name of the factory's corresponding model.
@@ -19,7 +20,8 @@ class SignupFactory extends Factory {
      *
      * @return array
      */
-    public function definition() {
+    public function definition()
+    {
         return [
             'id' => self::$id++,
             'signup_id' => $this->faker->uuid,

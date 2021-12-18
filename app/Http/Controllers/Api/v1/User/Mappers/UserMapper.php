@@ -6,10 +6,12 @@ use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\User\Models\UserSelf;
 use App\Models\User;
 
-trait UserMapper {
+trait UserMapper
+{
     use FoodOptionsMapper;
 
-    function mapUser(User $user) {
+    function mapUser(User $user)
+    {
         return new UserSelf(
             id: $user->id,
             name: $user->name,

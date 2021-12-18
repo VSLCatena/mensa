@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\User;
 use App\Models\Mensa;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MensaPolicy
@@ -16,7 +16,8 @@ class MensaPolicy
      * @param User $user
      * @return bool
      */
-    public function create(User $user): bool {
+    public function create(User $user): bool
+    {
         return $this->isMensaAdmin($user);
     }
 
@@ -27,7 +28,8 @@ class MensaPolicy
      * @param Mensa $mensa
      * @return bool
      */
-    public function softEdit(?User $user, Mensa $mensa): bool {
+    public function softEdit(?User $user, Mensa $mensa): bool
+    {
         return $this->hardEdit($user, $mensa) || $this->isCook($user, $mensa);
     }
 
@@ -38,7 +40,8 @@ class MensaPolicy
      * @param Mensa $mensa
      * @return bool
      */
-    public function hardEdit(?User $user, Mensa $mensa): bool {
+    public function hardEdit(?User $user, Mensa $mensa): bool
+    {
         return $this->isMensaAdmin($user);
     }
 
@@ -48,7 +51,8 @@ class MensaPolicy
      * @param Mensa $mensa
      * @return bool
      */
-    public function delete(User $user, Mensa $mensa): bool {
+    public function delete(User $user, Mensa $mensa): bool
+    {
         return $this->isMensaAdmin($user);
     }
 
@@ -59,7 +63,8 @@ class MensaPolicy
      * @param Mensa $mensa
      * @return bool
      */
-    public function seeOverview(User $user, Mensa $mensa): bool {
+    public function seeOverview(User $user, Mensa $mensa): bool
+    {
         return $this->isMensaAdmin($user) || $this->isCook($user, $mensa);
     }
 
@@ -70,11 +75,13 @@ class MensaPolicy
      * @param Mensa $mensa
      * @return bool
      */
-    private function isCook(User $user, Mensa $mensa): bool {
+    private function isCook(User $user, Mensa $mensa): bool
+    {
         return $mensa->users()->where('cooks', '1')->where('id', $user->id)->count() > 0;
     }
 
-    private function isMensaAdmin(?User $user): bool {
+    private function isMensaAdmin(?User $user): bool
+    {
         return optional($user)->mensa_admin == true;
     }
 }

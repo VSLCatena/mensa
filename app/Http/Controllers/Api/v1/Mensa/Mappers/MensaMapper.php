@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaDetailItem;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
-use App\Models\Mensa;
 use App\Models\ExtraOption;
+use App\Models\Mensa;
 use App\Models\MenuItem;
 use App\Models\Signup;
 
-trait MensaMapper {
+trait MensaMapper
+{
     use ExtraOptionsMapper, UserMapper, MenuItemMapper, FoodOptionsMapper;
 
     /**
@@ -26,11 +27,18 @@ trait MensaMapper {
         array $menu,
         array $options,
         bool $isLoggedIn
-    ): MensaItem {
-        $dishwashers = array_filter($users, function ($user) { return $user->dishwasher; });
-        $cooks = array_filter($users, function($user) { return $user->cooks; });
+    ): MensaItem
+    {
+        $dishwashers = array_filter($users, function ($user) {
+            return $user->dishwasher;
+        });
+        $cooks = array_filter($users, function ($user) {
+            return $user->cooks;
+        });
 
-        $userSignupMapper = function($signup) { return self::mapUserFromSignup($signup); };
+        $userSignupMapper = function ($signup) {
+            return self::mapUserFromSignup($signup);
+        };
 
         $signups = count($users);
         if ($isLoggedIn) {

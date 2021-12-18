@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
 use App\Contracts\RemoteUserLookup;
@@ -9,14 +10,11 @@ use App\Models\ExtraOption;
 use App\Models\Mensa;
 use App\Models\MenuItem;
 use App\Models\User;
-use Carbon\Carbon;
-use http\Exception\InvalidArgumentException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -52,7 +50,8 @@ class MensaController extends Controller
      * @return JsonResponse
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function getMensa(Request $request, string $mensaId): JsonResponse {
+    public function getMensa(Request $request, string $mensaId): JsonResponse
+    {
         $mensa = Mensa::findOrFail($mensaId);
 
         $currentUser = $this->currentUser();
@@ -67,17 +66,20 @@ class MensaController extends Controller
     }
 
 
-    public function newMensa(Request $request): ?JsonResponse {
+    public function newMensa(Request $request): ?JsonResponse
+    {
         if ($request->has('id')) throw new \InvalidArgumentException('id can\'t exist in request');
         return $this->internalUpdateMensa($request, null);
     }
 
-    public function updateMensa(Request $request, string $mensaId): ?JsonResponse {
+    public function updateMensa(Request $request, string $mensaId): ?JsonResponse
+    {
         if (!$request->has('id')) throw new \InvalidArgumentException('id doesn\'t exist in request');
         return $this->internalUpdateMensa($request, $mensaId);
     }
 
-    private function internalUpdateMensa(Request $request, string|null $mensaId): ?JsonResponse {
+    private function internalUpdateMensa(Request $request, string|null $mensaId): ?JsonResponse
+    {
         $currentUser = $this->currentUser();
 
         // All the fields and requirements are defined here
@@ -111,7 +113,9 @@ class MensaController extends Controller
             $mensa = Mensa::create(['id' => Str::uuid()]);
 
             // For new mensas we require everything
-            array_walk($fields, function (&$value) { $value[] = 'required'; });
+            array_walk($fields, function (&$value) {
+                $value[] = 'required';
+            });
         } else {
             // And we get the mensa
             $mensa = Mensa::findOrFail($mensaId);
@@ -219,12 +223,13 @@ class MensaController extends Controller
         string $class,
         array $rawData,
         $updater
-    ): array {
+    ): array
+    {
         $optionsToSave = array();
         $optionsToDelete = array();
 
         // Loop over all the raw data
-        foreach($rawData as $order => $rawItem) {
+        foreach ($rawData as $order => $rawItem) {
             /** @var Model $item */
             $item = null;
             // If the raw data contains an id we try to find it in the collection given or fail if it wasn't able to
@@ -248,7 +253,9 @@ class MensaController extends Controller
         // Then we check if we should delete any items by going over all previous items, and see if there are items that
         // are not in the new $optionsToSave array.
         foreach ($collection as $prevItem) {
-            $comparer = function ($item) use ($prevItem) { return $item->id == $prevItem->id; };
+            $comparer = function ($item) use ($prevItem) {
+                return $item->id == $prevItem->id;
+            };
 
             // If we were able to find the item we skip it
             if (array_first($optionsToSave, $comparer) != null) continue;
@@ -264,7 +271,8 @@ class MensaController extends Controller
         );
     }
 
-    public function deleteMensa(Request $request, string $mensaId): ?JsonResponse {
+    public function deleteMensa(Request $request, string $mensaId): ?JsonResponse
+    {
         $mensa = Mensa::findOrFail($mensaId);
 
         $currentUser = $this->currentUser();
@@ -275,9 +283,12 @@ class MensaController extends Controller
     }
 
 
-    private function currentUser(): ?User {
+    private function currentUser(): ?User
+    {
         try {
             return $this->remoteLookup->currentUpdatedIfNecessary();
-        } catch (ClientExceptionInterface) { abort(Response::HTTP_BAD_GATEWAY); }
+        } catch (ClientExceptionInterface) {
+            abort(Response::HTTP_BAD_GATEWAY);
+        }
     }
 }

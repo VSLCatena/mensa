@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Common\Models;
 
-class FoodOption {
+class FoodOption
+{
 
     function __construct(
         public string $name,
         public int $value
-    ) {
+    )
+    {
     }
 
 
@@ -18,7 +20,8 @@ class FoodOption {
     /** @var FoodOption[] */
     public static array $All;
 
-    public static function allNames(): array {
+    public static function allNames(): array
+    {
         return array_map(function (FoodOption $option): string {
             return $option->name;
         }, FoodOption::$All);

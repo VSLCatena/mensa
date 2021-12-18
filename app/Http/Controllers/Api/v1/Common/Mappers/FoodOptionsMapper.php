@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api\v1\Common\Mappers;
 
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 
-trait FoodOptionsMapper {
+trait FoodOptionsMapper
+{
 
     /**
      * @param $foodOptions int
      * @return string[]
      */
-    function mapFoodOptionsFromIntToNames(int $foodOptions): array {
+    function mapFoodOptionsFromIntToNames(int $foodOptions): array
+    {
         $options = array();
         foreach (FoodOption::$All as $option) {
             if ($foodOptions & $option->value) $options[] = $option->name;
@@ -23,7 +25,8 @@ trait FoodOptionsMapper {
      * @param int|null $foodOption
      * @return string|null
      */
-    function mapFoodOptionFromIntToName(int|null $foodOption): string|null {
+    function mapFoodOptionFromIntToName(int|null $foodOption): string|null
+    {
         if ($foodOption == null) return null;
 
         foreach (FoodOption::$All as $option) {
@@ -36,7 +39,8 @@ trait FoodOptionsMapper {
      * @param string[] $foodOptions
      * @return int
      */
-    function mapFoodOptionsFromNamesToInt(array $foodOptions): int {
+    function mapFoodOptionsFromNamesToInt(array $foodOptions): int
+    {
         $options = 0;
 
         foreach (FoodOption::$All as $option) {
@@ -50,7 +54,8 @@ trait FoodOptionsMapper {
      * @param string|null $foodOption
      * @return int
      */
-    function mapFoodOptionFromNameToInt(string|null $foodOption): int {
+    function mapFoodOptionFromNameToInt(string|null $foodOption): int
+    {
         if ($foodOption == null) return 0;
 
         foreach (FoodOption::$All as $option) {

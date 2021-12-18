@@ -35,7 +35,8 @@ class Faq extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public function lastEditedBy(): BelongsTo {
+    public function lastEditedBy(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'last_edited_by');
     }
 }

@@ -18,7 +18,8 @@ class SignupPolicy
      * @param string|null $confirmationCode
      * @return bool
      */
-    public function canEdit(?User $user, Signup $signup, ?string $confirmationCode): bool {
+    public function canEdit(?User $user, Signup $signup, ?string $confirmationCode): bool
+    {
         $isOwnSignup = $user != null && $signup->user_id == $user->id;
         $isAdmin = $user != null && $user->mensa_admin;
         $confirmationCheck = $signup->confirmation_code == $confirmationCode;

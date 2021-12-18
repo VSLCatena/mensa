@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
 use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
@@ -32,7 +33,8 @@ class MensaListController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function __invoke(Request $request): JsonResponse {
+    public function __invoke(Request $request): JsonResponse
+    {
         $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
 
         $validator = Validator::make($request->all(), ['weekOffset' => ['integer'],]);
@@ -49,7 +51,7 @@ class MensaListController extends Controller
             $startOfWeek = $startOfWeek->addWeeks($request->get('weekOffset'));
         }
         $startTime = $startOfWeek->getTimestamp();
-        $endTime = $startOfWeek->addWeeks(2)->getTimestamp()-1;
+        $endTime = $startOfWeek->addWeeks(2)->getTimestamp() - 1;
 
         $mensas = Mensa::orderBy('date')
             ->whereBetween('date', [$startTime, $endTime])

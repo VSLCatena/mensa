@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class SignupItem {
+class SignupItem
+{
 
     /**
      * SimpleUserItem constructor.
@@ -22,6 +23,7 @@ class SignupItem {
         public int $food_option,
         public bool $cooks,
         public bool $dishwasher
-    ) {
+    )
+    {
     }
 }

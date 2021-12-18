@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class ExtraOptionItem {
+class ExtraOptionItem
+{
     /**
      * ExtraOptionItem constructor.
      * @param string $id
@@ -15,6 +16,7 @@ class ExtraOptionItem {
         public string $description,
         public int $order,
         public float $price
-    ) {
+    )
+    {
     }
 }

@@ -30,7 +30,8 @@ namespace App\Models;
  * @method static \Illuminate\Database\Eloquent\Builder|PersonalAccessToken whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class PersonalAccessToken extends \Laravel\Sanctum\PersonalAccessToken {
+class PersonalAccessToken extends \Laravel\Sanctum\PersonalAccessToken
+{
     protected $casts = [
         'abilities' => 'json',
         'last_used_at' => 'datetime',

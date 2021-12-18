@@ -42,7 +42,7 @@ class MensaAutocreate extends Command
         // We want to create a mensa 2 weeks from now. We do this every day (Except weekends)
         // To do that we need to check
         $count = Mensa::whereBetween('date', [Carbon::today()->addWeeks(2), Carbon::today()->addWeeks(2)->addDay()])->count();
-        if($count < 1){
+        if ($count < 1) {
             $this->info('No mensas found two weeks from now, creating...');
             $mensa = new Mensa();
             $mensa->title = config('mensa.default.name');

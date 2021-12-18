@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SigninConfirmed extends Mailable
 {
@@ -30,7 +29,7 @@ class SigninConfirmed extends Mailable
      */
     public function build()
     {
-        $this->subject('Inschrijving bevestigd voor de mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false));
+        $this->subject('Inschrijving bevestigd voor de mensa op ' . formatDate($this->mensaUser->mensa->date, false, false, false));
         return $this->markdown('emails.signin.confirmed', ['mensaUser' => $this->mensaUser]);
     }
 }

@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MenuItemItem {
+class MenuItemItem
+{
     /**
      * MenuItemItem constructor.
      * @param string $id
@@ -10,6 +12,7 @@ class MenuItemItem {
     public function __construct(
         public string $id,
         public string $text,
-    ) {
+    )
+    {
     }
 }

@@ -6,8 +6,6 @@ use App\Models\Mensa;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\DB;
 
 class MensaState extends Mailable
 {
@@ -37,7 +35,7 @@ class MensaState extends Mailable
 
         $staff = $this->mensa->staff();
 
-        $staffIds = $staff->map(function($item){
+        $staffIds = $staff->map(function ($item) {
             return $item->id;
         });
 

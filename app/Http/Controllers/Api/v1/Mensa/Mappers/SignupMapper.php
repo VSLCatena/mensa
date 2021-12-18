@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
 use App\Http\Controllers\Api\v1\Mensa\Models\SignupItem;
-use App\Http\Controllers\Api\v1\Mensa\Models\SimpleUserItem;
 use App\Models\Signup;
 use App\Models\User;
 
-trait SignupMapper {
+trait SignupMapper
+{
     use UserMapper;
 
     /**
@@ -15,7 +15,8 @@ trait SignupMapper {
      * @param User|null $user
      * @return SignupItem
      */
-    function mapSignup(Signup $signup, User $user = null): SignupItem {
+    function mapSignup(Signup $signup, User $user = null): SignupItem
+    {
         return new SignupItem(
             id: $signup->id,
             user: self::mapUser($user ?? $signup->user),

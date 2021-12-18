@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\User\Models;
 
-class UserSelf {
+class UserSelf
+{
     public function __construct(
         public string $id,
         public string $name,
@@ -10,6 +12,7 @@ class UserSelf {
         public string|null $extraInfo,
         public string|null $foodPreference,
         public bool $isAdmin
-    ) {
+    )
+    {
     }
 }

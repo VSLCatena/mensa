@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Contracts;
 
 
@@ -7,7 +8,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Psr\Http\Client\ClientExceptionInterface;
 
-abstract class RemoteUserLookup {
+abstract class RemoteUserLookup
+{
 
     /**
      * Gets an user from the remote repository
@@ -36,7 +38,8 @@ abstract class RemoteUserLookup {
      * @return User|null
      * @throws ClientExceptionInterface
      */
-    function lookLocalFirst(string $userReference): ?User {
+    function lookLocalFirst(string $userReference): ?User
+    {
         $emailSuffix = config('mensa.remote_user.email_suffix');
         $emailedUser = ends_with($userReference, $emailSuffix) ? $userReference : "$userReference$emailSuffix";
 
@@ -61,7 +64,8 @@ abstract class RemoteUserLookup {
      * @return User|null
      * @throws ClientExceptionInterface
      */
-    function currentUpdatedIfNecessary(): ?User {
+    function currentUpdatedIfNecessary(): ?User
+    {
         $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
         if ($user == null) return null;
 
@@ -76,7 +80,8 @@ abstract class RemoteUserLookup {
      * @return User|null
      * @throws ClientExceptionInterface
      */
-    function getUpdatedUserIfNecessary(User $user, ?string $userReference = null): ?User {
+    function getUpdatedUserIfNecessary(User $user, ?string $userReference = null): ?User
+    {
         $userReference = $userReference ?? $user->remote_principal_name;
 
         $timeToUpdate = strtotime($user->remote_last_check) + config('mensa.remote_user.update_time');
@@ -96,7 +101,8 @@ abstract class RemoteUserLookup {
      * @return User|null
      * @throws ClientExceptionInterface
      */
-    function getUpdatedUser(User $user, ?string $userReference = null): ?User {
+    function getUpdatedUser(User $user, ?string $userReference = null): ?User
+    {
         $userReference = $userReference ?? $user->remote_principal_name;
 
         $remoteUser = $this->getUser($userReference);

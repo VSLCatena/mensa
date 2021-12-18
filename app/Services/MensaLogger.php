@@ -1,11 +1,13 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Log;
 use App\Models\Mensa;
 use Illuminate\Support\Facades\Auth;
 
-class MensaLogger {
+class MensaLogger
+{
     /**
      * Logs a given message to a certain Mensa.
      *
@@ -14,9 +16,10 @@ class MensaLogger {
      * @param Mensa $mensa
      * @param string $description
      */
-    public function log(Mensa $mensa, string $description){
+    public function log(Mensa $mensa, string $description)
+    {
         $log = new Log();
-        if(Auth::check()){
+        if (Auth::check()) {
             $log->user()->associate(Auth::user());
         }
         $log->mensa()->associate($mensa);

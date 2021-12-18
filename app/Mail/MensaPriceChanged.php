@@ -5,7 +5,6 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class MensaPriceChanged extends Mailable
 {
@@ -30,7 +29,7 @@ class MensaPriceChanged extends Mailable
      */
     public function build()
     {
-        $this->subject('Mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false).' is gewijzigd!');
+        $this->subject('Mensa op ' . formatDate($this->mensaUser->mensa->date, false, false, false) . ' is gewijzigd!');
         return $this->markdown('emails.mensa.changed', ['mensaUser' => $this->mensaUser]);
     }
 }

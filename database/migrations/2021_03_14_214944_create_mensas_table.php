@@ -27,7 +27,7 @@ class CreateMensasTable extends Migration
             $table->float('price');
 
             $table->primary('id');
-            
+
             $table->index('date');
         });
     }

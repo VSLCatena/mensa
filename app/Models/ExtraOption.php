@@ -38,11 +38,13 @@ class ExtraOption extends Model
 
     public $timestamps = false;
 
-    public function mensa(): BelongsTo {
+    public function mensa(): BelongsTo
+    {
         return $this->belongsTo(Mensa::class);
     }
 
-    public function signups(): BelongsToMany {
+    public function signups(): BelongsToMany
+    {
         return $this->belongsToMany(Signup::class, 'signup_extra_options', 'extra_option_id', 'signup_id');
     }
 }

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class SimpleUserItem {
+class SimpleUserItem
+{
 
     /**
      * SimpleUserItem constructor.
@@ -12,6 +13,7 @@ class SimpleUserItem {
     public function __construct(
         public string $id,
         public string $name,
-    ) {
+    )
+    {
     }
 }

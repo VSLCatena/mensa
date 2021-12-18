@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -69,11 +67,13 @@ class Signup extends Model
 
     protected $dates = ['deleted_at'];
 
-    public function extraOptions(): BelongsToMany {
+    public function extraOptions(): BelongsToMany
+    {
         return $this->belongsToMany(ExtraOption::class, 'signup_extra_options', 'signup_id', 'extra_option_id');
     }
 
-    public function mensa(): BelongsTo {
+    public function mensa(): BelongsTo
+    {
         return $this->belongsTo(Mensa::class);
     }
 
@@ -85,11 +85,13 @@ class Signup extends Model
 //        return $this->hasOne('App\Models\MensaUserItem', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
 //    }
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function price(): float {
+    public function price(): float
+    {
         return $this->extraOptions->sum('price') + $this->mensa->price;
     }
 

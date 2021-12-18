@@ -13,7 +13,8 @@ class   UserCache
     private static array $cache = [];
 
 
-    static function getCachedUser(string $userId) {
+    static function getCachedUser(string $userId)
+    {
         if (!array_key_exists($userId, self::$cache)) {
             self::$cache[$userId] = User::find($userId);
         }

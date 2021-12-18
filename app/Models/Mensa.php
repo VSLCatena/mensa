@@ -62,11 +62,13 @@ class Mensa extends Model
         'id', 'title', 'description', 'date', 'closing_time', 'max_users',
     ];
 
-    public function users(): HasMany {
+    public function users(): HasMany
+    {
         return $this->hasMany(Signup::class);
     }
 
-    public function orderedUsers(): HasMany {
+    public function orderedUsers(): HasMany
+    {
         return $this->hasMany(Signup::class)
             ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.food_option as food_option, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
             ->join('users', 'users.id', '=', 'signups.id')
@@ -76,23 +78,28 @@ class Mensa extends Model
             ->orderBy('signups.is_intro');
     }
 
-    public function extraOptions(): HasMany {
+    public function extraOptions(): HasMany
+    {
         return $this->hasMany(ExtraOption::class);
     }
 
-    public function logs(): HasMany {
+    public function logs(): HasMany
+    {
         return $this->hasMany(Log::class);
     }
 
-    public function menuItems(): HasMany {
+    public function menuItems(): HasMany
+    {
         return $this->hasMany(MenuItem::class)->orderBy('order');
     }
 
-    public function isClosed(): bool {
+    public function isClosed(): bool
+    {
         return $this->closed || strtotime($this->closing_time) < time();
     }
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
         static::creating(function (Model $model) {

@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
 use App\Models\Mensa;
 use App\Models\Signup;
 use App\Models\User;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -25,7 +24,8 @@ use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class SignupController extends Controller {
+class SignupController extends Controller
+{
     use SignupMapper, FoodOptionsMapper;
 
     private RemoteUserLookup $remoteLookup;
@@ -41,14 +41,15 @@ class SignupController extends Controller {
     }
 
 
-    public function getSignup(Request $request, string $mensaId): ?JsonResponse {
+    public function getSignup(Request $request, string $mensaId): ?JsonResponse
+    {
         $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
 
         if ($request->has('confirmation_code')) {
             $signups = Signup::where('mensa_id', '=', $mensaId)
                 ->where('confirmation_code', '=', $request->get('confirmation_code'))
                 ->get();
-        } else if($user != null) {
+        } else if ($user != null) {
             $signups = Signup::where('mensa_id', '=', $mensaId)
                 ->where('user_id', $user->id)
                 ->get();
@@ -56,7 +57,7 @@ class SignupController extends Controller {
             abort(Response::HTTP_UNAUTHORIZED);
         }
 
-        return response()->json($signups->map(function($signup) use ($user) {
+        return response()->json($signups->map(function ($signup) use ($user) {
             return $this->mapSignup($signup, $user);
         }));
     }
@@ -66,7 +67,8 @@ class SignupController extends Controller {
      * @param string $mensaId
      * @return Response|null
      */
-    public function signup(Request $request, string $mensaId): ?JsonResponse {
+    public function signup(Request $request, string $mensaId): ?JsonResponse
+    {
         /** @var Mensa $mensa */
         $mensa = Mensa::findOrFail($mensaId);
 
@@ -117,7 +119,7 @@ class SignupController extends Controller {
         $signupId = $previousSignups->first()?->signup_id ?? Str::uuid();
         $confirmationId = $previousSignups->first()?->confirmation_code ?? Str::uuid();
         $isConfirmed = $isAdmin ?: $previousSignups->first()?->confirmed ?? $user?->email == $email;
-        
+
         /* Here we map all the signups */
         /** @var Signup[] $signups */
         $signups = [];
@@ -150,7 +152,9 @@ class SignupController extends Controller {
         }
 
         // 1, and only 1 main user:
-        $mainCount = count(array_filter($signups, function (Signup $signup) { return !$signup->is_intro; }));
+        $mainCount = count(array_filter($signups, function (Signup $signup) {
+            return !$signup->is_intro;
+        }));
         if ($mainCount != 1) {
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_ONE_MAIN_ONLY
@@ -181,7 +185,8 @@ class SignupController extends Controller {
         return null;
     }
 
-    private function getSingleSignup(Mensa $mensa, array $userData, $isAdmin): Signup|MessageBag {
+    private function getSingleSignup(Mensa $mensa, array $userData, $isAdmin): Signup|MessageBag
+    {
         $allowedFoodOptions = $this->mapFoodOptionsFromIntToNames($mensa->food_options);
 
         $rules = [
@@ -218,7 +223,8 @@ class SignupController extends Controller {
         return $signup;
     }
 
-    public function confirmSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse {
+    public function confirmSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
+    {
         $signup = Signup::findOrFail($signupId);
         if ($signup->mensa_id != $mensaId) {
             return response()->json([
@@ -241,7 +247,8 @@ class SignupController extends Controller {
         return null;
     }
 
-    public function deleteSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse {
+    public function deleteSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
+    {
         $signup = Signup::findOrFail($signupId);
         if ($signup->mensa_id != $mensaId) {
             return response()->json([
@@ -256,10 +263,13 @@ class SignupController extends Controller {
         return null;
     }
 
-    private function currentUser(): ?User {
+    private function currentUser(): ?User
+    {
         try {
             return $this->remoteLookup->currentUpdatedIfNecessary();
-        } catch (ClientExceptionInterface) { abort(Response::HTTP_BAD_GATEWAY); }
+        } catch (ClientExceptionInterface) {
+            abort(Response::HTTP_BAD_GATEWAY);
+        }
         return null; // For lint
     }
 
@@ -292,7 +302,8 @@ class SignupController extends Controller {
      * @return User
      * @throws HttpException
      */
-    private function lookupUser(string $userReference): User {
+    private function lookupUser(string $userReference): User
+    {
         try {
             $user = $this->remoteLookup->lookLocalFirst($userReference);
 

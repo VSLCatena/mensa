@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
@@ -31,7 +32,8 @@ class SelfController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function getSelf(Request $request): JsonResponse {
+    public function getSelf(Request $request): JsonResponse
+    {
         $user = Auth::user();
         if ($user == null) {
             abort(Response::HTTP_UNAUTHORIZED);
@@ -46,7 +48,8 @@ class SelfController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function updateSelf(Request $request) {
+    public function updateSelf(Request $request)
+    {
         $user = Auth::user();
         if ($user == null) {
             abort(Response::HTTP_UNAUTHORIZED);

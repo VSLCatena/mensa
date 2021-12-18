@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MensaItem {
+class MensaItem
+{
     /**
      * MensaItem constructor.
      * @param string $id
@@ -34,6 +36,7 @@ class MensaItem {
         public array $foodOptions,
         public array $menu,
         public array $extraOptions,
-    ) {
+    )
+    {
     }
 }

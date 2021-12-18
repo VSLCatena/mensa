@@ -36,11 +36,13 @@ class Log extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    public function mensa(): BelongsTo {
+    public function mensa(): BelongsTo
+    {
         return $this->belongsTo(Mensa::class, 'mensa_id');
     }
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 }

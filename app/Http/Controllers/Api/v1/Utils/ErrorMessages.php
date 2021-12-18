@@ -1,7 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\Utils;
 
-class ErrorMessages {
+class ErrorMessages
+{
     const GENERAL_VALIDATION_ERROR = "GENERAL_VALIDATION_ERROR";
 
     const SIGNUP_NOT_EXIST = "SIGNUP_NOT_EXIST";

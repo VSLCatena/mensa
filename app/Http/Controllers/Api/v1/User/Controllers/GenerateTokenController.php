@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use App\Contracts\RemoteUserLookup;
@@ -29,7 +30,8 @@ class GenerateTokenController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function __invoke(Request $request): JsonResponse {
+    public function __invoke(Request $request): JsonResponse
+    {
         $azureUser = Socialite::driver('azure')->stateless()->user();
 
         $user = User::find($azureUser->id) ?? new User();

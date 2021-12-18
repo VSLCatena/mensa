@@ -16,14 +16,16 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
-    public function run() {
+    public function run()
+    {
         $this->command->info('-- Starting Mensa seeder --');
         $this->mensaSeeder();
         $this->command->info('-- Starting Faq seeder --');
         $this->faqSeeder();
     }
 
-    private function mensaSeeder() {
+    private function mensaSeeder()
+    {
         $faker = Faker\Factory::create();
 
         $this->command->info('- Creating users -');
@@ -74,7 +76,8 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function faqSeeder() {
+    private function faqSeeder()
+    {
         Faq::factory()
             ->count(30)
             ->create();

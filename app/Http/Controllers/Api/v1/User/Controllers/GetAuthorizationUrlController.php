@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use Illuminate\Http\JsonResponse;
@@ -27,7 +28,8 @@ class GetAuthorizationUrlController extends Controller
      * @param $mensaId
      * @return JsonResponse
      */
-    public function __invoke(Request $request): JsonResponse {
+    public function __invoke(Request $request): JsonResponse
+    {
         return response()->json([
             "authorizationUri" => Socialite::driver('azure')
                 ->stateless()->redirect()->getTargetUrl()

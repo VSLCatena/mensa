@@ -46,9 +46,9 @@ class DeleteUnconfirmed extends Command
     public function handle()
     {
         $unconfirmedUsers = Signup::where('confirmed', '0')->where('created_at', '<', Carbon::now()->subMinutes(15))->get();
-        foreach($unconfirmedUsers as $user){
+        foreach ($unconfirmedUsers as $user) {
             $user->delete();
-            $this->mensaLogger->log($user->mensa, $user->user->name.'\'s reservering is verlopen en wordt verwijderd.');
+            $this->mensaLogger->log($user->mensa, $user->user->name . '\'s reservering is verlopen en wordt verwijderd.');
         }
     }
 }

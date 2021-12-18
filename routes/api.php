@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix("v1")->middleware('jsonRequests')->group(function(){
+Route::prefix("v1")->middleware('jsonRequests')->group(function () {
     Route::get('login/url', 'Api\v1\User\Controllers\GetAuthorizationUrlController');
     Route::get('login/token', 'Api\v1\User\Controllers\GenerateTokenController');
 

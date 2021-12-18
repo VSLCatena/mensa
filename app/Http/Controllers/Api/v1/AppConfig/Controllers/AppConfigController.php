@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Api\v1\AppConfig\Controllers;
 
 use Illuminate\Http\JsonResponse;
@@ -23,7 +24,8 @@ class AppConfigController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function __invoke(Request $request): JsonResponse {
+    public function __invoke(Request $request): JsonResponse
+    {
         return response()->json([
             "defaultMensaOptions" => [
                 "title" => "Mensa met betaalde afwas",
