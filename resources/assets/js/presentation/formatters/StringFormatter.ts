@@ -3,7 +3,7 @@ import lang, {translatedText} from "../lang/Language";
 import {SimpleUser} from "../../domain/common/model/User";
 import Language from "../../domain/common/model/Language";
 
-export function formatUsers(users: SimpleUser[], language: Language = Vue.prototype.$local.language): string|null {
+export function formatUsers(users: SimpleUser[], language: Language = Vue.prototype.$local.language): string | null {
     switch (users.length) {
         case 0:
             return null;
@@ -17,11 +17,12 @@ export function formatUsers(users: SimpleUser[], language: Language = Vue.protot
         userText += ", " + users[x].name;
     }
 
-    userText += " " + translatedText(language, lang.text.and) + " " + users[users.length-1].name;
+    userText += " " + translatedText(language, lang.text.and) + " " + users[users.length - 1].name;
     userText = userText.substr(2);
 
     return userText;
 }
+
 // user1, user2, user3 and user4
 
 export function capitalize(text: string): string {

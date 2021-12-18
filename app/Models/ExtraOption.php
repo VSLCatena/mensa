@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use Database\Factories\ExtraOptionFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,19 +19,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $order
  * @property string $description
  * @property string $price
- * @property-read \App\Models\Mensa $mensa
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $signups
+ * @property-read Mensa $mensa
+ * @property-read Collection|Signup[] $signups
  * @property-read int|null $signups_count
- * @method static \Database\Factories\ExtraOptionFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption query()
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption whereMensaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ExtraOption wherePrice($value)
- * @mixin \Eloquent
+ * @method static ExtraOptionFactory factory(...$parameters)
+ * @method static Builder|ExtraOption newModelQuery()
+ * @method static Builder|ExtraOption newQuery()
+ * @method static Builder|ExtraOption query()
+ * @method static Builder|ExtraOption whereDescription($value)
+ * @method static Builder|ExtraOption whereId($value)
+ * @method static Builder|ExtraOption whereMensaId($value)
+ * @method static Builder|ExtraOption whereOrder($value)
+ * @method static Builder|ExtraOption wherePrice($value)
+ * @mixin Eloquent
  */
 class ExtraOption extends Model
 {

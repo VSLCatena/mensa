@@ -2,7 +2,7 @@ import Mensa from "../../../domain/mensa/model/Mensa";
 import MensaEntity from "../model/MensaEntity";
 import {checkIsArray, requireNotNull} from "../../utils/MappingUtils";
 import MapExtraOptions from "./MapExtraOptions";
-import Result, { runCatching } from "../../../domain/common/utils/Result";
+import Result, {runCatching} from "../../../domain/common/utils/Result";
 import MapSimpleUsers from "./MapSimpleUsers";
 import MensaListEntity, {BetweenEntity} from "../model/MensaListEntity";
 import MensaList, {Between} from "../../../domain/mensa/model/MensaList";
@@ -32,7 +32,7 @@ export function MapBetween(data: BetweenEntity): Result<Between> {
 function MapMensas(data: MensaEntity[]): Result<Mensa[]> {
     return runCatching(() => {
         checkIsArray('mensas', data);
-        return data.map(function(price: any) {
+        return data.map(function (price: any) {
             return MapMensa(price).getOrThrow();
         });
     })

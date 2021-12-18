@@ -5,7 +5,7 @@ import MapResponse from "../../utils/MapResponse";
 import MapAppConfig from "../mapper/MapAppConfig";
 
 class AppConfigCache {
-    private cachedAppConfig: AppConfig|null = null
+    private cachedAppConfig: AppConfig | null = null
 
     async getAppConfig(): Promise<AppConfig> {
         if (this.cachedAppConfig != null) return this.cachedAppConfig;

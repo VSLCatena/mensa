@@ -10,6 +10,7 @@ use App\Models\ExtraOption;
 use App\Models\Mensa;
 use App\Models\MenuItem;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use InvalidArgumentException;
 use JetBrains\PhpStorm\ArrayShape;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +50,7 @@ class MensaController extends Controller
      * @param Request $request
      * @param string $mensaId
      * @return JsonResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function getMensa(Request $request, string $mensaId): JsonResponse
     {
@@ -68,13 +70,13 @@ class MensaController extends Controller
 
     public function newMensa(Request $request): ?JsonResponse
     {
-        if ($request->has('id')) throw new \InvalidArgumentException('id can\'t exist in request');
+        if ($request->has('id')) throw new InvalidArgumentException('id can\'t exist in request');
         return $this->internalUpdateMensa($request, null);
     }
 
     public function updateMensa(Request $request, string $mensaId): ?JsonResponse
     {
-        if (!$request->has('id')) throw new \InvalidArgumentException('id doesn\'t exist in request');
+        if (!$request->has('id')) throw new InvalidArgumentException('id doesn\'t exist in request');
         return $this->internalUpdateMensa($request, $mensaId);
     }
 

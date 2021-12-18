@@ -8,7 +8,7 @@
             <v-spacer></v-spacer>
             <v-fade-transition leave-absolute>
                 <div class="flex-grow-0 mr-5 text-no-wrap" v-if="!open">
-                    {{ signupCount }} / {{ mensa.maxSignups }}<br />
+                    {{ signupCount }} / {{ mensa.maxSignups }}<br/>
                     {{ dishwasherCount }}
                 </div>
             </v-fade-transition>
@@ -41,13 +41,19 @@
                     <div v-if="mensa.cooks.length > 0" class="mt-4 mt-md-0 mb-4">
                         {{ $ll($lang.text.mensa.cooked_by) }}: <span class="text--secondary">{{ cooks }}</span>
                     </div>
-                    <div v-if="mensa.description.length > 0" class="text--secondary flex-grow-1 mt-4 mt-md-0">{{ mensa.description }}</div>
+                    <div v-if="mensa.description.length > 0" class="text--secondary flex-grow-1 mt-4 mt-md-0">
+                        {{ mensa.description }}
+                    </div>
 
                     <div class="mt-4" v-if="mensa.menu.length > 0 || mensa.extraOptions.length > 0">
                         <v-tabs v-model="infoTabs">
                             <v-tabs-slider></v-tabs-slider>
-                            <v-tab key="menu" v-if="mensa.menu.length > 0">{{ $ll($lang.text.mensa.menu_title) }}</v-tab>
-                            <v-tab key="extraOptions" v-if="mensa.extraOptions.length > 0">{{ $ll($lang.text.mensa.extra_options_title) }}</v-tab>
+                            <v-tab key="menu" v-if="mensa.menu.length > 0">
+                                {{ $ll($lang.text.mensa.menu_title) }}
+                            </v-tab>
+                            <v-tab key="extraOptions" v-if="mensa.extraOptions.length > 0">
+                                {{ $ll($lang.text.mensa.extra_options_title) }}
+                            </v-tab>
                         </v-tabs>
 
                         <v-tabs-items v-model="infoTabs" class="mt-2">
@@ -73,10 +79,16 @@
             </div>
 
             <div class="mt-6 d-flex">
-                <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">{{ $ll($lang.text.mensa.button_signup) }}</v-btn>
-                <v-btn class="ml-2" outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">{{ $ll($lang.text.mensa.button_overview) }}</v-btn>
-                <v-spacer />
-                <v-btn class="pa-2 edit-button" outlined v-if="$local.user.isAdmin" @click="onEditClicked(mensa)"><v-icon>mdi-square-edit-outline</v-icon></v-btn>
+                <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">
+                    {{ $ll($lang.text.mensa.button_signup) }}
+                </v-btn>
+                <v-btn class="ml-2" outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">
+                    {{ $ll($lang.text.mensa.button_overview) }}
+                </v-btn>
+                <v-spacer/>
+                <v-btn class="pa-2 edit-button" outlined v-if="$local.user.isAdmin" @click="onEditClicked(mensa)">
+                    <v-icon>mdi-square-edit-outline</v-icon>
+                </v-btn>
             </div>
         </v-expansion-panel-content>
     </v-expansion-panel>
@@ -84,14 +96,14 @@
 
 <script lang="ts">
     import Mensa from "../../../domain/mensa/model/Mensa";
-    import { formatDate } from "../../formatters/DateFormatter";
-    import Vue, { PropType } from "vue";
+    import {formatDate} from "../../formatters/DateFormatter";
+    import Vue, {PropType} from "vue";
     import {capitalize, formatUsers} from "../../formatters/StringFormatter";
     import {LanguageText} from "../../lang/LanguageText";
     import {AnonymousUser} from "../../../domain/common/model/User";
 
     export default Vue.extend({
-        data: function() {
+        data: function () {
             return {
                 infoTabs: null,
             }
@@ -115,26 +127,26 @@
             }
         },
         computed: {
-            isLoggedIn: function(): boolean {
+            isLoggedIn: function (): boolean {
                 return this.$local.user != AnonymousUser;
             },
-            formattedDate: function(): string {
+            formattedDate: function (): string {
                 return capitalize(formatDate(this.mensa.date));
             },
-            closingTime: function(): string {
-                return formatDate(this.mensa.closingTime, { withDate: false });
+            closingTime: function (): string {
+                return formatDate(this.mensa.closingTime, {withDate: false});
             },
-            cooks: function(): string|null {
+            cooks: function (): string | null {
                 return formatUsers(this.mensa.cooks);
             },
-            signupCount: function(): number {
+            signupCount: function (): number {
                 let users = this.mensa.signups;
                 if (Array.isArray(users)) {
                     return users.length;
                 }
                 return users;
             },
-            dishwasherCount: function(): string {
+            dishwasherCount: function (): string {
                 let ref = this.$lang.text.mensa.dishwasher_count;
                 let textRef: LanguageText;
                 switch (this.mensa.dishwashers) {
@@ -150,7 +162,7 @@
                 }
                 return this.$ll(textRef).replace('%s', this.mensa.dishwashers.toString());
             },
-            signups: function(): string {
+            signups: function (): string {
                 let users = this.mensa.signups;
                 if (Array.isArray(users)) {
                     return formatUsers(users) ?? "";
@@ -165,9 +177,11 @@
     .horizontal-spacing {
         border-spacing: 0 8px;
     }
+
     .vertical-top-align {
         vertical-align: top;
     }
+
     .edit-button {
         min-width: 0 !important;
     }

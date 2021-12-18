@@ -1,11 +1,10 @@
-import Result, {Failure, runCatching, Success} from "../../../domain/common/utils/Result";
+import Result, {runCatching} from "../../../domain/common/utils/Result";
 import UserEntity from "../../user/model/UserEntity";
 import {checkIsArray, requireNotNull} from "../../utils/MappingUtils";
 import {FullUser, SimpleUser, User} from "../../../domain/common/model/User";
 import MensaSimpleUserEntity from "../model/MensaSimpleUserEntity";
 import FullUserEntity from "../../user/model/FullUserEntity";
 import {MapFoodOption} from "../../common/MapFoodOption";
-
 
 
 export function MapFullUser(data: FullUserEntity): Result<FullUser> {
@@ -25,7 +24,7 @@ export function MapFullUser(data: FullUserEntity): Result<FullUser> {
 export function MapUsers(data: UserEntity[]): Result<User[]> {
     return runCatching(() => {
         checkIsArray('users', data);
-        return data.map(function(price: any) {
+        return data.map(function (price: any) {
             return MapUser(price).getOrThrow();
         });
     });
@@ -46,7 +45,7 @@ export function MapUser(data: UserEntity): Result<User> {
 export function MapSimpleUsers(data: MensaSimpleUserEntity[]): Result<SimpleUser[]> {
     return runCatching(() => {
         checkIsArray('mensaSimpleUser', data);
-        return data.map(function(price: any) {
+        return data.map(function (price: any) {
             return MapSimpleUser(price).getOrThrow();
         });
     });

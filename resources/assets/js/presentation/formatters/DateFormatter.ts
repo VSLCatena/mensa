@@ -21,10 +21,10 @@ let defaultOptions: Options = {
 
 export function formatDate(
     date: Date,
-    options: Partial<Options>|null = null,
+    options: Partial<Options> | null = null,
     language: Language = Vue.prototype.$local.language,
 ): string {
-    let actualOptions = {...defaultOptions, ...options }
+    let actualOptions = {...defaultOptions, ...options}
 
     let currentDate = new Date();
 
@@ -44,7 +44,7 @@ export function formatDate(
 
         // of May
         let monthText: string = getMonth(date, language, actualOptions.preferShort);
-        if (language.language == "en") monthText = "of "+monthText;
+        if (language.language == "en") monthText = "of " + monthText;
         dateBuilder.push(monthText);
 
         // 2023

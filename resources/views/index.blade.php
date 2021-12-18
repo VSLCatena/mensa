@@ -14,11 +14,11 @@
 
 </head>
 <body>
-    <div id="app">
-        <!--suppress HtmlUnknownTag, CheckEmptyScriptTag -->
-        <App nlimage="{{ asset('images/NL.svg') }}" enimage="{{ asset('images/GB.svg') }}" />
-    </div>
-    <!-- Scripts -->
-    <script src="{{ mix('/js/app.js') }}"></script>
+<div id="app">
+    <!--suppress HtmlUnknownTag, CheckEmptyScriptTag -->
+    <App nlimage="{{ asset('images/NL.svg') }}" enimage="{{ asset('images/GB.svg') }}"/>
+</div>
+<!-- Scripts -->
+<script src="{{ mix('/js/app.js') }}"></script>
 </body>
 </html>

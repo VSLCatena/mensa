@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\RemoteUserLookup;
 use App\Models\User;
 use GuzzleHttp\Client;
+use InvalidArgumentException;
 use Psr\Http\Client\ClientExceptionInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -28,7 +29,7 @@ class AzureUserLookup extends RemoteUserLookup
 
         if (!preg_match($userRegex, $userReference) && !filter_var($userReference, FILTER_VALIDATE_EMAIL)) {
             // given user is not a valid username or email address
-            throw new \InvalidArgumentException("User is not a valid username or email");
+            throw new InvalidArgumentException("User is not a valid username or email");
         }
 
         $azureUser = $this->getRawAzureUser($userReference);
@@ -91,7 +92,7 @@ class AzureUserLookup extends RemoteUserLookup
     function getUserGroups(string $userId): array
     {
         if (!Uuid::isValid($userId)) {
-            throw new \InvalidArgumentException("Invalid uuid");
+            throw new InvalidArgumentException("Invalid uuid");
         }
 
         $requestUrl = "https://graph.microsoft.com/v1.0/users/$userId/getMemberGroups";

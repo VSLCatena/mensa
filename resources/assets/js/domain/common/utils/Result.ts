@@ -1,4 +1,3 @@
-
 type Result<T> = Success<T> | Failure<T>
 export default Result
 
@@ -20,7 +19,7 @@ abstract class ResultType<T> {
         }
     }
 
-    public getOrNull(): T|null {
+    public getOrNull(): T | null {
         if (this instanceof Success) {
             return this.value;
         }

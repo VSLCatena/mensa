@@ -1,14 +1,12 @@
 import {checkIsArray, requireNotNull} from "../../utils/MappingUtils";
-import ExtraOption from "../../../domain/mensa/model/ExtraOption";
-import MensaExtraOptionsEntity from "../model/MensaExtraOptionsEntity";
-import Result, {Failure, runCatching, Success} from "../../../domain/common/utils/Result";
+import Result, {runCatching} from "../../../domain/common/utils/Result";
 import MensaMenuEntity from "../model/MensaMenuEntity";
 import MensaMenuItem from "../../../domain/mensa/model/MensaMenuItem";
 
 export default function MapMenu(data: MensaMenuEntity[]): Result<MensaMenuItem[]> {
     return runCatching(() => {
         checkIsArray('mensaMenu', data);
-        return data.map(function(price: any) {
+        return data.map(function (price: any) {
             return MapMenuItem(price).getOrThrow();
         });
     });

@@ -1,8 +1,8 @@
 <template>
     <div class="container mt-3 mb-3">
-        <MensaSignupDialog ref="mensaSignupDialog" />
-        <MensaOverviewDialog ref="mensaOverviewDialog" />
-        <MensaEditDialog ref="mensaEditDialog" />
+        <MensaSignupDialog ref="mensaSignupDialog"/>
+        <MensaOverviewDialog ref="mensaOverviewDialog"/>
+        <MensaEditDialog ref="mensaEditDialog"/>
         <v-banner>
             <div class="d-flex">
                 <div>
@@ -11,7 +11,9 @@
                 </div>
                 <v-spacer></v-spacer>
                 <div>
-                    <v-btn @click="offsetWeeks(-2)" :loading="loading" class="mr-4">{{ $ll($lang.text.mensa.previous_weeks) }}</v-btn>
+                    <v-btn @click="offsetWeeks(-2)" :loading="loading" class="mr-4">
+                        {{ $ll($lang.text.mensa.previous_weeks) }}
+                    </v-btn>
                     <v-btn @click="offsetWeeks(2)" :loading="loading">{{ $ll($lang.text.mensa.next_weeks) }}</v-btn>
                 </div>
             </div>
@@ -23,7 +25,7 @@
                 :mensa="mensa"
                 :on-signup-clicked="onSignupMensaClicked"
                 :on-overview-clicked="onMensaOverviewClicked"
-                :on-edit-clicked="onMensaEditClicked" />
+                :on-edit-clicked="onMensaEditClicked"/>
         </v-expansion-panels>
 
         <div class="mt-4 d-flex">
@@ -46,28 +48,28 @@
 
     export default Vue.extend({
         components: {MensaEditDialog, MensaOverviewDialog, MensaSignupDialog, MensaItem},
-        data: function() {
+        data: function () {
             return {
                 openedItem: null,
                 mensas: [] as Mensa[],
                 weekOffset: -1,
                 loading: true,
-                between: null as Between|null,
-                mensaSignup: null as Mensa|null,
+                between: null as Between | null,
+                mensaSignup: null as Mensa | null,
             }
         },
         computed: {
-            startDate: function(): string|null {
+            startDate: function (): string | null {
                 let between = this.between;
                 if (between == null) return null;
-                return formatDate(between.start, { withTime: false });
+                return formatDate(between.start, {withTime: false});
             },
-            endDate: function(): string|null {
+            endDate: function (): string | null {
                 let between = this.between;
                 if (between == null) return null;
-                return formatDate(between.end, { withTime: false });
+                return formatDate(between.end, {withTime: false});
             },
-            currentUser: function(): AuthUser {
+            currentUser: function (): AuthUser {
                 return this.$local.user;
             }
         },
@@ -92,7 +94,7 @@
             onMensaEditClicked: function (mensa: Mensa) {
                 (this.$refs.mensaEditDialog as any).open(mensa, mensa.signups);
             },
-            retrieveMensas: function(offset: number, clearItem: boolean) {
+            retrieveMensas: function (offset: number, clearItem: boolean) {
                 this.loading = true;
 
                 GetMensas(offset)

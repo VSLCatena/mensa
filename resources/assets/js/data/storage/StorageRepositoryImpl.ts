@@ -28,7 +28,7 @@ class StorageRepositoryImpl implements StorageRepository {
         Cookies.set(LANGUAGE_KEY, language.language);
     }
 
-    getUserToken(): string|undefined {
+    getUserToken(): string | undefined {
         return Cookies.get(TOKEN_KEY);
     }
 

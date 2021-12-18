@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -14,7 +13,7 @@ import VueRouter from 'vue-router';
 import App from "./presentation/App.vue";
 import Home from './presentation/pages/home/Home.vue';
 import Mensa from './presentation/components/mensa/MensaItem.vue';
-import lang, { translate } from "./presentation/lang/Language";
+import lang, {translate} from "./presentation/lang/Language";
 import GetDarkMode from "./domain/storage/usecase/GetDarkMode";
 import LoginToken from "./presentation/pages/login/LoginToken.vue";
 import GetSelf from "./domain/user/usecase/GetSelf";
@@ -31,9 +30,9 @@ Vue.use(VueRouter);
 Vue.use(Vuetify);
 
 const routes = [
-    { path: '/', component: Home },
-    { path: '/mensa', component: Mensa },
-    { path: '/login/token', component: LoginToken }
+    {path: '/', component: Home},
+    {path: '/mensa', component: Mensa},
+    {path: '/login/token', component: LoginToken}
 ];
 
 const router = new VueRouter({
@@ -59,4 +58,6 @@ const app = new Vue({
 }).$mount('#app');
 
 GetAppConfig().then();
-GetSelf().then(user => {app.$local.user = user;});
+GetSelf().then(user => {
+    app.$local.user = user;
+});

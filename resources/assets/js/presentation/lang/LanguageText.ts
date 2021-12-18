@@ -5,7 +5,7 @@ export interface ILanguage {
 }
 
 export interface LanguageBlock {
-    [key: string]: LanguageText|LanguageBlock
+    [key: string]: LanguageText | LanguageBlock
 }
 
 export type LanguageText = {
@@ -14,4 +14,5 @@ export type LanguageText = {
 
 // This is only used for lint checks
 // noinspection JSUnusedLocalSymbols
-export function LanguageLintCheck(block: LanguageBlock) {}
+export function LanguageLintCheck(block: LanguageBlock) {
+}

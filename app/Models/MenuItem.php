@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use Database\Factories\MenuItemFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,18 +18,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $mensa_id
  * @property string $text
  * @property int $order
- * @property-read \App\Models\Mensa $mensa
- * @method static \Database\Factories\MenuItemFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem query()
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereMensaId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereText($value)
- * @method static \Illuminate\Database\Eloquent\Builder|MenuItem whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property-read Mensa $mensa
+ * @method static MenuItemFactory factory(...$parameters)
+ * @method static Builder|MenuItem newModelQuery()
+ * @method static Builder|MenuItem newQuery()
+ * @method static Builder|MenuItem query()
+ * @method static Builder|MenuItem whereCreatedAt($value)
+ * @method static Builder|MenuItem whereId($value)
+ * @method static Builder|MenuItem whereMensaId($value)
+ * @method static Builder|MenuItem whereOrder($value)
+ * @method static Builder|MenuItem whereText($value)
+ * @method static Builder|MenuItem whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class MenuItem extends Model
 {

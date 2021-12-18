@@ -1,7 +1,7 @@
 import GetUserToken from "../../storage/usecase/GetUserToken";
 
 export default async function WithAuthentication<T>(
-    call: (token: string|null) => T,
+    call: (token: string | null) => T,
     strategy: Strategy = Strategy.AUTH_REQUIRED
 ): Promise<T> {
     let token = await GetUserToken() ?? null;

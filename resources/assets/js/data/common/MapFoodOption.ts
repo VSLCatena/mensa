@@ -5,13 +5,13 @@ import {checkIsArray, requireNotNull} from "../utils/MappingUtils";
 export function MapFoodOptions(preferences: string[]): Result<FoodOption[]> {
     return runCatching(() => {
         checkIsArray('foodOptions', preferences);
-        return preferences.map(function(preference: any) {
+        return preferences.map(function (preference: any) {
             return requireNotNull('foodOptions', MapFoodOption(preference).getOrThrow());
         });
     })
 }
 
-export function MapFoodOption(foodPreference?: string): Result<FoodOption|null> {
+export function MapFoodOption(foodPreference?: string): Result<FoodOption | null> {
     return runCatching(() => {
         switch (foodPreference) {
             case 'vegan':

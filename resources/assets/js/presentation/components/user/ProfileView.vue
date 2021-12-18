@@ -21,7 +21,7 @@
                 :rules="validations.allergies"
                 :counter="MAX_STRING_LENGTH"
                 hide-details="auto"
-                class="mt-8 mb-4" />
+                class="mt-8 mb-4"/>
 
             <v-text-field
                 :label="$ll($lang.text.signup.field_extraInfo)"
@@ -30,7 +30,7 @@
                 :rules="validations.extraInfo"
                 :counter="MAX_STRING_LENGTH"
                 hide-details="auto"
-                class="my-4" />
+                class="my-4"/>
         </v-form>
         <v-card-actions>
             <v-dialog v-model="logoutConfirmation" max-width="290">
@@ -48,120 +48,124 @@
                 </v-card>
             </v-dialog>
             <v-spacer></v-spacer>
-            <v-btn text @click="save()" :disabled="!hasSettingsChanged" :loading="!enabled">{{ $ll($lang.text.general.save) }}</v-btn>
+            <v-btn text @click="save()" :disabled="!hasSettingsChanged" :loading="!enabled">
+                {{ $ll($lang.text.general.save) }}
+            </v-btn>
             <v-btn text @click="close()">{{ $ll($lang.text.general.close) }}</v-btn>
         </v-card-actions>
     </v-card>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import {MAX_STRING_LENGTH, Validations} from "../../utils/ValidationRules";
-import GetLoginUrl from "../../../domain/user/usecase/GetLoginUrl";
-import Logout from "../../../domain/user/usecase/Logout";
-import {AnonymousUser, UpdatableUser} from "../../../domain/common/model/User";
-import FoodOption, {SortedFoodOptions} from "../../../domain/mensa/model/FoodOption";
-import UpdateSelf from "../../../domain/user/usecase/UpdateSelf";
+    import Vue from 'vue';
+    import {MAX_STRING_LENGTH, Validations} from "../../utils/ValidationRules";
+    import Logout from "../../../domain/user/usecase/Logout";
+    import {AnonymousUser, UpdatableUser} from "../../../domain/common/model/User";
+    import FoodOption, {SortedFoodOptions} from "../../../domain/mensa/model/FoodOption";
+    import UpdateSelf from "../../../domain/user/usecase/UpdateSelf";
 
-interface FoodOptionSelection {
-    value: FoodOption|null,
-    text: string
-}
+    interface FoodOptionSelection {
+        value: FoodOption | null,
+        text: string
+    }
 
-export default Vue.extend({
-    props: {
-        close: {
-            type: Function,
-            required: true
+    export default Vue.extend({
+        props: {
+            close: {
+                type: Function,
+                required: true
+            },
+            isOpen: Boolean,
         },
-        isOpen: Boolean,
-    },
-    data: function() {
-        return {
-            logoutConfirmation: false,
-            enabled: true,
-            allergies: "",
-            extraInfo: "",
-            foodPreference: null as FoodOption|null,
-            MAX_STRING_LENGTH: MAX_STRING_LENGTH,
-            validations: {
-                foodOptions: Validations.foodOptions,
-                allergies: [Validations.MaxStringLengthValidation],
-                description: [Validations.MaxStringLengthValidation],
+        data: function () {
+            return {
+                logoutConfirmation: false,
+                enabled: true,
+                allergies: "",
+                extraInfo: "",
+                foodPreference: null as FoodOption | null,
+                MAX_STRING_LENGTH: MAX_STRING_LENGTH,
+                validations: {
+                    foodOptions: Validations.foodOptions,
+                    allergies: [Validations.MaxStringLengthValidation],
+                    description: [Validations.MaxStringLengthValidation],
+                }
             }
-        }
-    },
-    methods: {
-        logout: function() {
-            Logout();
-            this.logoutConfirmation = false;
-            this.$local.user = AnonymousUser;
         },
-        save: function() {
-            this.enabled = false;
-            let user = this.$local.user;
+        methods: {
+            logout: function () {
+                Logout();
+                this.logoutConfirmation = false;
+                this.$local.user = AnonymousUser;
+            },
+            save: function () {
+                this.enabled = false;
+                let user = this.$local.user;
 
-            let newUser: UpdatableUser = {};
-            if ((user.allergies ?? "") != this.allergies) newUser = { ...newUser, allergies: this.allergies };
-            if ((user.extraInfo ?? "") != this.extraInfo) newUser = { ...newUser, extraInfo: this.extraInfo };
-            if (user.foodPreference != this.foodPreference) newUser = { ...newUser, foodPreference: this.foodPreference };
+                let newUser: UpdatableUser = {};
+                if ((user.allergies ?? "") != this.allergies) newUser = {...newUser, allergies: this.allergies};
+                if ((user.extraInfo ?? "") != this.extraInfo) newUser = {...newUser, extraInfo: this.extraInfo};
+                if (user.foodPreference != this.foodPreference) newUser = {
+                    ...newUser,
+                    foodPreference: this.foodPreference
+                };
 
-            UpdateSelf(newUser)
-                .then(() => {
-                    this.$local.user = {...this.$local.user, ...newUser };
-                    this.enabled = true;
-                    this.close();
-                }).catch(() => {
+                UpdateSelf(newUser)
+                    .then(() => {
+                        this.$local.user = {...this.$local.user, ...newUser};
+                        this.enabled = true;
+                        this.close();
+                    }).catch(() => {
                     this.enabled = true;
                 });
-        },
-        resetData: function() {
-            let user = this.$local.user;
+            },
+            resetData: function () {
+                let user = this.$local.user;
 
-            this.allergies = user.allergies ?? "";
-            this.extraInfo = user.extraInfo ?? "";
-            this.foodPreference = user.foodPreference ?? null;
-        }
-    },
-    mounted: function() {
-        this.resetData();
-    },
-    watch: {
-        isOpen: function(isOpen: boolean) {
-            if (!isOpen) return;
-            this.resetData();
-        }
-    },
-    computed: {
-        foodOptions: function(): FoodOptionSelection[] {
-            let options = this.allFoodOptions;
-
-            let sorted = SortedFoodOptions.map(function(option: FoodOption): FoodOptionSelection {
-                return {
-                    value: option,
-                    text: options[option]
-                }
-            });
-
-            return [
-                {value: null, text: options.none },
-                ...sorted
-            ]
-        },
-        allFoodOptions: function(): { [Property in FoodOption]: string } & {none:string} {
-            return {
-                none: this.$ll(this.$lang.text.foodOptions.none),
-                vegan: this.$ll(this.$lang.text.foodOptions.vegan),
-                vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
-                meat: this.$ll(this.$lang.text.foodOptions.meat),
+                this.allergies = user.allergies ?? "";
+                this.extraInfo = user.extraInfo ?? "";
+                this.foodPreference = user.foodPreference ?? null;
             }
         },
-        hasSettingsChanged: function(): boolean {
-            let user = this.$local.user;
-            return (user.allergies ?? "") != this.allergies ||
-                (user.extraInfo ?? "") != this.extraInfo ||
-                user.foodPreference != this.foodPreference;
+        mounted: function () {
+            this.resetData();
+        },
+        watch: {
+            isOpen: function (isOpen: boolean) {
+                if (!isOpen) return;
+                this.resetData();
+            }
+        },
+        computed: {
+            foodOptions: function (): FoodOptionSelection[] {
+                let options = this.allFoodOptions;
+
+                let sorted = SortedFoodOptions.map(function (option: FoodOption): FoodOptionSelection {
+                    return {
+                        value: option,
+                        text: options[option]
+                    }
+                });
+
+                return [
+                    {value: null, text: options.none},
+                    ...sorted
+                ]
+            },
+            allFoodOptions: function (): { [Property in FoodOption]: string } & { none: string } {
+                return {
+                    none: this.$ll(this.$lang.text.foodOptions.none),
+                    vegan: this.$ll(this.$lang.text.foodOptions.vegan),
+                    vegetarian: this.$ll(this.$lang.text.foodOptions.vegetarian),
+                    meat: this.$ll(this.$lang.text.foodOptions.meat),
+                }
+            },
+            hasSettingsChanged: function (): boolean {
+                let user = this.$local.user;
+                return (user.allergies ?? "") != this.allergies ||
+                    (user.extraInfo ?? "") != this.extraInfo ||
+                    user.foodPreference != this.foodPreference;
+            }
         }
-    }
-});
+    });
 </script>

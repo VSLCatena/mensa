@@ -4,6 +4,7 @@ import WithAuthentication from "../../common/usecase/WithAuthentication";
 
 
 export default async function UpdateSelf(user: UpdatableUser): Promise<void> {
-    return WithAuthentication((token: string|null) => repository.updateSelf(token as string, user))
-        .then(() => {});
+    return WithAuthentication((token: string | null) => repository.updateSelf(token as string, user))
+        .then(() => {
+        });
 }

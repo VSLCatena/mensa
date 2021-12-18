@@ -2,20 +2,25 @@
 
 namespace App\Models;
 
+use Database\Factories\SignupFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Signup
  *
  * @property int $id
  * @property string $signup_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @property int $cooks
  * @property int $dishwasher
  * @property int $food_option
@@ -27,14 +32,14 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $confirmation_code
  * @property string $user_id
  * @property string $mensa_id
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExtraOption[] $extraOptions
+ * @property-read Collection|ExtraOption[] $extraOptions
  * @property-read int|null $extra_options_count
- * @property-read \App\Models\Mensa $mensa
- * @property-read \App\Models\User $user
- * @method static \Database\Factories\SignupFactory factory(...$parameters)
+ * @property-read Mensa $mensa
+ * @property-read User $user
+ * @method static SignupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Signup newQuery()
- * @method static \Illuminate\Database\Query\Builder|Signup onlyTrashed()
+ * @method static Builder|Signup onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Signup query()
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereAllergies($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereConfirmationCode($value)
@@ -52,9 +57,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereSignupId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|Signup withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Signup withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Signup withTrashed()
+ * @method static Builder|Signup withoutTrashed()
+ * @mixin Eloquent
  */
 class Signup extends Model
 {

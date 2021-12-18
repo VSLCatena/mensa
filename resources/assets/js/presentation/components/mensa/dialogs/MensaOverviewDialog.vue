@@ -5,7 +5,7 @@
                 <v-card-title>{{ $ll($lang.text.signup.signups_for) }} {{ formattedDate }}</v-card-title>
             </v-toolbar>
             <div class="px-3 pt-3">
-                {{ $ll($lang.text.signup.signups_currently) }}<br />
+                {{ $ll($lang.text.signup.signups_currently) }}<br/>
                 <span class="text--secondary">{{ names }}</span>
             </div>
             <v-card-actions>
@@ -24,11 +24,11 @@
     import {formatDate} from "../../../formatters/DateFormatter";
 
     export default Vue.extend({
-        data: function() {
+        data: function () {
 
             return {
                 isOpen: false,
-                mensa: null as Mensa|null,
+                mensa: null as Mensa | null,
             }
         },
         methods: {
@@ -39,13 +39,13 @@
             },
         },
         computed: {
-            names: function(): string {
+            names: function (): string {
                 let signups = this.mensa?.signups;
                 if (Number.isInteger(signups) || this.$local.user == AnonymousUser) return "";
 
                 return formatUsers(signups as SimpleUser[]) ?? "";
             },
-            formattedDate: function(): string | null {
+            formattedDate: function (): string | null {
                 let mensa = this.mensa;
                 if (mensa == null || this.$local.user == AnonymousUser) return null;
 

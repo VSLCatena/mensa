@@ -14,7 +14,7 @@ export default interface Mensa {
     closingTime: Date,
     price: number,
     maxSignups: number,
-    signups: number|SimpleUser[],
+    signups: number | SimpleUser[],
     cooks: SimpleUser[],
     dishwashers: number,
 }

@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use Database\Factories\MensaFactory;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -12,8 +17,8 @@ use Illuminate\Support\Str;
  * App\Models\Mensa
  *
  * @property string $id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property string $title
  * @property string $description
@@ -23,33 +28,33 @@ use Illuminate\Support\Str;
  * @property int $food_options
  * @property int $closed
  * @property float $price
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExtraOption[] $extraOptions
+ * @property-read Collection|ExtraOption[] $extraOptions
  * @property-read int|null $extra_options_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Log[] $logs
+ * @property-read Collection|Log[] $logs
  * @property-read int|null $logs_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MenuItem[] $menuItems
+ * @property-read Collection|MenuItem[] $menuItems
  * @property-read int|null $menu_items_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $orderedUsers
+ * @property-read Collection|Signup[] $orderedUsers
  * @property-read int|null $ordered_users_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Signup[] $users
+ * @property-read Collection|Signup[] $users
  * @property-read int|null $users_count
- * @method static \Database\Factories\MensaFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa query()
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereClosed($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereClosingTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereFoodOptions($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereMaxUsers($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa wherePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Mensa whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static MensaFactory factory(...$parameters)
+ * @method static Builder|Mensa newModelQuery()
+ * @method static Builder|Mensa newQuery()
+ * @method static Builder|Mensa query()
+ * @method static Builder|Mensa whereClosed($value)
+ * @method static Builder|Mensa whereClosingTime($value)
+ * @method static Builder|Mensa whereCreatedAt($value)
+ * @method static Builder|Mensa whereDate($value)
+ * @method static Builder|Mensa whereDeletedAt($value)
+ * @method static Builder|Mensa whereDescription($value)
+ * @method static Builder|Mensa whereFoodOptions($value)
+ * @method static Builder|Mensa whereId($value)
+ * @method static Builder|Mensa whereMaxUsers($value)
+ * @method static Builder|Mensa wherePrice($value)
+ * @method static Builder|Mensa whereTitle($value)
+ * @method static Builder|Mensa whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Mensa extends Model
 {

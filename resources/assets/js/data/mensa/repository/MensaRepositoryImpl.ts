@@ -1,5 +1,4 @@
 import Mensa from '../../../domain/mensa/model/Mensa';
-import MensaSignup from '../../../domain/signup/model/MensaSignup';
 import {MensaRepository} from '../../../domain/mensa/repository/MensaRepository';
 import Config from '../../../Config';
 import MapMensas from "../mapper/MapMensas";
@@ -7,7 +6,6 @@ import axios from "axios";
 import MensaList from "../../../domain/mensa/model/MensaList";
 import MapResponse from "../../utils/MapResponse";
 import WithAuthHeader, {OptionalAuthHeader} from "../../utils/WithAuthHeader";
-import EditMensa from "../../../domain/mensa/model/EditMensa";
 import MensaRequestModel from "../model/MensaRequestModel";
 
 class MensaRepositoryImpl implements MensaRepository {

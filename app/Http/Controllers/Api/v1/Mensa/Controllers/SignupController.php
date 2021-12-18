@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
 use App\Models\Mensa;
 use App\Models\Signup;
 use App\Models\User;
+use Error;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -97,12 +98,12 @@ class SignupController extends Controller
         if ($previousSignups->count() > 0) {
             if ($request->isMethod(Request::METHOD_POST)) {
                 abort(Response::HTTP_BAD_REQUEST);
-                throw new \Error(); // For lint
+                throw new Error(); // For lint
             }
         } else {
             if ($request->isMethod(Request::METHOD_PUT)) {
                 abort(Response::HTTP_BAD_REQUEST);
-                throw new \Error(); // For lint
+                throw new Error(); // For lint
             }
         }
 
@@ -314,7 +315,7 @@ class SignupController extends Controller
             return $user;
         } catch (ClientExceptionInterface) {
             abort(Response::HTTP_BAD_GATEWAY);
-            throw new \Error(); // For lint
+            throw new Error(); // For lint
         }
     }
 }
