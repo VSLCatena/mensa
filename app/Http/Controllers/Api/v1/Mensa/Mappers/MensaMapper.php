@@ -51,8 +51,8 @@ trait MensaMapper {
 
             cooks: array_values(array_map($userSignupMapper, $cooks)),
             foodOptions: self::mapFoodOptionsFromIntToNames($mensa->food_options),
-            menu: array_map(function($item) { return self::mapMenuItem($item); }, $menu),
-            extraOptions: array_map(function ($option) { return self::mapExtraOptions($option); }, $options),
+            menu: self::mapMenuItems($menu),
+            extraOptions: self::mapExtraOptions($options),
         );
     }
 }
