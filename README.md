@@ -1,58 +1,87 @@
 [![Docker (Branch: feature/docker)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml/badge.svg?branch=feature%2docker)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml)
 [![Laravel (Branch: feature/revamp)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml/badge.svg?branch=feature%2Frevamp)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml)
 [![Laravel (Branch: development)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml/badge.svg?branch=development)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml)
+
+
 # mensa
+Mensa is an enrollment system for dinner that we use at our student association.
+You can create dinners and assign them to cooks, who can change the dinner by adding a menu and changing some extra 
+info.
+
+The back-end works through a PHP server, the front-end is html/javascript which talks to back-end through AJAX calls.
+This means that with very little adjustments you could split front-end from back-end.
 
 
-## **Docker**
+## Setup
 
-- With the exeption of the database root password every parameter / environment variable is retrieved using .env
-- Change .env and docker-compose to specific values
-#### **Build image yourself**
-- Check your current user id using `id -u` , should be the owner of the files of this repo
-- Set `WWW_UID` argument in docker-compose.yml to that specific value.
-- Execute `docker-compose up --build --force-recreate --detach` to build and serve the app
+### .env file
+All configuration of the app itself should be doable through the .env file.
+If you don't have a .env file available, you can duplicate the .env.example file to create a new .env file.
 
-#### **Use image from repository**
-- Login to GitHub and save token `export CR_PAT=YOUR_TOKEN; echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin`
-- Execute `docker-compose up --detach` to serve the app
+### Authorization
+For authorization we use OAuth for Azure Active Directory. For this you'll need to register an app in Azure Active 
+Directory. You can do this by going to Azure Active Directory -> App registrations -> New registration.
 
-#### **Clear the docker environment to default**
-> **Note:** Some directories and files in the repo may have been changed like `vendor`, `storage` and `composer.lock` 
-- Execute `docker-compose down --volumes`
+#### Setup
+- In _Authentication_ you will need to add a **redirectUri**. For debugging you could add for example 
+  `http://localhost:8000/login/token`
+- In _Api permissions_ you'll need to give the app the permissions: `GroupMember.Read.All`, `User.Read` and 
+  `User.Read.All`
+- In _Certificates & secrets_ you will have to create a **New client secret**. Save the secret you receive.
 
-#### **Debugging**
-- Read logs using `docker-compose logs --tail="50" [optional: container_name]`
-- Execute `artisan` or `compose` commands use `docker exec -it app /data/entrypoint.sh COMMANDS HERE` 
-- To use `phpMyAdmin` add `--profile testing` before the `up` argument.
+#### Now in .env you'll have to add some values:
+Unless specified, all of these values can be grabbed from the _Overview_ tab on the App page in Azure AD.
+- _AZURE_TENANT_ID_ is **Directory (tenant) ID**
+- _AZURE_CLIENT_ID_ is **Application (client) ID**
+- _AZURE_CLIENT_SECRET_ is the **secret** you received from creating a new secret in _Certificates & secrets_
+- _AZURE_REDIRECT_URI_ is the **redirectUri** you filled in in the _Authentication_ tab.
+
+The variables with the **REMOTE_USER_** prefix work a little bit different.
+- For _REMOTE_USER_ADMIN_GROUP_ID_ Choose or create an Azure group that will contain all the admins of the application.
+  The **Object Id** is what you'll need for the .env file.
+- _REMOTE_USER_UPDATE_TIME_ is the amount of seconds it will wait before grabbing the user from the remote server 
+  (Azure) again. This is to reduce the amount of Azure calls. 
+  - A log in always does an Azure call, but an already logged in user waits this amount of seconds before it checks on
+    the remote server again. So keep in mind that revoking permissions is not instantaneous!
+- _REMOTE_USER_EMAIL_SUFFIX_ is the email suffix for our principial name. We allow people to give up their email or 
+  their username. The only way to get the user by username is by pricipial name, which is for us: 
+  `username@vslcatena.nl`. So for us this would be `@vslcatena.nl`.
+  
+
+### Building the app
+For production I recommend to look at, and following the 
+[Laravel deployment page](https://laravel.com/docs/8.x/deployment). 
+Here you can see the laravel requirements and some optimizations you can do for Laravel such as caching options.
+
+#### Here are just the bare minimals for development purposes:
+To set up composer (Package manager for PHP):  
+`composer install`
+
+To set up npm/yarn (Package managers for Javascript):  
+`npm install`  
+`yarn install`  
+`npm run dev`
+
+To run migrations:  
+`php artisan migrate`
+
+To fill in mock data in the database:  
+`php artisan db:seed`
 
 
-<a href="https://mermaid-js.github.io/mermaid-live-editor/edit/##eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbnN1YmdyYXBoIERvY2tlciBFbnZpcm9ubWVudFxuREMoKGRvY2tlci1jb21wb3NlLnltbCkpXG5BUFB7YXBwfVxuc3ViZ3JhcGggT3B0aW9uYWxcblB7UGhwTXlBZG1pbn1cbmVuZFxuREJbKGRiKV1cbkRJKFtEb2NrZXJmaWxlXSlcbmVuZFxuQlJbW1dlYiBJbnRlcmZhY2VdXVxuUltNZW5zYSBSZXBvc2l0b3J5XVxuREIgPD09PiBBUFBcblAgPT1WaWV3L0FsdGVyPT0-IERCXG5EQyAtLi0gUlxuREMgLS5idWlsZCBpbWFnZS4tPiBESVxuREkgLS5zdGFydCBjb250YWluZXIuLT4gQVBQXG5EQyAtLnN0YXJ0IGNvbnRhaW5lci4tPiBEQlxuQVBQIDw9PW1vdW50OnJ3ID09PiBSXG5CUiA9PSBwb3J0IDgwODEgPT0-IFBcbkRDIC0uc3RhcnQgY29udGFpbmVyLi0-IFBcbkJSID09cG9ydCAxMjM0PT0-IEFQUFxuXG4iLCJtZXJtYWlkIjoie1xuICBcInRoZW1lXCI6IFwiZGFyXCIsXG4gIFwidGhlbWVWYXJpYWJsZXNcIjogeyBcbiAgICAgIFwiZGFya21vZGVcIjpcInRydWVcIlxuICAgICAgfVxufSIsInVwZGF0ZUVkaXRvciI6ZmFsc2UsImF1dG9TeW5jIjp0cnVlLCJ1cGRhdGVEaWFncmFtIjpmYWxzZX0">
-<img src="https://mermaid.ink/img/eyJjb2RlIjoiXG5mbG93Y2hhcnQgVERcbnN1YmdyYXBoIERvY2tlciBFbnZpcm9ubWVudFxuREMoKGRvY2tlci1jb21wb3NlLnltbCkpXG5BUFB7YXBwfVxuc3ViZ3JhcGggT3B0aW9uYWxcblB7UGhwTXlBZG1pbn1cbmVuZFxuREJbKGRiKV1cbkRJKFtEb2NrZXJmaWxlXSlcbmVuZFxuQlJbW1dlYiBJbnRlcmZhY2VdXVxuUltNZW5zYSBSZXBvc2l0b3J5XVxuREIgPD09PiBBUFBcblAgPT1WaWV3L0FsdGVyPT0-IERCXG5EQyAtLi0gUlxuREMgLS5idWlsZCBpbWFnZS4tPiBESVxuREkgLS5zdGFydCBjb250YWluZXIuLT4gQVBQXG5EQyAtLnN0YXJ0IGNvbnRhaW5lci4tPiBEQlxuQVBQIDw9PW1vdW50OnJ3ID09PiBSXG5CUiA9PSBwb3J0IDgwODEgPT0-IFBcbkRDIC0uc3RhcnQgY29udGFpbmVyLi0-IFBcbkJSID09cG9ydCAxMjM0PT0-IEFQUFxuXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGFyayIsInRoZW1lVmFyaWFibGVzIjp7ImRhcmttb2RlIjoidHJ1ZSJ9fSwidXBkYXRlRWRpdG9yIjpmYWxzZSwiYXV0b1N5bmMiOnRydWUsInVwZGF0ZURpYWdyYW0iOmZhbHNlfQ" alt="
-<!--
-https://mermaid-js.github.io/mermaid-live-editor/edit
-flowchart TD
-subgraph Docker Environment
-DC((docker-compose.yml))
-APP{app}
-subgraph Optional
-P{PhpMyAdmin}
-end
-DB[(db)]
-DI([Dockerfile])
-end
-BR[[Web Interface]]
-R[Mensa Repository]
-DB <==> APP
-P ==View/Alter==> DB
-DC -.- R
-DC -.build image.-> DI
-DI -.start container.-> APP
-DC -.start container.-> DB
-APP <==mount:rw ==> R
-BR == port 8081 ==> P
-DC -.start container.-> P
-BR ==port 1234==> APP
--->
-" width="" height="700">
-</a>
+
+## Running the app for development
+For running the PHP server:  
+`php artisan serve`  
+This will keep a server running, and changes are reflected immediately.  
+
+For compiling the front-end source:  
+`npm run watch`  
+This will keep npm running, a new build will automatically start on every file changes,
+so changes are reflected on page refresh.
+
+These two commands have made my life a lot better :)
+
+
+## Docker
+Info about how to get it working in docker can be found [Here](docs/DOCKER.md)
