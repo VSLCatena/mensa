@@ -22,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
         $this->app->bind(RemoteUserLookup::class, AzureUserLookup::class);
+
+        \URL::forceScheme('https');
+        setlocale(LC_TIME, "nl_NL");
     }
 
     /**
