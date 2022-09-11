@@ -1,73 +1,67 @@
-version: '3.8'
-
-x-common-variables: &db_root_password
-    'mensa'
-#<<: *db_root_password
-#MYSQL_ROOT_PASSWORD:*db_root_password
-
+# For more information: https://laravel.com/docs/sail
+version: '3'
 services:
-
-  #MySQL Service
-  db:
-    hostname: db
-    container_name: db
-    image: 'yobasystems/alpine-mariadb:latest'
-    environment:
-      MYSQL_ROOT_PASSWORD: *db_root_password
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER:  ${DB_USERNAME}
-      MYSQL_PASSWORD:  ${DB_PASSWORD}
-    volumes:
-      - dbdata:/var/lib/mysql/ # allows you to stop and restart the db service without losing data
-      - ./etc/mysql/my.cnf:/etc/mysql/my.cnf
-    networks:
-      - net
-
-  #PHP Service
-  app:
-    hostname: app
-    # before pulling the image do this or it wont work --> export CR_PAT=YOUR_TOKEN; echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
-    #image: 'ghcr.io/vslcatena/mensa:feature-docker' 
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args: 
-        WWW_UID: 1000 # $(id $USER -u) , default user laravel folder
-        WWW_GID: 33 # can be kept on www-data (33)
-    container_name: app
-    depends_on:
-      - db
-    ports:
-      - 1234:8080
-    command: run #init, composer, artisan
-    volumes:
-      - "./etc/php/local.ini:/usr/local/etc/php/conf.d/local.ini"
-      - .:/data/app:rw
-    networks:
-      - net
-     
+    laravel.test:
+        build:
+            context: ./vendor/laravel/sail/runtimes/8.1
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.1/app
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+        environment:
+            WWWUSER: '${WWWUSER}'
+            LARAVEL_SAIL: 1
+            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+        volumes:
+            - '.:/var/www/html'
+        networks:
+            - sail
+        depends_on:
+            - mariadb
+    mariadb:
+        image: 'mariadb:10'
+        ports:
+            - '${FORWARD_DB_PORT:-3306}:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ROOT_HOST: "%"
+            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_USER: '${DB_USERNAME}'
+            MYSQL_PASSWORD: '${DB_PASSWORD}'
+            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+        volumes:
+            - 'sail-mariadb:/var/lib/mysql'
+            - './vendor/laravel/sail/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+        networks:
+            - sail
+        healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
+            retries: 3
+            timeout: 5s
+  
   #phpmyadmin
   phpmyadmin:
     image: ghcr.io/linuxserver/phpmyadmin
     hostname: phpmyadmin
     container_name: phpmyadmin
-    profiles:
-      - testing
     environment:
-      PMA_HOST: ${DB_HOST}
+      PMA_HOST: mariadb
       PMA_USER: root
-      PMA_PASSWORD: *db_root_password
+      PMA_PASSWORD: '${DB_PASSWORD}'
     ports:
-      - "8082:80"
+      - "8181:80"
     networks:
-      - net
-
-
-
-#Docker Networks
+      - sail            
+      
 networks:
-  net:
-    driver: bridge
+    sail:
+        driver: bridge
 volumes:
-  dbdata:
-    driver: local
+    sail-mariadb:
+        driver: local

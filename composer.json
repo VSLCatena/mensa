@@ -25,6 +25,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.5.2",
         "filp/whoops": "^2.9.2",
+        "laravel/sail": "^1.16",
         "mockery/mockery": "^1.4.3",
         "phpunit/phpunit": "^9.5.2"
     },
