@@ -45,19 +45,19 @@ services:
             retries: 3
             timeout: 5s
   
-  #phpmyadmin
-  phpmyadmin:
-    image: ghcr.io/linuxserver/phpmyadmin
-    hostname: phpmyadmin
-    container_name: phpmyadmin
-    environment:
-      PMA_HOST: mariadb
-      PMA_USER: root
-      PMA_PASSWORD: '${DB_PASSWORD}'
-    ports:
-      - "8181:80"
-    networks:
-      - sail            
+    #phpmyadmin
+    phpmyadmin:
+        image: ghcr.io/linuxserver/phpmyadmin
+        hostname: phpmyadmin
+        container_name: phpmyadmin
+        environment:
+            PMA_HOST: mariadb
+            PMA_USER: root
+            PMA_PASSWORD: '${DB_PASSWORD}'
+        ports:
+          - "8181:80"
+        networks:
+          - sail            
       
 networks:
     sail:
