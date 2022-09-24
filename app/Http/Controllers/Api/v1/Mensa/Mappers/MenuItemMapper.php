@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemItem;
+use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemResponseModel;
 use App\Models\MenuItem;
 
 trait MenuItemMapper
@@ -10,11 +10,11 @@ trait MenuItemMapper
 
     /**
      * @param $menuItem MenuItem
-     * @return MenuItemItem
+     * @return MenuItemResponseModel
      */
-    function mapMenuItem(MenuItem $menuItem): MenuItemItem
+    function mapMenuItem(MenuItem $menuItem): MenuItemResponseModel
     {
-        return new MenuItemItem(
+        return new MenuItemResponseModel(
             id: $menuItem->id,
             text: $menuItem->text
         );
@@ -22,7 +22,7 @@ trait MenuItemMapper
 
     /**
      * @param MenuItem[] $menuItems
-     * @return MenuItemItem[]
+     * @return MenuItemResponseModel[]
      */
     function mapMenuItems(array $menuItems): array
     {

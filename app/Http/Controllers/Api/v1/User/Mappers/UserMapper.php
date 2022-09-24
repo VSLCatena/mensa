@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v1\User\Mappers;
 
 use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
-use App\Http\Controllers\Api\v1\User\Models\UserSelf;
+use App\Http\Controllers\Api\v1\User\Models\UserResponseModel;
 use App\Models\User;
 
 trait UserMapper
@@ -12,7 +12,7 @@ trait UserMapper
 
     function mapUser(User $user)
     {
-        return new UserSelf(
+        return new UserResponseModel(
             id: $user->id,
             name: $user->name,
             email: $user->email,

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class ExtraOptionItem
+class ExtraOptionResponseModel
 {
     /**
-     * ExtraOptionItem constructor.
+     * ExtraOptionResponseModel constructor.
      * @param string $id
      * @param string $description
      * @param int $order

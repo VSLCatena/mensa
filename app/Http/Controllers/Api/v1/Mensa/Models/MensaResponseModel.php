@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MensaItem
+class MensaResponseModel
 {
     /**
-     * MensaItem constructor.
+     * MensaResponseModel constructor.
      * @param string $id
      * @param string $title
      * @param string $description
@@ -13,13 +13,13 @@ class MensaItem
      * @param int $closingTime
      * @param bool $isClosed
      * @param int $maxSignups
-     * @param int|SimpleUserItem[] $signups
+     * @param int|SimpleUserResponseModel[] $signups
      * @param int $dishwashers
      * @param float $price
-     * @param SimpleUserItem[] $cooks
+     * @param SimpleUserResponseModel[] $cooks
      * @param string[] $foodOptions
-     * @param MenuItemItem[] $menu
-     * @param ExtraOptionItem[] $extraOptions
+     * @param MenuItemResponseModel[] $menu
+     * @param ExtraOptionResponseModel[] $extraOptions
      */
     public function __construct(
         public string $id,

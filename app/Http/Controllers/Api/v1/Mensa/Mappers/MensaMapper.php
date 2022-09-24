@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
 use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Mensa\Models\MensaDetailItem;
-use App\Http\Controllers\Api\v1\Mensa\Models\MensaItem;
+use App\Http\Controllers\Api\v1\Mensa\Models\MensaResponseModel;
 use App\Models\ExtraOption;
 use App\Models\Mensa;
 use App\Models\MenuItem;
@@ -19,7 +19,7 @@ trait MensaMapper
      * @param Signup[] $users
      * @param MenuItem[] $menu
      * @param ExtraOption[] $options
-     * @return MensaItem
+     * @return MensaResponseModel
      */
     function mapMensa(
         Mensa $mensa,
@@ -27,7 +27,7 @@ trait MensaMapper
         array $menu,
         array $options,
         bool $isLoggedIn
-    ): MensaItem
+    ): MensaResponseModel
     {
         $dishwashers = array_filter($users, function ($user) {
             return $user->dishwasher;
@@ -45,7 +45,7 @@ trait MensaMapper
             $signups = array_map($userSignupMapper, $users);
         }
 
-        return new MensaItem(
+        return new MensaResponseModel(
             id: $mensa->id,
             title: $mensa->title,
             description: $mensa->description,

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\User\Models;
 
-class UserSelf
+class UserResponseModel
 {
     public function __construct(
         public string $id,
