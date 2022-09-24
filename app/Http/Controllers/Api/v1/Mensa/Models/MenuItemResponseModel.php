@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MenuItemItem
+class MenuItemResponseModel
 {
     /**
-     * MenuItemItem constructor.
+     * MenuItemResponseModel constructor.
      * @param string $id
      * @param string $text
      */
