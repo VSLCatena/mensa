@@ -79,7 +79,7 @@ class DatabaseSeeder extends Seeder
     private function faqSeeder()
     {
         Faq::factory()
-            ->count(30)
+            ->count(12)
             ->create();
     }
 }

@@ -19,6 +19,7 @@ import LoginToken from "./presentation/pages/login/LoginToken.vue";
 import GetSelf from "./domain/user/usecase/GetSelf";
 import {defaultData} from "./Local";
 import GetAppConfig from "./domain/appconfig/usecase/GetAppConfig";
+import Faq from "./presentation/pages/faq/Faq.vue";
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -31,7 +32,7 @@ Vue.use(Vuetify);
 
 const routes = [
     {path: '/', component: Home},
-    {path: '/mensa', component: Mensa},
+    {path: '/faq', component: Faq},
     {path: '/login/token', component: LoginToken}
 ];
 

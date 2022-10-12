@@ -36,8 +36,6 @@ class FaqController extends Controller
                 return self::mapFaq($faq);
             });
 
-        return response()->json([
-            "faqs" => $faqs
-        ]);
+        return response()->json($faqs);
     }
 }

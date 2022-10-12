@@ -7,9 +7,9 @@
             </div>
             <v-spacer></v-spacer>
             <v-fade-transition leave-absolute>
-                <div class="flex-grow-0 mr-5 text-no-wrap" v-if="!open">
+                <div class="flex-grow-0 mr-5 text-no-wrap align text-right" v-if="!open">
                     {{ signupCount }} / {{ mensa.maxSignups }}<br/>
-                    {{ dishwasherCount }}
+                    <span v-if="dishwasherCount != null">{{ dishwasherCount }}</span>
                 </div>
             </v-fade-transition>
         </v-expansion-panel-header>
@@ -146,13 +146,12 @@
                 }
                 return users;
             },
-            dishwasherCount: function (): string {
+            dishwasherCount: function (): string | null {
                 let ref = this.$lang.text.mensa.dishwasher_count;
                 let textRef: LanguageText;
                 switch (this.mensa.dishwashers) {
                     case 0:
-                        textRef = ref.zero;
-                        break;
+                        return null;
                     case 1:
                         textRef = ref.one;
                         break;

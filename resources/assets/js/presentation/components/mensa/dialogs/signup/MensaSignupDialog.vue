@@ -56,13 +56,13 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import Mensa from "../../../../domain/mensa/model/Mensa";
-    import {formatDate} from "../../../formatters/DateFormatter";
-    import MensaSignup from "../../../../domain/signup/model/MensaSignup";
-    import MensaSignupEntry from "./signup/MensaSignupEntry.vue";
-    import {Validations} from "../../../utils/ValidationRules";
-    import {User} from "../../../../domain/common/model/User";
-    import SignupMensa from "../../../../domain/signup/usecase/SignupMensa";
+    import Mensa from "../../../../../domain/mensa/model/Mensa";
+    import {formatDate} from "../../../../formatters/DateFormatter";
+    import MensaSignup from "../../../../../domain/signup/model/MensaSignup";
+    import MensaSignupEntry from "./MensaSignupEntry.vue";
+    import {Validations} from "../../../../utils/ValidationRules";
+    import {User} from "../../../../../domain/common/model/User";
+    import SignupMensa from "../../../../../domain/signup/usecase/SignupMensa";
 
     export default Vue.extend({
         components: {MensaSignupEntry},

@@ -19,7 +19,11 @@
             </div>
         </v-banner>
 
-        <v-expansion-panels focusable accordion v-model="openedItem" class="mt-4">
+        <div class="mt-4" v-if="loading">
+            <v-skeleton-loader v-for="x in 5" :key="x" type="list-item-two-line" class="mt-1" />
+        </div>
+
+        <v-expansion-panels v-else focusable accordion v-model="openedItem" class="mt-4">
             <MensaItem
                 v-for="mensa in this.mensas" :key="mensa.id"
                 :mensa="mensa"
@@ -41,10 +45,10 @@
     import MensaItem from '../../components/mensa/MensaItem.vue';
     import {Between} from "../../../domain/mensa/model/MensaList";
     import {formatDate} from "../../formatters/DateFormatter";
-    import MensaSignupDialog from "../../components/mensa/dialogs/MensaSignupDialog.vue";
-    import MensaOverviewDialog from "../../components/mensa/dialogs/MensaOverviewDialog.vue";
+    import MensaSignupDialog from "../../components/mensa/dialogs/signup/MensaSignupDialog.vue";
+    import MensaOverviewDialog from "../../components/mensa/dialogs/overview/MensaOverviewDialog.vue";
     import {AuthUser} from "../../../domain/common/model/User";
-    import MensaEditDialog from "../../components/mensa/dialogs/MensaEditDialog.vue";
+    import MensaEditDialog from "../../components/mensa/dialogs/mensa/MensaEditDialog.vue";
 
     export default Vue.extend({
         components: {MensaEditDialog, MensaOverviewDialog, MensaSignupDialog, MensaItem},

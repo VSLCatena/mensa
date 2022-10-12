@@ -93,7 +93,7 @@
                                     class="py-0"
                                     cols="12" md="4" sm="12"
                                     v-for="(value, key) in allFoodOptions"
-                                    :key="item">
+                                    :key="key">
                                     <v-checkbox
                                         v-model="editor.foodOptions"
                                         :disabled="loading"
@@ -207,15 +207,15 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {formatDate} from "../../../formatters/DateFormatter";
-    import {MAX_STRING_LENGTH, Validations} from "../../../utils/ValidationRules";
-    import DateTimePicker from "../../common/DateTimePicker.vue";
-    import UpdateMensa from "../../../../domain/mensa/usecase/UpdateMensa";
+    import {formatDate} from "../../../../formatters/DateFormatter";
+    import {MAX_STRING_LENGTH, Validations} from "../../../../utils/ValidationRules";
+    import DateTimePicker from "../../../common/DateTimePicker.vue";
+    import UpdateMensa from "../../../../../domain/mensa/usecase/UpdateMensa";
     import draggable from 'vuedraggable';
-    import EditMensa from "../../../../domain/mensa/model/EditMensa";
+    import EditMensa from "../../../../../domain/mensa/model/EditMensa";
     import {v4 as uuidv4} from "uuid";
-    import FoodOption from "../../../../domain/mensa/model/FoodOption";
-    import MensaSignup from "../../../../domain/signup/model/MensaSignup";
+    import FoodOption from "../../../../../domain/mensa/model/FoodOption";
+    import MensaSignup from "../../../../../domain/signup/model/MensaSignup";
 
     interface TempMenuItem {
         draggableId: string,

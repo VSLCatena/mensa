@@ -4,8 +4,8 @@
         <v-app-bar app>
             <v-toolbar-title class="me-3">{{ appName }}</v-toolbar-title>
             <v-toolbar-items>
-                <v-btn to="/" text>Home</v-btn>
-                <v-btn to="/mensa" text>Mensa</v-btn>
+                <v-btn to="/" text>{{ $ll($lang.text.menu.home) }}</v-btn>
+                <v-btn to="/faq" text>{{ $ll($lang.text.menu.faq) }}</v-btn>
             </v-toolbar-items>
             <v-spacer></v-spacer>
             <v-icon large class="mx-4" @click="openLogin()">mdi-account</v-icon>

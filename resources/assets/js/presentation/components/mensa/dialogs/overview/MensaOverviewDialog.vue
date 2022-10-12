@@ -18,10 +18,10 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import Mensa from "../../../../domain/mensa/model/Mensa";
-    import {formatUsers} from "../../../formatters/StringFormatter";
-    import {AnonymousUser, SimpleUser} from "../../../../domain/common/model/User";
-    import {formatDate} from "../../../formatters/DateFormatter";
+    import Mensa from "../../../../../domain/mensa/model/Mensa";
+    import {formatUsers} from "../../../../formatters/StringFormatter";
+    import {AnonymousUser, SimpleUser} from "../../../../../domain/common/model/User";
+    import {formatDate} from "../../../../formatters/DateFormatter";
 
     export default Vue.extend({
         data: function () {

@@ -36,6 +36,14 @@ const text = {
         en: "and"
     },
     menu: {
+        home: {
+            nl: "Home",
+            en: "Home",
+        },
+        faq: {
+            nl: "FAQ",
+            en: "FAQ",
+        },
         account: {
             nl: "Account",
             en: "Account",
@@ -66,7 +74,7 @@ const text = {
         },
         previous_weeks: {
             nl: "-2 weken",
-            en: "+2 weeks",
+            en: "-2 weeks",
         },
         signups: {
             nl: "Inschrijvingen",
@@ -89,10 +97,6 @@ const text = {
             en: "Dishwashers",
         },
         dishwasher_count: {
-            zero: {
-                nl: '%s afwassers',
-                en: '%s dishwashers',
-            },
             one: {
                 nl: '%s afwasser',
                 en: '%s dishwasher',
@@ -219,6 +223,28 @@ const text = {
         error: {
             nl: "Er ging iets in bij het inloggen, probeer het later opnieuw.",
             en: "Something went wrong trying to log in, try again later",
+        }
+    },
+    faq: {
+        title: {
+            nl: 'FAQ',
+            en: 'FAQ',
+        },
+        dialog: {
+            edit: {
+                title: {
+                    nl: 'FAQ item aanpassen',
+                    en: 'Edit FAQ item',
+                },
+                question: {
+                    nl: 'Vraag',
+                    en: 'Question',
+                },
+                answer: {
+                    nl: 'Antwoord',
+                    en: 'Answer',
+                }
+            },
         }
     },
     profile: {
