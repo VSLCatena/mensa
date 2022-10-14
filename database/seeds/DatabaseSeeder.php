@@ -63,6 +63,7 @@ class DatabaseSeeder extends Seeder
                     ->createOne();
 
                 \App\Models\Log::factory()
+                    ->state(['category' => 'mensa'])
                     ->for($user)
                     ->for($mensa)
                     ->create();

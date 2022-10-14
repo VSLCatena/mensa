@@ -90,7 +90,7 @@ class Mensa extends Model
 
     public function logs(): HasMany
     {
-        return $this->hasMany(Log::class);
+        return $this->hasMany(Log::class,'objectId');
     }
 
     public function menuItems(): HasMany

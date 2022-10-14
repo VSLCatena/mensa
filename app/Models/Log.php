@@ -42,7 +42,7 @@ class Log extends Model
 
     public function mensa(): BelongsTo
     {
-        return $this->belongsTo(Mensa::class, 'mensa_id');
+        return $this->belongsTo(Mensa::class, 'object_id');
     }
 
     public function user(): BelongsTo
