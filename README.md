@@ -59,7 +59,11 @@ Some important Sail commands:
 - `./vendor/bin/sail composer` Run an composer command
 - `./vendor/bin/sail root-shell`  Start a root shell session within the application container
 - `./vendor/bin/sail shell` Start a shell session within the application container
-
+#### Permissions (when using safe-docker / Rootless mode)
+- `drwxrwxr-x  <items> <in-container uid> <regular username>  <size> <timestamp> FOLDER` 
+  - Sail Artisan can create files 
+- `-rw-rw-r--  <items> <regular username> <regular username>  <size> <timestamp> FILE`  
+  - You can upload files using sftp
 
 ### Building the app (using regular webserver)
 For production I recommend to look at, and following the 
