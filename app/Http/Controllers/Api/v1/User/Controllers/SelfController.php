@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Models\Log;
+use App\Models\User;
 
 class SelfController extends Controller
 {
@@ -26,6 +27,7 @@ class SelfController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+        $this->systemUser = User::where('name', 'SYSTEM')->first();
     }
 
     /**
@@ -40,7 +42,7 @@ class SelfController extends Controller
         if ($user == null) {
             $log = new Log;
             $log->category = "SelfController";
-            $log->user_id = "SYSTEM";
+            $log->user_id = $this->systemUser->id;
             $log->text = "getSelf Auth returned null for " . $request -> getClientIp();
             $log->save();            
             abort(Response::HTTP_UNAUTHORIZED);
@@ -61,7 +63,8 @@ class SelfController extends Controller
         if ($user == null) {
             $log = new Log;
             $log->category = "SelfController";
-            $log->user_id = "SYSTEM";
+            $log->user_id = $user->id;
+            $log->object_id = $user->id;
             $log->text = "updateSelf Auth returned null for " . $request -> getClientIp();
             $log->save();                        
             abort(Response::HTTP_UNAUTHORIZED);
@@ -76,7 +79,8 @@ class SelfController extends Controller
         if ($validator->fails()) {
             $log = new Log;
             $log->category = "SelfController";
-            $log->user_id = "SYSTEM";
+            $log->user_id = $user->id;
+            $log->object_id = $user->id;
             $log->text = "updateSelf validator failed for $user->name";
             $log->save();             
             return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
@@ -91,7 +95,8 @@ class SelfController extends Controller
         
         $log = new Log;
         $log->category = "SelfController";
-        $log->user_id = "SYSTEM";
+        $log->user_id = $user->id;
+        $log->object_id = $user->id;        
         $log->text = "updateSelf performed for ". $user->name;
         $log->save();       
         return null;

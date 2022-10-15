@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Laravel\Socialite\Facades\Socialite;
 
 use App\Models\Log;
+use App\Models\User;
 
 class GetAuthorizationUrlController extends Controller
 {
@@ -19,6 +20,7 @@ class GetAuthorizationUrlController extends Controller
      */
     public function __construct()
     {
+        $this->systemUser = User::where('name', 'SYSTEM')->first();
     }
 
     /**
@@ -34,7 +36,8 @@ class GetAuthorizationUrlController extends Controller
     {
         $log = new Log;
         $log->category = "GetAuthorizationUrlController";
-        $log->user_id = "SYSTEM";
+        $log->user_id = $this->systemUser->id;
+        $log->object_id = $this->systemUser->id;
         $log->text = "New AuthorizationUrlRequest from " . $request->getClientIp();
         $log->save();
         return response()->json([

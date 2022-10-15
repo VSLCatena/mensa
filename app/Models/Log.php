@@ -43,11 +43,7 @@ class Log extends Model
     
     protected $keyType = 'string';
     public $incrementing = false;
-    
-    protected $fillable = [
-        'object_id', 'user_id', 'category', 'text',
-    ];    
-    
+
     public function mensa(): BelongsTo
     {
         return $this->belongsTo(Mensa::class, 'object_id');
