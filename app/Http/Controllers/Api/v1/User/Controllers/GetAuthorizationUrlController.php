@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Laravel\Socialite\Facades\Socialite;
 
+use App\Models\Log;
+
 class GetAuthorizationUrlController extends Controller
 {
 
@@ -30,6 +32,11 @@ class GetAuthorizationUrlController extends Controller
      */
     public function __invoke(Request $request): JsonResponse
     {
+        $log = new Log;
+        $log->category = "GetAuthorizationUrlController";
+        $log->user_id = "SYSTEM";
+        $log->text = "New AuthorizationUrlRequest from " . $request->getClientIp();
+        $log->save();
         return response()->json([
             "authorizationUri" => Socialite::driver('azure')
                 ->stateless()->redirect()->getTargetUrl()

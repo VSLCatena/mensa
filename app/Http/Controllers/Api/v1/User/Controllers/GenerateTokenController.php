@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use App\Contracts\RemoteUserLookup;
 use App\Models\User;
+use App\Models\Log;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -42,13 +43,30 @@ class GenerateTokenController extends Controller
         try {
             $user = $this->userLookup->getUpdatedUser($user, $azureUser->principal_name);
         } catch (ClientExceptionInterface) {
+            $log = new Log;
+            $log->category = "GenerateTokenController";
+            $log->user_id = "SYSTEM";
+            $log->object_id = $azureUser->id;
+            $log->text = "userLookup->getUpdatedUser failed with ". $user . " (" . $azureUser->principal_name . ")";
+            $log->save();
             abort(Response::HTTP_BAD_GATEWAY);
         }
 
         if ($user == null) {
+            $log = new Log;
+            $log->category = "GenerateTokenController";
+            $log->user_id = "SYSTEM";
+            $log->object_id = $azureUser->id;
+            $log->text = "userLookup->getUpdatedUser not found for" . $azureUser->principal_name;
+            $log->save();
             abort(Response::HTTP_UNAUTHORIZED);
         }
-
+        $log = new Log;
+        $log->category = "GenerateTokenController";
+        $log->user_id = "SYSTEM";
+        $log->object_id = $azureUser->id;
+        $log->text = "userLookup->getUpdatedUser. Token created for" . $user . " (" . $azureUser->principal_name . ")";
+        $log->save();
         return response()->json([
             'token' => $user->createToken(Str::uuid())->plainTextToken
         ]);

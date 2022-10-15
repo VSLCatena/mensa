@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Models\Log;
+
 class SelfController extends Controller
 {
     use UserMapper;
@@ -36,6 +38,11 @@ class SelfController extends Controller
     {
         $user = Auth::user();
         if ($user == null) {
+            $log = new Log;
+            $log->category = "SelfController";
+            $log->user_id = "SYSTEM";
+            $log->text = "getSelf Auth returned null for " . $request -> getClientIp();
+            $log->save();            
             abort(Response::HTTP_UNAUTHORIZED);
         }
 
@@ -52,6 +59,11 @@ class SelfController extends Controller
     {
         $user = Auth::user();
         if ($user == null) {
+            $log = new Log;
+            $log->category = "SelfController";
+            $log->user_id = "SYSTEM";
+            $log->text = "updateSelf Auth returned null for " . $request -> getClientIp();
+            $log->save();                        
             abort(Response::HTTP_UNAUTHORIZED);
         }
 
@@ -62,6 +74,11 @@ class SelfController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $log = new Log;
+            $log->category = "SelfController";
+            $log->user_id = "SYSTEM";
+            $log->text = "updateSelf validator failed for $user->name";
+            $log->save();             
             return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -71,7 +88,12 @@ class SelfController extends Controller
             $user->food_preference = $this->mapFoodOptionFromNameToInt($request->get('foodPreference'));
 
         $user->save();
-
+        
+        $log = new Log;
+        $log->category = "SelfController";
+        $log->user_id = "SYSTEM";
+        $log->text = "updateSelf performed for ". $user->name;
+        $log->save();       
         return null;
     }
 }
