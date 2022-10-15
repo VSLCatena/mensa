@@ -64,6 +64,12 @@ Some important Sail commands:
   - Sail Artisan can create files 
 - `-rw-rw-r--  <items> <regular username> <regular username>  <size> <timestamp> FILE`  
   - You can upload files using sftp
+- `drwxrwxr-x  <items> <regular username> <regular username>  <size> <timestamp> FOLDER`
+  - Not in use by sail/docker/app
+    - .git
+    - .github
+    - .vscode
+  
 
 ### Building the app (using regular webserver)
 For production I recommend to look at, and following the 
