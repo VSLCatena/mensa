@@ -8,6 +8,8 @@ use App\Services\AzureUserLookup;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
         \URL::forceScheme('https');
         setlocale(LC_TIME, "nl_NL");
+        Log::shareContext(['invocation-id' => (string) Str::uuid()]);
     }
 
     /**

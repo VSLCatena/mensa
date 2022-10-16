@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
+use App\Models\User;
 
 class SelfController extends Controller
 {
@@ -24,6 +26,7 @@ class SelfController extends Controller
     public function __construct()
     {
         $this->middleware('auth:sanctum');
+        $this->systemUser = User::where('name', 'SYSTEM')->first();             
     }
 
     /**
@@ -36,6 +39,13 @@ class SelfController extends Controller
     {
         $user = Auth::user();
         if ($user == null) {
+            Log::error([
+                "category" => "user",
+                "text" => "getSelf / HTTP_UNAUTHORIZED",
+                "user_id" =>$this->systemUser->id,
+                "object_id" =>$this->systemUser->id
+                
+            ]);               
             abort(Response::HTTP_UNAUTHORIZED);
         }
 
@@ -52,6 +62,13 @@ class SelfController extends Controller
     {
         $user = Auth::user();
         if ($user == null) {
+            Log::error([
+                "category" => "user",
+                "text" => "updateSelf / HTTP_UNAUTHORIZED",
+                "user_id" =>$this->systemUser->id,
+                "object_id" =>$this->systemUser->id
+                
+            ]);             
             abort(Response::HTTP_UNAUTHORIZED);
         }
 
@@ -62,6 +79,13 @@ class SelfController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Log::error([
+                "category" => "user",
+                "text" => "updateSelf / Validator / HTTP_BAD_REQUEST",
+                "user_id" =>$user->id,
+                "object_id" =>$user->id
+                
+            ]);             
             return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
         }
 
@@ -71,7 +95,12 @@ class SelfController extends Controller
             $user->food_preference = $this->mapFoodOptionFromNameToInt($request->get('foodPreference'));
 
         $user->save();
-
+        Log::info([
+            "category" => "user",
+            "text" => "updateSelf / succes",
+            "user_id" =>$user->id,
+            "object_id" =>$user->id
+        ]);   
         return null;
     }
 }

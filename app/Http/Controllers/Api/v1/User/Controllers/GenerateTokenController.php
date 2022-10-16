@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
 
 class GenerateTokenController extends Controller
 {
@@ -22,6 +23,7 @@ class GenerateTokenController extends Controller
      */
     public function __construct(private RemoteUserLookup $userLookup)
     {
+        $this->systemUser = User::where('name', 'SYSTEM')->first();
     }
 
     /**
@@ -42,13 +44,33 @@ class GenerateTokenController extends Controller
         try {
             $user = $this->userLookup->getUpdatedUser($user, $azureUser->principal_name);
         } catch (ClientExceptionInterface) {
+            Log::error([
+                "category" => "auth",
+                "text" => "HTTP_BAD_GATEWAY",
+                "user_id" =>$this->systemUser->id,
+                "object_id" =>$user->id
+                
+            ]);             
             abort(Response::HTTP_BAD_GATEWAY);
         }
 
         if ($user == null) {
+            Log::error([
+                "category" => "auth",
+                "text" => "HTTP_UNAUTHORIZED",
+                "user_id" =>$this->systemUser->id,
+                "object_id" =>$user->id
+                
+            ]);            
             abort(Response::HTTP_UNAUTHORIZED);
         }
-
+        Log::info([
+            "category" => "auth",
+            "text" => "Success",
+            "user_id" =>$this->systemUser->id,
+            "object_id" =>$user->id
+            
+        ]);
         return response()->json([
             'token' => $user->createToken(Str::uuid())->plainTextToken
         ]);
