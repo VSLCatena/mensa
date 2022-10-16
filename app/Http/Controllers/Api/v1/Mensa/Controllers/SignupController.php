@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
 use App\Models\Mensa;
 use App\Models\Signup;
 use App\Models\User;
+use App\Models\Log;
 use Error;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -75,7 +77,12 @@ class SignupController extends Controller
 
         $user = $this->currentUser();
         $isAdmin = $user != null && $user->mensa_admin;
-
+        
+        $log = new Log;
+        $log->category = "mensa";
+        $log->user_id = $user->id;
+        $log->object_id = $mensa->id;
+        
         /* Check if the email is valid */
         $validator = Validator::make($request->all(), [
             'email' => ['string', 'email:rfc,dns', 'required'],
@@ -84,6 +91,10 @@ class SignupController extends Controller
             'override_user_limit' => [$isAdmin ? 'boolean' : 'prohibited']
         ]);
         if ($validator->fails()) {
+
+            $log->text = "SignupController/signup/validator failed: " . Arr::join($validator->errors()->toArray(),",");
+            $log->save();
+                
             return response()->json([
                 "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
                 "errors" => $validator->errors()
@@ -97,11 +108,15 @@ class SignupController extends Controller
         $previousSignups = Signup::whereMensaId($mensaId)->whereUserId($signupUser->id);
         if ($previousSignups->count() > 0) {
             if ($request->isMethod(Request::METHOD_POST)) {
+                $log->text = "SignupController/signup/Error: previousSignups got HTTP_BAD_REQUEST/POST";
+                $log->save();                
                 abort(Response::HTTP_BAD_REQUEST);
                 throw new Error(); // For lint
             }
         } else {
             if ($request->isMethod(Request::METHOD_PUT)) {
+                $log->text = "SignupController/signup/Error: previousSignups got HTTP_BAD_REQUEST/PUT";
+                $log->save();                       
                 abort(Response::HTTP_BAD_REQUEST);
                 throw new Error(); // For lint
             }
@@ -113,6 +128,8 @@ class SignupController extends Controller
                 || $request->get('signup_id') != $previousSignups->first()->signup_id
             )
         ) {
+            $log->text = "SignupController/signup/Error: previousSignups got SIGNUP_IDS_NOT_MATCHING";
+            $log->save();              
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_IDS_NOT_MATCHING
             ], Response::HTTP_BAD_REQUEST);
@@ -135,6 +152,8 @@ class SignupController extends Controller
         }, $request['signups']);
 
         if ($errors->isNotEmpty()) {
+            $log->text = "SignupController/signup/Error: GENERAL_VALIDATION_ERROR";
+            $log->save();              
             return response()->json([
                 "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
                 "errors" => $errors->messages()
@@ -147,6 +166,8 @@ class SignupController extends Controller
             $overrideUserLimit &&
             $mensa->users_count - $previousSignups->count() + count($signups) > $mensa->max_users
         ) {
+            $log->text = "SignupController/signup/Error: SIGNUP_MAX_USERS_REACHED";
+            $log->save();             
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_MAX_USERS_REACHED
             ]);
@@ -157,6 +178,8 @@ class SignupController extends Controller
             return !$signup->is_intro;
         }));
         if ($mainCount != 1) {
+            $log->text = "SignupController/signup/Error: SIGNUP_ONE_MAIN_ONLY";
+            $log->save();             
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_ONE_MAIN_ONLY
             ], Response::HTTP_BAD_REQUEST);
@@ -164,6 +187,8 @@ class SignupController extends Controller
         // intros can't be cooks or washing dishes
         foreach ($signups as $signup) {
             if ($signup->is_intro && ($signup->cooks || $signup->dishwasher)) {
+                $log->text = "SignupController/signup/Error: SIGNUP_INTRO_DISHES_COOKS";
+                $log->save();                            
                 return response()->json([
                     "error_code" => ErrorMessages::SIGNUP_INTRO_DISHES_COOKS
                 ], Response::HTTP_BAD_REQUEST);
@@ -182,6 +207,8 @@ class SignupController extends Controller
             $signup->confirmed = $isConfirmed;
             $signup->save();
         }
+        $log->text = "SignupController/signup/Signed up";
+        $log->save();     
 
         return null;
     }
@@ -226,17 +253,28 @@ class SignupController extends Controller
 
     public function confirmSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
     {
+        
         $signup = Signup::findOrFail($signupId);
+        $currentUser = $this->currentUser();
+        
+        $log = new Log;
+        $log->category = "mensa";
+        $log->user_id = $currentUser->id;
+        $log->object_id = $signupId;
+        
         if ($signup->mensa_id != $mensaId) {
+            $log->text = "SignupController/confirmSignup/Error: SIGNUP_NOT_EXIST";
+            $log->save();
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_NOT_EXIST
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $currentUser = $this->currentUser();
         Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
 
         if ($signup->confirmed) {
+            $log->text = "SignupController/confirmSignup/Error: SIGNUP_ALREADY_CONFIRMED";
+            $log->save();            
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_ALREADY_CONFIRMED
             ], Response::HTTP_BAD_REQUEST);
@@ -244,23 +282,34 @@ class SignupController extends Controller
 
         $signup->confirmed = true;
         $signup->save();
-
+        $log->text = "SignupController/confirmSignup/Signup confirmed";
+        $log->save();  
         return null;
     }
 
     public function deleteSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
     {
         $signup = Signup::findOrFail($signupId);
+        $currentUser = $this->currentUser();
+        
+        $log = new Log;
+        $log->category = "mensa";
+        $log->user_id = $currentUser->id;
+        $log->object_id = $signupId;
+        
         if ($signup->mensa_id != $mensaId) {
+            $log->text = "SignupController/deleteSignup/Error: SIGNUP_NOT_EXIST";
+            $log->save();               
             return response()->json([
                 "error_code" => ErrorMessages::SIGNUP_NOT_EXIST
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $currentUser = $this->currentUser();
         Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
 
         $signup->delete();
+        $log->text = "SignupController/deleteSignup/Signup deleted";
+        $log->save();
         return null;
     }
 

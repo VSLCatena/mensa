@@ -73,10 +73,10 @@ class DatabaseSeeder extends Seeder
 
                 \App\Models\Log::factory()
                     ->state([
-                        'category' => 'mensa/inschrijving',
-                        'text' => 'Signed up '.$user->name . " for " . $mensa->title . " on " . $mensa->date,
+                        'category' => 'mensa',
+                        'text' => 'DatabaseSeeder/mensaSeeder/signup/Signed up '.$user->name,
                         'user_id' => $system,
-                        'object_id' => $user
+                        'object_id' => $mensa->id
                         ])
                     ->for($user)
                     ->for($mensa)
