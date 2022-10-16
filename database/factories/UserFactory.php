@@ -24,7 +24,7 @@ class UserFactory extends Factory
         return [
             'id' => $this->faker->uuid,
             'name' => $this->faker->name,
-            'email' => $this->faker->email,
+            'email' => $this->faker->safeEmail,
             'allergies' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'extra_info' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'mensa_admin' => $this->faker->boolean,
