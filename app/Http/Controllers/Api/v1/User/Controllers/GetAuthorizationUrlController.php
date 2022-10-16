@@ -9,7 +9,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 use App\Models\Log;
 use App\Models\User;
-
+use Illuminate\Support\Arr;
 class GetAuthorizationUrlController extends Controller
 {
 
@@ -35,10 +35,10 @@ class GetAuthorizationUrlController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $log = new Log;
-        $log->category = "GetAuthorizationUrlController";
+        $log->category = "GetAuthorizationUrl";
         $log->user_id = $this->systemUser->id;
         $log->object_id = $this->systemUser->id;
-        $log->text = "New AuthorizationUrlRequest from " . $request->getClientIp();
+        $log->text = "AuthorizationUrlRequest from " . Arr::join($request->getClientIps(),",") . " to " . $request->fullUrl();
         $log->save();
         return response()->json([
             "authorizationUri" => Socialite::driver('azure')

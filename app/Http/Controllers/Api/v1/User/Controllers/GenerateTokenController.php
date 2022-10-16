@@ -45,28 +45,28 @@ class GenerateTokenController extends Controller
             $user = $this->userLookup->getUpdatedUser($user, $azureUser->principal_name);
         } catch (ClientExceptionInterface) {
             $log = new Log;
-            $log->category = "GenerateTokenController";
+            $log->category = "GenerateToken";
             $log->user_id = $this->systemUser->id;
             $log->object_id = $azureUser->id;
-            $log->text = "userLookup->getUpdatedUser failed with ". $user->name . " (" . $azureUser->principal_name . ")";
+            $log->text = "userLookup/getUpdatedUser: ClientException with ". $user->name . " (" . $azureUser->principal_name . ")";
             $log->save();
             abort(Response::HTTP_BAD_GATEWAY);
         }
 
         if ($user == null) {
             $log = new Log;
-            $log->category = "GenerateTokenController";
+            $log->category = "GenerateToken";
             $log->user_id = $this->systemUser->id;
             $log->object_id = $azureUser->id;
-            $log->text = "userLookup->getUpdatedUser not found for" . $azureUser->principal_name;
+            $log->text = "userLookup/getUpdatedUser: user not found for" . $azureUser->principal_name;
             $log->save();
             abort(Response::HTTP_UNAUTHORIZED);
         }
         $log = new Log;
-        $log->category = "GenerateTokenController";
+        $log->category = "GenerateToken";
         $log->user_id = $this->systemUser->id;
         $log->object_id = $azureUser->id;
-        $log->text = "userLookup->getUpdatedUser. Token created for" . $user->name . " (" . $azureUser->principal_name . ")";
+        $log->text = "userLookup/getUpdatedUser: Token created for " . $user->name . " (" . $azureUser->principal_name . ")";
         $log->save();
         return response()->json([
             'token' => $user->createToken(Str::uuid())->plainTextToken

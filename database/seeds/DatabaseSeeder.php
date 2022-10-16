@@ -72,7 +72,12 @@ class DatabaseSeeder extends Seeder
                     ->createOne();
 
                 \App\Models\Log::factory()
-                    ->state(['category' => 'mensa'])
+                    ->state([
+                        'category' => 'mensa/inschrijving',
+                        'text' => 'Signed up '.$user->name . " for " . $mensa->title . " on " . $mensa->date,
+                        'user_id' => $system,
+                        'object_id' => $user
+                        ])
                     ->for($user)
                     ->for($mensa)
                     ->create();
