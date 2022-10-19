@@ -1,5 +1,17 @@
-import repository from "../repository/StorageRepository";
+import {
+  StorageRepository,
+  StorageRepositoryToken,
+} from '../repository/StorageRepository';
+import {inject, injectable} from 'tsyringe';
 
-export default function SetUserToken(token: string | null) {
-    repository.setUserToken(token);
+@injectable()
+export class SetUserToken {
+  constructor(
+    @inject(StorageRepositoryToken)
+    private readonly repository: StorageRepository
+  ) {}
+
+  execute(token: string | null): void {
+    this.repository.setUserToken(token);
+  }
 }

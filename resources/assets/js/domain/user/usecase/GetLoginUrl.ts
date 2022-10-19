@@ -1,5 +1,17 @@
-import repository from "../repository/UserRepository";
+import {
+  UserRepository,
+  UserRepositoryToken,
+} from '../repository/UserRepository';
+import {inject, injectable} from 'tsyringe';
 
-export default async function GetLoginUrl(): Promise<string> {
-    return repository.getUrl();
+@injectable()
+export class GetLoginUrl {
+  constructor(
+    @inject(UserRepositoryToken)
+    private readonly repository: UserRepository
+  ) {}
+
+  async execute(): Promise<string> {
+    return await this.repository.getUrl();
+  }
 }

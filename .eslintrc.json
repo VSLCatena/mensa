@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "plugin:vue/vue3-recommended",
+    "./node_modules/gts/"
+  ],
+  "rules": {
+    "node/no-unpublished-import": [
+      "error", {
+        "allowModules": ["axios", "vue", "vuetify"]
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "warn", {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ]
+  }
+}

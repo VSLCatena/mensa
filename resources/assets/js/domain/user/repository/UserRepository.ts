@@ -1,14 +1,15 @@
-import repository from "../../../data/user/repository/UserRepositoryImpl";
-import {FullUser} from "../../common/model/User";
+import {FullUser, UserPreferences} from '../../common/model/User';
 
 export interface UserRepository {
-    getUrl(): Promise<string>
+  getUrl: () => Promise<string>;
 
-    exchangeToken(token: string): Promise<string>
+  exchangeToken: (token: string) => Promise<string>;
 
-    logout(): Promise<void>
+  logout: () => Promise<void>;
 
-    getSelf(authToken: string): Promise<FullUser>
+  getSelf: (authToken: string) => Promise<FullUser>;
+
+  updateSelf: (authToken: string, user: UserPreferences) => Promise<void>;
 }
 
-export default repository;
+export const UserRepositoryToken = 'UserRepositoryToken';

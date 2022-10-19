@@ -1,18 +1,20 @@
-import Mensa from "../model/Mensa";
-import repository from '../../../data/mensa/repository/MensaRepositoryImpl';
-import MensaList from "../model/MensaList";
-import MensaRequestModel from "../../../data/mensa/model/MensaRequestModel";
+import {Mensa} from '../model/Mensa';
+import {MensaList} from '../model/MensaList';
+import {EditMensa} from '../model/EditMensa';
 
 export interface MensaRepository {
-    getMensas(weekOffset: number | null, authToken: string | null): Promise<MensaList>
+  getMensas: (
+    weekOffset: number | null,
+    authToken: string | null
+  ) => Promise<MensaList>;
 
-    getMensa(mensaId: string): Promise<Mensa>
+  getMensa: (mensaId: string) => Promise<Mensa>;
 
-    addMensa(mensa: MensaRequestModel, authToken: string): Promise<void>
+  addMensa: (mensa: EditMensa, authToken: string) => Promise<void>;
 
-    editMensa(mensa: MensaRequestModel, authToken: string): Promise<void>
+  editMensa: (mensa: EditMensa, authToken: string) => Promise<void>;
 
-    deleteMensa(mensaId: string, authToken: string): Promise<void>
+  deleteMensa: (mensaId: string, authToken: string) => Promise<void>;
 }
 
-export default repository;
+export const MensaRepositoryToken = 'MensaRepositoryToken';

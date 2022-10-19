@@ -1,347 +1,345 @@
-import {LanguageLintCheck} from "./LanguageText";
+import {LanguageLintCheck} from './LanguageText';
 
-const text = {
-    general: {
-        close: {
-            nl: "Sluit",
-            en: "Close",
-        },
-        next: {
-            nl: 'Volgende',
-            en: 'Next',
-        },
-        previous: {
-            nl: 'Vorige',
-            en: 'Previous',
-        },
-        save: {
-            nl: 'Opslaan',
-            en: 'Save',
-        },
-        yes: {
-            nl: 'Ja',
-            en: 'Yes',
-        },
-        no: {
-            nl: 'Nee',
-            en: 'No',
-        },
-        cancel: {
-            nl: 'Annuleer',
-            en: 'Cancel',
-        }
+export const Text = {
+  general: {
+    close: {
+      nl: 'Sluit',
+      en: 'Close',
     },
-    and: {
-        nl: "en",
-        en: "and"
+    next: {
+      nl: 'Volgende',
+      en: 'Next',
     },
-    menu: {
-        home: {
-            nl: "Home",
-            en: "Home",
-        },
-        faq: {
-            nl: "FAQ",
-            en: "FAQ",
-        },
-        account: {
-            nl: "Account",
-            en: "Account",
-        },
-        switch_language: {
-            nl: "Switch to English",
-            en: "Wissel naar Nederlands",
-        },
-        switch_theme: {
-            to_dark: {
-                nl: "Wissel naar donker thema",
-                en: "Switch to dark theme",
-            },
-            to_light: {
-                nl: "Wissel naar licht thema",
-                en: "Switch to light theme",
-            }
-        }
+    previous: {
+      nl: 'Vorige',
+      en: 'Previous',
     },
-    mensa: {
-        mensas_between: {
-            nl: "Mensas tussen",
-            en: "Mensas between",
-        },
-        next_weeks: {
-            nl: "+2 weken",
-            en: "+2 weeks",
-        },
-        previous_weeks: {
-            nl: "-2 weken",
-            en: "-2 weeks",
-        },
-        signups: {
-            nl: "Inschrijvingen",
-            en: "Signups",
-        },
-        closingtime: {
-            nl: "Sluittijd",
-            en: "Closing time",
-        },
-        price: {
-            nl: "Prijs",
-            en: "Price",
-        },
-        cooked_by: {
-            nl: "Gekookt door",
-            en: "Cooked by",
-        },
-        dishwashers: {
-            nl: "Afwassers",
-            en: "Dishwashers",
-        },
-        dishwasher_count: {
-            one: {
-                nl: '%s afwasser',
-                en: '%s dishwasher',
-            },
-            many: {
-                nl: '%s afwassers',
-                en: '%s dishwashers',
-            }
-        },
-        button_signup: {
-            nl: "Inschrijven",
-            en: "Sign up",
-        },
-        button_overview: {
-            nl: "Overzicht",
-            en: "Overview",
-        },
-        menu_title: {
-            nl: "Menu",
-            en: "Menu",
-        },
-        extra_options_title: {
-            nl: "Extra opties",
-            en: "Extra options",
-        },
-        edit: {
-            title: {
-                nl: "Mensa aanpassen van",
-                en: "Edit the mensa of",
-            },
-            field_title: {
-                nl: "Titel",
-                en: "Title",
-            },
-            field_description: {
-                nl: "Omschrijving",
-                en: "Description",
-            },
-            field_date: {
-                nl: "Datum",
-                en: "Date",
-            },
-            field_closing_time: {
-                nl: "Sluittijd",
-                en: "Closing time",
-            },
-            field_max_signups: {
-                nl: "Max. inschrijvingen",
-                en: "Max. signups",
-            },
-            field_menu_label: {
-                nl: "Menu item",
-                en: "Menu item"
-            },
-            field_base_price: {
-                nl: "Basis prijs",
-                en: "Base price",
-            },
-            field_extra_options: {
-                nl: "Extra opties",
-                en: "Extra options",
-            },
-            field_food_preference: {
-                nl: 'Aangeboden etensvoorkeuren',
-                en: 'Possible foodoptions',
-            },
-            error_food_preference: {
-                nl: 'Minimaal één etens optie moet geselecteerd zijn',
-                en: 'At least one food option must be selected',
-            },
-            field_extra_option_price_label: {
-                nl: "Extra optie prijs",
-                en: "Extra option price",
-            },
-            field_extra_option_description_label: {
-                nl: "Extra optie beschrijving",
-                en: "Extra option description",
-            },
-            tabs: {
-                general: {
-                    nl: "Algemeen",
-                    en: "General",
-                },
-                menu: {
-                    nl: "Menu",
-                    en: "Menu",
-                },
-                prices: {
-                    nl: "Prijzen",
-                    en: "Prices",
-                },
-                signups: {
-                    nl: "Inschrijvingen",
-                    en: "Signups"
-                }
-            }
-        }
+    save: {
+      nl: 'Opslaan',
+      en: 'Save',
     },
-    login: {
-        title: {
-            nl: "Login",
-            en: "Login",
-        },
-        login_button: {
-            nl: 'Klik hier om in te loggen',
-            en: 'Click here to log in',
-        },
-        logout_button: {
-            nl: 'Log uit',
-            en: 'Log out',
-        },
-        login_info: {
-            nl: 'Inloggen verloopt via Microsoft. Dit doe je door in te loggen met <accountnaam>@vslcatena.nl en je Catena wachtwoord.',
-            en: 'Logging in happens through Microsoft. You can do this by logging in with <accountname>@vslcatena.nl and your Catena password',
-        },
-        forgot_password: {
-            nl: "Wachtwoord vergeten",
-            en: "Forgot password",
-        },
-        logging_in: {
-            nl: "Logging in",
-            en: "Logging in",
-        },
-        error: {
-            nl: "Er ging iets in bij het inloggen, probeer het later opnieuw.",
-            en: "Something went wrong trying to log in, try again later",
-        }
+    yes: {
+      nl: 'Ja',
+      en: 'Yes',
+    },
+    no: {
+      nl: 'Nee',
+      en: 'No',
+    },
+    cancel: {
+      nl: 'Annuleer',
+      en: 'Cancel',
+    },
+  },
+  and: {
+    nl: 'en',
+    en: 'and',
+  },
+  menu: {
+    home: {
+      nl: 'Home',
+      en: 'Home',
     },
     faq: {
+      nl: 'FAQ',
+      en: 'FAQ',
+    },
+    account: {
+      nl: 'Account',
+      en: 'Account',
+    },
+    switch_language: {
+      nl: 'Switch to English',
+      en: 'Wissel naar Nederlands',
+    },
+    switch_theme: {
+      to_dark: {
+        nl: 'Wissel naar donker thema',
+        en: 'Switch to dark theme',
+      },
+      to_light: {
+        nl: 'Wissel naar licht thema',
+        en: 'Switch to light theme',
+      },
+    },
+  },
+  mensa: {
+    mensas_between: {
+      nl: 'Mensas tussen',
+      en: 'Mensas between',
+    },
+    next_weeks: {
+      nl: '+2 weken',
+      en: '+2 weeks',
+    },
+    previous_weeks: {
+      nl: '-2 weken',
+      en: '-2 weeks',
+    },
+    signups: {
+      nl: 'Inschrijvingen',
+      en: 'Signups',
+    },
+    closingtime: {
+      nl: 'Sluittijd',
+      en: 'Closing time',
+    },
+    price: {
+      nl: 'Prijs',
+      en: 'Price',
+    },
+    cooked_by: {
+      nl: 'Gekookt door',
+      en: 'Cooked by',
+    },
+    dishwashers: {
+      nl: 'Afwassers',
+      en: 'Dishwashers',
+    },
+    dishwasher_count: {
+      one: {
+        nl: '%s afwasser',
+        en: '%s dishwasher',
+      },
+      many: {
+        nl: '%s afwassers',
+        en: '%s dishwashers',
+      },
+    },
+    button_signup: {
+      nl: 'Inschrijven',
+      en: 'Sign up',
+    },
+    button_overview: {
+      nl: 'Overzicht',
+      en: 'Overview',
+    },
+    menu_title: {
+      nl: 'Menu',
+      en: 'Menu',
+    },
+    extra_options_title: {
+      nl: 'Extra opties',
+      en: 'Extra options',
+    },
+    edit: {
+      title: {
+        nl: 'Mensa aanpassen van',
+        en: 'Edit the mensa of',
+      },
+      field_title: {
+        nl: 'Titel',
+        en: 'Title',
+      },
+      field_description: {
+        nl: 'Omschrijving',
+        en: 'Description',
+      },
+      field_date: {
+        nl: 'Datum',
+        en: 'Date',
+      },
+      field_closing_time: {
+        nl: 'Sluittijd',
+        en: 'Closing time',
+      },
+      field_max_signups: {
+        nl: 'Max. inschrijvingen',
+        en: 'Max. signups',
+      },
+      field_menu_label: {
+        nl: 'Menu item',
+        en: 'Menu item',
+      },
+      field_base_price: {
+        nl: 'Basis prijs',
+        en: 'Base price',
+      },
+      field_extra_options: {
+        nl: 'Extra opties',
+        en: 'Extra options',
+      },
+      field_food_preference: {
+        nl: 'Aangeboden etensvoorkeuren',
+        en: 'Possible foodoptions',
+      },
+      error_food_preference: {
+        nl: 'Minimaal één etens optie moet geselecteerd zijn',
+        en: 'At least one food option must be selected',
+      },
+      field_extra_option_price_label: {
+        nl: 'Extra optie prijs',
+        en: 'Extra option price',
+      },
+      field_extra_option_description_label: {
+        nl: 'Extra optie beschrijving',
+        en: 'Extra option description',
+      },
+      tabs: {
+        general: {
+          nl: 'Algemeen',
+          en: 'General',
+        },
+        menu: {
+          nl: 'Menu',
+          en: 'Menu',
+        },
+        prices: {
+          nl: 'Prijzen',
+          en: 'Prices',
+        },
+        signups: {
+          nl: 'Inschrijvingen',
+          en: 'Signups',
+        },
+      },
+    },
+  },
+  login: {
+    title: {
+      nl: 'Login',
+      en: 'Login',
+    },
+    login_button: {
+      nl: 'Klik hier om in te loggen',
+      en: 'Click here to log in',
+    },
+    logout_button: {
+      nl: 'Log uit',
+      en: 'Log out',
+    },
+    login_info: {
+      nl: 'Inloggen verloopt via Microsoft. Dit doe je door in te loggen met <accountnaam>@vslcatena.nl en je Catena wachtwoord.',
+      en: 'Logging in happens through Microsoft. You can do this by logging in with <accountname>@vslcatena.nl and your Catena password',
+    },
+    forgot_password: {
+      nl: 'Wachtwoord vergeten',
+      en: 'Forgot password',
+    },
+    logging_in: {
+      nl: 'Logging in',
+      en: 'Logging in',
+    },
+    error: {
+      nl: 'Er ging iets in bij het inloggen, probeer het later opnieuw.',
+      en: 'Something went wrong trying to log in, try again later',
+    },
+  },
+  faq: {
+    title: {
+      nl: 'FAQ',
+      en: 'FAQ',
+    },
+    dialog: {
+      edit: {
         title: {
-            nl: 'FAQ',
-            en: 'FAQ',
+          nl: 'FAQ item aanpassen',
+          en: 'Edit FAQ item',
         },
-        dialog: {
-            edit: {
-                title: {
-                    nl: 'FAQ item aanpassen',
-                    en: 'Edit FAQ item',
-                },
-                question: {
-                    nl: 'Vraag',
-                    en: 'Question',
-                },
-                answer: {
-                    nl: 'Antwoord',
-                    en: 'Answer',
-                }
-            },
-        }
+        question: {
+          nl: 'Vraag',
+          en: 'Question',
+        },
+        answer: {
+          nl: 'Antwoord',
+          en: 'Answer',
+        },
+      },
     },
-    profile: {
-        title: {
-            nl: 'Hey',
-            en: 'Hey',
-        }
+  },
+  profile: {
+    title: {
+      nl: 'Hey',
+      en: 'Hey',
     },
-    logout: {
-        title: {
-            nl: 'Uitloggen',
-            en: 'Log out',
-        },
-        confirm: {
-            nl: 'Weet je zeker dat je wilt uitloggen?',
-            en: 'Are you sure you want to log out?',
-        },
+  },
+  logout: {
+    title: {
+      nl: 'Uitloggen',
+      en: 'Log out',
     },
-    signup: {
-        mensa_at: {
-            nl: "Inschrijving voor mensa op",
-            en: "Singup for mensa at",
-        },
-        signups_for: {
-            nl: "Inschrijvingen voor de mensa op",
-            en: "Signups for the mensa at",
-        },
-        signups_currently: {
-            nl: "Mensen momenteel ingeschreven:",
-            en: "People currently signed up:",
-        },
-        tab_signup: {
-            nl: "Inschrijving",
-            en: "Signup",
-        },
-        tab_intro: {
-            nl: "Intro",
-            en: "Intro",
-        },
-        add_intro: {
-            nl: '+ intro',
-            en: '+ intro',
-        },
-        remove_intro: {
-            nl: 'Verwijder intro',
-            en: 'Delete intro',
-        },
-        button_signup: {
-            nl: 'Inschrijven',
-            en: 'Sign up',
-        },
-        field_email: {
-            nl: 'Email opgegeven bij Catena',
-            en: 'Email registered at Catena',
-        },
-        field_food_preference: {
-            nl: 'Etens voorkeur',
-            en: 'Food preference',
-        },
-        field_allergies: {
-            nl: 'Allergieën',
-            en: 'Allergies',
-        },
-        field_extraInfo: {
-            nl: 'Extra info',
-            en: 'Extra information',
-        },
-        field_cook: {
-            nl: 'Is koker',
-            en: 'Is cook',
-        },
-        field_dishwasher: {
-            nl: 'Vrijwillig afwassen',
-            en: 'Voluntair for washing dishes',
-        },
+    confirm: {
+      nl: 'Weet je zeker dat je wilt uitloggen?',
+      en: 'Are you sure you want to log out?',
     },
-    foodOptions: {
-        none: {
-            nl: 'Geen',
-            en: 'None',
-        },
-        vegan: {
-            nl: 'Veganistisch',
-            en: 'Vegan',
-        },
-        vegetarian: {
-            nl: 'Vegetarisch',
-            en: 'Vegetarian',
-        },
-        meat: {
-            nl: 'Vlees',
-            en: 'Meat',
-        },
-    }
+  },
+  signup: {
+    mensa_at: {
+      nl: 'Inschrijving voor mensa op',
+      en: 'Singup for mensa at',
+    },
+    signups_for: {
+      nl: 'Inschrijvingen voor de mensa op',
+      en: 'Signups for the mensa at',
+    },
+    signups_currently: {
+      nl: 'Mensen momenteel ingeschreven:',
+      en: 'People currently signed up:',
+    },
+    tab_signup: {
+      nl: 'Inschrijving',
+      en: 'Signup',
+    },
+    tab_intro: {
+      nl: 'Intro',
+      en: 'Intro',
+    },
+    add_intro: {
+      nl: '+ intro',
+      en: '+ intro',
+    },
+    remove_intro: {
+      nl: 'Verwijder intro',
+      en: 'Delete intro',
+    },
+    button_signup: {
+      nl: 'Inschrijven',
+      en: 'Sign up',
+    },
+    field_email: {
+      nl: 'Email opgegeven bij Catena',
+      en: 'Email registered at Catena',
+    },
+    field_food_preference: {
+      nl: 'Etens voorkeur',
+      en: 'Food preference',
+    },
+    field_allergies: {
+      nl: 'Allergieën',
+      en: 'Allergies',
+    },
+    field_extraInfo: {
+      nl: 'Extra info',
+      en: 'Extra information',
+    },
+    field_cook: {
+      nl: 'Is koker',
+      en: 'Is cook',
+    },
+    field_dishwasher: {
+      nl: 'Vrijwillig afwassen',
+      en: 'Voluntair for washing dishes',
+    },
+  },
+  foodOptions: {
+    none: {
+      nl: 'Geen',
+      en: 'None',
+    },
+    vegan: {
+      nl: 'Veganistisch',
+      en: 'Vegan',
+    },
+    vegetarian: {
+      nl: 'Vegetarisch',
+      en: 'Vegetarian',
+    },
+    meat: {
+      nl: 'Vlees',
+      en: 'Meat',
+    },
+  },
 };
 
 // Make sure it is in the correct format
-LanguageLintCheck(text);
-
-export default text;
+LanguageLintCheck(Text);

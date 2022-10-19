@@ -1,10 +1,9 @@
-import repository from '../../../data/faq/repository/FaqRepositoryImpl';
-import Faq from "../model/Faq";
+import {Faq} from '../model/Faq';
 
 export interface FaqRepository {
-    getFaqs(): Promise<Faq[]>
+  getFaqs: () => Promise<Faq[]>;
 
-    addFaq(faq: Faq): Promise<void>
+  addFaq: (faq: Faq) => Promise<void>;
 }
 
-export default repository;
+export const FaqRepositoryToken = 'FaqRepositoryToken';

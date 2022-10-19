@@ -1,5 +1,7 @@
-import AppConfig from "../model/AppConfig";
+import {AppConfig} from '../model/AppConfig';
 
 export interface AppConfigRepository {
-    getAppConfig(): Promise<AppConfig>
+  getAppConfig: () => Promise<AppConfig>;
 }
+
+export const AppConfigRepositoryToken = 'AppConfigRepositoryToken';

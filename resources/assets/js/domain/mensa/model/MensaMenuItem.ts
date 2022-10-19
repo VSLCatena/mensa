@@ -1,4 +1,4 @@
-export default interface MensaMenuItem {
-    id: string,
-    text: string
+export interface MensaMenuItem {
+  id: string;
+  text: string;
 }

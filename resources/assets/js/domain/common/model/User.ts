@@ -1,42 +1,31 @@
-import FoodOption from "../../mensa/model/FoodOption";
+import {FoodOption} from '../../mensa/model/FoodOption';
 
-export interface FullUser extends SimpleUser, UserEmail {
-    id: string,
-    name: string,
-    email: string,
-    isAdmin: boolean,
-    foodPreference: FoodOption | null,
-    extraInfo: string | null,
-    allergies: string | null,
+export interface AuthUser {
+  isAdmin: boolean;
 }
 
-export type UpdatableUser = Partial<Omit<FullUser, 'id' | 'name' | 'email' | 'isAdmin'>>;
-
-export interface SimpleUser extends User {
-    id: string,
-    name: string,
+export interface IdentifiableUser {
+  id: string;
+  name: string;
 }
 
-export interface UserEmail extends User {
-    email: string,
+export interface UserPreferences {
+  foodPreference: FoodOption | null;
+  extraInfo: string;
+  allergies: string;
 }
 
-export interface User {
-    id?: string,
-    name?: string,
-    email?: string,
-    isAdmin?: boolean,
-    foodPreference?: FoodOption | null,
-    extraInfo?: string | null,
-    allergies?: string | null,
+export interface UpdatableUser extends IdentifiableUser, UserPreferences {}
+export interface FullUser extends AuthUser, UpdatableUser {
+  email: string;
 }
 
-export type AuthUser = FullUser | Anonymous
+export type AuthenticatedState = AuthUser | FullUser;
 
-export interface Anonymous extends User {
-    isAdmin: false,
+export function isLoggedIn(state: AuthenticatedState): state is FullUser {
+  return (state as FullUser).name !== undefined;
 }
 
-export let AnonymousUser: Anonymous = {
-    isAdmin: false
-}
+export const AnonymousUser: AuthUser = {
+  isAdmin: false,
+};
