@@ -111,4 +111,9 @@ class Mensa extends Model
             $model->setAttribute($model->getKeyName(), Str::uuid());
         });
     }
+    
+    public function Log()
+    {
+        return $this->morphMany(Log::class, 'loggable');
+    }
 }

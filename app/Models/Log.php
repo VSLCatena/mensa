@@ -49,4 +49,9 @@ class Log extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    #One To Many (Polymorphic)
+    public function Loggable()
+    {
+        return $this->morphTo();
+    }
 }
