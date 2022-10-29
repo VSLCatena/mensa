@@ -28,6 +28,15 @@ class DatabaseSeeder extends Seeder
     {
         $faker = Faker\Factory::create();
 
+        $this->command->info('- Creating SYSTEM user -');
+        $system = new User;
+        $system->id="1";
+        $system->name="SYSTEM";
+        $system->email='';
+        $system->remote_last_check=0;
+        $system->remote_principal_name='';
+        $system->save();        
+        
         $this->command->info('- Creating users -');
         $users = User::factory()
             ->count(30)
@@ -56,6 +65,7 @@ class DatabaseSeeder extends Seeder
             $this->command->info('Signup a random amount of users');
             $userList = $users->random(rand(0, min($users->count(), $mensa->max_users)));
             foreach ($userList as $user) {
+                if($user->name == $system->name) {continue;}
                 /** @var Signup $signup */
                 $signup = Signup::factory()
                     ->for($user)
@@ -63,8 +73,11 @@ class DatabaseSeeder extends Seeder
                     ->createOne();
 
                 \App\Models\Log::factory()
-                    ->for($user)
-                    ->for($mensa)
+                ->state([
+                    'category' => 'mensa',
+                    'text' => 'DatabaseSeeder/mensaSeeder/signup/Signed up '.$user->name,
+                    ])->for(Mensa::factory(), 'loggable')
+                    ->for($system)          
                     ->create();
 
                 $userOptions = $extraOptions->random(rand(0, $extraOptions->count()));
