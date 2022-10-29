@@ -25,7 +25,7 @@ return new class extends Migration
             // 6       Informational: informational messages
             // 7       Debug: debug-level messages            
             $table->enum('severity', [0,1,2,3,4,5,6,7])->default(6)->after('updated_at');
-            $table->enum('category', ['mensa','user','mail'])->after('severity');
+            $table->enum('category', ['model','mail'])->after('severity');
             $table->nullableUuidMorphs('loggable');
 
         });

@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 
+use App\Traits\Observable;
+
 /**
  * App\Models\Signup
  *
@@ -63,7 +65,7 @@ use Illuminate\Support\Carbon;
  */
 class Signup extends Model
 {
-    use SoftDeletes, HasFactory;
+    use SoftDeletes, HasFactory, Observable;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -99,7 +101,11 @@ class Signup extends Model
     {
         return $this->extraOptions->sum('price') + $this->mensa->price;
     }
-
+    
+    public function log()
+    {
+        return $this->morphMany(Log::class, 'loggable',null ,null,'signup_id');
+    }
 //    public function consumptions() {
 //        return $this->mensa->consumptions($this->cooks, $this->dishwasher);
 //    }

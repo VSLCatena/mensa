@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+use App\Traits\Observable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 /**
  * App\Models\MenuItem
  *
@@ -33,7 +35,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class MenuItem extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids, Observable;
 
     public $timestamps = false;
 
@@ -43,5 +45,10 @@ class MenuItem extends Model
     public function mensa(): BelongsTo
     {
         return $this->belongsTo(Mensa::class);
+    }
+    
+    public function log()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }

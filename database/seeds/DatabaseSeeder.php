@@ -64,20 +64,12 @@ class DatabaseSeeder extends Seeder
             $this->command->info('Signup a random amount of users');
             $userList = $users->random(rand(0, min($users->count(), $mensa->max_users)));
             foreach ($userList as $user) {
-                if($user->name == $system->name) {continue;}
+                if($user->name === $system->name) {continue;}
                 /** @var Signup $signup */
                 $signup = Signup::factory()
                     ->for($user)
                     ->for($mensa)
                     ->createOne();
-
-                \App\Models\Log::factory()
-                ->state([
-                    'category' => 'mensa',
-                    'text' => 'DatabaseSeeder/mensaSeeder/signup/Signed up '.$user->name,
-                    ])->for(Mensa::factory(), 'loggable')
-                    ->for($system)          
-                    ->create();
 
                 $userOptions = $extraOptions->random(rand(0, $extraOptions->count()));
                 foreach ($userOptions as $option) {

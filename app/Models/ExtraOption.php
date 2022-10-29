@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+use App\Traits\Observable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 /**
  * App\Models\ExtraOption
  *
@@ -35,7 +37,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class ExtraOption extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids, Observable;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -50,5 +52,10 @@ class ExtraOption extends Model
     public function signups(): BelongsToMany
     {
         return $this->belongsToMany(Signup::class, 'signup_extra_options', 'extra_option_id', 'signup_id');
+    }
+    
+    public function log()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }

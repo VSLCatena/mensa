@@ -17,7 +17,6 @@ use Laravel\Sanctum\HasApiTokens;
 
 use App\Traits\Observable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-
 /**
  * App\Models\User
  *
@@ -59,13 +58,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, HasFactory, HasUuids;
+    use Notifiable, HasApiTokens, HasFactory, HasUuids, Observable;
 
     protected $keyType = 'string';
     public $incrementing = false;
-    
 
-    use Observable;
     /**
      * The attributes that are mass assignable.
      *
@@ -87,5 +84,10 @@ class User extends Authenticatable
     public function user(): HasMany
     {
         return $this->hasMany(Signup::class, 'user_id');
+    }
+    
+    public function log()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }

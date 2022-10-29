@@ -37,8 +37,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
  */
 class Log extends Model
 {
-    use HasFactory;
-    use HasUuids;
+    use HasFactory, HasUuids;
 
     protected $keyType = 'string';
     public $incrementing = false;

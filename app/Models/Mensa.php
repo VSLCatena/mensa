@@ -13,6 +13,9 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+use App\Traits\Observable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 /**
  * App\Models\Mensa
  *
@@ -58,7 +61,7 @@ use Illuminate\Support\Str;
  */
 class Mensa extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids, Observable;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -88,11 +91,6 @@ class Mensa extends Model
         return $this->hasMany(ExtraOption::class);
     }
 
-    public function logs(): HasMany
-    {
-        return $this->hasMany(Log::class);
-    }
-
     public function menuItems(): HasMany
     {
         return $this->hasMany(MenuItem::class)->orderBy('order');
@@ -112,7 +110,7 @@ class Mensa extends Model
         });
     }
     
-    public function Log()
+    public function log()
     {
         return $this->morphMany(Log::class, 'loggable');
     }
