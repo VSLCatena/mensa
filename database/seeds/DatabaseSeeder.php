@@ -30,7 +30,6 @@ class DatabaseSeeder extends Seeder
 
         $this->command->info('- Creating SYSTEM user -');
         $system = new User;
-        $system->id="1";
         $system->name="SYSTEM";
         $system->email='';
         $system->remote_last_check=0;

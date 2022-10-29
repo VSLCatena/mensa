@@ -15,6 +15,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Traits\Observable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+
 /**
  * App\Models\User
  *
@@ -56,11 +59,13 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, HasFactory;
+    use Notifiable, HasApiTokens, HasFactory, HasUuids;
 
     protected $keyType = 'string';
     public $incrementing = false;
+    
 
+    use Observable;
     /**
      * The attributes that are mass assignable.
      *
