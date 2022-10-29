@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 use Psr\Http\Client\ClientExceptionInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Log;
+use App\Models\Log;
 
 class GenerateTokenController extends Controller
 {
@@ -44,33 +44,42 @@ class GenerateTokenController extends Controller
         try {
             $user = $this->userLookup->getUpdatedUser($user, $azureUser->principal_name);
         } catch (ClientExceptionInterface) {
-            Log::error([
-                "category" => "auth",
-                "text" => "HTTP_BAD_GATEWAY",
-                "user_id" =>$this->systemUser->id,
-                "object_id" =>$user->id
-                
+            $log = new Log();
+            $log->user_id = $user->id;
+            $log->severity = '5';
+            $log->category = 'mensa';
+            $log->text = json_encode((object) [
+                'result' => "failure",
+                'data' => "Updating user failed: HTTP_BAD_GATEWAY"
             ]);             
+            $log->text = json_encode();
+            $user->Log()->save($log);
+
             abort(Response::HTTP_BAD_GATEWAY);
         }
 
         if ($user == null) {
-            Log::error([
-                "category" => "auth",
-                "text" => "HTTP_UNAUTHORIZED",
-                "user_id" =>$this->systemUser->id,
-                "object_id" =>$user->id
-                
-            ]);            
+            $log = new Log();
+            $log->user_id = $this->systemUser->id;
+            $log->severity = '5';
+            $log->category = 'mensa';
+            $log->text = json_encode((object) [
+                'result' => "failure",
+                'data' => "User not found. HTTP_UNAUTHORIZED".  " from " . $request->getClientIp()
+            ]); 
+            $this->systemUser->Log()->save($log);    
             abort(Response::HTTP_UNAUTHORIZED);
         }
-        Log::info([
-            "category" => "auth",
-            "text" => "Success",
-            "user_id" =>$this->systemUser->id,
-            "object_id" =>$user->id
-            
-        ]);
+        $log = new Log();
+        $log->user_id = $user->id;
+        $log->severity = '7';
+        $log->category = 'mensa';
+        $log->text = json_encode((object) [
+            'result' => "success",
+            'data' => $user->name .  " from " . $request->getClientIp(),
+        ]);        
+        $this->systemUser->Log()->save($log);    
+        
         return response()->json([
             'token' => $user->createToken(Str::uuid())->plainTextToken
         ]);

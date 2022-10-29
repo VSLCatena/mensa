@@ -69,6 +69,7 @@ trait Observable
         if($action === 'CREATED'){$data =  $model->getAttributes(); } 
         elseif ($action === 'UPDATED' ) {$data =  $model->getChanges();}
         $text = (object) [
+            'result' => "success",
             'action' => $action,
             'data' => $data,
         ];
