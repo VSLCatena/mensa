@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
-
+use Illuminate\Support\Facades\Log as LogFacade;
 /**
  * App\Models\Log
  *
@@ -45,6 +45,19 @@ class Log extends Model
     protected $fillable = [
         'category', 'text', 'severity','user_id',
     ];  
+    
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($model) {
+            $attributes = $model->attributesToArray();
+            LogFacade::debug($attributes);
+        });
+    }   
     
     public function user(): BelongsTo
     {
