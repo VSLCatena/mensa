@@ -27,7 +27,6 @@ class AppServiceProvider extends ServiceProvider
 
         \URL::forceScheme('https');
         setlocale(LC_TIME, "nl_NL");
-        Log::shareContext(['invocation-id' => (string) Str::uuid()]);
     }
 
     /**
