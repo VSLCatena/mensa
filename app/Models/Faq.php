@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
+use App\Traits\Observable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 /**
  * App\Models\Faq
  *
@@ -34,7 +36,7 @@ use Illuminate\Support\Carbon;
  */
 class Faq extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids, Observable;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -42,5 +44,10 @@ class Faq extends Model
     public function lastEditedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'last_edited_by');
+    }
+    
+    public function log()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }

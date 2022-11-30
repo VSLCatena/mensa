@@ -8,6 +8,8 @@ use App\Services\AzureUserLookup;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class AppServiceProvider extends ServiceProvider
 {

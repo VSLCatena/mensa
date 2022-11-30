@@ -15,6 +15,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Traits\Observable;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 /**
  * App\Models\User
  *
@@ -56,7 +58,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens, HasFactory;
+    use Notifiable, HasApiTokens, HasFactory, HasUuids, Observable;
 
     protected $keyType = 'string';
     public $incrementing = false;
@@ -82,5 +84,10 @@ class User extends Authenticatable
     public function user(): HasMany
     {
         return $this->hasMany(Signup::class, 'user_id');
+    }
+    
+    public function log()
+    {
+        return $this->morphMany(Log::class, 'loggable');
     }
 }
