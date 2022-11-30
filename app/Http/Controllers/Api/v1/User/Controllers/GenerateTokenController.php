@@ -70,10 +70,8 @@ class GenerateTokenController extends Controller
             $this->systemUser->Log()->save($log);    
             abort(Response::HTTP_UNAUTHORIZED);
         }
-        $log = new Log();
         $log->user_id = $user->id;
-        $log->severity = '7';
-        $log->category = 'mensa';
+        $log->severity = Severity::Debug;
         $log->text = json_encode((object) [
             'result' => "success",
             'data' => $user->name .  " from " . $request->getClientIp(),

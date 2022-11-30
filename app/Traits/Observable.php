@@ -11,7 +11,8 @@ use App\Models\Mensa;
 use App\Models\Faq;
 use App\Models\ExtraOption;
 use App\Models\MenuItem;
-
+use App\Traits\Log\Severity;
+use App\Traits\Log\Category;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -75,8 +76,8 @@ trait Observable
         ];
         $log = new Log;
         $log->user_id = Auth::check() ? Auth::user()->id : User::firstWhere('name', 'SYSTEM')->id;
-        $log->severity = '7';
-        $log->category = 'model';
+        $log->severity = Severity::Informational;
+        $log->category = Category::Model;
         $log->text = json_encode($text);
         
         $model->Log()->save($log);
