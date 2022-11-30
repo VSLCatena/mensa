@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('logs', function (Blueprint $table) {
             $table->dropForeign(['mensa_id']);
-            $table->dropColumn('mensa_id');
+            $table->dropColumn('mensa_id');           
             $table->int('severity')->default(5)->after('updated_at');
             $table->enum('category', ['model','mensa','mail'])->after('severity');
             $table->int('visibility')->after('category');
