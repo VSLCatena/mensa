@@ -54,7 +54,7 @@ class ExtraOption extends Model
         return $this->belongsToMany(Signup::class, 'signup_extra_options', 'extra_option_id', 'signup_id');
     }
     
-    public function log()
+    public function logs()
     {
         return $this->morphMany(Log::class, 'loggable');
     }
