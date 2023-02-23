@@ -46,14 +46,37 @@ The variables with the **REMOTE_USER_** prefix work a little bit different.
 - _REMOTE_USER_EMAIL_SUFFIX_ is the email suffix for our principial name. We allow people to give up their email or 
   their username. The only way to get the user by username is by pricipial name, which is for us: 
   `username@vslcatena.nl`. So for us this would be `@vslcatena.nl`.
+
+### Building the app (using Sail)
+- Docker using [Docker Docs](https://docs.docker.com/desktop/install/linux-install/)
+- Sail using [Sail Documentation](https://laravel.com/docs/9.x/sail)
+
+Some important Sail commands:
+- `./vendor/bin/sail up` to start Sail in foreground
+- `./vendor/bin/sail up -d` to start Sail in background
+- `./vendor/bin/sail ps` to see current status
+- `./vendor/bin/sail artisan` Run an Artisan command
+- `./vendor/bin/sail composer` Run an composer command
+- `./vendor/bin/sail root-shell`  Start a root shell session within the application container
+- `./vendor/bin/sail shell` Start a shell session within the application container
+#### Permissions (when using safe-docker / Rootless mode)
+- `drwxrwxr-x  <items> <in-container uid> <regular username>  <size> <timestamp> FOLDER` 
+  - Sail Artisan can create files 
+- `-rw-rw-r--  <items> <regular username> <regular username>  <size> <timestamp> FILE`  
+  - You can upload files using sftp
+- `drwxrwxr-x  <items> <regular username> <regular username>  <size> <timestamp> FOLDER`
+  - Not in use by sail/docker/app
+    - .git
+    - .github
+    - .vscode
   
 
-### Building the app
+### Building the app (using regular webserver)
 For production I recommend to look at, and following the 
-[Laravel deployment page](https://laravel.com/docs/8.x/deployment). 
+[Laravel deployment page](https://laravel.com/docs/9.x/deployment). 
 Here you can see the laravel requirements and some optimizations you can do for Laravel such as caching options.
 
-#### Here are just the bare minimals for development purposes:
+### Configure and prepare the dependencies:
 To set up composer (Package manager for PHP):  
 `composer install`
 
@@ -69,7 +92,6 @@ To fill in mock data in the database:
 `php artisan db:seed`
 
 
-
 ## Running the app for development
 For running the PHP server:  
 `php artisan serve`  
@@ -81,7 +103,3 @@ This will keep npm running, a new build will automatically start on every file c
 so changes are reflected on page refresh.
 
 These two commands have made my life a lot better :)
-
-
-## Docker
-Info about how to get it working in docker can be found [Here](docs/DOCKER.md)
