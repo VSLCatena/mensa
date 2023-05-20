@@ -57,9 +57,8 @@ Here you can see the laravel requirements and some optimizations you can do for 
 To set up composer (Package manager for PHP):  
 `composer install`
 
-To set up npm/yarn (Package managers for Javascript):  
+To set up npm (Package manager for Javascript):  
 `npm install`  
-`yarn install`  
 `npm run dev`
 
 To run migrations:  
