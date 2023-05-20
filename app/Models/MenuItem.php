@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $text
  * @property int $order
  * @property-read Mensa $mensa
+ *
  * @method static MenuItemFactory factory(...$parameters)
  * @method static Builder|MenuItem newModelQuery()
  * @method static Builder|MenuItem newQuery()
@@ -29,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static Builder|MenuItem whereOrder($value)
  * @method static Builder|MenuItem whereText($value)
  * @method static Builder|MenuItem whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class MenuItem extends Model
@@ -38,6 +40,7 @@ class MenuItem extends Model
     public $timestamps = false;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     public function mensa(): BelongsTo

@@ -5,12 +5,11 @@ namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 use App\Contracts\RemoteUserLookup;
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
-use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
+use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use App\Models\ExtraOption;
 use App\Models\Mensa;
 use App\Models\MenuItem;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
@@ -28,15 +27,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MensaController extends Controller
 {
-
-    use MensaMapper;
+    use MensaMapper, ValidateOrFail;
 
     private RemoteUserLookup $remoteLookup;
 
     /**
      * Create a new controller instance.
-     *
-     * @param RemoteUserLookup $remoteLookup
      */
     public function __construct(RemoteUserLookup $remoteLookup)
     {
@@ -44,14 +40,7 @@ class MensaController extends Controller
         $this->remoteLookup = $remoteLookup;
     }
 
-    /**
-     * Get a single mensa
-     *
-     * @param Request $request
-     * @param string $mensaId
-     * @return JsonResponse
-     * @throws AuthorizationException
-     */
+    /**  Get a single mensa */
     public function getMensa(Request $request, string $mensaId): JsonResponse
     {
         $mensa = Mensa::findOrFail($mensaId);
@@ -63,20 +52,25 @@ class MensaController extends Controller
             $mensa->users->all(),
             $mensa->menuItems->all(),
             $mensa->extraOptions->all(),
-            $currentUser != null
+            $currentUser
         ));
     }
 
-
     public function newMensa(Request $request): ?JsonResponse
     {
-        if ($request->has('id')) throw new InvalidArgumentException('id can\'t exist in request');
+        if ($request->has('id')) {
+            throw new InvalidArgumentException('id can\'t exist in request');
+        }
+
         return $this->internalUpdateMensa($request, null);
     }
 
     public function updateMensa(Request $request, string $mensaId): ?JsonResponse
     {
-        if (!$request->has('id')) throw new InvalidArgumentException('id doesn\'t exist in request');
+        if (! $request->has('id')) {
+            throw new InvalidArgumentException('id doesn\'t exist in request');
+        }
+
         return $this->internalUpdateMensa($request, $mensaId);
     }
 
@@ -132,21 +126,15 @@ class MensaController extends Controller
 
         // Check if all validations pass
         $validator = Validator::make($request->all(), $fields);
-        if ($validator->fails()) {
-            return response()->json([
-                "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
-                "errors" => $validator->errors()
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        $this->validateOrFail($validator);
 
         // Update the mensa fields
-        if ($request->has('title')) $mensa->title = $request->get('title');
-        if ($request->has('description')) $mensa->description = $request->get('description');
-        if ($request->has('date')) $mensa->date = $request->get('date');
-        if ($request->has('closingTime')) $mensa->closing_time = $request->get('closingTime');
-        if ($request->has('maxUsers')) $mensa->max_users = $request->get('maxUsers');
-        if ($request->has('closed')) $mensa->closed = $request->get('closed');
-        if ($request->has('price')) $mensa->price = $request->get('price');
+        $fields = ['title', 'description', 'date', 'closingTime', 'maxUsers', 'closed', 'price'];
+        foreach ($fields as $field) {
+            if ($request->has($field)) {
+                $mensa->$field = $request->get($field);
+            }
+        }
 
         if ($request->has('foodOptions')) {
             // We map the options to an int
@@ -155,8 +143,8 @@ class MensaController extends Controller
         }
 
         // We want to save and delete items only when everything is correctly validated.
-        $itemsToSave = array();
-        $itemsToDelete = array();
+        $itemsToSave = [];
+        $itemsToDelete = [];
 
         // Menu
         if ($request->has('menu')) {
@@ -199,6 +187,18 @@ class MensaController extends Controller
         return null;
     }
 
+    public function deleteMensa(Request $request, string $mensaId): ?JsonResponse
+    {
+        $mensa = Mensa::findOrFail($mensaId);
+
+        $currentUser = $this->currentUser();
+        Gate::forUser($currentUser)->authorize('delete', $mensa);
+
+        $mensa->delete();
+
+        return null;
+    }
+
     /**
      * We moved a lot of duplicate code to a separate function so it's less error-prone.
      * Summed up: You give it a list of a current collection, an array with form data, and a transformer.
@@ -207,17 +207,10 @@ class MensaController extends Controller
      * - It will call the updater function with the item and the raw data
      * - It will figure out with the current collection which one are not in it anymore (up for deletion)
      * - It will return an associated array with models to save, and models to delete
-     *
-     * @param Mensa $mensa
-     * @param HasMany $collection
-     * @param string $class
-     * @param array $rawData
-     * @param $updater
-     * @return array
      */
     #[ArrayShape([
-        'save' => "Illuminate\\Database\\Eloquent\\Model[]",
-        'delete' => "Illuminate\\Database\\Eloquent\\Model[]"
+        'save' => 'Illuminate\\Database\\Eloquent\\Model[]',
+        'delete' => 'Illuminate\\Database\\Eloquent\\Model[]',
     ])]
     private function compareAndUpdate(
         Mensa $mensa,
@@ -225,10 +218,9 @@ class MensaController extends Controller
         string $class,
         array $rawData,
         $updater
-    ): array
-    {
-        $optionsToSave = array();
-        $optionsToDelete = array();
+    ): array {
+        $optionsToSave = [];
+        $optionsToDelete = [];
 
         // Loop over all the raw data
         foreach ($rawData as $order => $rawItem) {
@@ -260,30 +252,20 @@ class MensaController extends Controller
             };
 
             // If we were able to find the item we skip it
-            if (array_first($optionsToSave, $comparer) != null) continue;
+            if (array_first($optionsToSave, $comparer) != null) {
+                continue;
+            }
 
             // If we weren't able to find the item we add it up for deletion
-            $itemsToDelete[] = $prevItem;
+            $optionsToDelete[] = $prevItem;
         }
 
         // Return the save and delete list
-        return array(
+        return [
             'save' => $optionsToSave,
-            'delete' => $optionsToDelete
-        );
+            'delete' => $optionsToDelete,
+        ];
     }
-
-    public function deleteMensa(Request $request, string $mensaId): ?JsonResponse
-    {
-        $mensa = Mensa::findOrFail($mensaId);
-
-        $currentUser = $this->currentUser();
-        Gate::forUser($currentUser)->authorize('delete', $mensa);
-
-        $mensa->delete();
-        return null;
-    }
-
 
     private function currentUser(): ?User
     {

@@ -1,30 +1,36 @@
-import AppConfig from "../../../domain/appconfig/model/AppConfig";
-import axios from "axios";
-import Config from "../../../Config";
-import MapResponse from "../../utils/MapResponse";
-import MapAppConfig from "../mapper/MapAppConfig";
+import {AppConfig} from '../../../domain/appconfig/model/AppConfig';
+import axios from 'axios';
+import {Config} from '../../../Config';
+import {singleton} from 'tsyringe';
+import {AppConfigSchema} from '../schema/AppConfigSchema';
+import {ResponseMapper} from '../../common/mapper/ResponseMapper';
+import {SchemaMapper} from '../../common/mapper/SchemaMapper';
 
-class AppConfigCache {
-    private cachedAppConfig: AppConfig | null = null
+@singleton()
+export class AppConfigCache {
+  constructor(
+    private readonly responseMapper: ResponseMapper,
+    private readonly schemaMapper: SchemaMapper
+  ) {}
 
-    async getAppConfig(): Promise<AppConfig> {
-        if (this.cachedAppConfig != null) return this.cachedAppConfig;
+  private cachedAppConfig: AppConfig | null = null;
 
-        try {
-            let response = await this.doAppConfigCall();
-            this.cachedAppConfig = response;
-            return Promise.resolve(response);
-        } catch (e) {
-            return Promise.reject(e)
-        }
+  async getAppConfig(): Promise<AppConfig> {
+    if (this.cachedAppConfig !== null) return this.cachedAppConfig;
+
+    try {
+      const response = await this.doAppConfigCall();
+      this.cachedAppConfig = response;
+      return response;
+    } catch (e) {
+      return await Promise.reject(e);
     }
+  }
 
-    private doAppConfigCall(): Promise<AppConfig> {
-        return axios.get(`${Config.API_BASE_URL}/appconfig`)
-            .then(MapResponse)
-            .then(value => MapAppConfig(value).asPromise());
-    }
+  private async doAppConfigCall(): Promise<AppConfig> {
+    return await axios
+      .get(`${Config.apiBaseUrl}/appconfig`)
+      .then(value => this.responseMapper.map(value))
+      .then(value => this.schemaMapper.map(AppConfigSchema, value));
+  }
 }
-
-const cache = new AppConfigCache();
-export default cache;

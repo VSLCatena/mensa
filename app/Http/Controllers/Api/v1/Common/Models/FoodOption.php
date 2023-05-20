@@ -4,17 +4,16 @@ namespace App\Http\Controllers\Api\v1\Common\Models;
 
 class FoodOption
 {
-
-    function __construct(
+    public function __construct(
         public string $name,
         public int $value
-    )
-    {
+    ) {
     }
 
-
     public static FoodOption $VEGAN;
+
     public static FoodOption $VEGETARIAN;
+
     public static FoodOption $MEAT;
 
     /** @var FoodOption[] */

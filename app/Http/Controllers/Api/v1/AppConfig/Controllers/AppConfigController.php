@@ -8,30 +8,20 @@ use Illuminate\Routing\Controller;
 
 class AppConfigController extends Controller
 {
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+    /** Create a new controller instance.*/
     public function __construct()
     {
     }
 
-    /**
-     * Get a list of mensas
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
+    /**  Get a list of mensas */
     public function __invoke(Request $request): JsonResponse
     {
         return response()->json([
-            "defaultMensaOptions" => [
-                "title" => "Mensa met betaalde afwas",
-                "maxSignups" => 42,
-                "price" => 4.00
-            ]
+            'defaultMensaOptions' => [
+                'title' => 'Mensa met betaalde afwas',
+                'maxSignups' => 42,
+                'price' => 4.00,
+            ],
         ]);
     }
 }

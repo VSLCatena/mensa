@@ -1,5 +1,5 @@
-export default interface ExtraOption {
-    id: string,
-    description: string,
-    price: number
+export interface ExtraOption {
+  id: string;
+  description: string;
+  price: number;
 }

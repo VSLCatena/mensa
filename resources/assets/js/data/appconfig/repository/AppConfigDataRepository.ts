@@ -1,13 +1,13 @@
-import {AppConfigRepository} from "../../../domain/appconfig/repository/AppConfigRepository";
-import AppConfig from "../../../domain/appconfig/model/AppConfig";
-import cache from "../cache/AppConfigCache";
+import {AppConfigRepository} from '../../../domain/appconfig/repository/AppConfigRepository';
+import {AppConfig} from '../../../domain/appconfig/model/AppConfig';
+import {singleton} from 'tsyringe';
+import {AppConfigCache} from '../cache/AppConfigCache';
 
-class AppConfigDataRepository implements AppConfigRepository {
-    getAppConfig(): Promise<AppConfig> {
-        return cache.getAppConfig();
-    }
+@singleton()
+export class AppConfigDataRepository implements AppConfigRepository {
+  constructor(private readonly appConfigCache: AppConfigCache) {}
 
+  async getAppConfig(): Promise<AppConfig> {
+    return await this.appConfigCache.getAppConfig();
+  }
 }
-
-const repository = new AppConfigDataRepository();
-export default repository;

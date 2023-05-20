@@ -36,6 +36,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $extra_options_count
  * @property-read Mensa $mensa
  * @property-read User $user
+ *
  * @method static SignupFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Signup newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Signup newQuery()
@@ -59,6 +60,7 @@ use Illuminate\Support\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|Signup whereUserId($value)
  * @method static Builder|Signup withTrashed()
  * @method static Builder|Signup withoutTrashed()
+ *
  * @mixin Eloquent
  */
 class Signup extends Model
@@ -66,6 +68,7 @@ class Signup extends Model
     use SoftDeletes, HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $fillable = ['id', 'cooks', 'dishwasher', 'food_option', 'is_intro', 'allergies', 'extra_info', 'confirmed', 'confirmation_code', 'user_id', 'mensa_id'];

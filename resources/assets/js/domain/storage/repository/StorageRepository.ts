@@ -1,18 +1,15 @@
-import Language from "../../common/model/Language";
-import repository from "../../../data/storage/StorageRepositoryImpl";
+import {Language} from '../../common/model/Language';
 
 export interface StorageRepository {
-    getDarkMode(): Boolean
+  getDarkMode: () => boolean;
 
-    setDarkMode(mode: Boolean): void
+  setDarkMode: (mode: boolean) => void;
 
-    getLanguage(): Language
+  getLanguage: () => Language;
 
-    setLanguage(language: Language): void
+  setLanguage: (language: Language) => void;
 
-    getUserToken(): string | undefined
+  getUserToken: () => string | undefined;
 
-    setUserToken(token: string | null): void
+  setUserToken: (token: string | null) => void;
 }
-
-export default repository;

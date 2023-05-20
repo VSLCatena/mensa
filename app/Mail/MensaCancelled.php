@@ -29,7 +29,8 @@ class MensaCancelled extends Mailable
      */
     public function build()
     {
-        $this->subject('Mensa op ' . formatDate($this->mensaUser->mensa->date, false, false, false) . ' is geannuleerd!');
+        $this->subject('Mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false).' is geannuleerd!');
+
         return $this->markdown('emails.mensa.cancelled', ['mensaUser' => $this->mensaUser]);
     }
 }

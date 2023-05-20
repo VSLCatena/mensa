@@ -5,7 +5,6 @@ use App\Models\Faq;
 use App\Models\Mensa;
 use App\Models\MenuItem;
 use App\Models\Signup;
-use App\Models\SignupExtraOption;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -79,7 +78,7 @@ class DatabaseSeeder extends Seeder
     private function faqSeeder()
     {
         Faq::factory()
-            ->count(30)
+            ->count(12)
             ->create();
     }
 }

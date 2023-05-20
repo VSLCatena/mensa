@@ -10,11 +10,8 @@ class MensaPolicy
 {
     use HandlesAuthorization;
 
-
     /**
      * Determine whether the user can create a mensa.
-     * @param User $user
-     * @return bool
      */
     public function create(User $user): bool
     {
@@ -23,10 +20,6 @@ class MensaPolicy
 
     /**
      * Determine whether the user can edit soft parts of the mensa.
-     *
-     * @param User|null $user
-     * @param Mensa $mensa
-     * @return bool
      */
     public function softEdit(?User $user, Mensa $mensa): bool
     {
@@ -35,10 +28,6 @@ class MensaPolicy
 
     /**
      * Determine whether the user can edit hard parts of the mensa.
-     *
-     * @param User|null $user
-     * @param Mensa $mensa
-     * @return bool
      */
     public function hardEdit(?User $user, Mensa $mensa): bool
     {
@@ -47,9 +36,6 @@ class MensaPolicy
 
     /**
      * Determine whether the user can delete the mensa.
-     * @param User $user
-     * @param Mensa $mensa
-     * @return bool
      */
     public function delete(User $user, Mensa $mensa): bool
     {
@@ -58,10 +44,6 @@ class MensaPolicy
 
     /**
      * Can the given user see the mensa overview
-     *
-     * @param User $user
-     * @param Mensa $mensa
-     * @return bool
      */
     public function seeOverview(User $user, Mensa $mensa): bool
     {
@@ -70,10 +52,6 @@ class MensaPolicy
 
     /**
      * Checks if the given user is a cook
-     *
-     * @param User $user
-     * @param Mensa $mensa
-     * @return bool
      */
     private function isCook(User $user, Mensa $mensa): bool
     {

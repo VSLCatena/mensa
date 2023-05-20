@@ -1,6 +1,16 @@
-import Mensa from "../model/Mensa";
-import repository from "../repository/MensaRepository";
+import {Mensa} from '../model/Mensa';
+import {MensaRepository} from '../repository/MensaRepository';
+import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
-export default async function GetMensa(mensaId: string): Promise<Mensa | null> {
-    return repository.getMensa(mensaId)
+@injectable()
+export class GetMensa {
+  constructor(
+    @inject(TypeSymbols.MensaRepository)
+    private readonly repository: MensaRepository
+  ) {}
+
+  async execute(mensaId: string): Promise<Mensa | null> {
+    return await this.repository.getMensa(mensaId);
+  }
 }

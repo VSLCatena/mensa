@@ -1,18 +1,27 @@
-import GetUserToken from "../../storage/usecase/GetUserToken";
+import {GetUserToken} from '../../storage/usecase/GetUserToken';
+import {AuthenticationTokenMissingError} from '../errors/AuthenticationTokenMissingError';
+import {injectable} from 'tsyringe';
 
-export default async function WithAuthentication<T>(
-    call: (token: string | null) => T,
-    strategy: Strategy = Strategy.AUTH_REQUIRED
-): Promise<T> {
-    let token = await GetUserToken() ?? null;
-    if (token == null && strategy == Strategy.AUTH_REQUIRED) {
-        return Promise.reject(Error("Authentication required"));
+@injectable()
+export class WithAuthentication {
+  constructor(private readonly getUserToken: GetUserToken) {}
+
+  async call<T, B extends Strategy>(
+    call: (
+      token: B extends Strategy.AUTH_REQUIRED ? string : string | null
+    ) => Promise<T>,
+    strategy: B
+  ): Promise<T> {
+    const token = this.getUserToken.execute() ?? null;
+    if (token === null && strategy === Strategy.AUTH_REQUIRED) {
+      throw new AuthenticationTokenMissingError();
     }
 
-    return call(token);
+    return await call(token as any);
+  }
 }
 
 export enum Strategy {
-    AUTH_REQUIRED,
-    AUTH_OPTIONAL,
+  AUTH_REQUIRED,
+  AUTH_OPTIONAL,
 }

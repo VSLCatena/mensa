@@ -9,7 +9,6 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GetAuthorizationUrlController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -24,19 +23,16 @@ class GetAuthorizationUrlController extends Controller
      *
      * Url: mensa/[uuid]
      *
-     * @param Request $request
      * @param $mensaId
-     * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse
     {
         return response()->json([
-            "authorizationUri" => Socialite::driver('azure')->with([
+            'authorizationUri' => Socialite::driver('azure')->with([
                 'prompt'        => 'select_account',
                 'whr'           =>env("AZURE_DOMAIN"),
                 'domain_hint'   =>env("AZURE_DOMAIN"),
-                ])->stateless()->redirect()->getTargetUrl()
+            ])->stateless()->redirect()->getTargetUrl()
         ]);
     }
 }
-

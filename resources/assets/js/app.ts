@@ -1,63 +1,72 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
+import 'reflect-metadata';
 import './bootstrap';
-
 import Vue from 'vue';
-import Vuetify from "vuetify";
+import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import VueRouter from 'vue-router';
-import App from "./presentation/App.vue";
-import Home from './presentation/pages/home/Home.vue';
-import Mensa from './presentation/components/mensa/MensaItem.vue';
-import lang, {translate} from "./presentation/lang/Language";
-import GetDarkMode from "./domain/storage/usecase/GetDarkMode";
-import LoginToken from "./presentation/pages/login/LoginToken.vue";
-import GetSelf from "./domain/user/usecase/GetSelf";
-import {defaultData} from "./Local";
-import GetAppConfig from "./domain/appconfig/usecase/GetAppConfig";
+import App from './presentation/App.vue';
+import HomePage from './presentation/pages/home/HomePage.vue';
+import {Language as Lang, translate} from './presentation/lang/Language';
+import {GetDarkMode} from './domain/storage/usecase/GetDarkMode';
+import LoginTokenPage from './presentation/pages/login/LoginTokenPage.vue';
+import {GetSelf} from './domain/user/usecase/GetSelf';
+import {GetDefaultData} from './Local';
+import {GetAppConfig} from './domain/appconfig/usecase/GetAppConfig';
+import FaqPage from './presentation/pages/faq/FaqPage.vue';
+import VueDi from '@rhangai/vue-di';
+import {container, injectable} from 'tsyringe';
+import DependencyContainer from 'tsyringe/dist/typings/types/dependency-container';
+import {configureContainer} from "./di/ConfigureContainer";
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+@injectable()
+class AppSetup {
+  constructor(
+    private readonly getDarkMode: GetDarkMode,
+    private readonly getDefaultData: GetDefaultData,
+    private readonly getAppConfig: GetAppConfig,
+    private readonly getSelf: GetSelf
+  ) {}
 
-Vue.use(VueRouter);
-Vue.use(Vuetify);
+  setup(container: DependencyContainer) {
+    Vue.use(VueRouter);
+    Vue.use(Vuetify);
+    Vue.use(VueDi, {container});
 
-const routes = [
-    {path: '/', component: Home},
-    {path: '/mensa', component: Mensa},
-    {path: '/login/token', component: LoginToken}
-];
+    const routes = [
+      {path: '/', component: HomePage},
+      {path: '/faq', component: FaqPage},
+      {path: '/login/token', component: LoginTokenPage},
+    ];
 
-const router = new VueRouter({
-    mode: 'history',
-    routes: routes
-});
+    const router = new VueRouter({
+      mode: 'history',
+      routes,
+    });
 
-const vuetify = new Vuetify({
-    theme: {
-        dark: GetDarkMode()
-    }
-});
+    const vuetify = new Vuetify({
+      theme: {
+        dark: this.getDarkMode.execute(),
+      },
+    });
 
+    Vue.prototype.$local = Vue.observable(this.getDefaultData.get());
+    Vue.prototype.$lang = Lang;
+    Vue.prototype.$ll = translate;
 
-Vue.prototype.$local = Vue.observable(defaultData());
-Vue.prototype.$lang = lang;
-Vue.prototype.$ll = translate;
+    const app = new Vue({
+      vuetify,
+      router,
+      components: {App},
+    }).$mount('#app');
 
-const app = new Vue({
-    vuetify,
-    router,
-    components: {App},
-}).$mount('#app');
+    void this.getAppConfig.execute();
+    void this.getSelf.execute().then(user => {
+      app.$local.user = user;
+    });
+  }
+}
 
-GetAppConfig().then();
-GetSelf().then(user => {
-    app.$local.user = user;
-});
+const configuredContainer = configureContainer(container);
+
+const appSetup = configuredContainer.resolve(AppSetup);
+appSetup.setup(configuredContainer);

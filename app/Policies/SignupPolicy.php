@@ -12,11 +12,6 @@ class SignupPolicy
 
     /**
      * Determine whether the user can edit soft parts of the mensa.
-     *
-     * @param User|null $user
-     * @param Signup $signup
-     * @param string|null $confirmationCode
-     * @return bool
      */
     public function canEdit(?User $user, Signup $signup, ?string $confirmationCode): bool
     {

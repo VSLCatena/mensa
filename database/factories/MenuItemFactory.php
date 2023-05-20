@@ -24,7 +24,7 @@ class MenuItemFactory extends Factory
         return [
             'id' => $this->faker->uuid,
             'order' => $this->faker->numberBetween(0, 100),
-            'text' => $this->faker->sentence(rand(3, 12))
+            'text' => $this->faker->sentence(rand(3, 12)),
         ];
     }
 }

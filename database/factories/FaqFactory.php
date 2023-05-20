@@ -25,7 +25,7 @@ class FaqFactory extends Factory
             'id' => $this->faker->uuid,
             'question' => $this->faker->sentence(rand(5, 30)),
             'answer' => $this->faker->sentence(rand(15, 200)),
-            'order' => $this->faker->numberBetween(0, 1000)
+            'order' => $this->faker->numberBetween(0, 1000),
         ];
     }
 }

@@ -2,33 +2,32 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemItem;
+use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemResponseModel;
 use App\Models\MenuItem;
 
 trait MenuItemMapper
 {
-
     /**
      * @param $menuItem MenuItem
-     * @return MenuItemItem
      */
-    function mapMenuItem(MenuItem $menuItem): MenuItemItem
+    public function mapMenuItem(MenuItem $menuItem): MenuItemResponseModel
     {
-        return new MenuItemItem(
+        return new MenuItemResponseModel(
             id: $menuItem->id,
             text: $menuItem->text
         );
     }
 
     /**
-     * @param MenuItem[] $menuItems
-     * @return MenuItemItem[]
+     * @param  MenuItem[]  $menuItems
+     * @return MenuItemResponseModel[]
      */
-    function mapMenuItems(array $menuItems): array
+    public function mapMenuItems(array $menuItems): array
     {
         usort($menuItems, function ($a, $b) {
             return $a->order - $b->order;
         });
+
         return array_map(function ($item) {
             return self::mapMenuItem($item);
         }, $menuItems);

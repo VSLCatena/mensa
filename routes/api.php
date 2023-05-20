@@ -11,7 +11,7 @@
 |
 */
 
-Route::prefix("v1")->middleware('jsonRequests')->group(function () {
+Route::prefix('v1')->middleware('jsonRequests')->group(function () {
     Route::get('login/url', 'Api\v1\User\Controllers\GetAuthorizationUrlController');
     Route::get('login/token', 'Api\v1\User\Controllers\GenerateTokenController');
 
@@ -28,6 +28,12 @@ Route::prefix("v1")->middleware('jsonRequests')->group(function () {
     Route::put('mensa/{mensaId}/signup', 'Api\v1\Mensa\Controllers\SignupController@signup');
     Route::patch('mensa/{mensaId}/signup/{signupId}/confirm', 'Api\v1\Mensa\Controllers\SignupController@confirmSignup');
     Route::delete('mensa/{mensaId}/signup/{signupId}', 'Api\v1\Mensa\Controllers\SignupController@deleteSignup');
+
+    Route::get('faqs', 'Api\v1\Faq\Controllers\FaqController@getFaqs');
+    Route::post('faqs/sort', 'Api\v1\Faq\Controllers\FaqController@sortFaqs');
+    Route::post('faq/new', 'Api\v1\Faq\Controllers\FaqController@newFaq');
+    Route::put('faq/{faqId}', 'Api\v1\Faq\Controllers\FaqController@updateFaq');
+    Route::delete('faq/{faqId}', 'Api\v1\Faq\Controllers\FaqController@deleteFaq');
 
     Route::get('user/self', 'Api\v1\User\Controllers\SelfController@getSelf');
     Route::patch('user/self/update', 'Api\v1\User\Controllers\SelfController@updateSelf');

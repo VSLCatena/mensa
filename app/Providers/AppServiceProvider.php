@@ -23,8 +23,11 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(RemoteUserLookup::class, AzureUserLookup::class);
 
-        \URL::forceScheme('https');
-        setlocale(LC_TIME, "nl_NL");
+        // We don't want to enforce https scheme in debug, as this breaks the debugbar locally
+        if (! config('app.debug')) {
+            \URL::forceScheme('https');
+        }
+        setlocale(LC_TIME, 'nl_NL');
     }
 
     /**

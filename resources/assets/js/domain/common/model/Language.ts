@@ -1,20 +1,21 @@
-import Config from "../../../Config";
+// noinspection JSUnusedLocalSymbols
 
-type languages = Lowercase<keyof typeof Config.SUPPORTED_LANGUAGES>;
+import {Config} from '../../../Config';
 
-export default class Language {
-    constructor(readonly language: languages) {
-    }
+type languages = Lowercase<keyof typeof Config.supportedLanguages>;
+
+export class Language {
+  constructor(readonly language: languages) {}
 }
 
 type AllLanguages = {
-    [Properties in languages]: Language
-}
-
+  [Properties in languages]: Language;
+};
 
 export const SupportedLanguages = {
-    nl: new Language('nl'),
-    en: new Language('en')
-}
+  nl: new Language('nl'),
+  en: new Language('en'),
+};
 
-let typecheck: AllLanguages = SupportedLanguages;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const typeCheck: AllLanguages = SupportedLanguages;

@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property string $mensa_id
  * @property-read Mensa $mensa
  * @property-read User $user
+ *
  * @method static LogFactory factory(...$parameters)
  * @method static Builder|Log newModelQuery()
  * @method static Builder|Log newQuery()
@@ -31,6 +32,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Log whereText($value)
  * @method static Builder|Log whereUpdatedAt($value)
  * @method static Builder|Log whereUserId($value)
+ *
  * @mixin Eloquent
  */
 class Log extends Model
@@ -38,6 +40,7 @@ class Log extends Model
     use HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     public function mensa(): BelongsTo

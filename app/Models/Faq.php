@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property string $answer
  * @property int $order
  * @property-read User $lastEditedBy
+ *
  * @method static FaqFactory factory(...$parameters)
  * @method static Builder|Faq newModelQuery()
  * @method static Builder|Faq newQuery()
@@ -30,6 +31,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Faq whereOrder($value)
  * @method static Builder|Faq whereQuestion($value)
  * @method static Builder|Faq whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Faq extends Model
@@ -37,6 +39,7 @@ class Faq extends Model
     use HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     public function lastEditedBy(): BelongsTo

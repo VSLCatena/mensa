@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read Mensa $mensa
  * @property-read Collection|Signup[] $signups
  * @property-read int|null $signups_count
+ *
  * @method static ExtraOptionFactory factory(...$parameters)
  * @method static Builder|ExtraOption newModelQuery()
  * @method static Builder|ExtraOption newQuery()
@@ -31,6 +32,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static Builder|ExtraOption whereMensaId($value)
  * @method static Builder|ExtraOption whereOrder($value)
  * @method static Builder|ExtraOption wherePrice($value)
+ *
  * @mixin Eloquent
  */
 class ExtraOption extends Model
@@ -38,6 +40,7 @@ class ExtraOption extends Model
     use HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     public $timestamps = false;

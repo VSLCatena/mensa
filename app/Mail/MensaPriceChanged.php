@@ -29,7 +29,8 @@ class MensaPriceChanged extends Mailable
      */
     public function build()
     {
-        $this->subject('Mensa op ' . formatDate($this->mensaUser->mensa->date, false, false, false) . ' is gewijzigd!');
+        $this->subject('Mensa op '.formatDate($this->mensaUser->mensa->date, false, false, false).' is gewijzigd!');
+
         return $this->markdown('emails.mensa.changed', ['mensaUser' => $this->mensaUser]);
     }
 }

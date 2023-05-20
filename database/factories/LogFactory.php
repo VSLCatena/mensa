@@ -23,7 +23,7 @@ class LogFactory extends Factory
     {
         return [
             'id' => $this->faker->uuid,
-            'text' => $this->faker->sentence(rand(5, 50))
+            'text' => $this->faker->sentence(rand(5, 50)),
         ];
     }
 }

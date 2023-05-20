@@ -1,5 +1,15 @@
-import repository from "../repository/StorageRepository";
+import {StorageRepository} from '../repository/StorageRepository';
+import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
-export default function SetDarkMode(mode: boolean) {
-    repository.setDarkMode(mode);
+@injectable()
+export class SetDarkMode {
+  constructor(
+    @inject(TypeSymbols.StorageRepository)
+    private readonly repository: StorageRepository
+  ) {}
+
+  execute(mode: boolean): void {
+    this.repository.setDarkMode(mode);
+  }
 }

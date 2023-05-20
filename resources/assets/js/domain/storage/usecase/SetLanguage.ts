@@ -1,6 +1,16 @@
-import repository from "../repository/StorageRepository";
-import Language from "../../common/model/Language";
+import {Language} from '../../common/model/Language';
+import {StorageRepository} from '../repository/StorageRepository';
+import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
-export default function SetLanguage(language: Language) {
-    return repository.setLanguage(language);
+@injectable()
+export class SetLanguage {
+  constructor(
+    @inject(TypeSymbols.StorageRepository)
+    private readonly repository: StorageRepository
+  ) {}
+
+  execute(language: Language): void {
+    return this.repository.setLanguage(language);
+  }
 }

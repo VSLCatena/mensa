@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Models;
 
 use Eloquent;
@@ -21,6 +20,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Model|Eloquent $tokenable
+ *
  * @method static Builder|PersonalAccessToken newModelQuery()
  * @method static Builder|PersonalAccessToken newQuery()
  * @method static Builder|PersonalAccessToken query()
@@ -33,6 +33,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|PersonalAccessToken whereTokenableId($value)
  * @method static Builder|PersonalAccessToken whereTokenableType($value)
  * @method static Builder|PersonalAccessToken whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class PersonalAccessToken extends \Laravel\Sanctum\PersonalAccessToken
@@ -40,6 +41,6 @@ class PersonalAccessToken extends \Laravel\Sanctum\PersonalAccessToken
     protected $casts = [
         'abilities' => 'json',
         'last_used_at' => 'datetime',
-        'id' => 'string'
+        'id' => 'string',
     ];
 }

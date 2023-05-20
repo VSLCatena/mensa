@@ -1,11 +1,24 @@
-import repository from "../repository/MensaRepository";
-import WithAuthentication, {Strategy} from "../../common/usecase/WithAuthentication";
-import EditMensa from "../model/EditMensa";
-import MapMensaRequest from "../mapper/MapMensaRequest";
+import {
+  WithAuthentication,
+  Strategy,
+} from '../../common/usecase/WithAuthentication';
+import {EditMensa} from '../model/EditMensa';
+import {MensaRepository} from '../repository/MensaRepository';
+import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
-export default async function UpdateMensa(mensa: EditMensa): Promise<void> {
-    return WithAuthentication(
-        token => repository.editMensa(MapMensaRequest(mensa), token!!),
-        Strategy.AUTH_REQUIRED
+@injectable()
+export class UpdateMensa {
+  constructor(
+    @inject(TypeSymbols.MensaRepository)
+    private readonly repository: MensaRepository,
+    private readonly withAuthentication: WithAuthentication
+  ) {}
+
+  async execute(mensa: EditMensa): Promise<void> {
+    return await this.withAuthentication.call(
+      async token => await this.repository.editMensa(mensa, token),
+      Strategy.AUTH_REQUIRED
     );
+  }
 }

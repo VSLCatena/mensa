@@ -2,7 +2,6 @@
 
 namespace App\Contracts;
 
-
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -10,35 +9,29 @@ use Psr\Http\Client\ClientExceptionInterface;
 
 abstract class RemoteUserLookup
 {
-
     /**
      * Gets an user from the remote repository
      *
-     * @param string $userReference
-     * @return User|null
      * @throws ClientExceptionInterface
      */
-    abstract function getUser(string $userReference): ?User;
+    abstract public function getUser(string $userReference): ?User;
 
     /**
      * Returns a list of groups the user is in
      *
-     * @param string $userId
      * @return array an array of groups the user is in
+     *
      * @throws ClientExceptionInterface
      */
-    abstract function getUserGroups(string $userId): array;
-
+    abstract public function getUserGroups(string $userId): array;
 
     /**
      * First grab the local user, if none was found try getting it from remote.
      * This also automatically checks if the user needs any updating.
      *
-     * @param string $userReference
-     * @return User|null
      * @throws ClientExceptionInterface
      */
-    function lookLocalFirst(string $userReference): ?User
+    public function lookLocalFirst(string $userReference): ?User
     {
         $emailSuffix = config('mensa.remote_user.email_suffix');
         $emailedUser = ends_with($userReference, $emailSuffix) ? $userReference : "$userReference$emailSuffix";
@@ -49,7 +42,9 @@ abstract class RemoteUserLookup
 
         if ($user == null) {
             $user = $this->getUser($userReference);
-            if ($user != null) $user->save();
+            if ($user != null) {
+                $user->save();
+            }
 
             return $user;
         }
@@ -57,17 +52,17 @@ abstract class RemoteUserLookup
         return $this->getUpdatedUserIfNecessary($user, $userReference);
     }
 
-
     /**
      * Get the current user. And update it if necessary.
      *
-     * @return User|null
      * @throws ClientExceptionInterface
      */
-    function currentUpdatedIfNecessary(): ?User
+    public function currentUpdatedIfNecessary(): ?User
     {
         $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
-        if ($user == null) return null;
+        if ($user == null) {
+            return null;
+        }
 
         return $this->getUpdatedUserIfNecessary($user);
     }
@@ -75,12 +70,9 @@ abstract class RemoteUserLookup
     /**
      * Checks if the given user needs to be updated and if so, updates it from the remote source
      *
-     * @param User $user
-     * @param string|null $userReference
-     * @return User|null
      * @throws ClientExceptionInterface
      */
-    function getUpdatedUserIfNecessary(User $user, ?string $userReference = null): ?User
+    public function getUpdatedUserIfNecessary(User $user, ?string $userReference = null): ?User
     {
         $userReference = $userReference ?? $user->remote_principal_name;
 
@@ -96,12 +88,9 @@ abstract class RemoteUserLookup
     /**
      * Update the given user from the remote source
      *
-     * @param User $user
-     * @param string|null $userReference
-     * @return User|null
      * @throws ClientExceptionInterface
      */
-    function getUpdatedUser(User $user, ?string $userReference = null): ?User
+    public function getUpdatedUser(User $user, ?string $userReference = null): ?User
     {
         $userReference = $userReference ?? $user->remote_principal_name;
 
@@ -109,6 +98,7 @@ abstract class RemoteUserLookup
 
         if ($remoteUser == null) {
             $user->forceDelete();
+
             return null;
         }
 

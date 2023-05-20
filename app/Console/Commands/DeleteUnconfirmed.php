@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Signup;
 use App\Services\MensaLogger;
-use App\Traits\Logger;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -23,7 +22,6 @@ class DeleteUnconfirmed extends Command
      * @var string
      */
     protected $description = 'Delete unconfirmed users';
-
 
     private MensaLogger $mensaLogger;
 
@@ -48,7 +46,7 @@ class DeleteUnconfirmed extends Command
         $unconfirmedUsers = Signup::where('confirmed', '0')->where('created_at', '<', Carbon::now()->subMinutes(15))->get();
         foreach ($unconfirmedUsers as $user) {
             $user->delete();
-            $this->mensaLogger->log($user->mensa, $user->user->name . '\'s reservering is verlopen en wordt verwijderd.');
+            $this->mensaLogger->log($user->mensa, $user->user->name.'\'s reservering is verlopen en wordt verwijderd.');
         }
     }
 }

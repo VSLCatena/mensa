@@ -1,5 +1,15 @@
-import repository from "../repository/StorageRepository";
+import {StorageRepository} from '../repository/StorageRepository';
+import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
-export default function GetUserToken(): string | undefined {
-    return repository.getUserToken();
+@injectable()
+export class GetUserToken {
+  constructor(
+    @inject(TypeSymbols.StorageRepository)
+    private readonly repository: StorageRepository
+  ) {}
+
+  execute(): string | undefined {
+    return this.repository.getUserToken();
+  }
 }
