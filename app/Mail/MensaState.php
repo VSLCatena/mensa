@@ -48,7 +48,6 @@ class MensaState extends Mailable
 
         $guests = $this->mensa->users(true)->whereNotIn('mensa_users.id', $staffIds)->get();
 
-
         return $this->view('emails.state.mensastate', [
             'staffIndex' => $staffIndex,
             'cooks' => $cooks,
@@ -58,7 +57,7 @@ class MensaState extends Mailable
             'singleDishwasherExtraConsumptions' => $singleDishwasherExtraConsumptions,
             'countExtraOptions' => $countExtraOptions,
             'staff' => $staff,
-            'guests' => $guests
+            'guests' => $guests,
         ]);
     }
 }

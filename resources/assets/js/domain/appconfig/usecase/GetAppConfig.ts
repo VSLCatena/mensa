@@ -1,14 +1,12 @@
 import {AppConfig} from '../model/AppConfig';
 import {inject, injectable} from 'tsyringe';
-import {
-  AppConfigRepository,
-  AppConfigRepositoryToken,
-} from '../repository/AppConfigRepository';
+import {AppConfigRepository} from '../repository/AppConfigRepository';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
 @injectable()
 export class GetAppConfig {
   constructor(
-    @inject(AppConfigRepositoryToken)
+    @inject(TypeSymbols.AppConfigRepository)
     private readonly repository: AppConfigRepository
   ) {}
 

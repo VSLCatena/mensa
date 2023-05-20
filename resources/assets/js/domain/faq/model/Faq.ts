@@ -3,3 +3,5 @@ export interface Faq {
   question: string;
   answer: string;
 }
+
+export type NewFaq = Omit<Faq, 'id'>;

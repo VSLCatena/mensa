@@ -1,4 +1,4 @@
-import {LanguageLintCheck} from './LanguageText';
+import {LanguageBlock} from './LanguageText';
 
 export const Text = {
   general: {
@@ -29,6 +29,10 @@ export const Text = {
     cancel: {
       nl: 'Annuleer',
       en: 'Cancel',
+    },
+    delete: {
+      nl: 'Verwijder',
+      en: 'Delete',
     },
   },
   and: {
@@ -233,8 +237,14 @@ export const Text = {
     dialog: {
       edit: {
         title: {
-          nl: 'FAQ item aanpassen',
-          en: 'Edit FAQ item',
+          new: {
+            nl: 'Nieuwe FAQ item',
+            en: 'New FAQ item',
+          },
+          existing: {
+            nl: 'FAQ item aanpassen',
+            en: 'Edit FAQ item',
+          },
         },
         question: {
           nl: 'Vraag',
@@ -341,5 +351,6 @@ export const Text = {
   },
 };
 
-// Make sure it is in the correct format
-LanguageLintCheck(Text);
+// Type check!
+// noinspection JSUnusedLocalSymbols
+const test: LanguageBlock = Text;

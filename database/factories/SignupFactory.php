@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class SignupFactory extends Factory
 {
     private static $id = 1;
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -33,7 +34,7 @@ class SignupFactory extends Factory
             'extra_info' => $this->faker->boolean ? $this->faker->sentence(10) : null,
             'confirmed' => $this->faker->boolean,
             'paid' => $this->faker->randomFloat(2, 0, 25),
-            'confirmation_code' => $this->faker->uuid
+            'confirmation_code' => $this->faker->uuid,
         ];
     }
 }

@@ -27,7 +27,13 @@
       }
     },
     mounted() {
-      let code = new URLSearchParams(window.location.search).get("code") as string;
+      // @ts-ignore We ignore this because we know it's there
+      // actually getting window to be recognized we need to add "dom" to the tsconfig.json
+      // This breaks multiple other things, so we're not doing that
+      // We define it as a small variable so as little code as possible is actually ignored
+      const search = window.location.search;
+
+      let code = new URLSearchParams(search).get("code") as string;
       if (code == null) return;
       (this.$services.login as Login).execute(code)
         .then(() => (this.$services.getSelf as GetSelf).execute())

@@ -1,7 +1,19 @@
 <template>
-  <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition">
-    <ProfileView v-if="isLoggedIn" :isOpen="isOpen && isLoggedIn" :close="close"/>
-    <LoginView v-else :isOpen="isOpen && !isLoggedIn" :close="close"/>
+  <v-dialog
+    v-model="isOpen"
+    max-width="800"
+    transition="dialog-bottom-transition"
+  >
+    <ProfileView
+      v-if="isLoggedIn"
+      :is-open="isOpen && isLoggedIn"
+      :close="close"
+    />
+    <LoginView
+      v-else
+      :is-open="isOpen && !isLoggedIn"
+      :close="close"
+    />
   </v-dialog>
 </template>
 
@@ -18,17 +30,17 @@
         isOpen: false,
       }
     },
+    computed: {
+      isLoggedIn: function (): boolean {
+        return this.$local.user != AnonymousUser
+      }
+    },
     methods: {
       open: function () {
         this.isOpen = true;
       },
       close: function () {
         this.isOpen = false;
-      }
-    },
-    computed: {
-      isLoggedIn: function (): boolean {
-        return this.$local.user != AnonymousUser
       }
     }
   });

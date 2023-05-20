@@ -4,16 +4,14 @@ import {
   WithAuthentication,
   Strategy,
 } from '../../common/usecase/WithAuthentication';
-import {
-  SignupRepository,
-  SignupRepositoryToken,
-} from '../repository/SignupRepository';
+import {SignupRepository} from '../repository/SignupRepository';
 import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
 @injectable()
 export class SignupMensa {
   constructor(
-    @inject(SignupRepositoryToken)
+    @inject(TypeSymbols.SignupRepository)
     private readonly repository: SignupRepository,
     private readonly withAuthentication: WithAuthentication
   ) {}

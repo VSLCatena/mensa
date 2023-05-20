@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Exception $exception
+     * @param  Exception  $exception
      * @return void
      */
     public function report(Throwable $exception)
@@ -45,8 +45,8 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
-     * @param Exception $exception
+     * @param  Request  $request
+     * @param  Exception  $exception
      * @return Response
      */
     public function render($request, Throwable $exception)
@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
                     return redirect(route('home'));
                     break;
 
-                // internal error
+                    // internal error
                 case '500':
                     return redirect(route('home'));
                     break;

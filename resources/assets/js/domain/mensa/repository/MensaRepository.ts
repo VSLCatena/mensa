@@ -16,5 +16,3 @@ export interface MensaRepository {
 
   deleteMensa: (mensaId: string, authToken: string) => Promise<void>;
 }
-
-export const MensaRepositoryToken = 'MensaRepositoryToken';

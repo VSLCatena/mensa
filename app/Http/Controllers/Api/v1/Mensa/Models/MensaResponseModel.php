@@ -6,20 +6,12 @@ class MensaResponseModel
 {
     /**
      * MensaResponseModel constructor.
-     * @param string $id
-     * @param string $title
-     * @param string $description
-     * @param int $date
-     * @param int $closingTime
-     * @param bool $isClosed
-     * @param int $maxSignups
-     * @param int|SimpleUserResponseModel[] $signups
-     * @param int $dishwashers
-     * @param float $price
-     * @param SimpleUserResponseModel[] $cooks
-     * @param string[] $foodOptions
-     * @param MenuItemResponseModel[] $menu
-     * @param ExtraOptionResponseModel[] $extraOptions
+     *
+     * @param  int|SimpleUserResponseModel[]  $signups
+     * @param  SimpleUserResponseModel[]  $cooks
+     * @param  string[]  $foodOptions
+     * @param  MenuItemResponseModel[]  $menu
+     * @param  ExtraOptionResponseModel[]  $extraOptions
      */
     public function __construct(
         public string $id,
@@ -36,7 +28,6 @@ class MensaResponseModel
         public array $foodOptions,
         public array $menu,
         public array $extraOptions,
-    )
-    {
+    ) {
     }
 }

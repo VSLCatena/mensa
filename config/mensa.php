@@ -59,7 +59,7 @@ return [
             [
                 'name' => 'Bar filmzaal',
                 'token' => env('MENSA_ACCOUNTURL_BAR002'),
-            ]
+            ],
         ],
         'whitelisted_ips' => explode(',', env('MENSA_ACCOUNT_WHITELIST_IPS')),
     ],

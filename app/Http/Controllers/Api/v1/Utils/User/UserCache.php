@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers\Api\v1\Utils\User;
 
-
 use App\Models\User;
 
-class   UserCache
+class UserCache
 {
     /**
      * @var array[string]User
      */
     private static array $cache = [];
 
-
-    static function getCachedUser(string $userId)
+    public static function getCachedUser(string $userId)
     {
-        if (!array_key_exists($userId, self::$cache)) {
+        if (! array_key_exists($userId, self::$cache)) {
             self::$cache[$userId] = User::find($userId);
         }
 
         return self::$cache[$userId];
     }
-
 }

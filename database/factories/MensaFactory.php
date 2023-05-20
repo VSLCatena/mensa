@@ -21,7 +21,7 @@ class MensaFactory extends Factory
      */
     public function definition()
     {
-        $date = $this->faker->dateTimeBetween("-1 month", "+3 months")->getTimestamp();
+        $date = $this->faker->dateTimeBetween('-1 month', '+3 months')->getTimestamp();
 
         return [
             'id' => $this->faker->uuid,
@@ -32,7 +32,7 @@ class MensaFactory extends Factory
             'max_users' => $this->faker->numberBetween(5, 50),
             'food_options' => $this->faker->numberBetween(1, 7),
             'closed' => $this->faker->boolean,
-            'price' => $this->faker->randomFloat(2, 0, 10)
+            'price' => $this->faker->randomFloat(2, 0, 10),
         ];
     }
 }

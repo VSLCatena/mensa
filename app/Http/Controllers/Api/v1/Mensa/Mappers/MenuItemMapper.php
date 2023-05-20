@@ -7,12 +7,10 @@ use App\Models\MenuItem;
 
 trait MenuItemMapper
 {
-
     /**
      * @param $menuItem MenuItem
-     * @return MenuItemResponseModel
      */
-    function mapMenuItem(MenuItem $menuItem): MenuItemResponseModel
+    public function mapMenuItem(MenuItem $menuItem): MenuItemResponseModel
     {
         return new MenuItemResponseModel(
             id: $menuItem->id,
@@ -21,14 +19,15 @@ trait MenuItemMapper
     }
 
     /**
-     * @param MenuItem[] $menuItems
+     * @param  MenuItem[]  $menuItems
      * @return MenuItemResponseModel[]
      */
-    function mapMenuItems(array $menuItems): array
+    public function mapMenuItems(array $menuItems): array
     {
         usort($menuItems, function ($a, $b) {
             return $a->order - $b->order;
         });
+
         return array_map(function ($item) {
             return self::mapMenuItem($item);
         }, $menuItems);

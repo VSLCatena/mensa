@@ -17,7 +17,6 @@ export class WithAuthentication {
       throw new AuthenticationTokenMissingError();
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return await call(token as any);
   }
 }

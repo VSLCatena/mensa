@@ -1,48 +1,54 @@
+<!-- eslint-disable vue/no-mutating-props */ -->
 <template>
   <div>
     <v-select
+      v-model="signup.foodOption"
       :label="$ll($lang.text.signup.field_food_preference)"
       :items="foodOptions"
       item-text="text"
       item-value="value"
-      v-model="signup.foodOption"
       :disabled="!enabled"
       :rules="validations.foodOptions"
-      hide-details="auto"></v-select>
+      hide-details="auto"
+    />
 
     <v-text-field
-      :label="$ll($lang.text.signup.field_allergies)"
       v-model="signup.allergies"
+      :label="$ll($lang.text.signup.field_allergies)"
       :disabled="!enabled"
       :rules="validations.allergies"
       :counter="MAX_STRING_LENGTH"
       hide-details="auto"
-      class="mt-8 mb-4"/>
+      class="mt-8 mb-4"
+    />
 
     <v-text-field
-      :label="$ll($lang.text.signup.field_extraInfo)"
       v-model="signup.extraInfo"
+      :label="$ll($lang.text.signup.field_extraInfo)"
       :disabled="!enabled"
       :rules="validations.extraInfo"
       :counter="MAX_STRING_LENGTH"
       hide-details="auto"
-      class="my-4"/>
+      class="my-4"
+    />
 
     <v-checkbox
-      :label="$ll($lang.text.signup.field_dishwasher) + (signup.dishwasher ? ' ❤' : '')"
       v-if="!signup.isIntro"
       v-model="signup.dishwasher"
+      :label="$ll($lang.text.signup.field_dishwasher) + (signup.dishwasher ? ' ❤' : '')"
       :disabled="!enabled"
       hide-details="auto"
-      class="mt-6"/>
+      class="mt-6"
+    />
 
     <v-checkbox
       v-if="$local.user.isAdmin && !signup.isIntro"
-      :label="$ll($lang.text.signup.field_cook)"
       v-model="signup.cook"
+      :label="$ll($lang.text.signup.field_cook)"
       :disabled="!enabled"
       hide-details="auto"
-      class="mt-4"/>
+      class="mt-4"
+    />
   </div>
 </template>
 

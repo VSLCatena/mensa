@@ -14,11 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class GenerateTokenController extends Controller
 {
-
     /**
      * Create a new controller instance.
-     *
-     * @param RemoteUserLookup $userLookup
      */
     public function __construct(private RemoteUserLookup $userLookup)
     {
@@ -26,9 +23,6 @@ class GenerateTokenController extends Controller
 
     /**
      * Get a single mensa
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function __invoke(Request $request): JsonResponse
     {
@@ -36,8 +30,9 @@ class GenerateTokenController extends Controller
 
         $user = User::find($azureUser->id) ?? new User();
 
-        if (!$user->exists)
+        if (! $user->exists) {
             $user->id = $azureUser->id;
+        }
 
         try {
             $user = $this->userLookup->getUpdatedUser($user, $azureUser->principal_name);
@@ -50,7 +45,7 @@ class GenerateTokenController extends Controller
         }
 
         return response()->json([
-            'token' => $user->createToken(Str::uuid())->plainTextToken
+            'token' => $user->createToken(Str::uuid())->plainTextToken,
         ]);
     }
 }

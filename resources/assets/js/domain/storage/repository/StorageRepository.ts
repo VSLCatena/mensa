@@ -13,5 +13,3 @@ export interface StorageRepository {
 
   setUserToken: (token: string | null) => void;
 }
-
-export const StorageRepositoryToken = 'StorageRepositoryToken';

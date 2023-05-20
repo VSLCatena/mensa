@@ -30,7 +30,7 @@ class UserFactory extends Factory
             'mensa_admin' => $this->faker->boolean,
             'food_preference' => $this->faker->randomElement([0, 1, 2, 4]),
             'remote_last_check' => $this->faker->dateTime->getTimestamp(),
-            'remote_principal_name' => ''
+            'remote_principal_name' => '',
         ];
     }
 }

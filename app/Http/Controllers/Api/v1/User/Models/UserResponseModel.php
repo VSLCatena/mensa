@@ -12,7 +12,6 @@ class UserResponseModel
         public string|null $extraInfo,
         public string|null $foodPreference,
         public bool $isAdmin
-    )
-    {
+    ) {
     }
 }

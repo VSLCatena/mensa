@@ -2,7 +2,7 @@
   <v-card>
     <v-toolbar>
       <v-tabs v-model="tabSelected">
-        <v-tabs-slider></v-tabs-slider>
+        <v-tabs-slider />
         <v-tab :key="1">
           <v-icon>mdi-calendar</v-icon>
         </v-tab>
@@ -17,21 +17,33 @@
         <v-date-picker
           v-model="selectedDate"
           no-title
-        ></v-date-picker>
+        />
       </v-tab-item>
       <v-tab-item :key="2">
         <v-time-picker
           v-model="selectedTime"
           format="24hr"
           no-title
-        ></v-time-picker>
+        />
       </v-tab-item>
     </v-tabs-items>
-    <v-card-text class="text-center">{{ dateText }}</v-card-text>
+    <v-card-text class="text-center">
+      {{ dateText }}
+    </v-card-text>
     <v-card-actions>
-      <v-spacer></v-spacer>
-      <v-btn text @click="onSaveClicked()">{{ $ll($lang.text.general.save) }}</v-btn>
-      <v-btn text @click="onCloseClicked()">{{ $ll($lang.text.general.cancel) }}</v-btn>
+      <v-spacer />
+      <v-btn
+        text
+        @click="onSaveClicked()"
+      >
+        {{ $ll($lang.text.general.save) }}
+      </v-btn>
+      <v-btn
+        text
+        @click="onCloseClicked()"
+      >
+        {{ $ll($lang.text.general.cancel) }}
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -52,7 +64,7 @@
       },
       originalDate: {
         type: Date as PropType<Date>,
-        required: false
+        required: true
       }
     },
     data: function () {
@@ -60,6 +72,18 @@
         tabSelected: 0,
         selectedDate: "",
         selectedTime: ""
+      }
+    },
+    computed: {
+      newDate: function (): Date {
+        let date = new Date();
+        if (this.selectedDate != "" && this.selectedTime != "") {
+          date = new Date(Date.parse(this.selectedDate + " " + this.selectedTime));
+        }
+        return date;
+      },
+      dateText: function (): string {
+        return formatDate(this.newDate);
       }
     },
     watch: {
@@ -91,18 +115,6 @@
           newText = '0' + newText;
         }
         return newText
-      }
-    },
-    computed: {
-      newDate: function (): Date {
-        let date = new Date();
-        if (this.selectedDate != "" && this.selectedTime != "") {
-          date = new Date(Date.parse(this.selectedDate + " " + this.selectedTime));
-        }
-        return date;
-      },
-      dateText: function (): string {
-        return formatDate(this.newDate);
       }
     }
   });

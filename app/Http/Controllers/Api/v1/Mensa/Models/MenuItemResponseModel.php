@@ -6,13 +6,10 @@ class MenuItemResponseModel
 {
     /**
      * MenuItemResponseModel constructor.
-     * @param string $id
-     * @param string $text
      */
     public function __construct(
         public string $id,
         public string $text,
-    )
-    {
+    ) {
     }
 }

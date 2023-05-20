@@ -12,9 +12,6 @@ class MensaLogger
      * Logs a given message to a certain Mensa.
      *
      * Automatically associates the current logged in user to it if any.
-     *
-     * @param Mensa $mensa
-     * @param string $description
      */
     public function log(Mensa $mensa, string $description)
     {

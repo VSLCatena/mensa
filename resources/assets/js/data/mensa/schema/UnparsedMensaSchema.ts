@@ -3,11 +3,13 @@ import {Mensa} from '../../../domain/mensa/model/Mensa';
 import {MensaMenuItemSchema} from './MensaMenuItemSchema';
 import {ExtraOptionSchema} from './ExtraOptionSchema';
 import {IdentifiableUserSchema} from '../../user/schema/IdentifiableUserSchema';
+import {UnparsedSignupUser, UnparsedSignupUserSchema} from "./UnparsedSignupUserSchema";
 
 export type UnparsedMensa = Omit<
   Mensa,
-  'foodOptions' & 'date' & 'closingTime'
+  'foodOptions' | 'date' | 'closingTime' | 'signups'
 > & {
+  signups: number | UnparsedSignupUser[];
   foodOptions: string[];
   date: number;
   closingTime: number;
@@ -40,8 +42,8 @@ export const UnparsedMensaSchema: JSONSchemaType<UnparsedMensa> = {
         {type: 'number'},
         {
           type: 'array',
-          items: IdentifiableUserSchema,
-        },
+          items: UnparsedSignupUserSchema,
+        }
       ],
     },
     cooks: {

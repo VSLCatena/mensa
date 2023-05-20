@@ -22,8 +22,6 @@ export const UnparsedFullUserSchema: JSONSchemaType<UnparsedFullUser> = {
     'email',
     'isAdmin',
     'foodPreference',
-    'extraInfo',
-    'allergies',
   ],
   additionalProperties: false,
 };

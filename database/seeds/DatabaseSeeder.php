@@ -5,7 +5,6 @@ use App\Models\Faq;
 use App\Models\Mensa;
 use App\Models\MenuItem;
 use App\Models\Signup;
-use App\Models\SignupExtraOption;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 

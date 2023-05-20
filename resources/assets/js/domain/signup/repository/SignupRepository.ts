@@ -28,5 +28,3 @@ export interface SignupRepository {
     authToken: string | null
   ) => Promise<void>;
 }
-
-export const SignupRepositoryToken = 'SignupRepositoryToken';

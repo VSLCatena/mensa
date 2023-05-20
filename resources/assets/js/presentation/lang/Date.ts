@@ -1,4 +1,4 @@
-import {LanguageLintCheck} from './LanguageText';
+import {LanguageBlock} from './LanguageText';
 
 const days = {
   short: {
@@ -175,5 +175,6 @@ export const Date = {
   months,
 };
 
-// Make sure it is in the correct format
-LanguageLintCheck(Date);
+// Type check!
+// noinspection JSUnusedLocalSymbols
+const test: LanguageBlock= Date;

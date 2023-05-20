@@ -38,6 +38,7 @@ use Illuminate\Support\Str;
  * @property-read int|null $ordered_users_count
  * @property-read Collection|Signup[] $users
  * @property-read int|null $users_count
+ *
  * @method static MensaFactory factory(...$parameters)
  * @method static Builder|Mensa newModelQuery()
  * @method static Builder|Mensa newQuery()
@@ -54,6 +55,7 @@ use Illuminate\Support\Str;
  * @method static Builder|Mensa wherePrice($value)
  * @method static Builder|Mensa whereTitle($value)
  * @method static Builder|Mensa whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class Mensa extends Model
@@ -61,6 +63,7 @@ class Mensa extends Model
     use HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     protected $fillable = [

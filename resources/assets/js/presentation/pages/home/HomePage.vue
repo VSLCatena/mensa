@@ -1,39 +1,64 @@
 <template>
   <div class="container mt-3 mb-3">
-    <MensaSignupDialog ref="mensaSignupDialog"/>
-    <MensaOverviewDialog ref="mensaOverviewDialog"/>
-    <MensaEditDialog ref="mensaEditDialog"/>
+    <MensaSignupDialog ref="mensaSignupDialog" />
+    <MensaOverviewDialog ref="mensaOverviewDialog" />
+    <MensaEditDialog ref="mensaEditDialog" />
     <v-banner>
       <div class="d-flex">
         <div>
           <span class="text--secondary">{{ $ll($lang.text.mensa.mensas_between) }}</span> {{ startDate }}
           <span class="text--secondary">{{ $ll($lang.text.and) }}</span> {{ endDate }}
         </div>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <div>
-          <v-btn @click="offsetWeeks(-2)" :loading="loading" class="mr-4">
+          <v-btn
+            :loading="loading"
+            class="mr-4"
+            @click="offsetWeeks(-2)"
+          >
             {{ $ll($lang.text.mensa.previous_weeks) }}
           </v-btn>
-          <v-btn @click="offsetWeeks(2)" :loading="loading">{{ $ll($lang.text.mensa.next_weeks) }}</v-btn>
+          <v-btn
+            :loading="loading"
+            @click="offsetWeeks(2)"
+          >
+            {{ $ll($lang.text.mensa.next_weeks) }}
+          </v-btn>
         </div>
       </div>
     </v-banner>
 
-    <div class="mt-4" v-if="loading">
-      <v-skeleton-loader v-for="x in 5" :key="x" type="list-item-two-line" class="mt-1"/>
+    <div
+      v-if="loading"
+      class="mt-4"
+    >
+      <v-skeleton-loader
+        v-for="x in 5"
+        :key="x"
+        type="list-item-two-line"
+        class="mt-1"
+      />
     </div>
 
-    <v-expansion-panels v-else focusable accordion v-model="openedItem" class="mt-4">
+    <v-expansion-panels
+      v-else
+      v-model="openedItem"
+      focusable
+      accordion
+      class="mt-4"
+    >
       <MensaItem
-        v-for="mensa in this.mensas" :key="mensa.id"
+        v-for="mensa in mensas"
+        :key="mensa.id"
         :mensa="mensa"
         :on-signup-clicked="onSignupMensaClicked"
-        :on-overview-clicked="onMensaOverviewClicked"
-        :on-edit-clicked="onMensaEditClicked"/>
+        :on-overview-clicked="currentUser.isAdmin ? onMensaOverviewClicked : undefined"
+        :on-edit-clicked="isLoggedIn(currentUser) ? onMensaEditClicked : undefined"
+      />
     </v-expansion-panels>
 
     <div class="mt-4 d-flex">
-      <v-spacer></v-spacer>
+      <v-spacer />
     </div>
   </div>
 </template>
@@ -47,7 +72,7 @@
   import {formatDate} from "../../formatters/DateFormatter";
   import MensaSignupDialog from "./dialogs/signup/MensaSignupDialog.vue";
   import MensaOverviewDialog from "./dialogs/overview/MensaOverviewDialog.vue";
-  import {AuthUser} from "../../../domain/common/model/User";
+  import {AuthUser, isLoggedIn} from "../../../domain/common/model/User";
   import MensaEditDialog from "./dialogs/mensa/MensaEditDialog.vue";
 
   export default Vue.extend({
@@ -88,18 +113,22 @@
         this.retrieveMensas(this.weekOffset, false);
       }
     },
+    created() {
+      this.weekOffset = 0;
+    },
     methods: {
+      isLoggedIn,
       offsetWeeks: function (offset: number) {
         this.weekOffset += offset;
       },
       onSignupMensaClicked: function (mensa: Mensa) {
-        (this.$refs.mensaSignupDialog as any).open(mensa);
+        this.$refs.mensaSignupDialog.open(mensa);
       },
       onMensaOverviewClicked: function (mensa: Mensa) {
-        (this.$refs.mensaOverviewDialog as any).open(mensa);
+        this.$refs.mensaOverviewDialog.open(mensa);
       },
       onMensaEditClicked: function (mensa: Mensa) {
-        (this.$refs.mensaEditDialog as any).open(mensa, mensa.signups);
+        this.$refs.mensaEditDialog.open(mensa);
       },
       retrieveMensas: function (offset: number, clearItem: boolean) {
         this.loading = true;
@@ -116,9 +145,6 @@
             this.loading = false;
           })
       }
-    },
-    created() {
-      this.weekOffset = 0;
     }
   });
 </script>

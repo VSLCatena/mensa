@@ -2,6 +2,7 @@ import {ExtraOption} from './ExtraOption';
 import {IdentifiableUser} from '../../common/model/User';
 import {MensaMenuItem} from './MensaMenuItem';
 import {FoodOption} from './FoodOption';
+import {SignupUser} from "./SignupUser";
 
 export interface Mensa {
   id: string;
@@ -14,7 +15,7 @@ export interface Mensa {
   closingTime: Date;
   price: number;
   maxSignups: number;
-  signups: number | IdentifiableUser[];
+  signups: number | SignupUser[];
   cooks: IdentifiableUser[];
   dishwashers: number;
 }

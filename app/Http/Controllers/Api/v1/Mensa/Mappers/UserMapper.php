@@ -2,27 +2,18 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
+use App\Http\Controllers\Api\v1\Mensa\Models\SignupResponseModel;
 use App\Http\Controllers\Api\v1\Mensa\Models\SimpleUserResponseModel;
-use App\Http\Controllers\Api\v1\Utils\User\UserCache;
-use App\Models\Signup;
 use App\Models\User;
 
 trait UserMapper
 {
-    /**
-     * @param User $user
-     * @return SimpleUserResponseModel
-     */
-    function mapUser(User $user): SimpleUserResponseModel
+    public function mapUser(User $user, ?SignupResponseModel $signup): SimpleUserResponseModel
     {
         return new SimpleUserResponseModel(
             id: $user->id,
             name: $user->name,
+            signup: $signup
         );
-    }
-
-    function mapUserFromSignup(Signup $signup): SimpleUserResponseModel
-    {
-        return $this->mapUser(UserCache::getCachedUser($signup->user_id));
     }
 }

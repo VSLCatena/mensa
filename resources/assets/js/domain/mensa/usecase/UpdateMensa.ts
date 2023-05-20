@@ -3,16 +3,14 @@ import {
   Strategy,
 } from '../../common/usecase/WithAuthentication';
 import {EditMensa} from '../model/EditMensa';
-import {
-  MensaRepository,
-  MensaRepositoryToken,
-} from '../repository/MensaRepository';
+import {MensaRepository} from '../repository/MensaRepository';
 import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
 @injectable()
 export class UpdateMensa {
   constructor(
-    @inject(MensaRepositoryToken)
+    @inject(TypeSymbols.MensaRepository)
     private readonly repository: MensaRepository,
     private readonly withAuthentication: WithAuthentication
   ) {}

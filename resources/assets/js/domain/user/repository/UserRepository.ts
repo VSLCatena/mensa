@@ -11,5 +11,3 @@ export interface UserRepository {
 
   updateSelf: (authToken: string, user: UserPreferences) => Promise<void>;
 }
-
-export const UserRepositoryToken = 'UserRepositoryToken';

@@ -7,7 +7,6 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
@@ -36,6 +35,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $tokens_count
  * @property-read Collection|Signup[] $user
  * @property-read int|null $user_count
+ *
  * @method static UserFactory factory(...$parameters)
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -52,6 +52,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static Builder|User whereRemoteLastCheck($value)
  * @method static Builder|User whereRemotePrincipalName($value)
  * @method static Builder|User whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class User extends Authenticatable
@@ -59,6 +60,7 @@ class User extends Authenticatable
     use Notifiable, HasApiTokens, HasFactory;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
 
     /**
@@ -78,9 +80,4 @@ class User extends Authenticatable
     protected $hidden = [
         'remember_token',
     ];
-
-    public function user(): HasMany
-    {
-        return $this->hasMany(Signup::class, 'user_id');
-    }
 }

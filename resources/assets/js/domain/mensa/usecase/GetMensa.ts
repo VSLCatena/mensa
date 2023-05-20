@@ -1,14 +1,12 @@
 import {Mensa} from '../model/Mensa';
-import {
-  MensaRepository,
-  MensaRepositoryToken,
-} from '../repository/MensaRepository';
+import {MensaRepository} from '../repository/MensaRepository';
 import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
 @injectable()
 export class GetMensa {
   constructor(
-    @inject(MensaRepositoryToken)
+    @inject(TypeSymbols.MensaRepository)
     private readonly repository: MensaRepository
   ) {}
 

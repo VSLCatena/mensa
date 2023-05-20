@@ -1,11 +1,9 @@
 import {SetUserToken} from '../../storage/usecase/SetUserToken';
-import {inject, injectable} from 'tsyringe';
-import {UserRepositoryToken} from '../repository/UserRepository';
+import {injectable} from 'tsyringe';
 
 @injectable()
 export class Logout {
   constructor(
-    @inject(UserRepositoryToken)
     private readonly setUserToken: SetUserToken
   ) {}
 

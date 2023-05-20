@@ -10,7 +10,7 @@ trait UserMapper
 {
     use FoodOptionsMapper;
 
-    function mapUser(User $user)
+    public function mapUser(User $user)
     {
         return new UserResponseModel(
             id: $user->id,

@@ -20,6 +20,7 @@ export class UnparsedMensaSignupMapper {
     return {
       ...data,
       foodOption,
+      isIntro: data.isIntro ?? false,
     };
   }
 }

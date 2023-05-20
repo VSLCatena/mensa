@@ -12,28 +12,32 @@ use Ramsey\Uuid\Uuid;
 class AzureUserLookup extends RemoteUserLookup
 {
     private ?string $token = null;
+
     private ?Client $httpClient = null;
 
     /**
      * Gets an user from Azure
      *
-     * @param string $userReference an username or email
+     * @param  string  $userReference an username or email
      * @return ?User
+     *
      * @throws ClientExceptionInterface
      */
-    function getUser(string $userReference): ?User
+    public function getUser(string $userReference): ?User
     {
         $userReference = strtolower($userReference);
 
         $userRegex = '/^[a-z0-9]+$/';
 
-        if (!preg_match($userRegex, $userReference) && !filter_var($userReference, FILTER_VALIDATE_EMAIL)) {
+        if (! preg_match($userRegex, $userReference) && ! filter_var($userReference, FILTER_VALIDATE_EMAIL)) {
             // given user is not a valid username or email address
-            throw new InvalidArgumentException("User is not a valid username or email");
+            throw new InvalidArgumentException('User is not a valid username or email');
         }
 
         $azureUser = $this->getRawAzureUser($userReference);
-        if ($azureUser == null) return null;
+        if ($azureUser == null) {
+            return null;
+        }
 
         return $this->mapUser($azureUser);
     }
@@ -41,8 +45,8 @@ class AzureUserLookup extends RemoteUserLookup
     /**
      * Maps a raw azure user to an actual model
      *
-     * @param ?object $raw raw azure user object
-     * @return User
+     * @param  ?object  $raw raw azure user object
+     *
      * @throws ClientExceptionInterface
      */
     private function mapUser(?object $raw): User
@@ -61,8 +65,8 @@ class AzureUserLookup extends RemoteUserLookup
     /**
      * Gets a raw azure user json object
      *
-     * @param string $userReference
      * @return ?object a raw azure user object
+     *
      * @throws ClientExceptionInterface
      */
     private function getRawAzureUser(string $userReference): ?object
@@ -70,14 +74,15 @@ class AzureUserLookup extends RemoteUserLookup
         $emailSuffix = config('mensa.remote_user.email_suffix');
         $emailedUser = ends_with($userReference, $emailSuffix) ? $userReference : "$userReference$emailSuffix";
 
-
         $filter = urlencode("mail eq '$userReference' or userPrincipalName eq '$emailedUser'");
         $requestUrl = "https://graph.microsoft.com/v1.0/users?\$filter=$filter";
 
         $res = $this->httpClient()->get($requestUrl, $this->withAuthorizationHeader());
 
         $rawUsers = json_decode($res->getBody())->value;
-        if (count($rawUsers) <= 0) return null;
+        if (count($rawUsers) <= 0) {
+            return null;
+        }
 
         return $rawUsers[0];
     }
@@ -85,20 +90,20 @@ class AzureUserLookup extends RemoteUserLookup
     /**
      * Returns a list of groups the user is in
      *
-     * @param string $userId
      * @return array an array of groups the user is in
+     *
      * @throws ClientExceptionInterface
      */
-    function getUserGroups(string $userId): array
+    public function getUserGroups(string $userId): array
     {
-        if (!Uuid::isValid($userId)) {
-            throw new InvalidArgumentException("Invalid uuid");
+        if (! Uuid::isValid($userId)) {
+            throw new InvalidArgumentException('Invalid uuid');
         }
 
         $requestUrl = "https://graph.microsoft.com/v1.0/users/$userId/getMemberGroups";
         $res = $this->httpClient()->post($requestUrl, $this->withAuthorizationHeader([
             'json' => ['securityEnabledOnly' => false],
-            'headers' => ['Content-Type' => 'application/json']
+            'headers' => ['Content-Type' => 'application/json'],
         ]));
 
         return json_decode($res->getBody())->value;
@@ -106,23 +111,23 @@ class AzureUserLookup extends RemoteUserLookup
 
     /**
      * Returns a cached http client
-     *
-     * @return Client
      */
     private function httpClient(): Client
     {
-        if ($this->httpClient != null)
+        if ($this->httpClient != null) {
             return $this->httpClient;
+        }
 
         $this->httpClient = new Client();
+
         return $this->httpClient;
     }
 
     /**
      * Automatically adds an authorization header to the options array
      *
-     * @param array $options
      * @return array the same options array but with an added authorization header
+     *
      * @throws ClientExceptionInterface
      */
     private function withAuthorizationHeader(array $options = []): array
@@ -135,7 +140,7 @@ class AzureUserLookup extends RemoteUserLookup
                 'headers' => array_merge(
                     $options->headers ?? [],
                     ['Authorization' => "Bearer $token"]
-                )
+                ),
             ]
         );
     }
@@ -143,12 +148,13 @@ class AzureUserLookup extends RemoteUserLookup
     /**
      * Create a new bearer token we can use to make authorized requests
      *
-     * @return string
      * @throws ClientExceptionInterface
      */
     private function getBearerToken(): string
     {
-        if ($this->token != null) return $this->token;
+        if ($this->token != null) {
+            return $this->token;
+        }
 
         $tenantId = config('services.azure.tenant_id');
         $clientId = config('services.azure.client_id');
@@ -161,11 +167,12 @@ class AzureUserLookup extends RemoteUserLookup
                 'grant_type' => $grantType,
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'scope' => $scope
-            ]
+                'scope' => $scope,
+            ],
         ]);
 
         $this->token = json_decode($res->getBody())->access_token;
+
         return $this->token;
     }
 }

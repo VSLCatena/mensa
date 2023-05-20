@@ -8,7 +8,10 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "noEmitOnError": false,
-    "declaration": false
+    "declaration": false,
+    "noImplicitThis": true,
+    "strict": true,
+    "skipLibCheck": true
   },
   "include": [
     "resources/assets/js/**/*",

@@ -1,13 +1,12 @@
 <?php
 
-
 namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
-
 
 use App\Contracts\RemoteUserLookup;
 use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Mensa\Mappers\SignupMapper;
 use App\Http\Controllers\Api\v1\Utils\ErrorMessages;
+use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use App\Models\Mensa;
 use App\Models\Signup;
 use App\Models\User;
@@ -27,20 +26,17 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SignupController extends Controller
 {
-    use SignupMapper, FoodOptionsMapper;
+    use SignupMapper, FoodOptionsMapper, ValidateOrFail;
 
     private RemoteUserLookup $remoteLookup;
 
     /**
      * Create a new controller instance.
-     *
-     * @param RemoteUserLookup $remoteLookup
      */
     public function __construct(RemoteUserLookup $remoteLookup)
     {
         $this->remoteLookup = $remoteLookup;
     }
-
 
     public function getSignup(Request $request, string $mensaId): ?JsonResponse
     {
@@ -50,7 +46,7 @@ class SignupController extends Controller
             $signups = Signup::where('mensa_id', '=', $mensaId)
                 ->where('confirmation_code', '=', $request->get('confirmation_code'))
                 ->get();
-        } else if ($user != null) {
+        } elseif ($user != null) {
             $signups = Signup::where('mensa_id', '=', $mensaId)
                 ->where('user_id', $user->id)
                 ->get();
@@ -58,14 +54,12 @@ class SignupController extends Controller
             abort(Response::HTTP_UNAUTHORIZED);
         }
 
-        return response()->json($signups->map(function ($signup) use ($user) {
-            return $this->mapSignup($signup, $user);
+        return response()->json($signups->map(function ($signup) {
+            return $this->mapSignup($signup);
         }));
     }
 
     /**
-     * @param Request $request
-     * @param string $mensaId
      * @return Response|null
      */
     public function signup(Request $request, string $mensaId): ?JsonResponse
@@ -81,14 +75,10 @@ class SignupController extends Controller
             'email' => ['string', 'email:rfc,dns', 'required'],
             'signup_id' => ['exists:signup,signup_id'],
             'signups' => ['required'],
-            'override_user_limit' => [$isAdmin ? 'boolean' : 'prohibited']
+            'override_user_limit' => [$isAdmin ? 'boolean' : 'prohibited'],
         ]);
-        if ($validator->fails()) {
-            return response()->json([
-                "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
-                "errors" => $validator->errors()
-            ], Response::HTTP_BAD_REQUEST);
-        }
+        $this->validateOrFail($validator);
+
         $signupUser = $this->lookupUser($request->get('email'));
         $overrideUserLimit = $request->get('override_user_limit', false);
         $email = $request->get('email');
@@ -98,23 +88,21 @@ class SignupController extends Controller
         if ($previousSignups->count() > 0) {
             if ($request->isMethod(Request::METHOD_POST)) {
                 abort(Response::HTTP_BAD_REQUEST);
-                throw new Error(); // For lint
             }
         } else {
             if ($request->isMethod(Request::METHOD_PUT)) {
                 abort(Response::HTTP_BAD_REQUEST);
-                throw new Error(); // For lint
             }
         }
 
         if ($previousSignups->count() > 0
             && (
-                !$request->has('signup_id')
+                ! $request->has('signup_id')
                 || $request->get('signup_id') != $previousSignups->first()->signup_id
             )
         ) {
             return response()->json([
-                "error_code" => ErrorMessages::SIGNUP_IDS_NOT_MATCHING
+                'error_code' => ErrorMessages::SIGNUP_IDS_NOT_MATCHING,
             ], Response::HTTP_BAD_REQUEST);
         }
         $signupId = $previousSignups->first()?->signup_id ?? Str::uuid();
@@ -136,8 +124,8 @@ class SignupController extends Controller
 
         if ($errors->isNotEmpty()) {
             return response()->json([
-                "error_code" => ErrorMessages::GENERAL_VALIDATION_ERROR,
-                "errors" => $errors->messages()
+                'error_code' => ErrorMessages::GENERAL_VALIDATION_ERROR,
+                'errors' => $errors->messages(),
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -148,24 +136,24 @@ class SignupController extends Controller
             $mensa->users_count - $previousSignups->count() + count($signups) > $mensa->max_users
         ) {
             return response()->json([
-                "error_code" => ErrorMessages::SIGNUP_MAX_USERS_REACHED
+                'error_code' => ErrorMessages::SIGNUP_MAX_USERS_REACHED,
             ]);
         }
 
         // 1, and only 1 main user:
         $mainCount = count(array_filter($signups, function (Signup $signup) {
-            return !$signup->is_intro;
+            return ! $signup->is_intro;
         }));
         if ($mainCount != 1) {
             return response()->json([
-                "error_code" => ErrorMessages::SIGNUP_ONE_MAIN_ONLY
+                'error_code' => ErrorMessages::SIGNUP_ONE_MAIN_ONLY,
             ], Response::HTTP_BAD_REQUEST);
         }
         // intros can't be cooks or washing dishes
         foreach ($signups as $signup) {
             if ($signup->is_intro && ($signup->cooks || $signup->dishwasher)) {
                 return response()->json([
-                    "error_code" => ErrorMessages::SIGNUP_INTRO_DISHES_COOKS
+                    'error_code' => ErrorMessages::SIGNUP_INTRO_DISHES_COOKS,
                 ], Response::HTTP_BAD_REQUEST);
             }
         }
@@ -211,15 +199,17 @@ class SignupController extends Controller
         }
 
         $validator = Validator::make($userData, $rules);
-        if ($validator->fails()) return $validator->errors();
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
 
         $signup = new Signup();
         $signup->cooks = $userData['cooks'] ?? false;
         $signup->dishwasher = $userData['dishwasher'] ?? false;
         $signup->food_option = $this->mapFoodOptionFromNameToInt($userData['foodOption']);
         $signup->is_intro = $userData['isIntro'];
-        $signup->allergies = $userData['allergies'] ?: "";
-        $signup->extra_info = $userData['extraInfo'] ?: "";
+        $signup->allergies = $userData['allergies'] ?: '';
+        $signup->extra_info = $userData['extraInfo'] ?: '';
 
         return $signup;
     }
@@ -229,7 +219,7 @@ class SignupController extends Controller
         $signup = Signup::findOrFail($signupId);
         if ($signup->mensa_id != $mensaId) {
             return response()->json([
-                "error_code" => ErrorMessages::SIGNUP_NOT_EXIST
+                'error_code' => ErrorMessages::SIGNUP_NOT_EXIST,
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -238,7 +228,7 @@ class SignupController extends Controller
 
         if ($signup->confirmed) {
             return response()->json([
-                "error_code" => ErrorMessages::SIGNUP_ALREADY_CONFIRMED
+                'error_code' => ErrorMessages::SIGNUP_ALREADY_CONFIRMED,
             ], Response::HTTP_BAD_REQUEST);
         }
 
@@ -253,7 +243,7 @@ class SignupController extends Controller
         $signup = Signup::findOrFail($signupId);
         if ($signup->mensa_id != $mensaId) {
             return response()->json([
-                "error_code" => ErrorMessages::SIGNUP_NOT_EXIST
+                'error_code' => ErrorMessages::SIGNUP_NOT_EXIST,
             ], Response::HTTP_NOT_FOUND);
         }
 
@@ -261,6 +251,7 @@ class SignupController extends Controller
         Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
 
         $signup->delete();
+
         return null;
     }
 
@@ -271,15 +262,13 @@ class SignupController extends Controller
         } catch (ClientExceptionInterface) {
             abort(Response::HTTP_BAD_GATEWAY);
         }
-        return null; // For lint
     }
 
     /**
      * Convenience function to check if there already exists signups for this user
      *
-     * @param Mensa $mensa
-     * @param string|User $userReference
      * @return Signup[]
+     *
      * @throws HttpException
      */
     private function lookupSignups(Mensa $mensa, string|User $userReference): array
@@ -299,8 +288,6 @@ class SignupController extends Controller
     /**
      * Convenience function to lookup a user, and throw an error if it doesn't exist
      *
-     * @param string $userReference
-     * @return User
      * @throws HttpException
      */
     private function lookupUser(string $userReference): User
@@ -315,7 +302,6 @@ class SignupController extends Controller
             return $user;
         } catch (ClientExceptionInterface) {
             abort(Response::HTTP_BAD_GATEWAY);
-            throw new Error(); // For lint
         }
     }
 }

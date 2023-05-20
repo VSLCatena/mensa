@@ -1,54 +1,125 @@
 <template>
-  <v-dialog max-width="800" v-model="isOpen" transition="dialog-bottom-transition" :persistent="loading">
+  <v-dialog
+    v-model="isOpen"
+    max-width="800"
+    transition="dialog-bottom-transition"
+    :persistent="loading"
+  >
     <v-card v-if="mensa != null">
       <v-toolbar>
         <v-card-title>{{ $ll($lang.text.signup.mensa_at) }} {{ formattedDate }}</v-card-title>
-        <template v-slot:extension v-if="step === 1">
-          <v-tabs v-model="tab" show-arrows>
-            <v-tabs-slider></v-tabs-slider>
-            <v-tab :key="0">{{ $ll($lang.text.signup.tab_signup) }}</v-tab>
-            <v-tab v-for="i in intros.length" :key="i">
+        <template
+          v-if="step === 1"
+          #extension
+        >
+          <v-tabs
+            v-model="tab"
+            show-arrows
+          >
+            <v-tabs-slider />
+            <v-tab :key="0">
+              {{ $ll($lang.text.signup.tab_signup) }}
+            </v-tab>
+            <v-tab
+              v-for="i in intros.length"
+              :key="i"
+            >
               {{ $ll($lang.text.signup.tab_intro) }}<span v-if="intros.length > 1">&nbsp;#{{ i }}</span>
             </v-tab>
           </v-tabs>
         </template>
       </v-toolbar>
       <div class="px-3 pt-3">
-        <v-form ref="signupForm" v-if="step === 1">
+        <v-form
+          v-if="step === 1"
+          ref="signupForm"
+        >
           <v-tabs-items v-model="tab">
-            <v-tab-item :key="0" class="pa-5">
-              <MensaSignupEntry :mensa="mensa" :signup="signup" :enabled="!loading"/>
+            <v-tab-item
+              :key="0"
+              class="pa-5"
+            >
+              <MensaSignupEntry
+                v-if="signup != null"
+                :mensa="mensa"
+                :signup="signup"
+                :enabled="!loading"
+              />
             </v-tab-item>
-            <v-tab-item v-for="(intro, index) in intros" :key="index + 1" class="pa-5">
-              <MensaSignupEntry :mensa="mensa" :signup="intro" :enabled="!loading"/>
+            <v-tab-item
+              v-for="(intro, index) in intros"
+              :key="index + 1"
+              class="pa-5"
+            >
+              <MensaSignupEntry
+                :mensa="mensa"
+                :signup="intro"
+                :enabled="!loading"
+              />
             </v-tab-item>
           </v-tabs-items>
         </v-form>
-        <v-form ref="emailForm" v-if="step === 2">
+        <v-form
+          v-if="step === 2"
+          ref="emailForm"
+        >
           <v-text-field
+            v-model="email"
             :label="$ll($lang.text.signup.field_email)"
             :disabled="loading"
-            v-model="email"
             :rules="validation.email"
             hide-details="auto"
-            class="pa-5"/>
+            class="pa-5"
+          />
         </v-form>
       </div>
       <v-card-actions>
-        <v-btn text :loading="loading" @click="addIntro()"
-               v-if="(intros.length < 1 || $local.user.isAdmin) && step === 1">
+        <v-btn
+          v-if="(intros.length < 1 || $local.user.isAdmin) && step === 1"
+          text
+          :loading="loading"
+          @click="addIntro()"
+        >
           {{ $ll($lang.text.signup.add_intro) }}
         </v-btn>
-        <v-btn text :loading="loading" @click="deleteIntro()" v-if="tab !== 0 && step === 1">
+        <v-btn
+          v-if="tab !== 0 && step === 1"
+          text
+          :loading="loading"
+          @click="deleteIntro()"
+        >
           {{ $ll($lang.text.signup.remove_intro) }}
         </v-btn>
-        <v-btn text @click="step = 1" v-if="step === 2">{{ $ll($lang.text.general.previous) }}</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn text @click="toEmail()" v-if="step === 1">{{ $ll($lang.text.general.next) }}</v-btn>
-        <v-btn text :loading="loading" @click="sendSignup()" v-if="step === 2">
+        <v-btn
+          v-if="step === 2"
+          text
+          @click="step = 1"
+        >
+          {{ $ll($lang.text.general.previous) }}
+        </v-btn>
+        <v-spacer />
+        <v-btn
+          v-if="step === 1"
+          text
+          @click="toEmail()"
+        >
+          {{ $ll($lang.text.general.next) }}
+        </v-btn>
+        <v-btn
+          v-if="step === 2"
+          text
+          :loading="loading"
+          @click="sendSignup()"
+        >
           {{ $ll($lang.text.signup.button_signup) }}
         </v-btn>
-        <v-btn text :loading="loading" @click="isOpen = false">{{ $ll($lang.text.general.close) }}</v-btn>
+        <v-btn
+          text
+          :loading="loading"
+          @click="isOpen = false"
+        >
+          {{ $ll($lang.text.general.close) }}
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -84,6 +155,14 @@
         },
         loading: false
       }
+    },
+    computed: {
+      formattedDate: function (): string | null {
+        let mensa = this.mensa;
+        if (mensa == null) return null;
+
+        return formatDate(mensa.date);
+      },
     },
     watch: {
       intros: function (after: [], before: []) {
@@ -183,14 +262,6 @@
 
         return signup;
       }
-    },
-    computed: {
-      formattedDate: function (): string | null {
-        let mensa = this.mensa;
-        if (mensa == null) return null;
-
-        return formatDate(mensa.date);
-      },
     }
   });
 </script>

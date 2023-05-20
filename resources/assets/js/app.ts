@@ -14,9 +14,9 @@ import {GetDefaultData} from './Local';
 import {GetAppConfig} from './domain/appconfig/usecase/GetAppConfig';
 import FaqPage from './presentation/pages/faq/FaqPage.vue';
 import VueDi from '@rhangai/vue-di';
-import {createDIContainer} from './SetupDI';
-import {injectable} from 'tsyringe';
+import {container, injectable} from 'tsyringe';
 import DependencyContainer from 'tsyringe/dist/typings/types/dependency-container';
+import {configureContainer} from "./di/ConfigureContainer";
 
 @injectable()
 class AppSetup {
@@ -66,7 +66,7 @@ class AppSetup {
   }
 }
 
-const container = createDIContainer();
+const configuredContainer = configureContainer(container);
 
-const appSetup = container.resolve(AppSetup);
-appSetup.setup(container);
+const appSetup = configuredContainer.resolve(AppSetup);
+appSetup.setup(configuredContainer);

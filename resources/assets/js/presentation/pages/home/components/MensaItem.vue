@@ -2,13 +2,18 @@
   <v-expansion-panel>
     <v-expansion-panel-header v-slot="{ open }">
       <div>
-        <h4 class="mb-1">{{ mensa.title }}</h4>
+        <h4 class="mb-1">
+          {{ mensa.title }}
+        </h4>
         <small>{{ formattedDate }}</small>
       </div>
-      <v-spacer></v-spacer>
+      <v-spacer />
       <v-fade-transition leave-absolute>
-        <div class="flex-grow-0 mr-5 text-no-wrap align text-right" v-if="!open">
-          {{ signupCount }} / {{ mensa.maxSignups }}<br/>
+        <div
+          v-if="!open"
+          class="flex-grow-0 mr-5 text-no-wrap align text-right"
+        >
+          {{ signupCount }} / {{ mensa.maxSignups }}<br>
           <span v-if="dishwasherCount != null">{{ dishwasherCount }}</span>
         </div>
       </v-fade-transition>
@@ -16,60 +21,117 @@
     <v-expansion-panel-content>
       <div class="d-flex flex-column flex-md-row pt-3">
         <div class="ml-0 ml-md-6 order-md-12">
-          <v-card outlined class="pa-4">
+          <v-card
+            outlined
+            class="pa-4"
+          >
             <table class="text-no-wrap">
               <tr>
-                <td class="pr-2">{{ $ll($lang.text.mensa.signups, true) }}:</td>
-                <td class="text--secondary">{{ signupCount }} / {{ mensa.maxSignups }}</td>
+                <td class="pr-2">
+                  {{ $ll($lang.text.mensa.signups, true) }}:
+                </td>
+                <td class="text--secondary">
+                  {{ signupCount }} / {{ mensa.maxSignups }}
+                </td>
               </tr>
               <tr v-if="mensa.dishwashers > 0">
-                <td class="pr-2">{{ $ll($lang.text.mensa.dishwashers) }}:</td>
-                <td class="text--secondary">{{ mensa.dishwashers }}</td>
+                <td class="pr-2">
+                  {{ $ll($lang.text.mensa.dishwashers) }}:
+                </td>
+                <td class="text--secondary">
+                  {{ mensa.dishwashers }}
+                </td>
               </tr>
               <tr>
-                <td class="pr-2">{{ $ll($lang.text.mensa.closingtime, true) }}:</td>
-                <td class="text--secondary">{{ closingTime }}</td>
+                <td class="pr-2">
+                  {{ $ll($lang.text.mensa.closingtime, true) }}:
+                </td>
+                <td class="text--secondary">
+                  {{ closingTime }}
+                </td>
               </tr>
               <tr v-if="mensa.price != 0">
-                <td class="pr-2">{{ $ll($lang.text.mensa.price, true) }}:</td>
-                <td class="text--secondary">&euro; {{ mensa.price.toFixed(2) }}</td>
+                <td class="pr-2">
+                  {{ $ll($lang.text.mensa.price, true) }}:
+                </td>
+                <td class="text--secondary">
+                  &euro; {{ mensa.price.toFixed(2) }}
+                </td>
               </tr>
             </table>
           </v-card>
         </div>
         <div>
-          <div v-if="mensa.cooks.length > 0" class="mt-4 mt-md-0 mb-4">
+          <div
+            v-if="mensa.cooks.length > 0"
+            class="mt-4 mt-md-0 mb-4"
+          >
             {{ $ll($lang.text.mensa.cooked_by) }}: <span class="text--secondary">{{ cooks }}</span>
           </div>
-          <div v-if="mensa.description.length > 0" class="text--secondary flex-grow-1 mt-4 mt-md-0">
+          <div
+            v-if="mensa.description.length > 0"
+            class="text--secondary flex-grow-1 mt-4 mt-md-0"
+          >
             {{ mensa.description }}
           </div>
 
-          <div class="mt-4" v-if="mensa.menu.length > 0 || mensa.extraOptions.length > 0">
+          <div
+            v-if="mensa.menu.length > 0 || mensa.extraOptions.length > 0"
+            class="mt-4"
+          >
             <v-tabs v-model="infoTabs">
-              <v-tabs-slider></v-tabs-slider>
-              <v-tab key="menu" v-if="mensa.menu.length > 0">
+              <v-tabs-slider />
+              <v-tab
+                v-if="mensa.menu.length > 0"
+                key="menu"
+              >
                 {{ $ll($lang.text.mensa.menu_title) }}
               </v-tab>
-              <v-tab key="extraOptions" v-if="mensa.extraOptions.length > 0">
+              <v-tab
+                v-if="mensa.extraOptions.length > 0"
+                key="extraOptions"
+              >
                 {{ $ll($lang.text.mensa.extra_options_title) }}
               </v-tab>
             </v-tabs>
 
-            <v-tabs-items v-model="infoTabs" class="mt-2">
-              <v-tab-item key="menu" v-if="mensa.menu.length > 0">
+            <v-tabs-items
+              v-model="infoTabs"
+              class="mt-2"
+            >
+              <v-tab-item
+                v-if="mensa.menu.length > 0"
+                key="menu"
+              >
                 <table class="horizontal-spacing">
-                  <tr v-for="item in mensa.menu">
-                    <td class="px-2 vertical-top-align">-</td>
-                    <td class="text--secondary">{{ item.text }}</td>
+                  <tr
+                    v-for="item in mensa.menu"
+                    :key="item.id"
+                  >
+                    <td class="px-2 vertical-top-align">
+                      -
+                    </td>
+                    <td class="text--secondary">
+                      {{ item.text }}
+                    </td>
                   </tr>
                 </table>
               </v-tab-item>
-              <v-tab-item key="extraOptions" v-if="mensa.extraOptions.length > 0">
+              <v-tab-item
+                v-if="mensa.extraOptions.length > 0"
+                key="extraOptions"
+              >
                 <table class="horizontal-spacing">
-                  <tr v-for="item in mensa.extraOptions">
-                    <td class="px-2 vertical-top-align">-</td>
-                    <td class="text--secondary">{{ item.description }}</td>
+                  <tr
+                    v-for="item in mensa.extraOptions"
+                    :key="item.id"
+                  >
+                    <td class="px-2 vertical-top-align">
+                      -
+                    </td>
+                    <td class="text--secondary">
+                      {{ item.description }}
+                    </td>
                   </tr>
                 </table>
               </v-tab-item>
@@ -79,14 +141,28 @@
       </div>
 
       <div class="mt-6 d-flex">
-        <v-btn color="primary" :disabled="mensa.signups >= mensa.maxSignups" @click="onSignupClicked(mensa)">
+        <v-btn
+          color="primary"
+          :disabled="mensa.signups >= mensa.maxSignups"
+          @click="onSignupClicked(mensa)"
+        >
           {{ $ll($lang.text.mensa.button_signup) }}
         </v-btn>
-        <v-btn class="ml-2" outlined v-if="isLoggedIn" @click="onOverviewClicked(mensa)">
+        <v-btn
+          v-if="onOverviewClicked != null"
+          class="ml-2"
+          outlined
+          @click="onOverviewClicked(mensa)"
+        >
           {{ $ll($lang.text.mensa.button_overview) }}
         </v-btn>
-        <v-spacer/>
-        <v-btn class="pa-2 edit-button" outlined v-if="$local.user.isAdmin" @click="onEditClicked(mensa)">
+        <v-spacer />
+        <v-btn
+          v-if="onEditClicked != null"
+          class="pa-2 edit-button"
+          outlined
+          @click="onEditClicked(mensa)"
+        >
           <v-icon>mdi-square-edit-outline</v-icon>
         </v-btn>
       </div>
@@ -103,11 +179,6 @@
   import {AnonymousUser} from "../../../../domain/common/model/User";
 
   export default Vue.extend({
-    data: function () {
-      return {
-        infoTabs: null,
-      }
-    },
     props: {
       mensa: {
         type: Object as PropType<Mensa>,
@@ -115,15 +186,22 @@
       },
       onSignupClicked: {
         type: Function,
-        required: false
+        required: true
       },
       onOverviewClicked: {
         type: Function,
-        required: false
+        required: false,
+        default: undefined
       },
       onEditClicked: {
         type: Function,
-        required: false
+        required: false,
+        default: undefined
+      }
+    },
+    data: function () {
+      return {
+        infoTabs: null,
       }
     },
     computed: {

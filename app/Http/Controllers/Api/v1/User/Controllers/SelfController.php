@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\User\Controllers;
 
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 use App\Http\Controllers\Api\v1\User\Mappers\UserMapper;
+use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -14,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SelfController extends Controller
 {
-    use UserMapper;
+    use UserMapper, ValidateOrFail;
 
     /**
      * Create a new controller instance.
@@ -28,9 +29,6 @@ class SelfController extends Controller
 
     /**
      * Get the user object currently logged in
-     *
-     * @param Request $request
-     * @return JsonResponse
      */
     public function getSelf(Request $request): JsonResponse
     {
@@ -45,7 +43,6 @@ class SelfController extends Controller
     /**
      * Update the user currently logged in
      *
-     * @param Request $request
      * @return JsonResponse
      */
     public function updateSelf(Request $request)
@@ -60,15 +57,17 @@ class SelfController extends Controller
             'extraInfo' => ['string'],
             'foodPreference' => ['string', 'nullable', Rule::in(FoodOption::allNames())],
         ]);
+        $this->validateOrFail($validator);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], Response::HTTP_BAD_REQUEST);
+        if ($request->has('allergies')) {
+            $user->allergies = $request->get('allergies');
         }
-
-        if ($request->has('allergies')) $user->allergies = $request->get('allergies');
-        if ($request->has('extraInfo')) $user->extra_info = $request->get('extraInfo');
-        if ($request->has('foodPreference'))
+        if ($request->has('extraInfo')) {
+            $user->extra_info = $request->get('extraInfo');
+        }
+        if ($request->has('foodPreference')) {
             $user->food_preference = $this->mapFoodOptionFromNameToInt($request->get('foodPreference'));
+        }
 
         $user->save();
 

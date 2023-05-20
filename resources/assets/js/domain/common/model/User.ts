@@ -11,8 +11,8 @@ export interface IdentifiableUser {
 
 export interface UserPreferences {
   foodPreference: FoodOption | null;
-  extraInfo: string;
-  allergies: string;
+  extraInfo?: string;
+  allergies?: string;
 }
 
 export interface UpdatableUser extends IdentifiableUser, UserPreferences {}

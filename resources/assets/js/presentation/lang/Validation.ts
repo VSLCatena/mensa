@@ -1,4 +1,4 @@
-import {LanguageLintCheck} from './LanguageText';
+import {LanguageBlock} from './LanguageText';
 
 export const Validation = {
   general: {
@@ -23,5 +23,6 @@ export const Validation = {
   },
 };
 
-// Make sure it is in the correct format
-LanguageLintCheck(Validation);
+// Type check!
+// noinspection JSUnusedLocalSymbols
+const test: LanguageBlock = Validation;

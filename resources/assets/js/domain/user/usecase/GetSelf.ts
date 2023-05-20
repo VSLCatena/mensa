@@ -1,18 +1,16 @@
-import {
-  UserRepository,
-  UserRepositoryToken,
-} from '../repository/UserRepository';
+import {UserRepository} from '../repository/UserRepository';
 import {AnonymousUser, AuthUser} from '../../common/model/User';
 import {
   WithAuthentication,
   Strategy,
 } from '../../common/usecase/WithAuthentication';
 import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
 @injectable()
 export class GetSelf {
   constructor(
-    @inject(UserRepositoryToken)
+    @inject(TypeSymbols.UserRepository)
     private readonly repository: UserRepository,
     private readonly withAuthentication: WithAuthentication
   ) {}

@@ -1,14 +1,12 @@
 import {SetUserToken} from '../../storage/usecase/SetUserToken';
-import {
-  UserRepository,
-  UserRepositoryToken,
-} from '../repository/UserRepository';
+import {UserRepository} from '../repository/UserRepository';
 import {inject, injectable} from 'tsyringe';
+import {TypeSymbols} from "../../../di/TypeSymbols";
 
 @injectable()
 export class Login {
   constructor(
-    @inject(UserRepositoryToken)
+    @inject(TypeSymbols.UserRepository)
     private readonly repository: UserRepository,
     private readonly setUserToken: SetUserToken
   ) {}

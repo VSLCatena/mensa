@@ -7,7 +7,7 @@ use App\Models\Faq;
 
 trait FaqMapper
 {
-    function mapFaq(Faq $faq): FaqResponseModel
+    public function mapFaq(Faq $faq): FaqResponseModel
     {
         return new FaqResponseModel(
             id: $faq->id,

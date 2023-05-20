@@ -1,26 +1,36 @@
 import {LanguageText} from './resources/assets/js/presentation/lang/LanguageText';
-import Translations, {Language} from './resources/assets/js/presentation/lang/Language';
+import {Language} from './resources/assets/js/presentation/lang/Language';
 import {Local} from './resources/assets/js/Local';
+import {SupportedLanguages} from './resources/assets/js/domain/common/model/Language';
+
 
 declare module '*.vue' {
-  import type { DefineComponent } from 'vue'
-  const component: DefineComponent<{}, {}, any>
-  export default component
+  // @ts-ignore
+  import type {DefineComponent} from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
 }
 
 declare module '@vue/runtime-core' {
-
   interface ComponentCustomProperties {
     $local: Local;
-    $lang: typeof Translations;
-    $ll: (text: LanguageText, capitalize: boolean, language: Language) => string;
+    $lang: typeof Language;
+    $ll: (
+      text: LanguageText,
+      capitalize: boolean,
+      language: keyof typeof Language
+    ) => string;
   }
 }
 
 declare module 'vue/types/vue' {
   interface Vue {
     $local: Local;
-    $lang: typeof Translations;
-    $ll: (text: LanguageText, capitalize?: boolean, language?: Language) => string;
+    $lang: typeof Language;
+    $ll: (
+      text: LanguageText,
+      capitalize?: boolean,
+      language?: keyof typeof SupportedLanguages
+    ) => string;
   }
 }
