@@ -28,8 +28,11 @@ class GetAuthorizationUrlController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         return response()->json([
-            'authorizationUri' => Socialite::driver('azure')
-                ->stateless()->redirect()->getTargetUrl(),
+            'authorizationUri' => Socialite::driver('azure')->with([
+                'prompt'        => 'select_account',
+                'whr'           =>env("AZURE_DOMAIN"),
+                'domain_hint'   =>env("AZURE_DOMAIN"),
+            ])->stateless()->redirect()->getTargetUrl()
         ]);
     }
 }

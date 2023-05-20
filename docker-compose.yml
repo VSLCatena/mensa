@@ -1,7 +1,8 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    mensa.test:
+        container_name: mensa.test
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -23,8 +24,10 @@ services:
         networks:
             - sail
         depends_on:
-            - mariadb
-    mariadb:
+            - mensa.mariadb
+    mensa.mariadb:
+        hostname: db
+        container_name: mensa.mariadb
         image: 'mariadb:10'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -46,12 +49,12 @@ services:
             timeout: 5s
   
     #phpmyadmin
-    phpmyadmin:
+    mensa.phpmyadmin:
         image: ghcr.io/linuxserver/phpmyadmin
         hostname: phpmyadmin
-        container_name: phpmyadmin
+        container_name: mensa.phpmyadmin
         environment:
-            PMA_HOST: mariadb
+            PMA_HOST: db
             PMA_USER: root
             PMA_PASSWORD: '${DB_PASSWORD}'
         ports:
