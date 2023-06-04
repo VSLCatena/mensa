@@ -2,20 +2,29 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\SignupResponseModel;
+use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
+use App\Http\Controllers\Api\v1\Mensa\Models\SignupDto;
 use App\Models\Signup;
 
-trait SignupMapper
+class SignupMapper
 {
-    use UserMapper;
-
-    public function mapSignup(Signup $signup): SignupResponseModel
+    public function __construct(
+        private readonly FoodOptionsMapper $foodOptionsMapper
+    )
     {
-        return new SignupResponseModel(
+    }
+
+    /**
+     * @param Signup $signup
+     * @return SignupDto
+     */
+    public function map(Signup $signup): SignupDto
+    {
+        return new SignupDto(
             id: $signup->id,
             allergies: $signup->allergies,
             extraInfo: $signup->extra_info,
-            foodOption: $signup->food_option,
+            foodOption: $this->foodOptionsMapper->fromIntToName($signup->food_option),
             cooks: $signup->cooks,
             dishwasher: $signup->dishwasher
         );

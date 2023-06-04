@@ -4,7 +4,7 @@ return [
     'default' => [
         'name' => env('MENSA_DEFAULT_NAME', ''),
         'price' => env('MENSA_DEFAULT_PRICE', 3.50),
-        'max_users' => env('MENSA_DEFAULT_MAX_USERS', 42),
+        'max_signups' => env('MENSA_DEFAULT_MAX_SIGNUPS', 42),
         'start_time' => env('MENSA_DEFAULT_START_TIME', '18:30'),
         'closing_time' => env('MENSA_DEFAULT_CLOSING_TIME', '16:00'),
     ],

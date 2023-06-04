@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api\v1\Faq\Mappers;
 
-use App\Http\Controllers\Api\v1\Faq\Models\FaqResponseModel;
+use App\Http\Controllers\Api\v1\Faq\Models\FaqDto;
 use App\Models\Faq;
 
-trait FaqMapper
+class FaqMapper
 {
-    public function mapFaq(Faq $faq): FaqResponseModel
+    public function map(Faq $faq): FaqDto
     {
-        return new FaqResponseModel(
+        return new FaqDto(
             id: $faq->id,
             question: $faq->question,
             answer: $faq->answer,

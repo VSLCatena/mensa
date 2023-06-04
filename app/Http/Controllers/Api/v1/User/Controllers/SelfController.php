@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1\User\Controllers;
 
+use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
-use App\Http\Controllers\Api\v1\User\Mappers\UserMapper;
+use App\Http\Controllers\Api\v1\User\Mappers\FullUserMapper;
 use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,49 +16,45 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SelfController extends Controller
 {
-    use UserMapper, ValidateOrFail;
-
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(
+        private readonly FullUserMapper    $userMapper,
+        private readonly FoodOptionsMapper $foodOptionsMapper,
+        private readonly ValidateOrFail    $validateOrFail
+    )
     {
         $this->middleware('auth:sanctum');
     }
 
     /**
      * Get the user object currently logged in
+     * @noinspection PhpUnused
      */
-    public function getSelf(Request $request): JsonResponse
+    public function getSelf(): ?JsonResponse
     {
         $user = Auth::user();
-        if ($user == null) {
-            abort(Response::HTTP_UNAUTHORIZED);
-        }
-
-        return response()->json(self::mapUser($user));
+        return response()->json($this->userMapper->map($user));
     }
 
     /**
      * Update the user currently logged in
      *
-     * @return JsonResponse
+     * @noinspection PhpUnused
      */
-    public function updateSelf(Request $request)
+    public function updateSelf(Request $request): ?JsonResponse
     {
         $user = Auth::user();
-        if ($user == null) {
-            abort(Response::HTTP_UNAUTHORIZED);
-        }
 
         $validator = Validator::make($request->all(), [
             'allergies' => ['string'],
             'extraInfo' => ['string'],
             'foodPreference' => ['string', 'nullable', Rule::in(FoodOption::allNames())],
         ]);
-        $this->validateOrFail($validator);
+        $this->validateOrFail->with($validator);
 
         if ($request->has('allergies')) {
             $user->allergies = $request->get('allergies');
@@ -66,7 +63,7 @@ class SelfController extends Controller
             $user->extra_info = $request->get('extraInfo');
         }
         if ($request->has('foodPreference')) {
-            $user->food_preference = $this->mapFoodOptionFromNameToInt($request->get('foodPreference'));
+            $user->food_preference = $this->foodOptionsMapper->fromNameToInt($request->get('foodPreference'));
         }
 
         $user->save();

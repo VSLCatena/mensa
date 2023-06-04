@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\v1\Utils;
 use Illuminate\Validation\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
-trait ValidateOrFail
+class ValidateOrFail
 {
-    public function validateOrFail(Validator $validator): void
+    public function with(Validator $validator): void
     {
         if ($validator->fails()) {
             abort(Response::HTTP_BAD_REQUEST, json_encode([

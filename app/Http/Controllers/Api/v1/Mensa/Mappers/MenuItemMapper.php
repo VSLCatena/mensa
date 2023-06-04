@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemResponseModel;
+use App\Http\Controllers\Api\v1\Mensa\Models\MenuItemDto;
 use App\Models\MenuItem;
 
-trait MenuItemMapper
+class MenuItemMapper
 {
     /**
      * @param $menuItem MenuItem
+     * @return MenuItemDto
      */
-    public function mapMenuItem(MenuItem $menuItem): MenuItemResponseModel
+    public function map(MenuItem $menuItem): MenuItemDto
     {
-        return new MenuItemResponseModel(
+        return new MenuItemDto(
             id: $menuItem->id,
             text: $menuItem->text
         );
@@ -20,16 +21,16 @@ trait MenuItemMapper
 
     /**
      * @param  MenuItem[]  $menuItems
-     * @return MenuItemResponseModel[]
+     * @return MenuItemDto[]
      */
-    public function mapMenuItems(array $menuItems): array
+    public function mapArray(array $menuItems): array
     {
         usort($menuItems, function ($a, $b) {
             return $a->order - $b->order;
         });
 
         return array_map(function ($item) {
-            return self::mapMenuItem($item);
+            return self::map($item);
         }, $menuItems);
     }
 }

@@ -51,7 +51,7 @@ export class UserDataRepository implements UserRepository {
       params = {...params, foodPreference: preference};
     }
 
-    return await axios.patch(`${Config.apiBaseUrl}/user/self/update`, params, {
+    return await axios.patch(`${Config.apiBaseUrl}/user/self`, params, {
       headers: WithAuthHeader(authToken),
     });
   }

@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use App\Models\Mensa;
 use App\Models\Signup;
 use App\Models\User;
-use Error;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -21,23 +21,28 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Psr\Http\Client\ClientExceptionInterface;
+use Symfony\Component\HttpFoundation\Request as RequestAlias;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SignupController extends Controller
 {
-    use SignupMapper, FoodOptionsMapper, ValidateOrFail;
-
-    private RemoteUserLookup $remoteLookup;
 
     /**
      * Create a new controller instance.
      */
-    public function __construct(RemoteUserLookup $remoteLookup)
+    public function __construct(
+        private readonly RemoteUserLookup $remoteLookup,
+        private readonly SignupMapper $signupMapper,
+        private readonly FoodOptionsMapper $foodOptionsMapper,
+        private readonly ValidateOrFail $validateOrFail
+    )
     {
-        $this->remoteLookup = $remoteLookup;
     }
 
+    /**
+     * @noinspection PhpUnused
+     */
     public function getSignup(Request $request, string $mensaId): ?JsonResponse
     {
         $user = Auth::guard('sanctum')->user() ?? Auth::getUser();
@@ -55,12 +60,13 @@ class SignupController extends Controller
         }
 
         return response()->json($signups->map(function ($signup) {
-            return $this->mapSignup($signup);
+            return $this->signupMapper->map($signup);
         }));
     }
 
     /**
      * @return Response|null
+     * @noinspection PhpUnused
      */
     public function signup(Request $request, string $mensaId): ?JsonResponse
     {
@@ -77,20 +83,20 @@ class SignupController extends Controller
             'signups' => ['required'],
             'override_user_limit' => [$isAdmin ? 'boolean' : 'prohibited'],
         ]);
-        $this->validateOrFail($validator);
+        $this->validateOrFail->with($validator);
 
         $signupUser = $this->lookupUser($request->get('email'));
         $overrideUserLimit = $request->get('override_user_limit', false);
         $email = $request->get('email');
 
-        // If there is a previous signup, the id's need to match so we know the overriding is on purpose
+        // If there is a previous signup, the id's need to match, so we know the overriding is on purpose
         $previousSignups = Signup::whereMensaId($mensaId)->whereUserId($signupUser->id);
         if ($previousSignups->count() > 0) {
-            if ($request->isMethod(Request::METHOD_POST)) {
+            if ($request->isMethod(RequestAlias::METHOD_POST)) {
                 abort(Response::HTTP_BAD_REQUEST);
             }
         } else {
-            if ($request->isMethod(Request::METHOD_PUT)) {
+            if ($request->isMethod(RequestAlias::METHOD_PUT)) {
                 abort(Response::HTTP_BAD_REQUEST);
             }
         }
@@ -133,7 +139,7 @@ class SignupController extends Controller
         // Would it still fit in the mensa? (mensaCurrent - previousSignups + newSignups <= mensaMax)
         if (
             $overrideUserLimit &&
-            $mensa->users_count - $previousSignups->count() + count($signups) > $mensa->max_users
+            $mensa->users_count - $previousSignups->count() + count($signups) > $mensa->max_signups
         ) {
             return response()->json([
                 'error_code' => ErrorMessages::SIGNUP_MAX_USERS_REACHED,
@@ -174,9 +180,58 @@ class SignupController extends Controller
         return null;
     }
 
+    /**
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
+    public function confirmSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
+    {
+        $signup = Signup::findOrFail($signupId);
+        if ($signup->mensa_id != $mensaId) {
+            return response()->json([
+                'error_code' => ErrorMessages::SIGNUP_NOT_EXIST,
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $currentUser = $this->currentUser();
+        Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
+
+        if ($signup->confirmed) {
+            return response()->json([
+                'error_code' => ErrorMessages::SIGNUP_ALREADY_CONFIRMED,
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $signup->confirmed = true;
+        $signup->save();
+
+        return null;
+    }
+
+    /**
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
+    public function deleteSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
+    {
+        $signup = Signup::findOrFail($signupId);
+        if ($signup->mensa_id != $mensaId) {
+            return response()->json([
+                'error_code' => ErrorMessages::SIGNUP_NOT_EXIST,
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $currentUser = $this->currentUser();
+        Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
+
+        $signup->delete();
+
+        return null;
+    }
+
     private function getSingleSignup(Mensa $mensa, array $userData, $isAdmin): Signup|MessageBag
     {
-        $allowedFoodOptions = $this->mapFoodOptionsFromIntToNames($mensa->food_options);
+        $allowedFoodOptions = $this->foodOptionsMapper->fromIntToNames($mensa->food_options);
 
         $rules = [
             'foodOption' => ['string', Rule::in($allowedFoodOptions), 'required'],
@@ -206,53 +261,12 @@ class SignupController extends Controller
         $signup = new Signup();
         $signup->cooks = $userData['cooks'] ?? false;
         $signup->dishwasher = $userData['dishwasher'] ?? false;
-        $signup->food_option = $this->mapFoodOptionFromNameToInt($userData['foodOption']);
+        $signup->food_option = $this->foodOptionsMapper->fromNameToInt($userData['foodOption']);
         $signup->is_intro = $userData['isIntro'];
         $signup->allergies = $userData['allergies'] ?: '';
         $signup->extra_info = $userData['extraInfo'] ?: '';
 
         return $signup;
-    }
-
-    public function confirmSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
-    {
-        $signup = Signup::findOrFail($signupId);
-        if ($signup->mensa_id != $mensaId) {
-            return response()->json([
-                'error_code' => ErrorMessages::SIGNUP_NOT_EXIST,
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        $currentUser = $this->currentUser();
-        Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
-
-        if ($signup->confirmed) {
-            return response()->json([
-                'error_code' => ErrorMessages::SIGNUP_ALREADY_CONFIRMED,
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        $signup->confirmed = true;
-        $signup->save();
-
-        return null;
-    }
-
-    public function deleteSignup(Request $request, string $mensaId, string $signupId): ?JsonResponse
-    {
-        $signup = Signup::findOrFail($signupId);
-        if ($signup->mensa_id != $mensaId) {
-            return response()->json([
-                'error_code' => ErrorMessages::SIGNUP_NOT_EXIST,
-            ], Response::HTTP_NOT_FOUND);
-        }
-
-        $currentUser = $this->currentUser();
-        Gate::forUser($currentUser)->authorize('canEdit', [$signup, $request->get('confirmation_code')]);
-
-        $signup->delete();
-
-        return null;
     }
 
     private function currentUser(): ?User
@@ -265,28 +279,7 @@ class SignupController extends Controller
     }
 
     /**
-     * Convenience function to check if there already exists signups for this user
-     *
-     * @return Signup[]
-     *
-     * @throws HttpException
-     */
-    private function lookupSignups(Mensa $mensa, string|User $userReference): array
-    {
-        if ($userReference instanceof User) {
-            $user = $userReference;
-        } else {
-            $user = $this->lookupUser($userReference);
-        }
-
-        return Signup::where('mensa_id', '=', $mensa->id)
-            ->where('user_id', '=', $user->id)
-            ->get()
-            ->all();
-    }
-
-    /**
-     * Convenience function to lookup a user, and throw an error if it doesn't exist
+     * Convenience function to look up a user, and throw an error if it doesn't exist
      *
      * @throws HttpException
      */

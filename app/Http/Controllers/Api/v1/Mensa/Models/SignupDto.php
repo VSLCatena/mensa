@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class SignupResponseModel
+class SignupDto
 {
     /**
-     * SimpleUserResponseModel constructor.
+     * SignupDto constructor.
      */
     public function __construct(
         public string $id,
         public ?string $allergies,
         public ?string $extraInfo,
-        public int $foodOption,
+        public string $foodOption,
         public bool $cooks,
         public bool $dishwasher
     ) {

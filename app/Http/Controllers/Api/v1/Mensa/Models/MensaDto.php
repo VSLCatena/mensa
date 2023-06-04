@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Models;
 
-class MensaResponseModel
+use App\Http\Controllers\Api\v1\Common\Models\SimpleUserDto;
+
+class MensaDto
 {
     /**
-     * MensaResponseModel constructor.
+     * MensaDto constructor.
      *
-     * @param  int|SimpleUserResponseModel[]  $signups
-     * @param  SimpleUserResponseModel[]  $cooks
+     * @param  int|MensaUserDto[]  $signups
+     * @param  SimpleUserDto[]  $cooks
      * @param  string[]  $foodOptions
-     * @param  MenuItemResponseModel[]  $menu
-     * @param  ExtraOptionResponseModel[]  $extraOptions
+     * @param  MenuItemDto[]  $menu
+     * @param  ExtraOptionDto[]  $extraOptions
+     * @param  int  $dishwashers
+     * @param  float  $price
+     * @param  int  $maxSignups
+     * @param  bool  $isClosed
+     * @param  int  $closingTime
+     * @param  int  $date
+     * @param  string  $description
+     * @param  string  $title
+     * @param  string  $id
+     * @return void
      */
     public function __construct(
         public string $id,

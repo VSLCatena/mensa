@@ -2,33 +2,32 @@
 
 namespace App\Http\Controllers\Api\v1\Mensa\Mappers;
 
-use App\Http\Controllers\Api\v1\Mensa\Models\ExtraOptionResponseModel;
+use App\Http\Controllers\Api\v1\Mensa\Models\ExtraOptionDto;
 use App\Models\ExtraOption;
 
-trait ExtraOptionsMapper
+class ExtraOptionsMapper
 {
-    public function mapExtraOption(ExtraOption $extraOption): ExtraOptionResponseModel
+    public function map(ExtraOption $extraOption): ExtraOptionDto
     {
-        return new ExtraOptionResponseModel(
+        return new ExtraOptionDto(
             id: $extraOption->id,
             description: $extraOption->description,
-            order: $extraOption->order,
             price: $extraOption->price
         );
     }
 
     /**
      * @param  ExtraOption[]  $extraOptions
-     * @return ExtraOptionResponseModel[]
+     * @return ExtraOptionDto[]
      */
-    public function mapExtraOptions(array $extraOptions): array
+    public function mapArray(array $extraOptions): array
     {
         usort($extraOptions, function ($a, $b) {
             return $a->order - $b->order;
         });
 
         return array_map(function ($item) {
-            return self::mapExtraOption($item);
+            return self::map($item);
         }, $extraOptions);
     }
 }

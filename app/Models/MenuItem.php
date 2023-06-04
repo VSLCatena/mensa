@@ -43,6 +43,10 @@ class MenuItem extends Model
 
     public $incrementing = false;
 
+    protected $fillable = [
+        'id', 'text', 'order'
+    ];
+
     public function mensa(): BelongsTo
     {
         return $this->belongsTo(Mensa::class);

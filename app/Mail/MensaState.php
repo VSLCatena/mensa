@@ -46,7 +46,7 @@ class MensaState extends Mailable
         $singleDishwasherExtraConsumptions = $this->mensa->consumptions(false, true, true) - $this->mensa->consumptions(false, true);
         $countExtraOptions = $this->mensa->extraOptions()->count();
 
-        $guests = $this->mensa->users(true)->whereNotIn('mensa_users.id', $staffIds)->get();
+        $guests = $this->mensa->signups(true)->whereNotIn('mensa_users.id', $staffIds)->get();
 
         return $this->view('emails.state.mensastate', [
             'staffIndex' => $staffIndex,

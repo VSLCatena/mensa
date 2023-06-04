@@ -17,7 +17,9 @@ class GenerateTokenController extends Controller
     /**
      * Create a new controller instance.
      */
-    public function __construct(private RemoteUserLookup $userLookup)
+    public function __construct(
+        private readonly RemoteUserLookup $userLookup
+    )
     {
     }
 

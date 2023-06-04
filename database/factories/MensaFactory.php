@@ -29,7 +29,7 @@ class MensaFactory extends Factory
             'description' => $this->faker->sentence(20),
             'date' => $date,
             'closing_time' => $date,
-            'max_users' => $this->faker->numberBetween(5, 50),
+            'max_signups' => $this->faker->numberBetween(5, 50),
             'food_options' => $this->faker->numberBetween(1, 7),
             'closed' => $this->faker->boolean,
             'price' => $this->faker->randomFloat(2, 0, 10),

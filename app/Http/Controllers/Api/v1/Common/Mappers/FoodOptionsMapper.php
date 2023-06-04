@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api\v1\Common\Mappers;
 
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 
-trait FoodOptionsMapper
+class FoodOptionsMapper
 {
     /**
      * @param $foodOptions int
      * @return string[]
      */
-    public function mapFoodOptionsFromIntToNames(int $foodOptions): array
+    public function fromIntToNames(int $foodOptions): array
     {
         $options = [];
         foreach (FoodOption::$All as $option) {
@@ -22,7 +22,7 @@ trait FoodOptionsMapper
         return $options;
     }
 
-    public function mapFoodOptionFromIntToName(int|null $foodOption): string|null
+    public function fromIntToName(int|null $foodOption): string|null
     {
         if ($foodOption == null) {
             return null;
@@ -40,7 +40,7 @@ trait FoodOptionsMapper
     /**
      * @param  string[]  $foodOptions
      */
-    public function mapFoodOptionsFromNamesToInt(array $foodOptions): int
+    public function fromNamesToInt(array $foodOptions): int
     {
         $options = 0;
 
@@ -53,7 +53,7 @@ trait FoodOptionsMapper
         return $options;
     }
 
-    public function mapFoodOptionFromNameToInt(string|null $foodOption): int
+    public function fromNameToInt(string|null $foodOption): int
     {
         if ($foodOption == null) {
             return 0;

@@ -3,19 +3,24 @@
 namespace App\Http\Controllers\Api\v1\Mensa\Controllers;
 
 use App\Contracts\RemoteUserLookup;
+use App\Http\Controllers\Api\v1\Common\Mappers\FoodOptionsMapper;
 use App\Http\Controllers\Api\v1\Common\Models\FoodOption;
 use App\Http\Controllers\Api\v1\Mensa\Mappers\MensaMapper;
 use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use App\Models\ExtraOption;
 use App\Models\Mensa;
 use App\Models\MenuItem;
+use App\Models\Signup;
+use App\Models\SignupAndUserCombined;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -27,53 +32,75 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MensaController extends Controller
 {
-    use MensaMapper, ValidateOrFail;
-
-    private RemoteUserLookup $remoteLookup;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(RemoteUserLookup $remoteLookup)
+    public function __construct(
+        private readonly RemoteUserLookup $remoteLookup,
+        private readonly MensaMapper $mensaMapper,
+        private readonly FoodOptionsMapper $foodOptionsMapper,
+        private readonly ValidateOrFail $validateOrFail
+    )
     {
         Auth::shouldUse('sanctum');
-        $this->remoteLookup = $remoteLookup;
     }
 
-    /**  Get a single mensa */
-    public function getMensa(Request $request, string $mensaId): JsonResponse
+    /**
+     * Get a single mensa
+     * @noinspection PhpUnused
+     */
+    public function getMensa(string $mensaId): JsonResponse
     {
         $mensa = Mensa::findOrFail($mensaId);
 
         $currentUser = $this->currentUser();
 
-        return response()->json(self::mapMensa(
+
+        $rawUserSignup = DB::table('signups')
+            ->where('signups.mensa_id', '=', $mensaId)
+            ->join('users', 'signups.user_id', '=', 'users.id')
+            ->select('users.*', 'signups.*')
+            ->get()->all();
+
+        // Map the raw user and signup data to a combined model
+        $userAndSignups = array_map(function ($user) {
+            return new SignupAndUserCombined(
+                User::newModelInstance($user),
+                Signup::newModelInstance($user)
+            );
+        }, $rawUserSignup);
+
+        return response()->json($this->mensaMapper->map(
             $mensa,
-            $mensa->users->all(),
+            $userAndSignups,
             $mensa->menuItems->all(),
             $mensa->extraOptions->all(),
             $currentUser
         ));
     }
 
+    /**
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
     public function newMensa(Request $request): ?JsonResponse
     {
-        if ($request->has('id')) {
-            throw new InvalidArgumentException('id can\'t exist in request');
-        }
-
         return $this->internalUpdateMensa($request, null);
     }
 
+    /**
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
     public function updateMensa(Request $request, string $mensaId): ?JsonResponse
     {
-        if (! $request->has('id')) {
-            throw new InvalidArgumentException('id doesn\'t exist in request');
-        }
-
         return $this->internalUpdateMensa($request, $mensaId);
     }
 
+    /**
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
     private function internalUpdateMensa(Request $request, string|null $mensaId): ?JsonResponse
     {
         $currentUser = $this->currentUser();
@@ -84,7 +111,7 @@ class MensaController extends Controller
             'description' => ['string'],
             'date' => ['integer'],
             'closingTime' => ['integer'],
-            'maxUsers' => ['integer', 'min:0', 'max:999'],
+            'maxSignups' => ['integer', 'min:0', 'max:999'],
             'closed' => ['boolean'],
             'foodOptions' => ['array', Rule::in(FoodOption::allNames())],
             'price' => ['numeric', 'between:0,999'],
@@ -96,22 +123,21 @@ class MensaController extends Controller
             'extraOptions.*.price' => ['numeric', 'between:0,999', 'required'],
             'extraOptions.*.description' => ['string', 'required'],
         ];
-        $hardRequestFields = ['date', 'closing_time', 'max_users', 'closed'];
+        $hardRequestFields = ['price', 'date', 'closingTime', 'maxSignups', 'closed'];
 
-        /** @var Mensa $mensa */
-        $mensa = null;
         // If mensa is null we create a new one
         if ($mensaId == null) {
             // For creating we require the create permission
             Gate::forUser($currentUser)->authorize('create', Mensa::class);
 
             // We create a new mensa
-            $mensa = Mensa::create(['id' => Str::uuid()]);
+            $mensa = Mensa::make(['id' => Str::uuid()]);
 
-            // For new mensas we require everything
-            array_walk($fields, function (&$value) {
-                $value[] = 'required';
-            });
+            // For new mensas we require almost all fields
+            $newRequiredFields = ['title', 'description', 'date', 'closingTime', 'maxSignups', 'foodOptions', 'price'];
+            foreach ($newRequiredFields as $field) {
+                $fields[$field][] = 'required';
+            }
         } else {
             // And we get the mensa
             $mensa = Mensa::findOrFail($mensaId);
@@ -126,19 +152,27 @@ class MensaController extends Controller
 
         // Check if all validations pass
         $validator = Validator::make($request->all(), $fields);
-        $this->validateOrFail($validator);
+        $this->validateOrFail->with($validator);
 
         // Update the mensa fields
-        $fields = ['title', 'description', 'date', 'closingTime', 'maxUsers', 'closed', 'price'];
-        foreach ($fields as $field) {
-            if ($request->has($field)) {
-                $mensa->$field = $request->get($field);
+        $fields = [
+            'title' => 'title',
+            'description' => 'description',
+            'date' => 'date',
+            'closingTime' => 'closing_time',
+            'maxSignups' => 'max_signups',
+            'closed' => 'closed',
+            'price' => 'price'
+        ];
+        foreach ($fields as $apiField => $field) {
+            if ($request->has($apiField)) {
+                $mensa->$field = $request->get($apiField);
             }
         }
 
         if ($request->has('foodOptions')) {
             // We map the options to an int
-            $options = $this->mapFoodOptionsFromNamesToInt($request->get('foodOptions'));
+            $options = $this->foodOptionsMapper->fromNamesToInt($request->get('foodOptions'));
             $mensa->food_options = $options;
         }
 
@@ -149,8 +183,11 @@ class MensaController extends Controller
         // Menu
         if ($request->has('menu')) {
             $result = $this->compareAndUpdate(
-                $mensa, $mensa->menuItems(), MenuItem::class, $request->get('menu'),
-                function (MenuItem $menuItem, $rawData) {
+                mensa: $mensa,
+                collection: $mensa->menuItems(),
+                class: MenuItem::class,
+                rawData: $request->get('menu'),
+                updater: function (MenuItem $menuItem, $rawData) {
                     $menuItem->text = $rawData['text'];
                 }
             );
@@ -162,8 +199,11 @@ class MensaController extends Controller
         // Extra options
         if ($request->has('extraOptions')) {
             $result = $this->compareAndUpdate(
-                $mensa, $mensa->extraOptions(), ExtraOption::class, $request->get('extraOptions'),
-                function (ExtraOption $extraOption, $rawData) {
+                mensa: $mensa,
+                collection: $mensa->extraOptions(),
+                class: ExtraOption::class,
+                rawData: $request->get('extraOptions'),
+                updater: function (ExtraOption $extraOption, $rawData) {
                     $extraOption->description = $rawData['description'];
                     $extraOption->price = $rawData['price'];
                 }
@@ -187,7 +227,11 @@ class MensaController extends Controller
         return null;
     }
 
-    public function deleteMensa(Request $request, string $mensaId): ?JsonResponse
+    /**
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
+    public function deleteMensa(string $mensaId): ?JsonResponse
     {
         $mensa = Mensa::findOrFail($mensaId);
 
@@ -200,7 +244,7 @@ class MensaController extends Controller
     }
 
     /**
-     * We moved a lot of duplicate code to a separate function so it's less error-prone.
+     * We moved a lot of duplicate code to a separate function, so it's less error-prone.
      * Summed up: You give it a list of a current collection, an array with form data, and a transformer.
      * - It will loop over the form data, grab the item if the form data contains an id, otherwise creates a new one
      * - It will update the order on the object
@@ -227,15 +271,17 @@ class MensaController extends Controller
             /** @var Model $item */
             $item = null;
             // If the raw data contains an id we try to find it in the collection given or fail if it wasn't able to
-            if ($rawItem['id'] != null) {
+            if (key_exists('id', $rawItem)) {
                 $item = $collection->clone()->findOrFail($rawItem['id']);
             } else {
                 // Otherwise we create a new object and associate it to the mensa
-                $item = $class::create(['id' => Str::uuid()]);
-                $item->mensa()->associate($mensa);
+                /** @noinspection PhpUndefinedMethodInspection */
+                $item = $class::make(['id' => Str::uuid()]);
+                $item->mensa_id = $mensa->id;
             }
 
             // We update the order
+            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             $item->order = $order;
 
             // We call the updater function with the item and the raw data
@@ -270,8 +316,10 @@ class MensaController extends Controller
     private function currentUser(): ?User
     {
         try {
+            // @codeCoverageIgnoreStart
             return $this->remoteLookup->currentUpdatedIfNecessary();
         } catch (ClientExceptionInterface) {
+            // @codeCoverageIgnoreEnd
             abort(Response::HTTP_BAD_GATEWAY);
         }
     }

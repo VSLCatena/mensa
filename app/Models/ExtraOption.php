@@ -45,6 +45,10 @@ class ExtraOption extends Model
 
     public $timestamps = false;
 
+    protected $fillable = [
+        'id', 'description', 'price', 'order'
+    ];
+
     public function mensa(): BelongsTo
     {
         return $this->belongsTo(Mensa::class);

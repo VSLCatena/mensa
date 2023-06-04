@@ -23,7 +23,7 @@ class MensaPolicy
      */
     public function softEdit(?User $user, Mensa $mensa): bool
     {
-        return $this->hardEdit($user, $mensa) || $this->isCook($user, $mensa);
+        return $user != null && ($this->hardEdit($user, $mensa) || $this->isCook($user, $mensa));
     }
 
     /**
@@ -55,7 +55,7 @@ class MensaPolicy
      */
     private function isCook(User $user, Mensa $mensa): bool
     {
-        return $mensa->users()->where('cooks', '1')->where('id', $user->id)->count() > 0;
+        return $mensa->signups()->where('cooks', '1')->where('user_id', $user->id)->count() > 0;
     }
 
     private function isMensaAdmin(?User $user): bool

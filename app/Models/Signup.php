@@ -71,7 +71,7 @@ class Signup extends Model
 
     public $incrementing = false;
 
-    protected $fillable = ['id', 'cooks', 'dishwasher', 'food_option', 'is_intro', 'allergies', 'extra_info', 'confirmed', 'confirmation_code', 'user_id', 'mensa_id'];
+    protected $fillable = ['id', 'signup_id', 'cooks', 'dishwasher', 'food_option', 'is_intro', 'allergies', 'extra_info', 'confirmed', 'confirmation_code', 'user_id', 'mensa_id'];
 
     protected $dates = ['deleted_at'];
 

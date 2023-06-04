@@ -24,7 +24,7 @@ use Illuminate\Support\Str;
  * @property string $description
  * @property int $date
  * @property int $closing_time
- * @property int $max_users
+ * @property int max_signups
  * @property int $food_options
  * @property int $closed
  * @property float $price
@@ -34,10 +34,10 @@ use Illuminate\Support\Str;
  * @property-read int|null $logs_count
  * @property-read Collection|MenuItem[] $menuItems
  * @property-read int|null $menu_items_count
- * @property-read Collection|Signup[] $orderedUsers
- * @property-read int|null $ordered_users_count
- * @property-read Collection|Signup[] $users
- * @property-read int|null $users_count
+ * @property-read Collection|Signup[] $orderedSignups
+ * @property-read int|null $ordered_signups_count
+ * @property-read Collection|Signup[] $signups
+ * @property-read int|null $signups_count
  *
  * @method static MensaFactory factory(...$parameters)
  * @method static Builder|Mensa newModelQuery()
@@ -51,7 +51,7 @@ use Illuminate\Support\Str;
  * @method static Builder|Mensa whereDescription($value)
  * @method static Builder|Mensa whereFoodOptions($value)
  * @method static Builder|Mensa whereId($value)
- * @method static Builder|Mensa whereMaxUsers($value)
+ * @method static Builder|Mensa whereMaxSignups($value)
  * @method static Builder|Mensa wherePrice($value)
  * @method static Builder|Mensa whereTitle($value)
  * @method static Builder|Mensa whereUpdatedAt($value)
@@ -64,18 +64,20 @@ class Mensa extends Model
 
     protected $keyType = 'string';
 
+    protected $primaryKey = 'id';
+
     public $incrementing = false;
 
     protected $fillable = [
-        'id', 'title', 'description', 'date', 'closing_time', 'max_users',
+        'id', 'title', 'description', 'date', 'closing_time', 'max_signups',
     ];
 
-    public function users(): HasMany
+    public function signups(): HasMany
     {
         return $this->hasMany(Signup::class);
     }
 
-    public function orderedUsers(): HasMany
+    public function orderedSignups(): HasMany
     {
         return $this->hasMany(Signup::class)
             ->select(DB::raw('*, mensa_users.extra_info as extra_info, mensa_users.allergies as allergies, mensa_users.food_option as food_option, mensa_users.created_at as created_at, mensa_users.updated_at as updated_at'))
@@ -101,17 +103,8 @@ class Mensa extends Model
         return $this->hasMany(MenuItem::class)->orderBy('order');
     }
 
-    public function isClosed(): bool
+    public function canSignup(User $user): bool
     {
-        return $this->closed || strtotime($this->closing_time) < time();
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (Model $model) {
-            $model->setAttribute($model->getKeyName(), Str::uuid());
-        });
+        return !$this->closed && strtotime($this->closing_time) >= time() || $user->is_admin;
     }
 }

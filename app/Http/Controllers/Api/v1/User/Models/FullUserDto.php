@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\User\Models;
 
-class UserResponseModel
+class FullUserDto
 {
     public function __construct(
         public string $id,

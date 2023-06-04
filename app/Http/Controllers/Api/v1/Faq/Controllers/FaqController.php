@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\v1\Faq\Mappers\FaqMapper;
 use App\Http\Controllers\Api\v1\Utils\ValidateOrFail;
 use App\Models\Faq;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -19,32 +20,36 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FaqController extends Controller
 {
-    use FaqMapper, ValidateOrFail;
-
-    private RemoteUserLookup $remoteLookup;
-
     /**
      * Create a new controller instance.
      */
-    public function __construct(RemoteUserLookup $remoteLookup)
+    public function __construct(
+        private readonly RemoteUserLookup $remoteLookup,
+        private readonly FaqMapper $faqMapper,
+        private readonly ValidateOrFail $validateOrFail
+    )
     {
         Auth::shouldUse('sanctum');
-        $this->remoteLookup = $remoteLookup;
     }
 
-    /** Get a list of faqs */
-    public function getFaqs(Request $request): JsonResponse
+    /** Get a list of faqs
+     * @noinspection PhpUnused
+     */
+    public function getFaqs(): JsonResponse
     {
         $faqs = Faq::orderBy('order')
             ->get()
             ->map(function ($faq) {
-                return self::mapFaq($faq);
+                return $this->faqMapper->map($faq);
             });
 
         return response()->json($faqs);
     }
 
-    /** Sort faqs */
+    /** Sort faqs
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
+     */
     public function sortFaqs(Request $request): JsonResponse
     {
         // For sorting we require the sort permission
@@ -58,13 +63,13 @@ class FaqController extends Controller
 
         // Check if all validations pass
         $validator = Validator::make($request->all(), $fields);
-        $this->validateOrFail($validator);
+        $this->validateOrFail->with($validator);
 
-        $faqOrder = $request->input('ids');
+        $faqOrder = array_values($request->input('ids'));
         $faqs = Faq::whereIn('id', $faqOrder)->get();
 
-        foreach ($faqOrder as $order => $faq) {
-            $faqModel = $faqs->where('id', $faq)->first();
+        foreach ($faqOrder as $order => $faqId) {
+            $faqModel = $faqs->where('id', $faqId)->first();
             $faqModel->order = $order;
             $faqModel->save();
         }
@@ -74,6 +79,8 @@ class FaqController extends Controller
 
     /**
      * Create a new faq
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
      */
     public function newFaq(Request $request): JsonResponse
     {
@@ -88,7 +95,7 @@ class FaqController extends Controller
 
         // Check if all validations pass
         $validator = Validator::make($request->all(), $fields);
-        $this->validateOrFail($validator);
+        $this->validateOrFail->with($validator);
 
         $faq = new Faq();
         $faq->id = Str::uuid();
@@ -102,6 +109,8 @@ class FaqController extends Controller
 
     /**
      * Update a faq
+     * @throws AuthorizationException
+     * @noinspection PhpUnused
      */
     public function updateFaq(Request $request, string $faqId): JsonResponse
     {
@@ -118,7 +127,7 @@ class FaqController extends Controller
 
         // Check if all validations pass
         $validator = Validator::make($request->all(), $fields);
-        $this->validateOrFail($validator);
+        $this->validateOrFail->with($validator);
         $faq->question = $request->input('question');
         $faq->answer = $request->input('answer');
         $faq->save();
@@ -128,8 +137,10 @@ class FaqController extends Controller
 
     /**
      * Delete a faq
+     * @noinspection PhpUnused
+     * @throws AuthorizationException
      */
-    public function deleteFaq(Request $request, string $faqId): JsonResponse
+    public function deleteFaq(string $faqId): JsonResponse
     {
         $faq = Faq::findOrFail($faqId);
 
@@ -146,8 +157,10 @@ class FaqController extends Controller
     {
         try {
             return $this->remoteLookup->currentUpdatedIfNecessary();
+        // @codeCoverageIgnoreStart
         } catch (ClientExceptionInterface) {
             abort(Response::HTTP_BAD_GATEWAY);
         }
+        // @codeCoverageIgnoreEnd
     }
 }
