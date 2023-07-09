@@ -153,7 +153,7 @@
                                 @endif
                             </fieldset>
                             <br /><br />
-                            <input type="submit" value="{{ (!$mensa->id)?'Mensa aanmaken':'Wijzig mensa' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (!$mensa->id)?route('home'):route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-default">Terug</a>
+                            <input type="submit" value="{{ (!$mensa->id)?'Mensa aanmaken':'Wijzig mensa' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (!$mensa->id)?route('home'):route('mensa.overview', ['mensaId' => $mensa->id]) }}" class="btn btn-default">Terug</a>
                         </form>
                     </div>
                     <script type="text/javascript">
