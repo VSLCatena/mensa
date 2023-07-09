@@ -1,4 +1,5 @@
 <?php
+namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Route;
 
@@ -13,54 +14,54 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index')->name('home');
-Route::get('/page/{page}', 'HomeController@index')->name('home.page');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/page/{page}', [HomeController::class, 'index'])->name('home.page');
 
-Route::get('faq', 'FaqController@view')->name('faq');
-Route::get('faq/list', 'FaqController@listFaqs')->name('faq.list');
-Route::match(['get', 'post'], 'faq/add', 'FaqController@edit')->name('faq.add');
-Route::match(['get', 'post'], 'faq/edit/{id}', 'FaqController@edit')->name('faq.edit');
-Route::match(['get', 'post'], 'faq/delete/{id}', 'FaqController@delete')->name('faq.delete');
+Route::get('faq', [FaqController::class, 'view'])->name('faq');
+Route::get('faq/list', [FaqController::class, 'listFaqs'])->name('faq.list');
+Route::match(['get', 'post'], 'faq/add',  [FaqController::class, 'edit'])->name('faq.add');
+Route::match(['get', 'post'], 'faq/edit/{id}',  [FaqController::class, 'edit'])->name('faq.edit');
+Route::match(['get', 'post'], 'faq/delete/{id}',  [FaqController::class, 'delete'])->name('faq.delete');
 
 // Login and log out
-Route::get('login/{token}', 'LoginController@loginByToken');
-Route::match(['get', 'post'], 'login', 'LoginController@login')->name('login');
-Route::post('logout', 'LoginController@logout')->name('logout');
+Route::get('login/{token}',  [LoginController::class, 'loginByToken']);
+Route::match(['get', 'post'], 'login',  [LoginController::class, 'login'])->name('login');
+Route::post('logout',  [LoginController::class, 'logout'])->name('logout');
 
 // Verify confirmation and sign out
-Route::get('signin/{code}/confirm', 'ConfirmController@confirm')->name('signin.confirm');
-Route::match(['get', 'post'], 'signin/{userId}/edit', 'SigninController@mailSignin')->name('signin.edit');
-Route::get('signin/{code}/signout', 'ConfirmController@cancel')->name('signin.cancel');
+Route::get('signin/{code}/confirm',  [ConfirmController::class, 'confirm'])->name('signin.confirm');
+Route::match(['get', 'post'], 'signin/{userId}/edit', [SigninController::class, 'mailSignin'])->name('signin.edit');
+Route::get('signin/{code}/signout',  [ConfirmController::class, 'cancel'])->name('signin.cancel');
 
-Route::match(['get', 'post'], 'settings', 'UserSettingsController@changeSettings')->name('user.settings');
+Route::match(['get', 'post'], 'settings',  [UserSettingsController::class, 'changeSettings'])->name('user.settings');
 
 Route::prefix('mensa')->group(function() {
     // Mensa editing
-    Route::match(['get', 'post'], 'create', 'MensaAdminController@edit')->name('mensa.create');
-    Route::match(['get', 'post'], '{id}/edit', 'MensaCookController@edit')->name('mensa.edit');
+    Route::match(['get', 'post'], 'create',  [MensaAdminController::class, 'edit'])->name('mensa.create');
+    Route::match(['get', 'post'], '{id}/edit', [MensaCookController::class, 'edit'])->name('mensa.edit');
 
     // Mensa info
-    Route::get('{id}', 'MensaCookController@showOverview')->name('mensa.overview');
-    Route::get('{id}/signins', 'MensaCookController@showSignins')->name('mensa.signins');
+    Route::get('{id}', [MensaCookController::class, 'showOverview'])->name('mensa.overview');
+    Route::get('{id}/signins', [MensaCookController::class, 'showSignins'])->name('mensa.signins');
 
     // Mensa administration
-    Route::post('{mensaId}/togglepaid', 'MensaAdminController@togglePaid')->name('mensa.togglepaid');
-    Route::match(['get', 'post'], '{mensaId}/signin/new', 'MensaAdminController@newSignin')->name('mensa.newsignin');
-    Route::match(['get', 'post'], '{mensaId}/signin/{lidnummer}/bulk', 'MensaAdminController@bulkSignin')->name('mensa.newsignin.bulk');
-    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', 'SigninController@editSignin')->name('mensa.editsignin');
-    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', 'MensaAdminController@removeSignin')->name('mensa.removesignin');
-    Route::match(['get', 'post'], '{mensaId}/printstate/preview', 'MensaAdminController@printStatePreview')->name('mensa.printstate.preview');
-    Route::match(['get', 'post'], '{mensaId}/printstate', 'MensaAdminController@printState')->name('mensa.printstate');
-    Route::get('{mensaId}/logs', 'MensaAdminController@showLogs')->name('mensa.logs');
+    Route::post('{mensaId}/togglepaid', [MensaAdminController::class, 'togglePaid'])->name('mensa.togglepaid');
+    Route::match(['get', 'post'], '{mensaId}/signin/new', [MensaAdminController::class, 'newSignin'])->name('mensa.newsignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/{lidnummer}/bulk', [MensaAdminController::class, 'bulkSignin'])->name('mensa.newsignin.bulk');
+    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/edit', [SigninController::class, 'editSignin'])->name('mensa.editsignin');
+    Route::match(['get', 'post'], '{mensaId}/signin/{userId}/delete', [MensaAdminController::class, 'removeSignin'])->name('mensa.removesignin');
+    Route::match(['get', 'post'], '{mensaId}/printstate/preview', [MensaAdminController::class, 'printStatePreview'])->name('mensa.printstate.preview');
+    Route::match(['get', 'post'], '{mensaId}/printstate', [MensaAdminController::class, 'printState'])->name('mensa.printstate');
+    Route::get('{mensaId}/logs', [MensaAdminController::class, 'showLogs'])->name('mensa.logs');
 
-    Route::post('{mensaId}/close', 'MensaAdminController@closeMensa')->name('mensa.close');
-    Route::match(['get', 'post'], '{mensaId}/reopen', 'MensaAdminController@openMensa')->name('mensa.open');
-    Route::match(['get', 'post'], '{mensaId}/cancel', 'MensaCookController@cancelMensa')->name('mensa.cancel');
+    Route::post('{mensaId}/close', [MensaAdminController::class, 'closeMensa'])->name('mensa.close');
+    Route::match(['get', 'post'], '{mensaId}/reopen', [MensaAdminController::class, 'openMensa'])->name('mensa.open');
+    Route::match(['get', 'post'], '{mensaId}/cancel', [MensaCookController::class, 'cancelMensa'])->name('mensa.cancel');
 
     // Sign in and sign out
-    Route::post('search', 'MensaAdminController@requestUserLookup')->name('mensa.searchusers');
-    Route::match(['get', 'post'], '{id}/signin/{lidnummer?}', 'SigninController@newSignin')->name('signin');
-    Route::post('{id}/signout', 'SigninController@signout')->name('signout');
+    Route::post('search', [MensaAdminController::class, 'requestUserLookup'])->name('mensa.searchusers');
+    Route::match(['get', 'post'], '{id}/signin/{lidnummer?}', [SigninController::class, 'newSignin'])->name('signin');
+    Route::post('{id}/signout', [SigninController::class, 'signout'])->name('signout');
 });
 
 if(config('app.debug', false)){
