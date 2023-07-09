@@ -60,8 +60,8 @@ Route::prefix('mensa')->group(function() {
 
     // Sign in and sign out
     Route::post('search', [MensaAdminController::class, 'requestUserLookup'])->name('mensa.searchusers');
-    Route::match(['get', 'post'], '{id}/signin/{lidnummer?}', [SigninController::class, 'newSignin'])->name('signin');
-    Route::post('{id}/signout', [SigninController::class, 'signout'])->name('signout');
+    Route::match(['get', 'post'], '{mensaId}/signin/{lidnummer?}', [SigninController::class, 'newSignin'])->name('signin');
+    Route::post('{mensaId}/signout', [SigninController::class, 'signout'])->name('signout');
 });
 
 if(config('app.debug', false)){
