@@ -16,6 +16,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        \URL::forceScheme('https');
+        setlocale(LC_TIME, "nl_NL");
 
         // Register our own @admin blade if to simplify things
         Blade::if('admin', function () {
