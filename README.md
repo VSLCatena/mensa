@@ -19,34 +19,7 @@ All configuration of the app itself should be doable through the .env file.
 If you don't have a .env file available, you can duplicate the .env.example file to create a new .env file.
 
 ### Authorization
-For authorization we use OAuth for Azure Active Directory. For this you'll need to register an app in Azure Active 
-Directory. You can do this by going to Azure Active Directory -> App registrations -> New registration.
-
-#### Setup
-- In _Authentication_ you will need to add a **redirectUri**. For debugging you could add for example 
-  `http://localhost:8000/login/token`
-- In _Api permissions_ you'll need to give the app the permissions: `GroupMember.Read.All`, `User.Read` and 
-  `User.Read.All`
-- In _Certificates & secrets_ you will have to create a **New client secret**. Save the secret you receive.
-
-#### Now in .env you'll have to add some values:
-Unless specified, all of these values can be grabbed from the _Overview_ tab on the App page in Azure AD.
-- _AZURE_TENANT_ID_ is **Directory (tenant) ID**
-- _AZURE_CLIENT_ID_ is **Application (client) ID**
-- _AZURE_CLIENT_SECRET_ is the **secret** you received from creating a new secret in _Certificates & secrets_
-- _AZURE_REDIRECT_URI_ is the **redirectUri** you filled in in the _Authentication_ tab.
-
-The variables with the **REMOTE_USER_** prefix work a little bit different.
-- For _REMOTE_USER_ADMIN_GROUP_ID_ Choose or create an Azure group that will contain all the admins of the application.
-  The **Object Id** is what you'll need for the .env file.
-- _REMOTE_USER_UPDATE_TIME_ is the amount of seconds it will wait before grabbing the user from the remote server 
-  (Azure) again. This is to reduce the amount of Azure calls. 
-  - A log in always does an Azure call, but an already logged in user waits this amount of seconds before it checks on
-    the remote server again. So keep in mind that revoking permissions is not instantaneous!
-- _REMOTE_USER_EMAIL_SUFFIX_ is the email suffix for our principial name. We allow people to give up their email or 
-  their username. The only way to get the user by username is by pricipial name, which is for us: 
-  `username@vslcatena.nl`. So for us this would be `@vslcatena.nl`.
-  
+For authorization we use Active Directory. For this you'll need to make sure PHP-LDAP works
 
 ### Building the app
 For production I recommend to look at, and following the 
