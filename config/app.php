@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\ServiceProvider;
+
 return [
 
     /*
@@ -53,6 +56,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -92,6 +97,19 @@ return [
     */
 
     'fallback_locale' => 'en',
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Faker Locale
+    |--------------------------------------------------------------------------
+    |
+    | This locale will be used by the Faker PHP library when generating fake
+    | data for your database seeds. For example, this will be used to get
+    | localized telephone numbers, street address information and more.
+    |
+    */
+
+    'faker_locale' => 'en_US',
 
     /*
     |--------------------------------------------------------------------------
@@ -108,6 +126,25 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Maintenance Mode Driver
+    |--------------------------------------------------------------------------
+    |
+    | These configuration options determine the driver used to determine and
+    | manage Laravel's "maintenance mode" status. The "cache" driver will
+    | allow maintenance mode to be controlled across multiple machines.
+    |
+    | Supported drivers: "file", "cache"
+    |
+    */
+
+    'maintenance' => [
+        'driver' => 'file',
+        // 'store'  => 'redis',
+    ],
+    
+    
     /*
     |--------------------------------------------------------------------------
     | Logging Configuration
@@ -136,7 +173,7 @@ return [
     |
     */
 
-    'providers' => [
+    'providers' => ServiceProvider::defaultProviders()->merge([
 
         /*
          * Laravel Framework Service Providers...
@@ -182,7 +219,7 @@ return [
          * Application Debug Providers...
          */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-    ],
+    ])->toArray(),
 
     /*
     |--------------------------------------------------------------------------
@@ -195,7 +232,7 @@ return [
     |
     */
 
-    'aliases' => [
+    'aliases' => Facade::defaultAliases()->merge([
 
         'App' => Illuminate\Support\Facades\App::class,
         'Artisan' => Illuminate\Support\Facades\Artisan::class,
@@ -232,6 +269,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Adldap' => Adldap\Laravel\Facades\Adldap::class,
 
-    ],
+    ])->toArray(),
 
 ];

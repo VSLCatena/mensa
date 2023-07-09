@@ -25,14 +25,23 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     /**
-     * Register any events for your application.
+     * The event to listener mappings for the application.
      *
-     * @return void
+     * @var array<class-string, array<int, class-string>>
      */
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 
         //
+    }
+    
+    
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     */
+    public function shouldDiscoverEvents(): bool
+    {
+        return false;
     }
 }
