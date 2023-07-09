@@ -14,7 +14,7 @@
                         {{ csrf_field() }}
                         <input type="hidden" name="id" value="{{ $mUser->id }}" />
                         <input type="submit" class="btn btn-danger" value="Ja" />
-                        <a href="{{ route('mensa.signins', ['id' => $mUser->mensa->id]) }}" class="btn btn-success">Nee</a>
+                        <a href="{{ route('mensa.signins', ['mensaId' => $mUser->mensa->id]) }}" class="btn btn-success">Nee</a>
                     </div>
                 </form>
             </div>

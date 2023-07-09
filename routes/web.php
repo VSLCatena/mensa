@@ -38,11 +38,11 @@ Route::match(['get', 'post'], 'settings',  [UserSettingsController::class, 'chan
 Route::prefix('mensa')->group(function() {
     // Mensa editing
     Route::match(['get', 'post'], 'create',  [MensaAdminController::class, 'edit'])->name('mensa.create');
-    Route::match(['get', 'post'], '{id}/edit', [MensaCookController::class, 'edit'])->name('mensa.edit');
+    Route::match(['get', 'post'], '{mensaId}/edit', [MensaCookController::class, 'edit'])->name('mensa.edit');
 
     // Mensa info
-    Route::get('{id}', [MensaCookController::class, 'showOverview'])->name('mensa.overview');
-    Route::get('{id}/signins', [MensaCookController::class, 'showSignins'])->name('mensa.signins');
+    Route::get('{mensaId}', [MensaCookController::class, 'showOverview'])->name('mensa.overview');
+    Route::get('{mensaId}/signins', [MensaCookController::class, 'showSignins'])->name('mensa.signins');
 
     // Mensa administration
     Route::post('{mensaId}/togglepaid', [MensaAdminController::class, 'togglePaid'])->name('mensa.togglepaid');

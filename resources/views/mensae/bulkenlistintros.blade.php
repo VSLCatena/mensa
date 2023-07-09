@@ -63,7 +63,7 @@
 
                             <input type="submit" value="Intros inschrijven" class="btn btn-primary" />
                             &nbsp;&nbsp;
-                            <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-default">Terug</a>
+                            <a href="{{ route('mensa.overview', ['mensaId' => $mensa->id]) }}" class="btn btn-default">Terug</a>
                         </form>
                     </div>
                     <script type="text/javascript">
