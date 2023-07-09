@@ -1,5 +1,11 @@
-[![Docker (Branch: feature/docker)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml/badge.svg?branch=feature%2docker)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml)
-[![Laravel (Branch: feature/revamp)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml/badge.svg?branch=feature%2Frevamp)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml)
+*Main*
+
+[![Docker (Branch: Main)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml/badge.svg?branch=main-docker)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml)
+[![Laravel (Branch: main)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml/badge.svg?branch=main-docker)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml)
+
+*Development*
+
+[![Docker (Branch: development)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml/badge.svg?branch=development)](https://github.com/VSLCatena/mensa/actions/workflows/docker-publish.yml)
 [![Laravel (Branch: development)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml/badge.svg?branch=development)](https://github.com/VSLCatena/mensa/actions/workflows/laravel.yml)
 
 
