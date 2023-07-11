@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
             }
             else
             {
-                return parent::renderable(Throwable $exception, Request $request);
+                return parent::render(Throwable $exception, Request $request);
             }
         });
     }
