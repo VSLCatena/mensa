@@ -21,7 +21,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+      - name: Copy .env
+        run: |
+           if [[ ! -f '.env' ]];then
+               cp '.env.example' '.env'
+           fi
+      - name: Install Dependencies
+        run: composer require laravel/sail -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    
       - name: Run tests
         run: |
           if [ -f docker-compose.test.yml ]; then
