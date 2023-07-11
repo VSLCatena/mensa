@@ -11,7 +11,9 @@ jobs:
   laravel-tests:
 
     runs-on: ubuntu-latest
-
+    env: 
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database.sqlite
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
@@ -31,7 +33,4 @@ jobs:
           php artisan migrate:fresh
           php artisan db:seed
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database.sqlite
         run: vendor/bin/phpunit
