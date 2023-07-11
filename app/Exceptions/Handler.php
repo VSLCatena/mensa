@@ -41,10 +41,6 @@ class Handler extends ExceptionHandler
                         break;
                 }
             }
-            else
-            {
-                return parent::render(Request $request, Throwable $exception);
-            }
         });
     }
 }
