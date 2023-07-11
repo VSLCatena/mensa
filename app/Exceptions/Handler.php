@@ -45,6 +45,6 @@ class Handler extends ExceptionHandler
             {
                 return parent::renderable(Throwable $exception, Request $request);
             }
-        }
+        });
     }
 }
