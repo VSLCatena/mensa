@@ -19,7 +19,9 @@
         "laravel/ui": "^4.5.2",
         "nesbot/carbon": "^2.72.3",
         "nunomaduro/collision": "^7.10",
-        "spatie/laravel-ignition": "^2.7"
+        "spatie/laravel-ignition": "^2.7",
+        "laravel/socialite": "^5.9",
+        "socialiteproviders/microsoft-azure": "^5.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13.5",
