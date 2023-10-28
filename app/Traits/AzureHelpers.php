@@ -20,18 +20,19 @@ trait AzureHelpers
     }
 
     public function searchAzureUsers($name){
-        if(!preg_match('/^[a-zA-Z0-9 _]+$/', $name)){
+        if(!preg_match('/^[a-zA-Z0-9 _]+$/', $name) ){
             return '';
         }
         $UserByApp=new UserByApp();
-        $users = $UserByApp->getUsers(10,'displayName',$name,False);
-
-        return $users->map(function ($user){
-            return [
-                'name' => $user->name,
-                'lidnummer' => $user->lidnummer
-            ];
-        }, $users);
+        $users = $UserByApp->getUsers(50,'displayName',$name,False);
+        if(!empty($users)) { 
+            return $users->map(function ($user){
+                return [
+                    'name' => $user->name,
+                    'lidnummer' => $user->lidnummer
+                ];
+            }, $users);
+        }
     }
 
     public function saveAzureUser($user){
