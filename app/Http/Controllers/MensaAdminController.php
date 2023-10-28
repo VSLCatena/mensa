@@ -118,7 +118,7 @@ class MensaAdminController extends MensaCookController
 
     public function requestUserLookup(Request $request){
         $request->validate(['name' => 'regex:/^[a-zA-Z _]+$/']);
-        return response()->json($this->searchLdapUsers($request->get('name')));
+        return response()->json($this->searchAzureUsers($request->get('name')));
     }
 
     public function printState(Request $request, $mensaId){
@@ -206,7 +206,7 @@ class MensaAdminController extends MensaCookController
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
 
-        $user = $this->getLdapUserBy('description', $lidnummer);
+        $user = $this->getAzureUserBy('description', $lidnummer);
         if($user == null){
             return redirect()->back()->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met ' . config('mensa.contact.mail') . '.');
         }
