@@ -6,6 +6,7 @@ use Microsoft\Graph\Graph;
 use GuzzleHttp;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class UserByApp {
     protected $employeeNumberProperty ;
@@ -38,14 +39,23 @@ class UserByApp {
             // if request for extensionProperty then translate the propertyName
             switch($searchProperty){
                 case 'employeeNumber':
-                    $searchProperty = $this->employeeNumberProperty; break;
+                    $searchProperty = $this->employeeNumberProperty;
+                    $search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
+                    break;
                 case 'description':
-                    $searchProperty = $this->descriptionProperty; break;
+                    $searchProperty = $this->descriptionProperty;
+                    $search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
+                    break;
                 case 'email':
-                    $searchProperty = $this->mailProperty; break;
+                    $searchProperty = $this->mailProperty; 
+                    $search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
+                    break;
+                default:
+                    $search = $searchProperty && $searchValue ? '&$search="'. $searchProperty . ':' . $searchValue . '"' : null;
+                    break;
             }
             // if search then append to query
-            $search= $searchProperty && $searchValue ? '&$search="'. $searchProperty . ':' . $searchValue . '"' : null;
+            //$search = $searchProperty && $searchValue ? '&$search="'. $searchProperty . ':' . $searchValue . '"' : null;
             //$search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
             $endpoint = '/users';
             $url = $endpoint . '?$count=true&$orderBy=displayName' . $topN . $search . ' &$select=id,displayName,surname,givenName,userPrincipalName,mail,businessPhones,onPremisesSamAccountName,employeeId,' . $this->descriptionProperty . ',' . $this->employeeNumberProperty  . ',' . $this->mailProperty ;
@@ -55,6 +65,9 @@ class UserByApp {
             $data=$request->execute();
             $content = $data->getBody();
             $users = collect(json_decode(json_encode($content['value']), FALSE));
+            if(empty($users) || count($users) >= 50 ) { 
+                return null; 
+            }
             // if nextLink then loop
             while(array_key_exists('@odata.nextLink',$content)){
                 $url = $content['@odata.nextLink'];
@@ -63,7 +76,7 @@ class UserByApp {
                 $data=$request->execute();
                 $content = $data->getBody();
                 $newusers = collect(json_decode(json_encode($content['value']), FALSE));
-                $users = merge($users,$newusers);
+                $users = $users->merge($newusers);
             }
             
             $cleanupUsers = $users->map(function ($user) use($checkAdmin){
@@ -76,7 +89,7 @@ class UserByApp {
                 $user->email = $user->{$this->mailProperty} ?? null;
                 $user->phonenumber = $user->businessPhones[0] ?? null;
                 $user->description = isset($user->{$this->descriptionProperty}) ? Arr::join( $user->{$this->descriptionProperty} , ',' ) : null;
-                $user->lidnummer = $user->{$this->employeeNumberProperty};
+                $user->lidnummer = $user->{$this->employeeNumberProperty} ?? null;
                 
                 //cleanup object
                 unset($user->displayName);
