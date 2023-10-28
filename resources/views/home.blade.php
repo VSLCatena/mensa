@@ -85,7 +85,7 @@
                                                 <span class="btn btn-primary disabled">Geannuleerd</span>
                                             @elseif(!Auth::check() || !Auth::user()->service_user)
                                                 @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
-                                                    <form method="POST" @can('softEdit', $mensa) class="btn-group-vertical" @endcan action="{{ route('signout', ['id' => $mensa->id]) }}">
+                                                    <form method="POST" @can('softEdit', $mensa) class="btn-group-vertical" @endcan action="{{ route('signout', ['mensaId' => $mensa->id]) }}">
                                                         <input type="submit" class="btn btn-danger {{ $mensa->isClosed()?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="id" value="{{ $mensa->id }}" />
