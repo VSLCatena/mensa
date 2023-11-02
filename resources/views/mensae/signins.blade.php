@@ -102,7 +102,7 @@
                 btn.removeClass('btn-success btn-danger btn-warning');
                 btn.blur();
 
-                $.post("{{ route('mensa.togglepaid', ['id' => $mensa->id]) }}", {id: $(this).data('id')}, function (data) {
+                $.post("{{ route('mensa.togglepaid', ['mensaId' => $mensa->id]) }}", {id: $(this).data('id')}, function (data) {
                     if(data.error !== undefined){
                         btn.addClass(hasPaid ? 'btn-success' : 'btn-danger');
                         alert("Whoops! Er ging iets verkeerd bij het aanpassen van het betalen! :(")

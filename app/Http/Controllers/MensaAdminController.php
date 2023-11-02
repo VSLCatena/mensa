@@ -22,7 +22,7 @@ class MensaAdminController extends MensaCookController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('isAdmin');
+        $this->middleware('IsAdmin');
     }
 
     public function showLogs(Request $request, $mensaId){
@@ -67,11 +67,11 @@ class MensaAdminController extends MensaCookController
         try {
             $mUser = MensaUser::findOrFail($userId);
         } catch(ModelNotFoundException $e){
-            return redirect(route('mensa.signins', ['id' => $mensaId]))->with('error', 'Gebruiker niet gevonden!');
+            return redirect(route('mensa.signins', ['mensaId' => $mensaId]))->with('error', 'Gebruiker niet gevonden!');
         }
 
         if($mUser->mensa->closed){
-            return redirect(route('mensa.overview', ['id' => $mensaId]))->with('error', 'Deze mensa is al gesloten!');
+            return redirect(route('mensa.overview', ['mensaId' => $mensaId]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod('get')){
@@ -86,7 +86,7 @@ class MensaAdminController extends MensaCookController
         // Send signout email
         Mail::to($mUser->user)->send(new SigninCancelled($mUser));
 
-        return redirect(route('mensa.signins', ['id' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
+        return redirect(route('mensa.signins', ['mensaId' => $mensaId]))->with('info', $mUser->user->name.' is uitgeschreven!');
     }
 
     // This is for if you're an admin
@@ -98,7 +98,7 @@ class MensaAdminController extends MensaCookController
         }
 
         if($mensa->closed){
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
+            return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod('get')){
@@ -110,10 +110,10 @@ class MensaAdminController extends MensaCookController
         ]);
 
         if($request->has('bulk')){
-            return redirect(route('mensa.newsignin.bulk', ['id' => $mensa->id, 'lidnummer' => $request->get('lidnummer')]));
+            return redirect(route('mensa.newsignin.bulk', ['mensaId' => $mensa->id, 'lidnummer' => $request->get('lidnummer')]));
         }
 
-        return redirect(route('signin', ['id' => $mensaId, 'lidnummer' => $request->get('lidnummer')]));
+        return redirect(route('signin', ['mensaId' => $mensaId, 'lidnummer' => $request->get('lidnummer')]));
     }
 
     public function requestUserLookup(Request $request){
@@ -140,7 +140,7 @@ class MensaAdminController extends MensaCookController
         $this->log($mensa, 'Het wijzigen van de mensa is geblokkeerd i.v.m. het printen van de mensastaat');
         $this->log($mensa, 'Mensastaat uitgeprint.');
 
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensastaat is uitgeprint!');
+        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Mensastaat is uitgeprint!');
     }
 
     public function printStatePreview(Request $request, $mensaId){
@@ -169,7 +169,7 @@ class MensaAdminController extends MensaCookController
         }
 
         if(!$mensa->closed) {
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al open!');
+            return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Deze mensa is al open!');
         }
 
         $mensa->closed = false;
@@ -178,7 +178,7 @@ class MensaAdminController extends MensaCookController
         $mensa->save();
 
         $this->log($mensa, 'Mensa opnieuw geopend voor wijzigingen');
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geopend voor aanpassingen!');
+        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Mensa geopend voor aanpassingen!');
     }
 
     public function closeMensa(Request $request, $mensaId){
@@ -189,14 +189,14 @@ class MensaAdminController extends MensaCookController
         }
 
         if($mensa->closed) {
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al geopend!');
+            return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Deze mensa is al geopend!');
         }
 
         $mensa->closed = true;
         $mensa->save();
 
         $this->log($mensa, 'Mensa gesloten voor wijzigingen');
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa gesloten voor aanpassingen!');
+        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Mensa gesloten voor aanpassingen!');
     }
 
     public function bulkSignin(Request $request, $mensaId, $lidnummer){
@@ -246,6 +246,6 @@ class MensaAdminController extends MensaCookController
 
         $this->log($mensa, $count.' intro'.($count == 1?'':'s').' ingeschreven voor '.$user->name.'.');
 
-        return redirect(route('mensa.signins', ['id' => $mensa->id]))->with('info', $count.' intro'.($count == 1?'':'s').' succesvol ingeschreven voor '.$user->name.'!');
+        return redirect(route('mensa.signins', ['mensaId' => $mensa->id]))->with('info', $count.' intro'.($count == 1?'':'s').' succesvol ingeschreven voor '.$user->name.'!');
     }
 }

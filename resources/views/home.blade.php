@@ -92,7 +92,7 @@
                                                     </form>
                                                 @elseif(!$mensa->isClosed())
                                                     @if($mensa->max_users > $mensa->users()->count())
-                                                        <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
+                                                        <a href="{{ route('signin', ['mensaId' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
                                                     @else
                                                         <span class="btn btn-primary disabled">Vol</span>
                                                     @endif
@@ -101,7 +101,7 @@
                                                 @endif
                                             @endif
                                             @can('softEdit', $mensa)
-                                            <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
+                                            <a href="{{ route('mensa.overview', ['mensaId' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
                                             @endcan
                                         </div>
                                     </td>
