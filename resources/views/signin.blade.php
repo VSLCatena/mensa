@@ -95,7 +95,7 @@
                                         <label for="cooks">Koker</label>
                                     </div>
                                 @endadmin
-                                <input type="submit" value="{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (Auth::check() && Auth::user()->mensa_admin)?route('mensa.signins', ['id' => $mensaUser->mensa->id]):route('home') }}" class="btn btn-default">Terug</a>
+                                <input type="submit" value="{{ (!$mensaUser->id)?'Inschrijven':'Inschrijving aanpassen' }}" class="btn btn-primary" />&nbsp;&nbsp;<a href="{{ (Auth::check() && Auth::user()->mensa_admin)?route('mensa.signins', ['mensaId' => $mensaUser->mensa->id]):route('home') }}" class="btn btn-default">Terug</a>
                             </form>
                             <script type="text/javascript">
                                 $("#intro").click(function(){

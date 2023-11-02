@@ -8,30 +8,31 @@
     "prefer-stable": true,
     "require": {
         "php": ">=8.1.0",
-        "guzzlehttp/guzzle": "^7.7",        
-        "adldap2/adldap2-laravel": "^6.1.7",
         "barryvdh/laravel-ide-helper": "^2.13",
         "doctrine/dbal": "^3.6.4",
+        "guzzlehttp/guzzle": "^7.7",
         "laravel/framework": "^10.14.1",
         "laravel/helpers": "^1.6",
-        "laravel/passport": "^11.8.8",
         "laravel/sanctum": "^3.2.5",
+        "laravel/socialite": "^5.9",
         "laravel/tinker": "^2.8.1",
         "laravel/ui": "^4.2.2",
+        "microsoft/microsoft-graph": "^1.108",
         "nesbot/carbon": "^2.68.1",
         "nunomaduro/collision": "^7.7",
+        "socialiteproviders/microsoft-azure": "^5.1",
         "spatie/laravel-ignition": "^2.2"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.8.1",
         "fakerphp/faker": "^1.23",
+        "filp/whoops": "^2.15.2",
         "laravel/pint": "^1.10.3",
         "laravel/sail": "^1.23",
         "mockery/mockery": "^1.6.2",
         "nunomaduro/collision": "^7.7",
         "phpunit/phpunit": "^10.2.4",
-        "spatie/laravel-ignition": "^2.2",
-        "barryvdh/laravel-debugbar": "^3.8.1",
-        "filp/whoops": "^2.15.2"
+        "spatie/laravel-ignition": "^2.2"
     },
     "autoload": {
         "classmap": [
