@@ -40,7 +40,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build image based on docker-compose.yml
-        run: docker compose build
+        run: docker compose build mensa.php
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
