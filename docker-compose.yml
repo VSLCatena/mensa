@@ -2,6 +2,7 @@
 services:
     mensa.php:
         container_name: mensa.php
+        pull_policy: missing
         build:
             context: ./vendor/laravel/sail/runtimes/${SAIL_VERSION:-8.1}
             dockerfile: Dockerfile
