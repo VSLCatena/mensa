@@ -38,6 +38,12 @@ return [
          'client_secret' => env('AZURE_CLIENT_SECRET'),
          'redirect' => env('AZURE_REDIRECT_URI'),
          'tenant'  => env('AZURE_TENANT_ID'),
-         'proxy' => env('PROXY') // optionally];
+         'proxy' => env('PROXY'),
+         'serviceprincipal_id' => env('AZURE_SERVICEPRINCIPAL_ID'),
+         'extension_app_id' => env('AZURE_EXTENSION_APP_ID'),
+         'role' => [
+             'admin_value' => env('AZURE_ROLE_ADMIN_VALUE'),
+             'user_value' => env('AZURE_ROLE_USER_VALUE'),
+         ],
     ],
 ];
