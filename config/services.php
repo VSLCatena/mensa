@@ -8,31 +8,42 @@ return [
     |--------------------------------------------------------------------------
     |
     | This file is for storing the credentials for third party services such
-    | as Stripe, Mailgun, SparkPost and others. This file provides a sane
-    | default location for this type of information, allowing packages
-    | to have a conventional place to find your various credentials.
+    | as Mailgun, Postmark, AWS and more. This file provides the de facto
+    | location for this type of information, allowing packages to have
+    | a conventional file to locate the various service credentials.
     |
     */
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
+        'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
+        'scheme' => 'https',
+    ],
+
+    'postmark' => [
+        'token' => env('POSTMARK_TOKEN'),
     ],
 
     'ses' => [
-        'key' => env('SES_KEY'),
-        'secret' => env('SES_SECRET'),
-        'region' => 'us-east-1',
+        'key' => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'sparkpost' => [
-        'secret' => env('SPARKPOST_SECRET'),
-    ],
 
-    'stripe' => [
-        'model' => App\User::class,
-        'key' => env('STRIPE_KEY'),
-        'secret' => env('STRIPE_SECRET'),
-    ],
 
+    'azure' => [
+         'client_id' => env('AZURE_CLIENT_ID'),
+         'client_secret' => env('AZURE_CLIENT_SECRET'),
+         'redirect' => env('AZURE_REDIRECT_URI'),
+         'tenant'  => env('AZURE_TENANT_ID'),
+         'proxy' => env('PROXY'),
+         'serviceprincipal_id' => env('AZURE_SERVICEPRINCIPAL_ID'),
+         'extension_app_id' => env('AZURE_EXTENSION_APP_ID'),
+         'role' => [
+             'admin_value' => env('AZURE_ROLE_ADMIN_VALUE'),
+             'user_value' => env('AZURE_ROLE_USER_VALUE'),
+         ],
+    ],
 ];

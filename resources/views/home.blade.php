@@ -85,14 +85,14 @@
                                                 <span class="btn btn-primary disabled">Geannuleerd</span>
                                             @elseif(!Auth::check() || !Auth::user()->service_user)
                                                 @if(Auth::check() && $mensa->users->where('lidnummer', Auth::user()->lidnummer)->count() > 0)
-                                                    <form method="POST" @can('softEdit', $mensa) class="btn-group-vertical" @endcan action="{{ route('signout', ['id' => $mensa->id]) }}">
+                                                    <form method="POST" @can('softEdit', $mensa) class="btn-group-vertical" @endcan action="{{ route('signout', ['mensaId' => $mensa->id]) }}">
                                                         <input type="submit" class="btn btn-danger {{ $mensa->isClosed()?'disabled':'' }}" value="Uitschrijven" {{ $mensa->closed?'disabled':'' }} />
                                                         {{ csrf_field() }}
                                                         <input type="hidden" name="id" value="{{ $mensa->id }}" />
                                                     </form>
                                                 @elseif(!$mensa->isClosed())
                                                     @if($mensa->max_users > $mensa->users()->count())
-                                                        <a href="{{ route('signin', ['id' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
+                                                        <a href="{{ route('signin', ['mensaId' => $mensa->id]) }}" class="btn btn-primary">Inschrijven</a>
                                                     @else
                                                         <span class="btn btn-primary disabled">Vol</span>
                                                     @endif
@@ -101,7 +101,7 @@
                                                 @endif
                                             @endif
                                             @can('softEdit', $mensa)
-                                            <a href="{{ route('mensa.overview', ['id' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
+                                            <a href="{{ route('mensa.overview', ['mensaId' => $mensa->id]) }}" class="btn btn-primary">Bekijken</a>
                                             @endcan
                                         </div>
                                     </td>
