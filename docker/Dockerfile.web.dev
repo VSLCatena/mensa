@@ -1,0 +1,10 @@
+FROM node:20-alpine
+
+# setup workspace
+WORKDIR /home/app
+
+# install angular version 17
+RUN npm install -g @angular/cli@17
+
+# Expose port
+EXPOSE 4200
