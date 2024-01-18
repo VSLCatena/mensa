@@ -10,7 +10,7 @@ export class MenuItemService {
         private readonly menuItemModel: typeof MenuItem
     ) {}
 
-    findAll(mensaId: number): Promise<MenuItem[]> {
+    findAllByMensaId(mensaId: number): Promise<MenuItem[]> {
         return this.menuItemModel.findAll({
             where: {
                 mensaId: mensaId

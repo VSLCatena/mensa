@@ -9,7 +9,7 @@ export class MensaUserService {
         private readonly mensaUserModel: typeof MensaUser
     ) {}
 
-    findAll(mensaId: number): Promise<MensaUser[]> {
+    findAllByMensaId(mensaId: number): Promise<MensaUser[]> {
         return this.mensaUserModel.findAll({
             where: {
                 mensaId: mensaId
