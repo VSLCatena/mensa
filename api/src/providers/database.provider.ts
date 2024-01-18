@@ -18,6 +18,12 @@ export const databaseProviders = [
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
+        pool: {
+          max: 5,
+          min: 0,
+          acquire: 30000,
+          idle: 10000
+        }
       });
       sequelize.addModels([ User, Mensa, Faq, MenuItem, MensaUser, MensaExtraOption, MensaUserExtraOption ]);
       await sequelize.sync();
