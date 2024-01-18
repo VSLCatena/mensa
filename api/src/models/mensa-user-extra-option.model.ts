@@ -1,23 +1,24 @@
-import { Table, Model, Column, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
+import { Table, Model, ForeignKey, BelongsTo, DataType, Column } from 'sequelize-typescript';
 import { MensaUser } from './mensa-user.model';
 import { MensaExtraOption } from './mensa-extra-option.model';
 
 @Table({
   tableName: 'mensa_user_extra_options',
-  timestamps: false, // Disable timestamps for this table
+  timestamps: false,
+  underscored: true,
 })
 export class MensaUserExtraOption extends Model<MensaUserExtraOption> {
+  @Column({ type: DataType.INTEGER.UNSIGNED, allowNull: false })
+  mensaUserId: number;
+
+  @Column({ type: DataType.INTEGER.UNSIGNED, allowNull: false })
+  mensaExtraOptionId: number;
+
   @ForeignKey(() => MensaUser)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  mensa_user_id: number;
-
-  @ForeignKey(() => MensaExtraOption)
-  @Column({ type: DataType.INTEGER, allowNull: false })
-  mensa_extra_option_id: number;
-
-  @BelongsTo(() => MensaUser)
+  @BelongsTo(() => MensaUser, 'mensa_user_id')
   mensaUser: MensaUser;
 
-  @BelongsTo(() => MensaExtraOption)
+  @ForeignKey(() => MensaExtraOption)
+  @BelongsTo(() => MensaExtraOption, 'mensa_extra_option_id')
   mensaExtraOption: MensaExtraOption;
 }

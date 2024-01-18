@@ -1,29 +1,30 @@
-import { Table, Model, Column, ForeignKey, BelongsTo, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Table, Model, Column, CreatedAt, UpdatedAt, PrimaryKey, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { User } from './user.model';
 
 @Table({
   tableName: 'faqs',
 })
-export class FAQ extends Model<FAQ> {
-  @Column({ autoIncrement: true, primaryKey: true })
+export class Faq extends Model<Faq> {
+  @PrimaryKey
+  @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false })
   id: number;
 
-  @Column
+  @Column({ type: DataType.STRING(191), allowNull: false })
   question: string;
 
-  @Column({ type: 'LONGTEXT' })
+  @Column({ type: DataType.TEXT, allowNull: false })
   answer: string;
 
   @ForeignKey(() => User)
-  @Column
-  last_edited_by: string;
+  @Column({ type: DataType.STRING(191), allowNull: false, field: 'last_edited_by' })
+  lastEditedBy: string;
+
+  @BelongsTo(() => User)
+  lastEditedByUser: User;
 
   @CreatedAt
   createdAt: Date;
 
   @UpdatedAt
   updatedAt: Date;
-
-  @BelongsTo(() => User)
-  lastEditedBy: User;
 }

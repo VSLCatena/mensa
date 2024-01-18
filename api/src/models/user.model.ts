@@ -1,33 +1,39 @@
-import { Table, Model, Column, PrimaryKey, CreatedAt, UpdatedAt, Default, AllowNull } from 'sequelize-typescript';
+import { Table, Model, Column, CreatedAt, UpdatedAt, PrimaryKey, DataType } from 'sequelize-typescript';
 
 @Table({
   tableName: 'users',
 })
 export class User extends Model<User> {
   @PrimaryKey
-  @Column
-  lidnummer: string;
+  @Column({ type: DataType.STRING(191), allowNull: false, field: 'lidnummer' })
+  membershipNumber: string;
 
-  @Column
+  @Column({ type: DataType.STRING(191), allowNull: false })
   name: string;
 
-  @Column
-  email: string;
+  @Column({ type: DataType.STRING(191)})
+  email?: string;
 
-  @AllowNull
-  @Column
+  @Column({ type: DataType.STRING(191) })
   allergies?: string;
 
-  @AllowNull
-  @Column
-  wishes?: string;
+  @Column({ type: DataType.STRING(191) })
+  extraInfo?: string;
 
-  @Default(false)
-  @Column
-  mensa_admin: boolean;
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  mensaAdmin: boolean;
 
-  @Column
-  rememberToken: string;
+  @Column({ type: DataType.STRING(100) })
+  rememberToken?: string;
+
+  @Column({ type: DataType.STRING(191) })
+  phoneNumber?: string;
+
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  vegetarian: boolean;
+
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  serviceUser: boolean;
 
   @CreatedAt
   createdAt: Date;

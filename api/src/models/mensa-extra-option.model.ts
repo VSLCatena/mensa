@@ -1,23 +1,25 @@
-import { Table, Model, Column, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Model, Column, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, DataType } from 'sequelize-typescript';
 import { Mensa } from './mensa.model';
 
 @Table({
   tableName: 'mensa_extra_options',
 })
 export class MensaExtraOption extends Model<MensaExtraOption> {
-  @Column({ autoIncrement: true, primaryKey: true })
+  @PrimaryKey
+  @AutoIncrement
+  @Column({ type: DataType.INTEGER.UNSIGNED, allowNull: false })
   id: number;
 
   @ForeignKey(() => Mensa)
-  @Column
-  mensa_id: number;
+  @Column({ type: DataType.INTEGER.UNSIGNED, allowNull: false, field: 'mensa_id' })
+  mensaId: number;
 
-  @Column
+  @BelongsTo(() => Mensa, 'mensa_id')
+  mensa: Mensa;
+
+  @Column({ type: DataType.STRING(191), allowNull: false })
   description: string;
 
-  @Column
+  @Column({ type: DataType.DECIMAL(8, 2), allowNull: false })
   price: number;
-
-  @BelongsTo(() => Mensa)
-  mensa: Mensa;
 }

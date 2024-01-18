@@ -1,24 +1,30 @@
-import { Table, Model, Column, PrimaryKey, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Table, Model, Column, CreatedAt, UpdatedAt, PrimaryKey, DataType } from 'sequelize-typescript';
 
 @Table({
   tableName: 'mensas',
 })
 export class Mensa extends Model<Mensa> {
   @PrimaryKey
-  @Column({ autoIncrement: true })
+  @Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, allowNull: false })
   id: number;
 
-  @Column
+  @Column({ type: DataType.STRING(191), allowNull: false })
   title: string;
 
-  @Column({ type: 'TIMESTAMP' })
+  @Column({ type: DataType.DATE, allowNull: false })
   date: Date;
 
-  @Column({ type: 'TIMESTAMP' })
-  closing_time: Date;
+  @Column({ type: DataType.DATE, allowNull: false, field: 'closing_time' })
+  closingTime: Date;
 
-  @Column
-  max_users: number;
+  @Column({ type: DataType.TINYINT, allowNull: false, field: 'max_users' })
+  maxUsers: number;
+
+  @Column({ type: DataType.DECIMAL(8, 2), allowNull: false })
+  price: number;
+
+  @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
+  closed: boolean;
 
   @CreatedAt
   createdAt: Date;
