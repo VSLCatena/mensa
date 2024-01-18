@@ -1,3 +1,4 @@
+import { MenuItem } from './menu-item.model';
 export class Mensa {
 	id: number;
 	title: string;
@@ -7,6 +8,7 @@ export class Mensa {
     enrollments: number;
 	price: number;
 	closed: boolean;
+    menuItems: MenuItem[];
 	createdAt: Date;
 	updatedAt: Date;
 
@@ -19,6 +21,7 @@ export class Mensa {
         enrollments: number,
 		price: number,
 		closed: boolean,
+        menuItems: MenuItem[],
 		createdAt: Date,
 		updatedAt: Date
 	) {
@@ -30,6 +33,7 @@ export class Mensa {
         this.enrollments = enrollments;
 		this.price = price;
 		this.closed = closed;
+        this.menuItems = menuItems;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
