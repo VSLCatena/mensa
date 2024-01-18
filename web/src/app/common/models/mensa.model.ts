@@ -1,4 +1,5 @@
 import { MenuItem } from './menu-item.model';
+import { MensaExtraOption } from './mensa-extra-option';
 export class Mensa {
 	id: number;
 	title: string;
@@ -9,6 +10,7 @@ export class Mensa {
 	price: number;
 	closed: boolean;
     menuItems: MenuItem[];
+    extraOptions: MensaExtraOption[];
 	createdAt: Date;
 	updatedAt: Date;
 
@@ -22,6 +24,7 @@ export class Mensa {
 		price: number,
 		closed: boolean,
         menuItems: MenuItem[],
+        extraOptions: MensaExtraOption[],
 		createdAt: Date,
 		updatedAt: Date
 	) {
@@ -34,6 +37,7 @@ export class Mensa {
 		this.price = price;
 		this.closed = closed;
         this.menuItems = menuItems;
+        this.extraOptions = extraOptions;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
