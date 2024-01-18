@@ -10,7 +10,7 @@ services:
         MYSQL_USER: root
         MYSQL_PASSWORD: rootpwd
       networks:
-          - mensa
+        - mensa
     api:
       image: 'node:20-alpine'
       ports:
