@@ -1,1 +1,4 @@
-export type StaffRole = 'Cook' | 'Dishwasher';
+export enum StaffRole {
+    Cook = 'Cook',
+    Dishwasher = 'Dishwasher',
+}
