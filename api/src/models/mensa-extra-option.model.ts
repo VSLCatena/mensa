@@ -1,4 +1,3 @@
-// mensa-extra-option.model.ts
 import { Table, Model, Column, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Mensa } from './mensa.model';
 

@@ -1,4 +1,3 @@
-// mensa-user.model.ts
 import { Table, Model, Column, PrimaryKey, ForeignKey, BelongsTo, CreatedAt, UpdatedAt, DataType } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Mensa } from './mensa.model';

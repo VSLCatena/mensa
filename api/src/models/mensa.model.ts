@@ -1,4 +1,3 @@
-// mensa.model.ts
 import { Table, Model, Column, PrimaryKey, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 
 @Table({

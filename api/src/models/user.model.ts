@@ -1,4 +1,3 @@
-// user.model.ts
 import { Table, Model, Column, PrimaryKey, CreatedAt, UpdatedAt, Default, AllowNull } from 'sequelize-typescript';
 
 @Table({

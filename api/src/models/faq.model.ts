@@ -1,4 +1,3 @@
-// faq.model.ts
 import { Table, Model, Column, ForeignKey, BelongsTo, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import { User } from './user.model';
 
