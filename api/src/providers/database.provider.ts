@@ -1,11 +1,11 @@
 import { Sequelize } from 'sequelize-typescript';
-import { Faq } from 'src/models/faq.model';
-import { MensaExtraOption } from 'src/models/mensa-extra-option.model';
-import { MensaUserExtraOption } from 'src/models/mensa-user-extra-option.model';
-import { MensaUser } from 'src/models/mensa-user.model';
-import { Mensa } from 'src/models/mensa.model';
-import { MenuItem } from 'src/models/menu-item.model';
-import { User } from 'src/models/user.model';
+import { Faq } from 'src/database/models/faq.model';
+import { MensaExtraOption } from 'src/database/models/mensa-extra-option.model';
+import { MensaUserExtraOption } from 'src/database/models/mensa-user-extra-option.model';
+import { MensaUser } from 'src/database/models/mensa-user.model';
+import { Mensa } from 'src/database/models/mensa.model';
+import { MenuItem } from 'src/database/models/menu-item.model';
+import { User } from 'src/database/models/user.model';
 
 export const databaseProviders = [
 	{
