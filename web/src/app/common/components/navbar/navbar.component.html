@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#app-navbar-collapse" aria-controls="app-navbar-collapse" aria-expanded="false" aria-label="Toggle Navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/">V.S.L. Catena</a>
+
+    <div class="collapse navbar-collapse" id="app-navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" routerLink="/">Mensaoverzicht</a></li>
+        <!-- Add *ngIf directive for the admin link -->
+        <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" routerLink="/mensa/create">Mensa aanmaken</a></li>
+        <li class="nav-item"><a class="nav-link" routerLink="/faq">FAQ</a></li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li *ngIf="!isLoggedIn" class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
+        <li *ngIf="isLoggedIn" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ username }}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li class="nav-item"><a class="nav-link" routerLink="/user/settings">Instellingen</a></li>
+            <!-- Add *ngIf directive for the admin menu items -->
+            <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Statistiek</a></li>
+            <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Logboek</a></li>
+            <!-- Add a separator only if not a service user -->
+            <li *ngIf="isAdmin && !isServiceUser" role="separator" class="dropdown-divider"></li>
+            <!-- Add logout form only if not a service user -->
+            <li *ngIf="!isServiceUser" class="nav-item">
+              <form id="logout-form" action="/logout" method="POST">
+                <!-- Add CSRF token if needed -->
+                <button type="submit" class="btn btn-link">Logout</button>
+              </form>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
