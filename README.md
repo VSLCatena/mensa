@@ -45,10 +45,6 @@ The pattern *modelname.model.ts* is used for naming the files.
 
 Documentation for creating a model can be found here: https://www.npmjs.com/package/sequelize-typescript#model-definition
 
-##### Registering model
-After creating the model, you need to register it in the **api/src/providers/database.provider.ts** file.
-Add the model inside the array:  ```sequelize.addModels([])```.
-
 ##### Creating a migration
 After creating the model, you need to create a migration for it.
 This can be done by running the following command: ```npm run migration:generate mymigrationname```<br>

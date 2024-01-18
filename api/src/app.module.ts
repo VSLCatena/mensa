@@ -1,5 +1,5 @@
+import { SequelizeModule } from '@nestjs/sequelize';
 import { Module } from '@nestjs/common';
-import { databaseProviders } from './common/providers/database.provider';
 import { ConfigModule } from '@nestjs/config';
 import { MensaController } from './controllers/mensa/mensa.controller';
 import { MensaService } from './services/mensa-service/mensa.service';
@@ -9,8 +9,20 @@ import { MensaExtraOptionService } from './services/mensa-extra-option/mensa-ext
 import { UserService } from './services/user/user.service';
 
 @Module({
-	imports: [ConfigModule.forRoot()],
-	providers: [...databaseProviders, MensaService, MenuItemService, MensaUserService, MensaExtraOptionService, UserService],
+	imports: [
+		ConfigModule.forRoot(),
+		SequelizeModule.forRoot({
+			dialect: 'mariadb',
+			host: process.env.DB_HOST,
+			port: parseInt(process.env.DB_PORT),
+			username: process.env.DB_USERNAME,
+			password: process.env.DB_PASSWORD,
+			database: process.env.DB_DATABASE,
+			autoLoadModels: true,
+			synchronize: true
+  		})
+	],
+	providers: [MensaService, MenuItemService, MensaUserService, MensaExtraOptionService, UserService],
 	controllers: [MensaController]
 })
 export class AppModule {}
