@@ -21,3 +21,10 @@ This will start up all the needed services for the project.
  - Web -> http://localhost:4200
  - API -> http://localhost:3000
  - Database -> http://localhost:3306 (Need to use a database client to connect to it)
+
+## Techstack
+This section will provide a brief overview of the techstack used within the project.
+ - Web -> Angular (V17)
+ - API -> NestJS (V10)
+ - Database -> MariaDB (V10)
+ - Node -> v20 (lts)
