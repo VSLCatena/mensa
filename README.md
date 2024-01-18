@@ -28,3 +28,30 @@ This section will provide a brief overview of the techstack used within the proj
  - API -> NestJS (V10)
  - Database -> MariaDB (V10)
  - Node -> v20 (lts)
+
+## API
+This concerns documentation for the API, this is build with NestJS which uses typescript.
+See it as NodeJS with extra abstraction and types, it works the same way.
+Within this section all the needed technical information will be provided to achieve maximum productivity
+for new features or bug fixes.
+
+### Database / Migrations / Models
+The database is managed by Sequelize, this is an ORM (Object Relational Mapper).
+In this section will be explained how new models can be created and updated.
+
+#### Creating a new model
+To create a new model, you need to create a new file in the **api/src/models** directory.
+The pattern *modelname.model.ts* is used for naming the files.
+
+Documentation for creating a model can be found here: https://www.npmjs.com/package/sequelize-typescript#model-definition
+
+##### Registering model
+After creating the model, you need to register it in the **api/src/providers/database.provider.ts** file.
+Add the model inside the array:  ```sequelize.addModels([])```.
+
+##### Creating a migration
+After creating the model, you need to create a migration for it.
+This can be done by running the following command: ```npm run migration:generate mymigrationname```<br>
+Inside **api/src/database/migrations** a new file will be created, you have to add the needed code to create the table.
+
+Documentation for creating a migration can be found here: https://sequelize.org/docs/v6/other-topics/migrations/#migration-skeleton
