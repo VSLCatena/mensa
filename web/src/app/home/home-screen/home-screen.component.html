@@ -1,9 +1,8 @@
-
 <div class="container">
   <div class="row">
-    <div class="col-xs-12">
-      <div class="panel panel-default">
-        <div class="panel-heading" *ngIf="">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
           <ng-container *ngIf="!page || page === 0; else dateRange">
             Mensae in de komende 2 weken
           </ng-container>
@@ -12,7 +11,7 @@
           </ng-template>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
           <table class="table responsive-table mensae">
             <thead>
                 <tr>
@@ -26,81 +25,81 @@
             </thead>
             <tbody>
                 <ng-container *ngFor="let mensa of mensae">
-                    <tr [class.cancelled]="mensa.maxUsers <= 0 && mensa.enrollments <= 0"></tr>
-                    <td>{{mensa.date}}</td>
-                    <td>
-                        {{mensa.title}}
-                        <ng-container *ngIf="mensa.menuItems.length <= 0">
-                            <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
-                            <div class="menu-toggle">
-                                <h4>Menu:</h4>
-                                <ul>
-                                    <li *ngFor="let menuItem of getMenuItems(mensa)">
-                                        {{menuItem.text}}
-                                    </li>
-                                </ul>
-                            </div>
-                        </ng-container>
-                        <ng-container *ngFor="let option of mensa.extraOptions">
-                            <div>
-                                <strong><u>Extra optie:</u></strong>
-                                {{option.description}} voor &euro;{{ option.price }}
-                            </div>
-                        </ng-container>
-                        <div>Gekookt door: {{getStaff(mensa, staffRole.Cook)}}</div>
-                    </td>
-                    <td>&euro;{{mensa.price}}</td>
-                    <td>
-                        {{mensa.enrollments}} / {{mensa.maxUsers}}<br>
-                        <ng-container *ngIf="getStaffAmount(mensa, staffRole.Dishwasher) > 0">
-                            {{getStaffAmount(mensa, staffRole.Dishwasher)}} afwasser<span *ngIf="getStaffAmount(mensa, staffRole.Dishwasher) > 1">s</span>
-                        </ng-container>
-                    </td>
-                    <td>
-                        <ng-container *ngIf="mensa.maxUsers <= 0; else closingTimeBlock">
-                            <span class="text-danger">Geannuleerd</span>
-                        </ng-container>
-                        <ng-template #closingTimeBlock>
-                            <ng-container *ngIf="mensa.closed; else notClosedBlock">
-                                <span class="text-danger">Gesloten</span>
-                            </ng-container>
-                            <ng-template #notClosedBlock>
-                                {{mensa.closingTime}}
-                            </ng-template>
-                        </ng-template>
-                    </td>
-                    <td>
-                        <div class="btn-group-vertical">
-                            <ng-container *ngIf="shouldShowCancelledBlock(mensa); else signInOrClosedBlock">
-                                <span class="btn btn-primary disabled">Geannuleerd</span>
-                            </ng-container>
+                    <tr [class.cancelled]="mensa.maxUsers <= 0 && mensa.enrollments <= 0">
+                      <td>{{mensa.date}}</td>
+                      <td>
+                          {{mensa.title}}
+                          <ng-container *ngIf="mensa.menuItems.length <= 0">
+                              <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
+                              <div class="menu-toggle">
+                                  <h4>Menu:</h4>
+                                  <ul>
+                                      <li *ngFor="let menuItem of getMenuItems(mensa)">
+                                          {{menuItem.text}}
+                                      </li>
+                                  </ul>
+                              </div>
+                          </ng-container>
+                          <ng-container *ngFor="let option of mensa.extraOptions">
+                              <div>
+                                  <strong><u>Extra optie:</u></strong>
+                                  {{option.description}} voor &euro;{{ option.price }}
+                              </div>
+                          </ng-container>
+                          <div>Gekookt door: {{getStaff(mensa, staffRole.Cook)}}</div>
+                      </td>
+                      <td>&euro;{{mensa.price}}</td>
+                      <td>
+                          {{mensa.enrollments}} / {{mensa.maxUsers}}<br>
+                          <ng-container *ngIf="getStaffAmount(mensa, staffRole.Dishwasher) > 0">
+                              {{getStaffAmount(mensa, staffRole.Dishwasher)}} afwasser<span *ngIf="getStaffAmount(mensa, staffRole.Dishwasher) > 1">s</span>
+                          </ng-container>
+                      </td>
+                      <td>
+                          <ng-container *ngIf="mensa.maxUsers <= 0; else closingTimeBlock">
+                              <span class="text-danger">Geannuleerd</span>
+                          </ng-container>
+                          <ng-template #closingTimeBlock>
+                              <ng-container *ngIf="mensa.closed; else notClosedBlock">
+                                  <span class="text-danger">Gesloten</span>
+                              </ng-container>
+                              <ng-template #notClosedBlock>
+                                  {{mensa.closingTime}}
+                              </ng-template>
+                          </ng-template>
+                      </td>
+                      <td>
+                          <div class="btn-group-vertical">
+                              <ng-container *ngIf="shouldShowCancelledBlock(mensa); else signInOrClosedBlock">
+                                  <span class="btn btn-primary disabled">Geannuleerd</span>
+                              </ng-container>
 
-                            <ng-template #signInOrClosedBlock>
-                                <ng-container *ngIf="shouldShowSignOutForm(mensa); else notSignedUpBlock">
-                                    <form method="POST" class="btn-group-vertical" (ngSubmit)="signoutFormSubmit(mensa)" >
-                                        <input type="submit" class="btn btn-danger" [class.disabled]="mensa.closed" value="Uitschrijven" [disabled]="mensa.closed" />
-                                        <input type="hidden" name="id" [value]="mensa.id" />
-                                    </form>
-                                </ng-container>
+                              <ng-template #signInOrClosedBlock>
+                                  <ng-container *ngIf="shouldShowSignOutForm(mensa); else notSignedUpBlock">
+                                      <form method="POST" class="btn-group-vertical" (ngSubmit)="signoutFormSubmit(mensa)" >
+                                          <input type="submit" class="btn btn-danger" [class.disabled]="mensa.closed" value="Uitschrijven" [disabled]="mensa.closed" />
+                                          <input type="hidden" name="id" [value]="mensa.id" />
+                                      </form>
+                                  </ng-container>
 
-                                <ng-template #notSignedUpBlock>
-                                    <ng-container *ngIf="shouldShowSignUpBlock(mensa); else closedBlock">
-                                        <a [routerLink]="['/signin', mensa.id, '']" class="btn btn-primary">Inschrijven</a>
-                                    </ng-container>
+                                  <ng-template #notSignedUpBlock>
+                                      <ng-container *ngIf="shouldShowSignUpBlock(mensa); else closedBlock">
+                                          <a [routerLink]="['/signin', mensa.id, '']" class="btn btn-primary">Inschrijven</a>
+                                      </ng-container>
 
-                                    <ng-template #closedBlock>
-                                        <span class="btn btn-primary disabled">Gesloten</span>
-                                    </ng-template>
-                                </ng-template>
-                            </ng-template>
+                                      <ng-template #closedBlock>
+                                          <span class="btn btn-primary disabled">Gesloten</span>
+                                      </ng-template>
+                                  </ng-template>
+                              </ng-template>
 
-                            <ng-template #notSignedUpBlock>
-                                <a [routerLink]="['/mensa-details', mensa.id, '']" class="btn btn-primary">Bekijken</a>
-                            </ng-template>
+                              <ng-template #notSignedUpBlock>
+                                  <a [routerLink]="['/mensa-details', mensa.id, '']" class="btn btn-primary">Bekijken</a>
+                              </ng-template>
 
-
-                        </div>
-                    </td>
+                          </div>
+                      </td>
+                    </tr>
                 </ng-container>
 
                 <ng-container *ngIf="mensae.length <= 0">
@@ -113,10 +112,10 @@
           </table>
         </div>
 
-        <div class="panel-footer">
-          <a [routerLink]="['/home', page ? page - 1 : -1]" class="pull-left">&lt;&lt;</a>
-          <a [routerLink]="['/home', page ? page + 1 : 1]" class="pull-right">&gt;&gt;</a>
-          <br class="clearfix"/>
+        <div class="card-footer">
+          <a [routerLink]="['/home', page ? page - 1 : -1]" class="float-start">&lt;&lt;</a>
+          <a [routerLink]="['/home', page ? page + 1 : 1]" class="float-end">&gt;&gt;</a>
+          <div class="clearfix"></div>
         </div>
       </div>
     </div>
