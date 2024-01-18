@@ -4,7 +4,7 @@ FROM node:20-alpine
 WORKDIR /home/app
 
 # install angular version 17
-RUN npm install -g @angular/cli@17
+RUN npm install -g @angular/cli
 
 # Expose port
 EXPOSE 4200
