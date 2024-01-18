@@ -4,12 +4,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeScreenComponent } from './home-screen/home-screen.component';
 
 @NgModule({
-  declarations: [
-    HomeScreenComponent
-  ],
-  imports: [
-    CommonModule,
-    HomeRoutingModule
-  ]
+	declarations: [HomeScreenComponent],
+	imports: [CommonModule, HomeRoutingModule]
 })
-export class HomeModule { }
+export class HomeModule {}

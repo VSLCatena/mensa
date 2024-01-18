@@ -8,17 +8,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavbarComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    HomeModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [AppComponent, NavbarComponent],
+	imports: [BrowserModule, AppRoutingModule, HttpClientModule, HomeModule],
+	providers: [],
+	bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
