@@ -23,7 +23,7 @@ export const databaseProviders = [
           min: 0,
           acquire: 30000,
           idle: 10000
-        }
+        },
       });
       sequelize.addModels([ User, Mensa, Faq, MenuItem, MensaUser, MensaExtraOption, MensaUserExtraOption ]);
       await sequelize.sync();
