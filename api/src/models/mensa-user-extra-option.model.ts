@@ -6,7 +6,7 @@ import { MensaExtraOption } from './mensa-extra-option.model';
   tableName: 'mensa_user_extra_options',
   timestamps: false, // Disable timestamps for this table
 })
-export class MensaUserExtraOptions extends Model<MensaUserExtraOptions> {
+export class MensaUserExtraOption extends Model<MensaUserExtraOption> {
   @ForeignKey(() => MensaUser)
   @Column({ type: DataType.INTEGER, allowNull: false })
   mensa_user_id: number;
