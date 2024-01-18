@@ -7,8 +7,12 @@ services:
       environment:
         MYSQL_ROOT_PASSWORD: rootpwd
         MYSQL_DATABASE: mydatabase
-        MYSQL_USER: root
-        MYSQL_PASSWORD: rootpwd
+        MYSQL_USER: user
+        MYSQL_PASSWORD: pwd
+      healthcheck:
+        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        timeout: 5s
+        retries: 3
       networks:
         - mensa
     api:
@@ -22,7 +26,9 @@ services:
       networks:
         - mensa
       depends_on:
-        - database
+        database:
+          condition: service_healthy
+          required: true
     web:
       build:
         context: .
