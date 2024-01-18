@@ -8,7 +8,6 @@
     <div class="collapse navbar-collapse" id="app-navbar-collapse">
       <ul class="navbar-nav me-auto">
         <li class="nav-item"><a class="nav-link" routerLink="/">Mensaoverzicht</a></li>
-        <!-- Add *ngIf directive for the admin link -->
         <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" routerLink="/mensa/create">Mensa aanmaken</a></li>
         <li class="nav-item"><a class="nav-link" routerLink="/faq">FAQ</a></li>
       </ul>
@@ -21,15 +20,11 @@
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li class="nav-item"><a class="nav-link" routerLink="/user/settings">Instellingen</a></li>
-            <!-- Add *ngIf directive for the admin menu items -->
             <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Statistiek</a></li>
             <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Logboek</a></li>
-            <!-- Add a separator only if not a service user -->
             <li *ngIf="isAdmin && !isServiceUser" role="separator" class="dropdown-divider"></li>
-            <!-- Add logout form only if not a service user -->
             <li *ngIf="!isServiceUser" class="nav-item">
               <form id="logout-form" action="/logout" method="POST">
-                <!-- Add CSRF token if needed -->
                 <button type="submit" class="btn btn-link">Logout</button>
               </form>
             </li>
