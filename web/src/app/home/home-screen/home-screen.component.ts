@@ -1,20 +1,27 @@
 import { StaffRole } from './../../common/types/staff-role.type';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Mensa } from 'src/app/common/models/mensa.model';
 import { MenuItem } from 'src/app/common/models/menu-item.model';
+import { MensaService } from 'src/app/common/services/mensa/mensa.service';
 
 @Component({
 	selector: 'app-home-screen',
 	templateUrl: './home-screen.component.html',
 	styleUrl: './home-screen.component.scss'
 })
-export class HomeScreenComponent {
+export class HomeScreenComponent implements OnInit {
 	public page: number = 0;
 	public mensae: Mensa[] = [];
   public staffRole = StaffRole;
 
-  constructor(private readonly router: Router) { }
+  constructor(private readonly router: Router, private readonly mensaService: MensaService) { }
+
+  ngOnInit(): void {
+    this.mensaService.getMensae().subscribe(mensae => {
+      this.mensae = mensae;
+    });
+  }
 
 	public getDateForPage(page: number): string {
 		const today = new Date();
