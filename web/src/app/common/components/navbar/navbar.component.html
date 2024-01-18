@@ -13,23 +13,32 @@
       </ul>
 
       <ul class="navbar-nav">
-        <li *ngIf="!isLoggedIn" class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
-        <li *ngIf="isLoggedIn" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ username }}
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li class="nav-item"><a class="nav-link" routerLink="/user/settings">Instellingen</a></li>
-            <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Statistiek</a></li>
-            <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Logboek</a></li>
-            <li *ngIf="isAdmin && !isServiceUser" role="separator" class="dropdown-divider"></li>
-            <li *ngIf="!isServiceUser" class="nav-item">
-              <form id="logout-form" action="/logout" method="POST">
-                <button type="submit" class="btn btn-link">Logout</button>
-              </form>
-            </li>
-          </ul>
-        </li>
+        <ng-container *ngIf="!isLoggedIn; else loggedIn">
+          <li class="nav-item"><a class="nav-link" routerLink="/login">Login</a></li>
+        </ng-container>
+
+        <ng-template #loggedIn>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ username }}
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li class="nav-item"><a class="nav-link" routerLink="/user/settings">Instellingen</a></li>
+
+              <ng-container *ngIf="isAdmin">
+                <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Statistiek</a></li>
+                <li *ngIf="isAdmin" class="nav-item"><a class="nav-link" href="#">Logboek</a></li>
+                <li *ngIf="isAdmin && !isServiceUser" role="separator" class="dropdown-divider"></li>
+              </ng-container>
+
+              <li *ngIf="!isServiceUser" class="nav-item">
+                <form id="logout-form" action="/logout" method="POST">
+                  <button type="submit" class="btn btn-link">Logout</button>
+                </form>
+              </li>
+            </ul>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </div>
