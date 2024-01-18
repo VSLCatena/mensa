@@ -1,0 +1,1 @@
+export type StaffRole = 'Cook' | 'Dishwasher';
