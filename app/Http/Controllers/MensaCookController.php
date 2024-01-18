@@ -90,7 +90,7 @@ class MensaCookController extends Controller
         }
 
         if($mensa->closed){
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
+            return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('error', 'Deze mensa is al gesloten!');
         }
 
         if($request->isMethod('get')){
@@ -154,7 +154,7 @@ class MensaCookController extends Controller
                 if (isset($prices[$i]['id'])) {
                     $mensaPrice = MensaExtraOption::find($prices[$i]['id']);
                     if($mensa->id !== $mensaPrice->mensa->id){
-                        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
+                        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
                     }
                 } else {
                     $mensaPrice = new MensaExtraOption();
@@ -222,7 +222,7 @@ class MensaCookController extends Controller
         $mensa->menuItems()->whereNotIn('id', $syncIds)->delete();
 
 
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
+        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Mensa aangemaakt/gewijzigd!');
     }
 
     public function cancelMensa(Request $request, $mensaId){
@@ -233,7 +233,7 @@ class MensaCookController extends Controller
         }
 
         if($mensa->max_users <= 0) {
-            return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Deze mensa is al geannuleerd!');
+            return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Deze mensa is al geannuleerd!');
         }
 
         if($request->isMethod("get")){
@@ -251,6 +251,6 @@ class MensaCookController extends Controller
         }
 
         $this->log($mensa, 'Mensa geannuleerd');
-        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('info', 'Mensa geannuleerd!');
+        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('info', 'Mensa geannuleerd!');
     }
 }
