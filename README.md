@@ -5,7 +5,6 @@ dinner experience by adding menus and updating additional information as needed.
 
 ## Setup
 The setup process is fairly simple. You need:
- - NPM (Node Package Manager) (Project uses node v20)
  - Docker
 
 ### Installation
