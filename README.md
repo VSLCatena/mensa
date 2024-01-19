@@ -9,14 +9,16 @@ The setup process is fairly simple. You need:
  - Docker
 
 ### Installation
-Run ```npm install``` in directory **web** and **api** to install all dependencies.
+Run ```npm install``` in directory **web** and **api** to install all dependencies. <br>
+If you **don't** have NPM installed,  you can use ```docker compose -f docker-install.yml up && docker compose -f docker-install.yml down```
+inside the **docker** directory to install all dependencies for api and web.
 
 ### ENV / Secrets
 Duplicate the **.env.example** file and rename it to **.env**. The env example file contains all the environment variables
 needed to run the project.
 
 ### Running the project
-Go to the **docker** directory and run ```docker-compose up```.
+Go to the **docker** directory and run ```docker compose up```.
 This will start up all the needed services for the project.
  - Web -> http://localhost:4200
  - API -> http://localhost:3000
