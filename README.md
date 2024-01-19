@@ -36,6 +36,10 @@ See it as NodeJS with extra abstraction and types, it works the same way.
 Within this section all the needed technical information will be provided to achieve maximum productivity
 for new features or bug fixes.
 
+### Documentation
+The API is documented with Swagger, this is a tool that generates documentation based on the code.
+This is available at http://localhost:3000/swagger, when the API is running.
+
 ### Database / Migrations / Models
 The database is managed by Sequelize, this is an ORM (Object Relational Mapper).
 In this section will be explained how new models can be created and updated.
