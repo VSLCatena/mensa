@@ -8,7 +8,7 @@ const generateFaqs = () => {
     const faq = {
       question: faker.lorem.sentence(),
       answer: faker.lorem.paragraph(),
-      lastEditedBy: faker.number.int({min: 400000, max: 400010}),
+      lastEditedBy: faker.number.int({min: 400000, max: 400100}),
       createdAt: new Date(),
       updatedAt: new Date(),
     };

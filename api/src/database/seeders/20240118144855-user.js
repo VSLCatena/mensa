@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 const generateUsers = () => {
   const users = [];
 
-  for (let i = 400000; i <= 400010; i++) {
+  for (let i = 400000; i <= 400100; i++) {
     const user = {
       membershipNumber: i.toString(),
       name: faker.name.findName(),
