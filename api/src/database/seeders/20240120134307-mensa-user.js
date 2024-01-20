@@ -1,5 +1,5 @@
 'use strict';
-import { faker } from '@faker-js/faker';
+const { faker } = require('@faker-js/faker');
 
 const generateMensaUsers = (mensaId, amount) => {
   const mensaUsers = [];
