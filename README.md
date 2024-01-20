@@ -60,3 +60,10 @@ This can be done by running the following command: ```npm run migration:generate
 Inside **api/src/database/migrations** a new file will be created, you have to add the needed code to create the table.
 
 Documentation for creating a migration can be found here: https://sequelize.org/docs/v6/other-topics/migrations/#migration-skeleton
+
+##### Creating a seeder
+Seeders are used to populate the database with data, this is useful for testing purposes.
+This can be done by running the following command: ```npm run seed:generate myseedname```<br>
+Inside **api/src/database/seeders** a new file will be created, you have to add the needed code to populate the table.
+
+Documentation for creating a seeder can be found here: https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed
