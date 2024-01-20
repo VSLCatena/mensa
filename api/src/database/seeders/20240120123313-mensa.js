@@ -26,7 +26,7 @@ function isDateInPast(inputDate) {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('mensae', [
+    await queryInterface.bulkInsert('mensas', [
       generateMensae(1, 'Pastadag', today),
       generateMensae(2, 'Pizzadag', new Date(today.setDate(today.getDate() + 2))),
       generateMensae(3, 'Soepdag', new Date(today.setDate(today.getDate() - 2))),
