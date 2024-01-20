@@ -23,7 +23,8 @@
     "migration:undo": "npx sequelize-cli db:migrate:undo",
     "migration:generate": "npx sequelize-cli migration:generate --name",
     "seed": "npx sequelize-cli db:seed:all",
-    "seed:undo": "npx sequelize-cli db:seed:undo:all"
+    "seed:undo": "npx sequelize-cli db:seed:undo:all",
+    "seed:generate": "npx sequelize-cli seed:generate --name"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
