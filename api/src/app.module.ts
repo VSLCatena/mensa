@@ -7,6 +7,16 @@ import { MenuItemService } from './services/menu-item/menu-item.service';
 import { MensaUserService } from './services/mensa-user/mensa-user.service';
 import { MensaExtraOptionService } from './services/mensa-extra-option/mensa-extra-option.service';
 import { UserService } from './services/user/user.service';
+import { Mensa } from './database/models/mensa.model';
+import { Faq } from './database/models/faq.model';
+import { Log } from './database/models/log.model';
+import { MensaExtraOption } from './database/models/mensa-extra-option.model';
+import { MensaUserExtraOption } from './database/models/mensa-user-extra-option.model';
+import { MensaUser } from './database/models/mensa-user.model';
+import { MenuItem } from './database/models/menu-item.model';
+import { User } from './database/models/user.model';
+
+var models = [Faq, Log, MensaExtraOption, MensaUserExtraOption, MensaUser, Mensa, MenuItem, User];
 
 @Module({
 	imports: [
@@ -18,9 +28,13 @@ import { UserService } from './services/user/user.service';
 			username: process.env.DB_USERNAME,
 			password: process.env.DB_PASSWORD,
 			database: process.env.DB_DATABASE,
+			models: models,
+			retryAttempts: 5,
+			retryDelay: 2000,
 			autoLoadModels: true,
 			synchronize: true
-  		})
+  		}),
+		SequelizeModule.forFeature(models)
 	],
 	providers: [MensaService, MenuItemService, MensaUserService, MensaExtraOptionService, UserService],
 	controllers: [MensaController]
