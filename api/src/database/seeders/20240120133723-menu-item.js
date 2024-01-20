@@ -20,7 +20,7 @@ const generateMenuItems = (mensaId) => {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('menu-items', [
+    await queryInterface.bulkInsert('menu_items', [
       ...generateMenuItems(1),
       ...generateMenuItems(2),
       ...generateMenuItems(3),
@@ -28,6 +28,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-await queryInterface.bulkDelete('menu-items', null, {});
+await queryInterface.bulkDelete('menu_items', null, {});
   }
 };
