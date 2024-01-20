@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 const generateMenuItems = (mensaId) => {
   const menuItems = [];
 
-  for (let i = 1; i < 3; i++) {
+  for (let i = 1; i <= 3; i++) {
     const menuItem = {
       mensaId: faker.number.int(mensaId), // Assuming mensa IDs are in the range 1-100
       order: i + 1,
