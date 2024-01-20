@@ -32,7 +32,7 @@ var models = [Faq, Log, MensaExtraOption, MensaUserExtraOption, MensaUser, Mensa
 			retryAttempts: 5,
 			retryDelay: 2000,
 			autoLoadModels: true,
-			synchronize: true
+			synchronize: Boolean(process.env.DEV_ENVIRONMENT).valueOf() // Only synchronise when in dev environment
   		}),
 		SequelizeModule.forFeature(models)
 	],
