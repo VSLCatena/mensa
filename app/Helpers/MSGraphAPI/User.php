@@ -21,7 +21,7 @@ class User {
     public $givenName;
     public $description;
     public $userPrincipalName;
-    public $mail;
+    public $email;
     public $onPremisesSamAccountName;
     public $employeeId;
     public $employeeNumber;

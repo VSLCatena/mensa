@@ -54,7 +54,7 @@ class LoginController extends Controller
             $user = User::updateOrCreate(
                 [   'lidnummer' => $azureUserInfo->employeeNumber ],
                 [
-                    'email' => $azureUserInfo->mail,
+                    'email' => $azureUserInfo->email,
                     'name' => $azureUserInfo->displayName,
                 ]
             );
