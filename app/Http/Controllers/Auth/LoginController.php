@@ -51,13 +51,13 @@ class LoginController extends Controller
         Try {
             $azureUserInfo =  new AzureUserInfo;
             $azureUserInfo->GetUserInfo($azureUser->token);
-            $user = User::updateOrCreate(
-                [   'lidnummer' => $azureUserInfo->employeeNumber ],
-                [
-                    'email' => $azureUserInfo->email,
-                    'name' => $azureUserInfo->displayName,
-                ]
+            User::upsert(
+                [   'lidnummer' => $azureUserInfo->employeeNumber,
+                    'email'     => $azureUserInfo->email,
+                    'name'      => $azureUserInfo->displayName,
+                ], ['lidnummer']
             );
+            $user = User::where('lidnummer', $azureUserInfo->employeeNumber)->first();
             $user->mensa_admin = $azureUserInfo->isAdmin;
             $user->save();
             Auth::login($user);
