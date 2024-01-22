@@ -10,5 +10,5 @@ export class MensaRepository extends BaseRepository<Mensa> {
         readonly model: typeof Mensa
     ) {
         super(model);
-     }
+    }
 }

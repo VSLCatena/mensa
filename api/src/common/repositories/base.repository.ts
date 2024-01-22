@@ -6,11 +6,11 @@ import { FindOptions, UpdateOptions, DestroyOptions } from 'sequelize';
 export abstract class BaseRepository<T extends Model<T>> {
   constructor(protected readonly model: ModelCtor<T>) { }
 
-async findAll(options?: FindOptions): Promise<T[]> {
+async findAll(options?: FindOptions<T>): Promise<T[]> {
     return this.model.findAll(options);
   }
 
-  async findById(id: number, options?: FindOptions): Promise<T> {
+  async findById(id: number, options?: FindOptions<T>): Promise<T> {
     const instance = await this.model.findByPk(id, options);
     if (!instance) {
       throw new NotFoundException(`Entity with id ${id} not found`);
