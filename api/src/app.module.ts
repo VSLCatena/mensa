@@ -15,6 +15,7 @@ import { MensaUserExtraOption } from './database/models/mensa-user-extra-option.
 import { MensaUser } from './database/models/mensa-user.model';
 import { MenuItem } from './database/models/menu-item.model';
 import { User } from './database/models/user.model';
+import { MenuItemController } from './controllers/menu-item/menu-item.controller';
 
 var models = [Faq, Log, MensaExtraOption, MensaUserExtraOption, MensaUser, Mensa, MenuItem, User];
 
@@ -40,6 +41,6 @@ var models = [Faq, Log, MensaExtraOption, MensaUserExtraOption, MensaUser, Mensa
 		SequelizeModule.forFeature(models)
 	],
 	providers: [MensaService, MenuItemService, MensaUserService, MensaExtraOptionService, UserService],
-	controllers: [MensaController]
+	controllers: [MensaController, MenuItemController]
 })
 export class AppModule {}
