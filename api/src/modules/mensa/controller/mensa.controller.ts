@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiQuery } from '@nestjs/swagger';
-import { Mensa } from 'src/database/models/mensa.model';
 import { MensaService } from '../service/mensa.service';
+import { MensaDto } from '../dto/mensa.dto';
 
 @Controller('mensa')
 export class MensaController {
@@ -17,7 +17,7 @@ export class MensaController {
      */
     @Get()
     @ApiQuery({ name: 'page', type: Number, required: true })
-    async findAll(@Query('page') page: number): Promise<Mensa[]> {
+    async findAll(@Query('page') page: number): Promise<MensaDto[]> {
         return await this.mensaService.findAll(page);
     }
 }
