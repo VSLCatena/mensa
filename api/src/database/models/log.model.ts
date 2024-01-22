@@ -28,7 +28,6 @@ export class Log extends Model<Log> {
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
 		allowNull: false,
-		field: 'mensa_id'
 	})
 	mensaId: number;
 

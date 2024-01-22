@@ -26,10 +26,10 @@ export class Mensa extends Model<Mensa> {
 	@Column({ type: DataType.DATE, allowNull: false })
 	date: Date;
 
-	@Column({ type: DataType.DATE, allowNull: false, field: 'closing_time' })
+	@Column({ type: DataType.DATE, allowNull: false })
 	closingTime: Date;
 
-	@Column({ type: DataType.TINYINT, allowNull: false, field: 'max_users' })
+	@Column({ type: DataType.TINYINT, allowNull: false })
 	maxUsers: number;
 
 	@Column({ type: DataType.DECIMAL(8, 2), allowNull: false })

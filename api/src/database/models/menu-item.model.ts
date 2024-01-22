@@ -23,7 +23,6 @@ export class MenuItem extends Model<MenuItem> {
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
 		allowNull: false,
-		field: 'mensa_id'
 	})
 	mensaId: number;
 

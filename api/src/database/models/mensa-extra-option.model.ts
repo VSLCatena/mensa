@@ -23,7 +23,6 @@ export class MensaExtraOption extends Model<MensaExtraOption> {
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
 		allowNull: false,
-		field: 'mensa_id'
 	})
 	mensaId: number;
 

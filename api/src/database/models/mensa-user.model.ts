@@ -39,7 +39,6 @@ export class MensaUser extends Model<MensaUser> {
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
 		allowNull: false,
-		field: 'mensa_id'
 	})
 	mensaId: number;
 
@@ -56,7 +55,6 @@ export class MensaUser extends Model<MensaUser> {
 		type: DataType.BOOLEAN,
 		allowNull: false,
 		defaultValue: false,
-		field: 'is_intro'
 	})
 	isIntro: boolean;
 
@@ -66,7 +64,6 @@ export class MensaUser extends Model<MensaUser> {
 	@Column({
 		type: DataType.STRING(191),
 		defaultValue: null,
-		field: 'extra_info'
 	})
 	extraInfo?: string;
 
@@ -92,7 +89,6 @@ export class MensaUser extends Model<MensaUser> {
 	@Column({
 		type: DataType.STRING(191),
 		allowNull: false,
-		field: 'confirmation_code'
 	})
 	confirmationCode: string;
 

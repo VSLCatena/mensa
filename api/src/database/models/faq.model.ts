@@ -33,7 +33,6 @@ export class Faq extends Model<Faq> {
 	@Column({
 		type: DataType.STRING(191),
 		allowNull: false,
-		field: 'last_edited_by'
 	})
 	lastEditedBy: string;
 
