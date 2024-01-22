@@ -31,7 +31,7 @@ export class MensaUser extends Model<MensaUser> {
 	})
 	membershipNumber: string;
 
-	@BelongsTo(() => User, 'lidnummer')
+	@BelongsTo(() => User)
 	user: User;
 
 	@ForeignKey(() => Mensa)
@@ -41,7 +41,7 @@ export class MensaUser extends Model<MensaUser> {
 	})
 	mensaId: number;
 
-	@BelongsTo(() => Mensa, 'mensa_id')
+	@BelongsTo(() => Mensa)
 	mensa: Mensa;
 
 	@Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })

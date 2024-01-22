@@ -26,7 +26,7 @@ export class MenuItem extends Model<MenuItem> {
 	})
 	mensaId: number;
 
-	@BelongsTo(() => Mensa, 'mensa_id')
+	@BelongsTo(() => Mensa)
 	mensa: Mensa;
 
 	@Column({ type: DataType.SMALLINT, allowNull: false })

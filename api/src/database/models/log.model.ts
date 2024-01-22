@@ -44,9 +44,9 @@ export class Log extends Model<Log> {
 	@UpdatedAt
 	updatedAt: Date;
 
-	@BelongsTo(() => Mensa, 'mensa_id')
+	@BelongsTo(() => Mensa)
 	mensa: Mensa;
 
-	@BelongsTo(() => User, 'lidnummer')
+	@BelongsTo(() => User)
 	user: User;
 }

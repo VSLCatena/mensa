@@ -26,7 +26,7 @@ export class MensaExtraOption extends Model<MensaExtraOption> {
 	})
 	mensaId: number;
 
-	@BelongsTo(() => Mensa, 'mensa_id')
+	@BelongsTo(() => Mensa)
 	mensa: Mensa;
 
 	@Column({ type: DataType.STRING(191), allowNull: false })
