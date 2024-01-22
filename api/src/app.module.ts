@@ -29,10 +29,13 @@ var models = [Faq, Log, MensaExtraOption, MensaUserExtraOption, MensaUser, Mensa
 			password: process.env.DB_PASSWORD,
 			database: process.env.DB_DATABASE,
 			models: models,
-			retryAttempts: 5,
+			retryAttempts: 10,
 			retryDelay: 2000,
 			autoLoadModels: true,
-			synchronize: Boolean(process.env.DEV_ENVIRONMENT).valueOf() // Only synchronise when in dev environment
+			synchronize: Boolean(process.env.DEV_ENVIRONMENT).valueOf(), // Only synchronise when in dev environment
+			define: {
+				underscored: true,
+			}
   		}),
 		SequelizeModule.forFeature(models)
 	],
