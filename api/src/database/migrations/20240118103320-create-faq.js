@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
  * @type {import('sequelize-cli').Migration}
  */
 module.exports = {
-  async up(queryInterface) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('faqs', {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -22,19 +22,17 @@ module.exports = {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-      lastEditedBy: {
+      last_edited_by: {
         type: DataTypes.STRING(191),
         allowNull: false,
-        references: {
-          model: 'users',
-          key: 'lidnummer',
-        },
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
     });
 
@@ -43,13 +41,13 @@ module.exports = {
       fields: ['last_edited_by'],
       references: {
         table: 'users',
-        field: 'lidnummer',
+        field: 'membership_number', // Adjust this field based on your User model
       },
       name: 'faqs_last_edited_by_foreign',
     });
   },
 
-  async down(queryInterface) {
+  down: async (queryInterface) => {
     await queryInterface.removeConstraint('faqs', 'faqs_last_edited_by_foreign');
     await queryInterface.dropTable('faqs');
   }

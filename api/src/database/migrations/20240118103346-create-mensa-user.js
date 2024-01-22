@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
  * @type {import('sequelize-cli').Migration}
  */
 module.exports = {
-  async up(queryInterface) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('mensa_users', {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -14,21 +14,13 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      membershipNumber: {
+      membership_number: {
         type: DataTypes.STRING(191),
         allowNull: false,
-        references: {
-          model: 'users',
-          key: 'lidnummer',
-        },
       },
-      mensaId: {
+      mensa_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        references: {
-          model: 'mensas',
-          key: 'id',
-        },
       },
       cooks: {
         type: DataTypes.BOOLEAN,
@@ -40,7 +32,7 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      isIntro: {
+      is_intro: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
@@ -49,7 +41,7 @@ module.exports = {
         type: DataTypes.STRING(191),
         defaultValue: null,
       },
-      extraInfo: {
+      extra_info: {
         type: DataTypes.STRING(191),
         defaultValue: null,
       },
@@ -61,18 +53,20 @@ module.exports = {
       paid: {
         type: DataTypes.DECIMAL(8, 2),
         allowNull: false,
-        defaultValue: 0.00,
+        defaultValue: 0.0,
       },
-      createdAt: {
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      deleted_at: {
         type: DataTypes.DATE,
       },
-      updatedAt: {
-        type: DataTypes.DATE,
-      },
-      deletedAt: {
-        type: DataTypes.DATE,
-      },
-      confirmationCode: {
+      confirmation_code: {
         type: DataTypes.STRING(191),
         allowNull: false,
       },
@@ -85,12 +79,12 @@ module.exports = {
 
     await queryInterface.addConstraint('mensa_users', {
       type: 'foreign key',
-      fields: ['lidnummer'],
+      fields: ['membership_number'],
       references: {
         table: 'users',
-        field: 'lidnummer',
+        field: 'membership_number',
       },
-      name: 'mensa_users_lidnummer_foreign',
+      name: 'mensa_users_membership_number_foreign',
     });
 
     await queryInterface.addConstraint('mensa_users', {
@@ -104,8 +98,8 @@ module.exports = {
     });
   },
 
-  async down(queryInterface) {
-    await queryInterface.removeConstraint('mensa_users', 'mensa_users_lidnummer_foreign');
+  down: async (queryInterface) => {
+    await queryInterface.removeConstraint('mensa_users', 'mensa_users_membership_number_foreign');
     await queryInterface.removeConstraint('mensa_users', 'mensa_users_mensa_id_foreign');
     await queryInterface.dropTable('mensa_users');
   }

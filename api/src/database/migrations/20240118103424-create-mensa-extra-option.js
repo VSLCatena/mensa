@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
  * @type {import('sequelize-cli').Migration}
  */
 module.exports = {
-  async up(queryInterface) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('mensa_extra_options', {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -14,13 +14,9 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
       },
-      mensaId: {
+      mensa_id: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false,
-        references: {
-          model: 'mensas',
-          key: 'id',
-        },
       },
       description: {
         type: DataTypes.STRING(191),
@@ -28,6 +24,14 @@ module.exports = {
       },
       price: {
         type: DataTypes.DECIMAL(8, 2),
+        allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
         allowNull: false,
       },
     });
@@ -43,7 +47,7 @@ module.exports = {
     });
   },
 
-  async down(queryInterface) {
+  down: async (queryInterface) => {
     await queryInterface.removeConstraint('mensa_extra_options', 'mensa_extra_options_mensa_id_foreign');
     await queryInterface.dropTable('mensa_extra_options');
   }

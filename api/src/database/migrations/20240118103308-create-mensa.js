@@ -6,7 +6,7 @@ const { DataTypes } = require('sequelize');
  * @type {import('sequelize-cli').Migration}
  */
 module.exports = {
-  async up(queryInterface) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('mensas', {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
@@ -22,11 +22,11 @@ module.exports = {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      closingTime: {
+      closing_time: {
         type: DataTypes.DATE,
         allowNull: false,
       },
-      maxUsers: {
+      max_users: {
         type: DataTypes.TINYINT,
         allowNull: false,
       },
@@ -39,18 +39,19 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
     });
-
-    await queryInterface.addIndex('mensas', ['date'], { name: 'mensas_date_index' });
   },
 
-  async down(queryInterface) {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('mensas');
   }
 };
+

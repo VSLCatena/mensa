@@ -6,9 +6,9 @@ const { DataTypes } = require('sequelize');
  * @type {import('sequelize-cli').Migration}
  */
 module.exports = {
-  async up(queryInterface) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('users', {
-      membershipNumber: {
+      membership_number: {
         type: DataTypes.STRING(191),
         allowNull: false,
         primaryKey: true,
@@ -23,18 +23,18 @@ module.exports = {
       allergies: {
         type: DataTypes.STRING(191),
       },
-      extraInfo: {
+      extra_info: {
         type: DataTypes.STRING(191),
       },
-      mensaAdmin: {
+      mensa_admin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },
-      rememberToken: {
+      remember_token: {
         type: DataTypes.STRING(100),
       },
-      phoneNumber: {
+      phone_number: {
         type: DataTypes.STRING(191),
       },
       vegetarian: {
@@ -42,21 +42,24 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      serviceUser: {
+      service_user: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
       },
-      createdAt: {
+      created_at: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
-      updatedAt: {
+      updated_at: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
     });
   },
 
-  async down(queryInterface) {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('users');
   }
 };
+
