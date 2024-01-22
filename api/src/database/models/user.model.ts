@@ -16,7 +16,6 @@ export class User extends Model<User> {
 	@Column({
 		type: DataType.STRING(191),
 		allowNull: false,
-		field: 'lidnummer'
 	})
 	membershipNumber: string;
 

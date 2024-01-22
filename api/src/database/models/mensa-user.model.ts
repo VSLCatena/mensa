@@ -27,8 +27,7 @@ export class MensaUser extends Model<MensaUser> {
 	@ForeignKey(() => User)
 	@Column({
 		type: DataType.STRING(191),
-		allowNull: false,
-		field: 'lidnummer'
+		allowNull: false
 	})
 	membershipNumber: string;
 

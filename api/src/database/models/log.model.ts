@@ -32,7 +32,7 @@ export class Log extends Model<Log> {
 	mensaId: number;
 
 	@ForeignKey(() => User)
-	@Column({ type: DataType.STRING(191), field: 'lidnummer' })
+	@Column({ type: DataType.STRING(191) })
 	membershipNumber?: string;
 
 	@Column({ type: DataType.STRING(191), allowNull: false })
