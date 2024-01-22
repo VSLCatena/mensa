@@ -6,7 +6,7 @@ const generateMensaExtraOptions = (mensaId, amount = 1) => {
 
   for (let i = 1; i <= amount; i++) {
     const mensaExtraOption = {
-      mensaId: mensaId,
+      mensa_id: mensaId,
       description: faker.lorem.words(3),
       price: faker.finance.amount(1, 5),
     };

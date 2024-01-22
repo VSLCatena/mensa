@@ -6,7 +6,7 @@ const generateMenuItems = (mensaId) => {
 
   for (let i = 1; i <= 3; i++) {
     const menuItem = {
-      mensaId: faker.number.int(mensaId), // Assuming mensa IDs are in the range 1-100
+      mensa_id: faker.number.int(mensaId), // Assuming mensa IDs are in the range 1-100
       order: i + 1,
       text: faker.lorem.words(3),
     };

@@ -6,15 +6,15 @@ const generateUsers = () => {
 
   for (let i = 400000; i <= 400100; i++) {
     const user = {
-      membershipNumber: i.toString(),
+      membership_number: i.toString(),
       name: faker.person.fullName(),
       email: faker.internet.email(),
-      mensaAdmin: false,
-      phoneNumber: faker.phone.number(),
+      mensa_admin: false,
+      phone_number: faker.phone.number(),
       vegetarian: faker.datatype.boolean(),
-      serviceUser: false,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      service_user: false,
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
     users.push(user);
@@ -28,37 +28,37 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('users', [
       {
-        membershipNumber: '111111',
+        membership_number: '111111',
         name: 'admin',
         email: 'admin@vslcatena.nl',
-        mensaAdmin: true,
-        phoneNumber: faker.phone.number(),
+        mensa_admin: true,
+        phone_number: faker.phone.number(),
         vegetarian: true,
-        serviceUser: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        service_user: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       },
       {
-        membershipNumber: '222222',
+        membership_number: '222222',
         name: 'serviceuser',
         email: 'serviceuser@vslcatena.nl',
-        mensaAdmin: false,
-        phoneNumber: faker.phone.number(),
+        mensa_admin: false,
+        phone_number: faker.phone.number(),
         vegetarian: true,
-        serviceUser: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        service_user: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       },
       {
-        membershipNumber: '333333',
+        membership_number: '333333',
         name: 'user',
         email: 'user@vslcatena.nl',
-        mensaAdmin: false,
-        phoneNumber: faker.phone.number(),
+        mensa_admin: false,
+        phone_number: faker.phone.number(),
         vegetarian: true,
-        serviceUser: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        service_user: false,
+        created_at: new Date(),
+        updated_at: new Date(),
       }, ...generateUsers()
     ], {});
   },

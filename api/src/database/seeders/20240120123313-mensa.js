@@ -8,12 +8,12 @@ const generateMensae = (id, title, mensaDate, closingHour = 15) => {
     id: id,
     title: title,
     date: mensaDate,
-    closingTime: mensaDate.setHours(closingHour, 0, 0, 0),
-    maxUsers: faker.number.int({min: 15, max: 45}),
+    closing_time: mensaDate.setHours(closingHour, 0, 0, 0),
+    max_users: faker.number.int({min: 15, max: 45}),
     price: 4.50,
     closed: isDateInPast(mensaDate),
-    createdAt: mensaDate.setDate(mensaDate.getDate() - 7), // 7 days ago
-    updatedAt: mensaDate.setDate(mensaDate.getDate() - 7) // 7 days ago
+    created_at: mensaDate.setDate(mensaDate.getDate() - 7), // 7 days ago
+    updated_at: mensaDate.setDate(mensaDate.getDate() - 7) // 7 days ago
   }
 }
 

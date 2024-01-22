@@ -23,18 +23,18 @@ const generateMensaUsers = (mensaId, amount) => {
     }
 
     const mensaUser = {
-      membershipNumber: membershipNumber,
-      mensaId: mensaId,
+      membership_number: membershipNumber,
+      mensa_id: mensaId,
       cooks: cook,
       dishwasher: dishwasher,
-      isIntro: faker.datatype.boolean(0.1),
+      is_intro: faker.datatype.boolean(0.1),
       allergies: faker.lorem.words(),
-      extraInfo: faker.lorem.words(),
+      extra_info: faker.lorem.words(),
       confirmed: faker.datatype.boolean(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      confirmationCode: crypto.randomBytes(32).toString('hex'),
+      created_at: new Date(),
+      updated_at: new Date(),
+      deleted_at: null,
+      confirmation_code: crypto.randomBytes(32).toString('hex'),
       vegetarian: faker.datatype.boolean(0.4),
     };
 

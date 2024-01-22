@@ -8,9 +8,9 @@ const generateFaqs = () => {
     const faq = {
       question: faker.lorem.sentence(),
       answer: faker.lorem.paragraph(),
-      lastEditedBy: faker.number.int({min: 400000, max: 400100}),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      last_edited_by: faker.number.int({min: 400000, max: 400100}),
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
     faqs.push(faq);
