@@ -6,12 +6,12 @@ import { DayOfWeek } from 'src/common/types/day-of-week.type';
 import { Mensa } from 'src/database/models/mensa.model';
 
 @Injectable()
-export class MensaService {
-
+export class MensaProvider {
     constructor(
         @InjectModel(Mensa)
         private readonly mensaModel: typeof Mensa
-    ) {}
+    ) { }
+
 
     findAll(page: number): Promise<Mensa[]> {
         const currentWeek = getWeekDate(DayOfWeek.Monday, page);

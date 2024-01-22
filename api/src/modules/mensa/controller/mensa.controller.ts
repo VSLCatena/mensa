@@ -1,14 +1,13 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { MensaService } from 'src/services/mensa-service/mensa.service';
-import { Mensa } from 'src/database/models/mensa.model';
 import { ApiQuery } from '@nestjs/swagger';
+import { Mensa } from 'src/database/models/mensa.model';
+import { MensaService } from '../service/mensa.service';
 
 @Controller('mensa')
 export class MensaController {
-
     constructor(
         private readonly mensaService: MensaService,
-    ) {}
+    ) { }
 
     /**
      * @summary Gets mensae for given week + 1
