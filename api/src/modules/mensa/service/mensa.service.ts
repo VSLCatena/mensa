@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { MensaProvider } from 'src/common/providers/mensa-provider/mensa-provider';
+import { MensaRepository } from 'src/common/repositories/mensa-repository/mensa-repository';
 
 @Injectable()
 export class MensaService {
 
-    constructor(private readonly mensaProvider: MensaProvider) {}
+    constructor(private readonly mensaRepository: MensaRepository) {}
 
     async findAll(page: number) {
-        return await this.mensaProvider.findAll(page);
+        return await this.mensaRepository.findAll(page);
     }
 }

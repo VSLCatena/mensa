@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MensaProvider } from './mensa-provider';
+import { MensaUserRepository } from './mensa-user-repository';
 
-describe('MensaProvider', () => {
-  let provider: MensaProvider;
+describe('MensaUserRepository', () => {
+  let provider: MensaUserRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [MensaProvider],
+      providers: [MensaUserRepository],
     }).compile();
 
-    provider = module.get<MensaProvider>(MensaProvider);
+    provider = module.get<MensaUserRepository>(MensaUserRepository);
   });
 
   it('should be defined', () => {

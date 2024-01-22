@@ -6,7 +6,7 @@ import { DayOfWeek } from 'src/common/types/day-of-week.type';
 import { Mensa } from 'src/database/models/mensa.model';
 
 @Injectable()
-export class MensaProvider {
+export class MensaRepository {
     constructor(
         @InjectModel(Mensa)
         private readonly mensaModel: typeof Mensa
