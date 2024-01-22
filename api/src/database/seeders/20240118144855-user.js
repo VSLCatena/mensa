@@ -12,6 +12,7 @@ const generateUsers = () => {
       mensa_admin: false,
       phone_number: faker.phone.number(),
       vegetarian: faker.datatype.boolean(),
+      extra_info: faker.lorem.words({ min: 0, max: 5 }),
       service_user: false,
       created_at: new Date(),
       updated_at: new Date(),

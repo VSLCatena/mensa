@@ -23,7 +23,7 @@ const generateFaqs = () => {
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('faqs', [
-      generateFaqs(),
+      ...generateFaqs(),
     ], {});
   },
 

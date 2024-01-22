@@ -1,5 +1,6 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
+const crypto = require('crypto');
 
 const generateMensaUsers = (mensaId, amount) => {
   const mensaUsers = [];
@@ -8,7 +9,7 @@ const generateMensaUsers = (mensaId, amount) => {
   for (let i = 1; i <= amount; i++) {
     let membershipNumber;
     do {
-      membershipNumber = faker.datatype.number({ min: 400000, max: 400100 });
+      membershipNumber = faker.number.int({ min: 400000, max: 400100 });
     } while (usedMembershipNumbers.has(membershipNumber));
 
     usedMembershipNumbers.add(membershipNumber);
