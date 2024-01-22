@@ -11,9 +11,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from './user.model';
 
-@Table({
-	tableName: 'faqs'
-})
+@Table
 export class Faq extends Model<Faq> {
 	@PrimaryKey
 	@Column({

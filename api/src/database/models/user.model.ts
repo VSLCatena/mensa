@@ -8,9 +8,7 @@ import {
 	DataType
 } from 'sequelize-typescript';
 
-@Table({
-	tableName: 'users'
-})
+@Table
 export class User extends Model<User> {
 	@PrimaryKey
 	@Column({

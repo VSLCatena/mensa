@@ -1,18 +1,16 @@
 import {
-	Table,
 	Model,
 	Column,
 	PrimaryKey,
 	AutoIncrement,
 	ForeignKey,
 	BelongsTo,
-	DataType
+	DataType,
+	Table
 } from 'sequelize-typescript';
 import { Mensa } from './mensa.model';
 
-@Table({
-	tableName: 'mensa_extra_options'
-})
+@Table
 export class MensaExtraOption extends Model<MensaExtraOption> {
 	@PrimaryKey
 	@AutoIncrement

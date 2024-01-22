@@ -10,9 +10,7 @@ import { MensaUser } from './mensa-user.model';
 import { MensaExtraOption } from './mensa-extra-option.model';
 
 @Table({
-  tableName: 'mensa_user_extra_options',
   timestamps: false,
-  underscored: true
 })
 export class MensaUserExtraOption extends Model<MensaUserExtraOption> {
   @ForeignKey(() => MensaUser)

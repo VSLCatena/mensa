@@ -8,9 +8,7 @@ import {
 	DataType
 } from 'sequelize-typescript';
 
-@Table({
-	tableName: 'mensas'
-})
+@Table
 export class Mensa extends Model<Mensa> {
 	@PrimaryKey
 	@Column({

@@ -15,7 +15,6 @@ import { User } from './user.model';
 import { Mensa } from './mensa.model';
 
 @Table({
-	tableName: 'mensa_users',
 	paranoid: true
 })
 export class MensaUser extends Model<MensaUser> {

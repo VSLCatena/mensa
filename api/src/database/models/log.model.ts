@@ -12,9 +12,7 @@ import {
 import { User } from './user.model';
 import { Mensa } from './mensa.model';
 
-@Table({
-	tableName: 'logs'
-})
+@Table
 export class Log extends Model<Log> {
 	@PrimaryKey
 	@Column({
