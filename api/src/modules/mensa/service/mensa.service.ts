@@ -22,7 +22,8 @@ export class MensaService {
 
 	async findAll(page: number): Promise<MensaDto[]> {
 		const currentWeek = getWeekDate(DayOfWeek.Monday, page);
-		const nextWeek = getWeekDate(DayOfWeek.Monday, page + 2);
+		let nextWeekPage = page === 0 ? page + 2 : page + 1;
+		const nextWeek = getWeekDate(DayOfWeek.Monday, nextWeekPage);
 
 		const mensae = await this.mensaRepository.findAll({
 			where: {
