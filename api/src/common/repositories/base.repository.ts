@@ -2,11 +2,10 @@ import { Model, ModelCtor } from 'sequelize-typescript';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindOptions, UpdateOptions, DestroyOptions } from 'sequelize';
 
-@Injectable()
 export abstract class BaseRepository<T extends Model<T>> {
   constructor(protected readonly model: ModelCtor<T>) { }
 
-async findAll(options?: FindOptions<T>): Promise<T[]> {
+  async findAll(options?: FindOptions<T>): Promise<T[]> {
     return this.model.findAll(options);
   }
 
@@ -29,7 +28,7 @@ async findAll(options?: FindOptions<T>): Promise<T[]> {
     } as UpdateOptions);
 
 
-    if (affectedCount < 0) {
+    if (affectedCount === 0) {
       throw new NotFoundException(`Entity with id ${id} not found`);
     }
 
