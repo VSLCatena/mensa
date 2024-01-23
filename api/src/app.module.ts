@@ -1,18 +1,9 @@
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { Mensa } from './database/models/mensa.model';
-import { Faq } from './database/models/faq.model';
-import { Log } from './database/models/log.model';
-import { MensaExtraOption } from './database/models/mensa-extra-option.model';
-import { MensaUserExtraOption } from './database/models/mensa-user-extra-option.model';
-import { MensaUser } from './database/models/mensa-user.model';
-import { MenuItem } from './database/models/menu-item.model';
-import { User } from './database/models/user.model';
 import { MensaModule } from './modules/mensa/mensa.module';
 import { CommonModule } from './common/common.module';
-
-var models = [Faq, Log, MensaExtraOption, MensaUserExtraOption, MensaUser, Mensa, MenuItem, User];
+import { models } from './database/models.database';
 
 @Module({
 	imports: [
