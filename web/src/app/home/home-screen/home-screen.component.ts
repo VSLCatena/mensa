@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Mensa } from 'src/app/common/models/mensa.model';
 import { MenuItem } from 'src/app/common/models/menu-item.model';
 import { MensaService } from 'src/app/common/services/mensa/mensa.service';
+import { MensaDto } from '../../../../../api/src/modules/mensa/dto/mensa.dto';
 
 @Component({
 	selector: 'app-home-screen',
@@ -12,14 +13,14 @@ import { MensaService } from 'src/app/common/services/mensa/mensa.service';
 })
 export class HomeScreenComponent implements OnInit {
 	public page: number = 0;
-	public mensae: Mensa[] = [];
+	public mensaeDto: MensaDto[] = [];
   public staffRole = StaffRole;
 
   constructor(private readonly router: Router, private readonly mensaService: MensaService) { }
 
   ngOnInit(): void {
-    this.mensaService.getMensae().subscribe(mensae => {
-      this.mensae = mensae;
+    this.mensaService.getMensae().subscribe(mensaeDto => {
+      this.mensaeDto = mensaeDto;
     });
   }
 
@@ -34,16 +35,8 @@ export class HomeScreenComponent implements OnInit {
 		return today.toLocaleDateString('en-GB', options);
 	}
 
-  public getMenuItems(mensa: Mensa): MenuItem[] {
-    return mensa.menuItems.sort((a, b) => a.order - b.order);
-  }
-
-  public getStaff(mensa: Mensa, role: StaffRole): string {
-    return mensa.staff.filter((staff) => staff.role == role).map((staff) => staff.name).join(' en ');
-  }
-
-  public getStaffAmount(mensa: Mensa, role: StaffRole): number {
-    return mensa.staff.filter((staff) => staff.role == role).length;
+  public getMenuItems(menuItems: MenuItem[]): MenuItem[] {
+    return menuItems.sort((a, b) => a.order - b.order);
   }
 
   public isLoggedIn(): boolean {
@@ -70,7 +63,7 @@ export class HomeScreenComponent implements OnInit {
 
   }
 
-  public shouldShowSignUpBlock(mensa: Mensa): boolean {
-    return mensa.maxUsers > mensa.enrollments;
+  public shouldShowSignUpBlock(mensaDto: MensaDto): boolean {
+    return mensaDto.mensa.maxUsers > mensaDto.enrollments;
   }
 }

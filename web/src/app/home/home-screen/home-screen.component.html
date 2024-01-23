@@ -24,67 +24,67 @@
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let mensa of mensae">
-                    <tr [class.cancelled]="mensa.maxUsers <= 0 && mensa.enrollments <= 0">
-                      <td>{{mensa.date}}</td>
+                <ng-container *ngFor="let mensaDto of mensaeDto">
+                    <tr [class.cancelled]="mensaDto.mensa.maxUsers <= 0 && mensaDto.enrollments <= 0">
+                      <td>{{mensaDto.mensa.date}}</td>
                       <td>
-                          {{mensa.title}}
-                          <ng-container *ngIf="mensa.menuItems.length <= 0">
+                          {{mensaDto.mensa.title}}
+                          <ng-container *ngIf="mensaDto.menuItems.length <= 0">
                               <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
                               <div class="menu-toggle">
                                   <h4>Menu:</h4>
                                   <ul>
-                                      <li *ngFor="let menuItem of getMenuItems(mensa)">
-                                          {{menuItem.description}}
+                                      <li *ngFor="let menuItem of getMenuItems(mensaDto.menuItems)">
+                                          {{menuItem.text}}
                                       </li>
                                   </ul>
                               </div>
                           </ng-container>
-                          <ng-container *ngFor="let option of mensa.extraOptions">
+                          <ng-container *ngFor="let option of mensaDto.extraOptions">
                               <div>
                                   <strong><u>Extra optie:</u></strong>
                                   {{option.description}} voor &euro;{{ option.price }}
                               </div>
                           </ng-container>
-                          <div>Gekookt door: {{getStaff(mensa, staffRole.Cook)}}</div>
+                          <div>Gekookt door: {{mensaDto.cooks.join(' en ')}}</div>
                       </td>
-                      <td>&euro;{{mensa.price}}</td>
+                      <td>&euro;{{mensaDto.mensa.price}}</td>
                       <td>
-                          {{mensa.enrollments}} / {{mensa.maxUsers}}<br>
-                          <ng-container *ngIf="getStaffAmount(mensa, staffRole.Dishwasher) > 0">
-                              {{getStaffAmount(mensa, staffRole.Dishwasher)}} afwasser<span *ngIf="getStaffAmount(mensa, staffRole.Dishwasher) > 1">s</span>
+                          {{mensaDto.enrollments}} / {{mensaDto.mensa.maxUsers}}<br>
+                          <ng-container *ngIf="mensaDto.dishwashers.length > 0">
+                              {{mensaDto.dishwashers.length}} afwasser<span *ngIf="mensaDto.dishwashers.length > 1">s</span>
                           </ng-container>
                       </td>
                       <td>
-                          <ng-container *ngIf="mensa.maxUsers <= 0; else closingTimeBlock">
+                          <ng-container *ngIf="mensaDto.mensa.maxUsers <= 0; else closingTimeBlock">
                               <span class="text-danger">Geannuleerd</span>
                           </ng-container>
                           <ng-template #closingTimeBlock>
-                              <ng-container *ngIf="mensa.closed; else notClosedBlock">
+                              <ng-container *ngIf="mensaDto.mensa.closed; else notClosedBlock">
                                   <span class="text-danger">Gesloten</span>
                               </ng-container>
                               <ng-template #notClosedBlock>
-                                  {{mensa.closingTime}}
+                                  {{mensaDto.mensa.closingtime}}
                               </ng-template>
                           </ng-template>
                       </td>
                       <td>
                           <div class="btn-group-vertical">
-                              <ng-container *ngIf="shouldShowCancelledBlock(mensa); else signInOrClosedBlock">
+                              <ng-container *ngIf="shouldShowCancelledBlock(mensaDto.mensa); else signInOrClosedBlock">
                                   <span class="btn btn-primary disabled">Geannuleerd</span>
                               </ng-container>
 
                               <ng-template #signInOrClosedBlock>
-                                  <ng-container *ngIf="shouldShowSignOutForm(mensa); else notSignedUpBlock">
-                                      <form method="POST" class="btn-group-vertical" (ngSubmit)="signoutFormSubmit(mensa)" >
-                                          <input type="submit" class="btn btn-danger" [class.disabled]="mensa.closed" value="Uitschrijven" [disabled]="mensa.closed" />
-                                          <input type="hidden" name="id" [value]="mensa.id" />
+                                  <ng-container *ngIf="shouldShowSignOutForm(mensaDto.mensa); else notSignedUpBlock">
+                                      <form method="POST" class="btn-group-vertical" (ngSubmit)="signoutFormSubmit(mensaDto.mensa)" >
+                                          <input type="submit" class="btn btn-danger" [class.disabled]="mensaDto.mensa.closed" value="Uitschrijven" [disabled]="mensaDto.mensa.closed" />
+                                          <input type="hidden" name="id" [value]="mensaDto.mensa.id" />
                                       </form>
                                   </ng-container>
 
                                   <ng-template #notSignedUpBlock>
-                                      <ng-container *ngIf="shouldShowSignUpBlock(mensa); else closedBlock">
-                                          <a [routerLink]="['/signin', mensa.id, '']" class="btn btn-primary">Inschrijven</a>
+                                      <ng-container *ngIf="shouldShowSignUpBlock(mensaDto); else closedBlock">
+                                          <a [routerLink]="['/signin', mensaDto.mensa.id, '']" class="btn btn-primary">Inschrijven</a>
                                       </ng-container>
 
                                       <ng-template #closedBlock>
@@ -94,7 +94,7 @@
                               </ng-template>
 
                               <ng-template #notSignedUpBlock>
-                                  <a [routerLink]="['/mensa-details', mensa.id, '']" class="btn btn-primary">Bekijken</a>
+                                  <a [routerLink]="['/mensa-details', mensaDto.mensa.id, '']" class="btn btn-primary">Bekijken</a>
                               </ng-template>
 
                           </div>
@@ -102,7 +102,7 @@
                     </tr>
                 </ng-container>
 
-                <ng-container *ngIf="mensae.length <= 0">
+                <ng-container *ngIf="mensaeDto.length <= 0">
                     <tr>
                         <td colspan="6">Er zijn geen mensae gevonden!</td>
                     </tr>
