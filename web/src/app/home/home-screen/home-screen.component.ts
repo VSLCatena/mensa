@@ -1,4 +1,3 @@
-import { StaffRole } from './../../common/types/staff-role.type';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Mensa } from 'src/app/common/models/mensa.model';
@@ -14,7 +13,6 @@ import { MensaDto } from '../../../../../api/src/modules/mensa/dto/mensa.dto';
 export class HomeScreenComponent implements OnInit {
 	public page: number = 0;
 	public mensaeDto: MensaDto[] = [];
-  public staffRole = StaffRole;
 
   constructor(private readonly router: Router, private readonly mensaService: MensaService) { }
 
