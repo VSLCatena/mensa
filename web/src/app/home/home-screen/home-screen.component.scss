@@ -10,6 +10,13 @@ tr.cancelled {
     }
 }
 
+.card-footer {
+    a {
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
 @media (max-width: 767px) {
     // Force table to not be like tables anymore
     table.responsive-table,
