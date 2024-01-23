@@ -1,19 +1,18 @@
 'use strict';
 const { faker } = require('@faker-js/faker');
 
-const today = new Date();
-
 const generateMensae = (id, title, mensaDate, closingHour = 15) => {
+  mensaDate.setHours(18, 0, 0, 0) // mensa starts at 18:00
   return {
     id: id,
     title: title,
-    date: mensaDate,
-    closing_time: new Date(mensaDate.setHours(closingHour, 0, 0, 0)),
+    date: formatDateTime(mensaDate),
+    closing_time: formatDateTime(new Date(mensaDate.setHours(closingHour, 0, 0, 0))),
     max_users: faker.number.int({min: 15, max: 45}),
     price: 4.50,
     closed: isDateInPast(mensaDate),
-    created_at: new Date(mensaDate.setDate(mensaDate.getDate() - 7)), // 7 days ago
-    updated_at: new Date(mensaDate.setDate(mensaDate.getDate() - 7)) // 7 days ago
+    created_at: formatDateTime(new Date(mensaDate.getTime() - 7 * 24 * 60 * 60 * 1000)), // 7 days ago
+    updated_at: formatDateTime(new Date(mensaDate.getTime() - 7 * 24 * 60 * 60 * 1000)) // 7 days ago
   }
 }
 
@@ -22,14 +21,25 @@ function isDateInPast(inputDate) {
   return inputDate < currentDate;
 }
 
+const formatDateTime = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
+
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    const today = new Date();
     await queryInterface.bulkInsert('mensas', [
       generateMensae(1, 'Pastadag', today),
-      generateMensae(2, 'Pizzadag', new Date(today.setDate(today.getDate() + 2))),
-      generateMensae(3, 'Soepdag', new Date(today.setDate(today.getDate() - 2))),
+      generateMensae(2, 'Pizzadag', new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000)), // 2 days from now
+      generateMensae(3, 'Soepdag', new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000)), // 2 days ago
     ], {});
   },
 
