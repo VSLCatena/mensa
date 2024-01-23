@@ -7,7 +7,7 @@
             Mensae in de komende 2 weken
           </ng-container>
           <ng-template #dateRange>
-            Mensae tussen {{ getDateForPage(page * 2) }} en {{ getDateForPage((page * 2) + 2) }}
+            Mensae tussen {{ getDateForPage(page * 2) | date:'EEEE d MMM HH:mm' }} en {{ getDateForPage((page * 2) + 2) | date:'EEEE d MMM HH:mm'}}
           </ng-template>
         </div>
 
@@ -26,7 +26,7 @@
             <tbody>
                 <ng-container *ngFor="let mensaDto of mensaeDto">
                     <tr [class.cancelled]="mensaDto.mensa.maxUsers <= 0 && mensaDto.enrollments <= 0">
-                      <td>{{mensaDto.mensa.date}}</td>
+                      <td>{{mensaDto.mensa.date | date:'EEEE d MMM HH:mm'}}</td>
                       <td>
                           {{mensaDto.mensa.title}}
                           <ng-container *ngIf="mensaDto.menuItems.length <= 0">
@@ -64,7 +64,7 @@
                                   <span class="text-danger">Gesloten</span>
                               </ng-container>
                               <ng-template #notClosedBlock>
-                                  {{mensaDto.mensa.closingTime}}
+                                  {{mensaDto.mensa.closingTime | date:'EEEE d MMM HH:mm'}}
                               </ng-template>
                           </ng-template>
                       </td>
