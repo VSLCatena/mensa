@@ -20,7 +20,7 @@ export class MenuItem extends Model<MenuItem> {
 	@ForeignKey(() => Mensa)
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
-		allowNull: false,
+		allowNull: false
 	})
 	mensaId: number;
 

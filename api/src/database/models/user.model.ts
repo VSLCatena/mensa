@@ -13,7 +13,7 @@ export class User extends Model<User> {
 	@PrimaryKey
 	@Column({
 		type: DataType.STRING(191),
-		allowNull: false,
+		allowNull: false
 	})
 	membershipNumber: string;
 

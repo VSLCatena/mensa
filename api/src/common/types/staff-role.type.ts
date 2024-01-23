@@ -1,4 +1,4 @@
 export enum StaffRole {
-    Cook = 'Cook',
-    Dishwasher = 'Dishwasher',
+	Cook = 'Cook',
+	Dishwasher = 'Dishwasher'
 }

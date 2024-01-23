@@ -21,12 +21,12 @@ import { models } from './database/models.database';
 			autoLoadModels: true,
 			synchronize: Boolean(process.env.DEV_ENVIRONMENT).valueOf(), // Only synchronise when in dev environment
 			define: {
-				underscored: true,
+				underscored: true
 			}
-  		}),
+		}),
 		SequelizeModule.forFeature(models),
 		MensaModule,
-		CommonModule,
+		CommonModule
 	]
 })
 export class AppModule {}

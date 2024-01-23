@@ -36,7 +36,7 @@ export class MensaUser extends Model<MensaUser> {
 	@ForeignKey(() => Mensa)
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
-		allowNull: false,
+		allowNull: false
 	})
 	mensaId: number;
 
@@ -52,7 +52,7 @@ export class MensaUser extends Model<MensaUser> {
 	@Column({
 		type: DataType.BOOLEAN,
 		allowNull: false,
-		defaultValue: false,
+		defaultValue: false
 	})
 	isIntro: boolean;
 
@@ -61,7 +61,7 @@ export class MensaUser extends Model<MensaUser> {
 
 	@Column({
 		type: DataType.STRING(191),
-		defaultValue: null,
+		defaultValue: null
 	})
 	extraInfo?: string;
 
@@ -86,7 +86,7 @@ export class MensaUser extends Model<MensaUser> {
 
 	@Column({
 		type: DataType.STRING(191),
-		allowNull: false,
+		allowNull: false
 	})
 	confirmationCode: string;
 

@@ -30,7 +30,7 @@ export class Faq extends Model<Faq> {
 	@ForeignKey(() => User)
 	@Column({
 		type: DataType.STRING(191),
-		allowNull: false,
+		allowNull: false
 	})
 	lastEditedBy: string;
 

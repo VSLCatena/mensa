@@ -5,10 +5,10 @@ import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class MenuItemRepository extends BaseRepository<MenuItem> {
-    constructor(
-        @InjectModel(MenuItem)
-        readonly model: typeof MenuItem
-    ) {
-        super(model);
-     }
+	constructor(
+		@InjectModel(MenuItem)
+		readonly model: typeof MenuItem
+	) {
+		super(model);
+	}
 }

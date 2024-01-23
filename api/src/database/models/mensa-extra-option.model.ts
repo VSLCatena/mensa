@@ -20,7 +20,7 @@ export class MensaExtraOption extends Model<MensaExtraOption> {
 	@ForeignKey(() => Mensa)
 	@Column({
 		type: DataType.INTEGER.UNSIGNED,
-		allowNull: false,
+		allowNull: false
 	})
 	mensaId: number;
 

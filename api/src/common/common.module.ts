@@ -8,15 +8,18 @@ import { MensaExtraOptionRepository } from './repositories/mensa-extra-option.re
 import { SequelizeModule } from '@nestjs/sequelize';
 import { models } from 'src/database/models.database';
 
-const repositories = [MensaExtraOptionRepository, MensaUserExtraOptionRepository, MensaUserRepository, MensaRepository, MenuItemRepository, UserRepository]
+const repositories = [
+	MensaExtraOptionRepository,
+	MensaUserExtraOptionRepository,
+	MensaUserRepository,
+	MensaRepository,
+	MenuItemRepository,
+	UserRepository
+];
 
 @Module({
-    providers: [
-        ...repositories,
-    ],
-    exports: [
-        ...repositories,
-    ],
-  imports: [SequelizeModule.forFeature(models)]
+	providers: [...repositories],
+	exports: [...repositories],
+	imports: [SequelizeModule.forFeature(models)]
 })
-export class CommonModule { }
+export class CommonModule {}

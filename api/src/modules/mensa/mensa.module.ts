@@ -4,8 +4,8 @@ import { MensaService } from './service/mensa.service';
 import { CommonModule } from 'src/common/common.module';
 
 @Module({
-  controllers: [MensaController],
-  providers: [MensaService],
-  imports: [CommonModule]
+	controllers: [MensaController],
+	providers: [MensaService],
+	imports: [CommonModule]
 })
 export class MensaModule {}

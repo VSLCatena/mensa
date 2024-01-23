@@ -5,10 +5,10 @@ import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class MensaExtraOptionRepository extends BaseRepository<MensaExtraOption> {
-    constructor(
-        @InjectModel(MensaExtraOption)
-        readonly model: typeof MensaExtraOption
-    ) {
-        super(model);
-     }
+	constructor(
+		@InjectModel(MensaExtraOption)
+		readonly model: typeof MensaExtraOption
+	) {
+		super(model);
+	}
 }

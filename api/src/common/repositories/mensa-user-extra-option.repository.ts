@@ -5,10 +5,10 @@ import { BaseRepository } from './base.repository';
 
 @Injectable()
 export class MensaUserExtraOptionRepository extends BaseRepository<MensaUserExtraOption> {
-    constructor(
-        @InjectModel(MensaUserExtraOption)
-        readonly model: typeof MensaUserExtraOption
-    ) {
-        super(model);
-     }
+	constructor(
+		@InjectModel(MensaUserExtraOption)
+		readonly model: typeof MensaUserExtraOption
+	) {
+		super(model);
+	}
 }
