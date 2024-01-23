@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class MensaService extends BaseService {
 
-  getMensae(): Observable<MensaDto[]> {
-    return this.get<MensaDto[]>(`${environment.apiUrl}/mensa`);
+  getMensae(page: number = 0): Observable<MensaDto[]> {
+    return this.get<MensaDto[]>(`${environment.apiUrl}/mensa?page=${page}`);
   }
 }
