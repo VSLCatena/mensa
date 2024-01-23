@@ -1,5 +1,5 @@
+import { MensaDto } from './../../../../../../api/src/modules/mensa/dto/mensa.dto';
 import { Injectable } from '@angular/core';
-import { Mensa } from '../../models/mensa.model';
 import { environment } from 'src/environments/environment';
 import { BaseService } from '../base.service';
 import { Observable } from 'rxjs';
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class MensaService extends BaseService {
 
-  getMensae(): Observable<Mensa[]> {
-    return this.get<Mensa[]>(`${environment.apiUrl}/mensa`);
+  getMensae(): Observable<MensaDto[]> {
+    return this.get<MensaDto[]>(`${environment.apiUrl}/mensa`);
   }
 }
