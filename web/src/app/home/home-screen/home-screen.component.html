@@ -7,7 +7,7 @@
             Mensae in de komende 2 weken
           </ng-container>
           <ng-template #dateRange>
-            Mensae tussen {{ getDateForPage(page * 2) | date:'EEEE d MMM HH:mm' }} en {{ getDateForPage((page * 2) + 2) | date:'EEEE d MMM HH:mm'}}
+            Mensae tussen {{ getDateForPage(page * 2, dayOfWeek.Monday) | date:'EEEE d MMM HH:mm' }} en {{ getDateForPage((page * 2) + 2, dayOfWeek.Sunday) | date:'EEEE d MMM HH:mm'}}
           </ng-template>
         </div>
 
@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let mensaDto of mensaeDto">
+                <ng-container *ngFor="let mensaDto of mensaeDtoList[page.toString()]">
                     <tr [class.cancelled]="mensaDto.mensa.maxUsers <= 0 && mensaDto.enrollments <= 0">
                       <td>{{mensaDto.mensa.date | date:'EEEE d MMM HH:mm'}}</td>
                       <td>
@@ -102,7 +102,7 @@
                     </tr>
                 </ng-container>
 
-                <ng-container *ngIf="mensaeDto.length <= 0">
+                <ng-container *ngIf="mensaeDtoList[page.toString()].length <= 0">
                     <tr>
                         <td colspan="6">Er zijn geen mensae gevonden!</td>
                     </tr>
@@ -113,8 +113,8 @@
         </div>
 
         <div class="card-footer">
-          <a [routerLink]="['/home', page ? page - 1 : -1]" class="float-start">&lt;&lt;</a>
-          <a [routerLink]="['/home', page ? page + 1 : 1]" class="float-end">&gt;&gt;</a>
+          <a [routerLink]="" (click)="getPage(tableNavigate.Previous)" class="float-start">&lt;&lt;</a>
+          <a [routerLink]="" (click)="getPage(tableNavigate.Next)" class="float-end">&gt;&gt;</a>
           <div class="clearfix"></div>
         </div>
       </div>
