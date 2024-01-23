@@ -1,7 +1,8 @@
 import { MensaExtraOption } from "../mensa-extra-option.model";
+import { Mensa } from "../mensa.model";
 import { MenuItem } from "../menu-item.model";
 
-export class Mensa {
+export class MensaDto {
 	mensa: Mensa;
 	cooks: string[];
 	dishwashers: string[];
