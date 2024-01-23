@@ -1,9 +1,10 @@
 import { Model, ModelCtor } from 'sequelize-typescript';
-import { NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindOptions, UpdateOptions, DestroyOptions } from 'sequelize';
 
-export abstract class BaseRepository<T extends Model<T>> {
-  constructor(protected readonly model: ModelCtor<T>) { }
+@Injectable()
+export class BaseRepository<T extends Model<T>> {
+  constructor(private readonly model: ModelCtor<T>) { }
 
   async findAll(options?: FindOptions<T>): Promise<T[]> {
     return this.model.findAll(options);
