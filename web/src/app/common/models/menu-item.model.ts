@@ -2,7 +2,7 @@ export class MenuItem {
 	id: number;
 	mensaId: number;
 	order: number;
-	description: string;
+	text: string;
 
 	constructor(
 		id: number,
@@ -13,6 +13,6 @@ export class MenuItem {
         this.id = id;
         this.mensaId = mensaId;
         this.order = order;
-        this.description = description;
+        this.text = description;
 	}
 }
