@@ -1,5 +1,5 @@
 import { Model, ModelCtor } from 'sequelize-typescript';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { FindOptions, UpdateOptions, DestroyOptions } from 'sequelize';
 
 export abstract class BaseRepository<T extends Model<T>> {
