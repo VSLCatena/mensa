@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Mensa } from 'src/app/common/models/mensa.model';
 import { MenuItem } from 'src/app/common/models/menu-item.model';
 import { MensaService } from 'src/app/common/services/mensa/mensa.service';
-import { MensaDto } from '../../../../../api/src/modules/mensa/dto/mensa.dto';
+import { MensaDto } from 'src/app/common/models/dto/mensa.dto';
 
 @Component({
 	selector: 'app-home-screen',
