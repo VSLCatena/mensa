@@ -1,4 +1,4 @@
 export const environment = {
 	production: false,
-	apiUrl: `http://api:3000`
+	apiUrl: `http://api:3000/apiProxy`
 };
