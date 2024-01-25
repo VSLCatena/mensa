@@ -6,7 +6,7 @@ import { MensaService } from 'src/app/common/services/mensa/mensa.service';
 import { MensaDto } from 'src/app/common/models/dto/mensa.dto';
 import { TableNavigate } from 'src/app/common/types/table-navigate.type';
 import { DayOfWeek } from 'src/app/common/types/day-of-week.type';
-import { AuthService } from 'src/app/common/services/login/auth.service';
+import { AuthService } from 'src/app/common/services/auth/auth.service';
 
 @Component({
 	selector: 'app-home-screen',
