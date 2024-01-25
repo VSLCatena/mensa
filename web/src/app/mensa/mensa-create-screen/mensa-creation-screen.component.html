@@ -1,1 +1,90 @@
-<p>mensa-creation-screen works!</p>
+<!-- mensa-create.component.html -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header">Mensa aanmaken</div>
+        <div class="card-body">
+          <form [formGroup]="mensaForm" (ngSubmit)="onSubmit()" class="ng-pristine ng-valid">
+            <div class="mb-3">
+                <label for="title" class="form-label">Titel</label>
+                <input id="title" type="text" class="form-control" formControlName="title" placeholder="Titel" required autofocus>
+                <div class="form-text">Prefix je titel met r| of m| voor de label <span class="badge bg-primary">r| Reservering</span> of <span class="badge bg-success">m| Mensa</span></div>
+                <div class="form-text">Bijvoorbeeld: "m|Mensa met betaalde afwas"</div>
+            </div>
+            <div class="mb-3">
+                <label for="date">Datum</label>
+                <input id="date" type="datetime-local" class="form-control" formControlName="date" placeholder="Datum" step="60" required>
+            </div>
+            <div class="mb-3">
+                <label for="closingTime">Sluittijd</label>
+                <input id="closingTime" type="datetime-local" class="form-control" formControlName="closingTime" placeholder="Sluittijd" step="60" required>
+            </div>
+            <div class="mb-3">
+                <label for="maxUsers">Max inschrijvingen</label>
+                <input id="maxUsers" type="number" class="form-control" formControlName="maxUsers" placeholder="Max inschrijvingen" step="1" required>
+            </div>
+            <div class="mb-3">
+                <label for="price"><strong>Mensa prijs</strong></label>
+                <div class="input-group">
+                    <label class="input-group-text">
+                        <i class="bi bi-currency-euro"></i>
+                    </label>
+                    <input type="number" formControlName="price" step="0.05" class="form-control" required>
+                </div>
+            </div>
+            <fieldset class="mb-3">
+                <legend>Menu</legend>
+                <div formArrayName="menu">
+                    <div class="row" *ngFor="let menuItem of menuControls; let i = index" [formGroupName]="i">
+                        <input type="hidden" formControlName="order">
+                        <div class="col-8 col-sm-10">
+                            <input formControlName="text" class="form-control" />
+                        </div>
+                        <div class="col-4 col-sm-2">
+                            <span class="btn btn-danger form-control" (click)="deleteOption(i, 'menu')"><i class="bi bi-trash3-fill"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8 col-sm-10" *ngIf="menuControls.length === 0">Voeg hier je menu toe!</div>
+                    <div [ngClass]="menuControls.length !== 0 ? 'col-4 offset-8 col-sm-2 offset-sm-10' : 'col-4 col-sm-2'">
+                        <span class="btn btn-success form-control" (click)="addMenuItem()"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="mb-3">
+                <legend>Extra opties</legend>
+                <div formArrayName="extraOptions">
+                    <div class="row" *ngFor="let extraOption of extraOptionsControls; let i = index" [formGroupName]="i">
+                        <div class="col-8 col-sm-7">
+                            <input formControlName="description" placeholder="Beschrijving van optie" class="form-control" />
+                        </div>
+                        <div class="col-4 col-sm-3">
+                            <div class="input-group">
+                                <label class="input-group-text">
+                                    <i class="bi bi-currency-euro"></i>
+                                </label>
+                                <input type="number" formControlName="price" step="0.05" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-2">
+                            <span class="btn btn-danger form-control" (click)="deleteOption(i, 'extraOptions')"><i class="bi bi-trash3-fill"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8 col-sm-10" *ngIf="extraOptionsControls.length === 0">Voeg hier je extra opties toe!</div>
+                    <div [ngClass]="extraOptionsControls.length !== 0 ? 'col-4 offset-8 col-sm-2 offset-sm-10' : 'col-4 col-sm-2'">
+                        <span class="btn btn-success form-control" (click)="addExtraOption()"><i class="bi bi-plus-lg"></i></span>
+                    </div>
+                </div>
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Mensa aanmaken</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
