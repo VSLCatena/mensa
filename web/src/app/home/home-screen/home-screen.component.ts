@@ -6,6 +6,7 @@ import { MensaService } from 'src/app/common/services/mensa/mensa.service';
 import { MensaDto } from 'src/app/common/models/dto/mensa.dto';
 import { TableNavigate } from 'src/app/common/types/table-navigate.type';
 import { DayOfWeek } from 'src/app/common/types/day-of-week.type';
+import { AuthService } from 'src/app/common/services/login/auth.service';
 
 @Component({
 	selector: 'app-home-screen',
@@ -20,7 +21,7 @@ export class HomeScreenComponent implements OnInit {
   public tableNavigate = TableNavigate;
   public dayOfWeek = DayOfWeek;
 
-  constructor(private readonly router: Router, private readonly mensaService: MensaService) { }
+  constructor(private readonly router: Router, private readonly mensaService: MensaService, private readonly authService: AuthService) { }
 
   ngOnInit(): void {
     this.mensaService.getMensae().subscribe(mensaeDto => {
@@ -41,13 +42,11 @@ export class HomeScreenComponent implements OnInit {
   }
 
   public isLoggedIn(): boolean {
-    // TODO Check if logged in
-    return false;
+    return this.authService.isLoggedIn();
   }
 
   public isServiceUser(): boolean {
-    // TODO Check if service user
-    return false;
+    return this.authService.isServiceUser();
   }
 
   public signoutFormSubmit(mensa: Mensa): void {
