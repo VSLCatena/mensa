@@ -7,7 +7,7 @@ import { AuthService } from '../common/services/login/auth.service';
 
 @NgModule({
 	declarations: [HomeScreenComponent],
-	imports: [CommonModule, HomeRoutingModule],
+	imports: [HomeRoutingModule, CommonModule],
 	providers: [MensaService, AuthService]
 })
 export class HomeModule {}

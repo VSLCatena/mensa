@@ -4,7 +4,7 @@ import { MensaCreationScreenComponent } from './mensa-create-screen/mensa-creati
 
 const routes: Routes = [
 	{
-		path: 'mensa/create',
+		path: 'create',
 		component: MensaCreationScreenComponent
 	}
 ];
@@ -13,4 +13,4 @@ const routes: Routes = [
 	imports: [RouterModule.forChild(routes)],
 	exports: [RouterModule]
 })
-export class MensaCreationRoutingModule {}
+export class MensaRoutingModule {}
