@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './home/home.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
-import { MensaCreationModule } from './mensa-creation/mensa-creation.module';
+import { MensaModule } from './mensa/mensa.module';
 
 @NgModule({
 	declarations: [AppComponent, NavbarComponent],
@@ -15,7 +15,7 @@ import { MensaCreationModule } from './mensa-creation/mensa-creation.module';
 		AppRoutingModule,
 		HttpClientModule,
 		HomeModule,
-		MensaCreationModule
+		MensaModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

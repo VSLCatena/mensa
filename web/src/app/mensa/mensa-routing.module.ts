@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MensaCreationScreenComponent } from './mensa-creation-screen/mensa-creation-screen.component';
+import { MensaCreationScreenComponent } from './mensa-create-screen/mensa-creation-screen.component';
 
 const routes: Routes = [
 	{
