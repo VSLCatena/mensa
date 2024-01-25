@@ -1,3 +1,4 @@
+import { AuthService } from 'src/app/common/services/login/auth.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,8 +7,10 @@ import { Component } from '@angular/core';
 	styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-	public isLoggedIn: boolean = false;
-	public isAdmin: boolean = false;
-	public isServiceUser: boolean = false;
+	public isLoggedIn: boolean = this.authService.isLoggedIn();
+	public isAdmin: boolean = this.authService.isAdminUser();
+	public isServiceUser: boolean = this.authService.isServiceUser();
 	public username: string = 'fgdfg ';
+
+	constructor(private readonly authService : AuthService) {}
 }
