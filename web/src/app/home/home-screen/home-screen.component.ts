@@ -64,8 +64,7 @@ export class HomeScreenComponent implements OnInit {
 	}
 
 	public shouldShowSignOutForm(mensa: Mensa): boolean {
-		// TODO Wanneer ingelogd en ingeschreven
-		return false;
+    return this.authService.isLoggedIn();
 	}
 
 	public shouldShowSignUpBlock(mensaDto: MensaDto): boolean {
