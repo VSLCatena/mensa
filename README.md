@@ -105,3 +105,19 @@ When updating a model you need to take the following steps:
  - Update the repository (if needed there is custom stuff in there)
 
 Also be sure to update the dto's in the api and models in the web if needed.
+
+
+### Modules
+The API is build with modules, this is a way of structuring the code.
+A module is placed inside the **api/src/modules** directory, and can be created by running the following command: ```npx nest generate module modules/mymodulename```.
+Each module is for a specific part of the API, for example the **auth** module is for authentication.
+The structure of a module looks like this:
+ - /controller
+   - Contains the controller with routes for the module.
+ - /dto
+   - Contains the dto's for the module.
+ - /service
+   - Contains the service for the module which is only for the module otherwise create a service in **common/services**.
+ - mymodule.module.ts
+
+To use the injectable services from the common module (like the **repositories**) you need to add the **CommonModule** to the imports of the module.
