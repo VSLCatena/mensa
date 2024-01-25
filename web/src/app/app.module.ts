@@ -10,7 +10,13 @@ import { MensaCreationModule } from './mensa-creation/mensa-creation.module';
 
 @NgModule({
 	declarations: [AppComponent, NavbarComponent],
-	imports: [BrowserModule, AppRoutingModule, HttpClientModule, HomeModule, MensaCreationModule],
+	imports: [
+		BrowserModule,
+		AppRoutingModule,
+		HttpClientModule,
+		HomeModule,
+		MensaCreationModule
+	],
 	providers: [],
 	bootstrap: [AppComponent]
 })
