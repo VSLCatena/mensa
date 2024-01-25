@@ -5,11 +5,10 @@ import { BaseService } from '../base.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class MensaService extends BaseService {
-
-  getMensae(page: number = 0): Observable<MensaDto[]> {
-    return this.get<MensaDto[]>(`${environment.apiUrl}/mensa?page=${page}`);
-  }
+	getMensae(page: number = 0): Observable<MensaDto[]> {
+		return this.get<MensaDto[]>(`${environment.apiUrl}/mensa?page=${page}`);
+	}
 }

@@ -1,4 +1,4 @@
 export enum TableNavigate {
-    Previous = 'previous',
-    Next = 'next',
+	Previous = 'previous',
+	Next = 'next'
 }

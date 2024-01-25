@@ -8,11 +8,11 @@ export class MenuItem {
 		id: number,
 		mensaId: number,
 		order: number,
-		description: string,
+		description: string
 	) {
-        this.id = id;
-        this.mensaId = mensaId;
-        this.order = order;
-        this.text = description;
+		this.id = id;
+		this.mensaId = mensaId;
+		this.order = order;
+		this.text = description;
 	}
 }
