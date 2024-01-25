@@ -51,8 +51,8 @@ The pattern *modelname.model.ts* is used for naming the files.
 Documentation for creating a model can be found here: https://www.npmjs.com/package/sequelize-typescript#model-definition
 
 #### Registering the model
-After creating a model it needs to be registered. This can be done by adding the model to the ```var models [...]``` inside the
-**api/src/app.module.ts** file. This will register the model and make it available as repository in the api.
+After creating a model it needs to be registered. This can be done by adding the model to the ```export const models = [...]``` inside the
+**api/src/database/models.database.ts** file. This will register the model and make it available as repository in the api.
 
 ##### Creating a migration
 After creating the model, you need to create a migration for it.
@@ -67,3 +67,41 @@ This can be done by running the following command: ```npm run seed:generate myse
 Inside **api/src/database/seeders** a new file will be created, you have to add the needed code to populate the table.
 
 Documentation for creating a seeder can be found here: https://sequelize.org/docs/v6/other-topics/migrations/#creating-the-first-seed
+
+###### When do I create a seeder?
+You create a seeder when you have added a new model to the database and you want to populate it with data.
+When updating an existing model you don't need to create a seeder, you can just update the existing one.
+
+#### Using the model
+When the model is created and registered you need to create a **repository** for it to communicate with the database.
+To create a repository you need to create a new file in the **api/src/repositories** directory with the pattern *modelname.repository.ts*.
+
+You can use the following template to create a repository for your model.
+The base repository covers all the basic CRUD operations, so you don't have to write them yourself.
+```typescript
+import { Injectable } from '@nestjs/common';
+import { BaseRepository } from './base.repository';
+import { MODELNAME } from 'src/database/models/MODELNAME.model';
+import { InjectModel } from '@nestjs/sequelize';
+
+@Injectable()
+export class MODELNAMERepository extends BaseRepository<MODELNAME> {
+	constructor(
+		@InjectModel(MODELNAME)
+		readonly model: typeof MODELNAME
+	) {
+		super(model);
+	}
+}
+```
+
+After creating the repository you need to register it in the **api/src/common/common.module.ts** file by adding it to the ```const repositories = [...]``` array.
+
+#### Updating a model
+When updating a model you need to take the following steps:
+ - Update the model
+ - Update the migration
+ - Update the seeder
+ - Update the repository (if needed there is custom stuff in there)
+
+Also be sure to update the dto's in the api and models in the web if needed.
