@@ -1,4 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
-@import 'variables';
+// Bootstrap
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
+
+// Global styling
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #333 !important;
+    text-align: left !important;
+
+    background-color: #f5f8fa;
+}
