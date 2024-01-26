@@ -81,7 +81,11 @@
                     </div>
                 </div>
             </fieldset>
-            <button type="submit" class="btn btn-primary">Mensa aanmaken</button>
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                </span>
+                Mensa aanmaken
+            </button>
           </form>
         </div>
       </div>
