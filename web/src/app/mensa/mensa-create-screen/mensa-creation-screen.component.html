@@ -69,7 +69,7 @@
             </div>
             <fieldset class="mb-3">
                 <legend>Menu</legend>
-                <div formArrayName="menu">
+                <div formArrayName="menuItems">
                     <div class="row" *ngFor="let menuItem of menuControls; let i = index" [formGroupName]="i">
                         <input type="hidden" formControlName="order">
                         <div class="col-8 col-sm-10">
