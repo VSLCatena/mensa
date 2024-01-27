@@ -1,13 +1,15 @@
-import { FormControl } from "@angular/forms";
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-export const fullDateValidator = (control: FormControl) => {
-    const value = control.value;
+export function fullDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value: string = control.value as string;
 
-    if (value === null || value === undefined || value === '') {
-        return null; // No validation error if the control is empty
+    if (!value) {
+      return null;
     }
 
     const dateTimeLocalRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
 
     return dateTimeLocalRegex.test(value) ? null : { invalidDateTimeLocalFormat: true };
+  };
 }
