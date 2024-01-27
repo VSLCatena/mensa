@@ -4,8 +4,8 @@ import { MenuItem } from "../menu-item.model";
 
 export class CreateMensaDto {
     public title: string = '';
-    public date: string = '';
-    public closingTime: string = '';
+    public date: Date = new Date();
+    public closingTime: Date = new Date();
     public maxUsers: string = '';
     public price: string = '';
     public menuItems: MenuItem[] = [];
@@ -13,8 +13,8 @@ export class CreateMensaDto {
 
     public mapForm(form: FormGroup) {
         this.title = form.get('title')!.value;
-        this.date = form.get('date')!.value;
-        this.closingTime = form.get('closingTime')!.value;
+        this.date = new Date(form.get('date')!.value);
+        this.closingTime = new Date(form.get('closingTime')!.value);
         this.maxUsers = form.get('maxUsers')!.value;
         this.price = form.get('price')!.value;
         this.menuItems = this.mapMenuItems(form.get('menuItems')! as FormArray);
