@@ -5,9 +5,10 @@ import { MensaCreationScreenComponent } from './mensa-create-screen/mensa-creati
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeysPipe } from '../common/pipes/keys.pipe';
 import { AlertComponent } from '../common/components/alert/alert.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
 	declarations: [MensaCreationScreenComponent, KeysPipe, AlertComponent],
-	imports: [MensaRoutingModule, CommonModule, FormsModule, ReactiveFormsModule]
+	imports: [MensaRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, BsDatepickerModule.forRoot()]
 })
 export class MensaModule {}

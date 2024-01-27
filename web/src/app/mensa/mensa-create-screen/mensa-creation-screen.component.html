@@ -22,15 +22,33 @@
             </div>
             <div class="mb-3">
                 <label for="date">Datum</label>
-                <input id="date" type="datetime-local" class="form-control" formControlName="date" placeholder="Datum" step="60" required [ngClass]="{
+                <input
+                    id="date"
+                    formControlName="date"
+                    required
+                    type="text"
+                    placeholder="Datum van mensa"
+                    class="form-control"
+                    [bsConfig]="datepickerConfig"
+                    bsDatepicker
+                    [ngClass]="{
 						'invalid-input': error.isError && !isValid('date')
 					}">
             </div>
             <div class="mb-3">
                 <label for="closingTime">Sluittijd</label>
-                <input id="closingTime" type="datetime-local" class="form-control" formControlName="closingTime" placeholder="Sluittijd" step="60" required [ngClass]="{
+                <input
+                    id="closingTime"
+                    formControlName="closingTime"
+                    required
+                    type="text"
+                    placeholder="Sluittijd"
+                    class="form-control"
+                    [bsConfig]="datepickerConfig"
+                    bsDatepicker
+                    [ngClass]="{
 						'invalid-input': error.isError && !isValid('closingTime')
-					}">
+                }">
             </div>
             <div class="mb-3">
                 <label for="maxUsers">Max inschrijvingen</label>
