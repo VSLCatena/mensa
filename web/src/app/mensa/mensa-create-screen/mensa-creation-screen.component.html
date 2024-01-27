@@ -1,29 +1,42 @@
 <!-- mensa-create.component.html -->
-
 <div class="container">
   <div class="row">
     <div class="col-12 col-md-8 offset-md-2">
       <div class="card">
         <div class="card-header">Mensa aanmaken</div>
+        <app-alert [isVisible]="error.isError" [alertType]="'danger'" [iconClass]="'bi bi-exclamation-triangle-fill'">
+        {{ error.message }}
+        </app-alert>
+        <app-alert [isVisible]="isSuccess" [alertType]="'success'" [iconClass]="'bi bi-check-lg'">
+        Mensa is succesvol aangemaakt!
+        </app-alert>
         <div class="card-body">
           <form [formGroup]="mensaForm" (ngSubmit)="onSubmit()" class="ng-pristine ng-valid">
             <div class="mb-3">
                 <label for="title" class="form-label">Titel</label>
-                <input id="title" type="text" class="form-control" formControlName="title" placeholder="Titel" required autofocus>
+                <input id="title" type="text" class="form-control" formControlName="title" placeholder="Titel" required autofocus [ngClass]="{
+						'invalid-input': error.isError && !isValid('title')
+					}">
                 <div class="form-text">Prefix je titel met r| of m| voor de label <span class="badge bg-primary">r| Reservering</span> of <span class="badge bg-success">m| Mensa</span></div>
                 <div class="form-text">Bijvoorbeeld: "m|Mensa met betaalde afwas"</div>
             </div>
             <div class="mb-3">
                 <label for="date">Datum</label>
-                <input id="date" type="datetime-local" class="form-control" formControlName="date" placeholder="Datum" step="60" required>
+                <input id="date" type="datetime-local" class="form-control" formControlName="date" placeholder="Datum" step="60" required [ngClass]="{
+						'invalid-input': error.isError && !isValid('date')
+					}">
             </div>
             <div class="mb-3">
                 <label for="closingTime">Sluittijd</label>
-                <input id="closingTime" type="datetime-local" class="form-control" formControlName="closingTime" placeholder="Sluittijd" step="60" required>
+                <input id="closingTime" type="datetime-local" class="form-control" formControlName="closingTime" placeholder="Sluittijd" step="60" required [ngClass]="{
+						'invalid-input': error.isError && !isValid('closingTime')
+					}">
             </div>
             <div class="mb-3">
                 <label for="maxUsers">Max inschrijvingen</label>
-                <input id="maxUsers" type="number" class="form-control" formControlName="maxUsers" placeholder="Max inschrijvingen" step="1" required>
+                <input id="maxUsers" type="number" class="form-control" formControlName="maxUsers" placeholder="Max inschrijvingen" step="1" required [ngClass]="{
+						'invalid-input': error.isError && !isValid('maxUsers')
+					}">
             </div>
             <div class="mb-3">
                 <label for="price"><strong>Mensa prijs</strong></label>
@@ -31,7 +44,9 @@
                     <label class="input-group-text">
                         <i class="bi bi-currency-euro"></i>
                     </label>
-                    <input type="number" formControlName="price" step="0.05" class="form-control" required>
+                    <input type="number" formControlName="price" step="0.05" class="form-control" required [ngClass]="{
+						'invalid-input': error.isError && !isValid('price')
+					}">
                 </div>
             </div>
             <fieldset class="mb-3">
@@ -40,7 +55,12 @@
                     <div class="row" *ngFor="let menuItem of menuControls; let i = index" [formGroupName]="i">
                         <input type="hidden" formControlName="order">
                         <div class="col-8 col-sm-10">
-                            <input formControlName="text" class="form-control" />
+                            <div class="input-group">
+                                <span class="input-group-text">{{i + 1}}</span>
+                                <input formControlName="text" class="form-control" placeholder="Type hier je gerecht" [ngClass]="{
+                                    'invalid-input': error.isError && !isValid('menu', i)
+                                }" />
+                            </div>
                         </div>
                         <div class="col-4 col-sm-2">
                             <span class="btn btn-danger form-control" (click)="deleteOption(i, 'menu')"><i class="bi bi-trash3-fill"></i></span>
@@ -59,14 +79,18 @@
                 <div formArrayName="extraOptions">
                     <div class="row" *ngFor="let extraOption of extraOptionsControls; let i = index" [formGroupName]="i">
                         <div class="col-8 col-sm-7">
-                            <input formControlName="description" placeholder="Beschrijving van optie" class="form-control" />
+                            <input formControlName="description" placeholder="Beschrijving van optie" class="form-control" [ngClass]="{
+                                    'invalid-input': error.isError && !isValid('extraOptions', i)
+                                }" />
                         </div>
                         <div class="col-4 col-sm-3">
                             <div class="input-group">
                                 <label class="input-group-text">
                                     <i class="bi bi-currency-euro"></i>
                                 </label>
-                                <input type="number" formControlName="price" step="0.05" class="form-control">
+                                <input type="number" formControlName="price" step="0.05" class="form-control" [ngClass]="{
+                                    'invalid-input': error.isError && !isValid('extraOptions', i)
+                                }"/>
                             </div>
                         </div>
                         <div class="col-12 col-sm-2">
