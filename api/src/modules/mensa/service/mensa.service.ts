@@ -10,6 +10,7 @@ import { DayOfWeek } from 'src/common/types/day-of-week.type';
 import { MensaUser } from 'src/database/models/mensa-user.model';
 import { MensaDto } from '../dto/mensa.dto';
 import { User } from 'src/database/models/user.model';
+import { CreateMensaDto } from '../dto/create-mensa.dto';
 
 @Injectable()
 export class MensaService {
@@ -68,5 +69,18 @@ export class MensaService {
 		mensaDto.dishwashers = mensaUsers
 			.filter(mensaUser => mensaUser.dishwasher)
 			.map(mensaUser => mensaUser.user.name);
+	}
+
+	async saveMensaDto(createMensaDto: CreateMensaDto): Promise<void> {
+		var mensa = await this.mensaRepository.create(createMensaDto.getMensa());
+		createMensaDto.menuItems.map(menuItem => {
+			menuItem.mensaId = mensa.id;
+			this.menuItemRepository.create(menuItem);
+		});
+
+		createMensaDto.extraOptions.map(extraOption => {
+			extraOption.mensaId = mensa.id;
+			this.mensaExtraOptionRepository.create(extraOption);
+		});
 	}
 }
