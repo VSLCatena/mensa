@@ -102,16 +102,6 @@ export class MensaCreationScreenComponent {
 		return this.mensaForm.controls[formController].valid;
 	}
 
-	public hihi(index: any): boolean {
-		var array = this.mensaForm.get('menu') as FormArray;
-
-		if (index >= 0 && index < array.length) {
-			const menuItem = array.at(index) as FormGroup;
-			return menuItem.valid;
-		}
-		return false;
-	}
-
 	public addMenuItem(): void {
 		const menuItem = this.formBuilder.group({
 			order: [(this.menuControls.length + 1), Validators.required],
