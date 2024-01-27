@@ -5,7 +5,6 @@ import { MensaService } from 'src/app/common/services/mensa/mensa.service';
 import { fullDateValidator, integerValidator } from 'src/app/common/helpers/custom.validators';
 import { CreateMensaDto } from 'src/app/common/models/dto/create-mensa.dto';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { formatDateTime } from 'src/app/common/helpers/date.formatter';
 
 @Component({
 	selector: 'app-mensa-creation-screen',
@@ -85,8 +84,7 @@ export class MensaCreationScreenComponent {
 				this.setCleanForm();
 			},
 			error: err => {
-				console.log(err)
-				this.error.setError(true, err.error.message.message);
+				this.error.setError(true, err.error.message);
 				this.isLoading = false;
 			}
 		});
