@@ -30,7 +30,7 @@ class Handler extends ExceptionHandler
                 switch ($exception->getStatusCode())
                 {
                     case 404:
-                        return redirect(route('home'));
+                        return $this->renderHttpException($exception);
                         break;
                     case '500':
                         return redirect(route('home'));

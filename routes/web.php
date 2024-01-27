@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers;
+use App\Http\Controllers\Auth\LoginController as AuthLoginController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -23,10 +24,12 @@ Route::match(['get', 'post'], 'faq/add',  [FaqController::class, 'edit'])->name(
 Route::match(['get', 'post'], 'faq/edit/{id}',  [FaqController::class, 'edit'])->name('faq.edit');
 Route::match(['get', 'post'], 'faq/delete/{id}',  [FaqController::class, 'delete'])->name('faq.delete');
 
-// Login and log out
-Route::get('login/{token}',  [LoginController::class, 'loginByToken']);
-Route::match(['get', 'post'], 'login',  [LoginController::class, 'login'])->name('login');
-Route::post('logout',  [LoginController::class, 'logout'])->name('logout');
+// Login and log out with azure
+Route::match(['get', 'post'], '/login', [AuthLoginController::class, 'login'])->name('login');
+Route::get('login/{token}',  [AuthLoginController::class, 'loginByToken']);
+Route::post('logout',  [AuthLoginController::class, 'logout'])->name('logout');
+
+Route::get('/auth/callback', [AuthLoginController::class,'callback'])->name('callback');
 
 // Verify confirmation and sign out
 Route::get('signin/{code}/confirm',  [ConfirmController::class, 'confirm'])->name('signin.confirm');
