@@ -1,12 +1,12 @@
 export class MenuItem {
-	id: number;
-	mensaId: number;
+	id: number | null;
+	mensaId: number | null;
 	order: number;
 	text: string;
 
 	constructor(
-		id: number,
-		mensaId: number,
+		id: number | null,
+		mensaId: number | null,
 		order: number,
 		description: string
 	) {

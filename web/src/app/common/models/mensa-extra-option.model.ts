@@ -1,12 +1,12 @@
 export class MensaExtraOption {
-	id: number;
-	mensaId: number;
+	id: number | null;
+	mensaId: number | null;
 	description: string;
 	price: number;
 
 	constructor(
-		id: number,
-		mensaId: number,
+		id: number | null,
+		mensaId: number | null,
 		description: string,
 		price: number
 	) {
