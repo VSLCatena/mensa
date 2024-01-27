@@ -1,4 +1,4 @@
-import { IsString, IsDate, IsInt, IsArray, ValidateNested, Matches } from 'class-validator';
+import { IsString, IsDate, IsInt, IsArray, ValidateNested, Matches, IsNumber } from 'class-validator';
 import { Type } from 'class-transformer';
 import { MensaExtraOption } from 'src/database/models/mensa-extra-option.model';
 import { MenuItem } from 'src/database/models/menu-item.model';
@@ -8,16 +8,19 @@ export class CreateMensaDto {
     @IsString()
     title: string;
 
+	@Type(() => Date)
     @IsDate()
     date: Date;
 
+	@Type(() => Date)
     @IsDate()
     closingTime: Date;
 
     @IsInt()
     maxUsers: number;
 
-    @IsString()
+	@Type(() => String)
+	@IsString()
 	@Matches(/^\d+(\.\d{1,2})?$/)
     price: string;
 
