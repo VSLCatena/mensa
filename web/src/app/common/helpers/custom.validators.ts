@@ -13,3 +13,15 @@ export function fullDateValidator(): ValidatorFn {
     return dateTimeLocalRegex.test(value) ? null : { invalidDateTimeLocalFormat: true };
   };
 }
+
+export function integerValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value: number = control.value as number;
+
+    if (isNaN(value) || Number.isInteger(value)) {
+      return null;
+    } else {
+      return { notAnInteger: true };
+    }
+  };
+}
