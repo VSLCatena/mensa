@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { MensaCreationScreenComponent } from './mensa-create-screen/mensa-creation-screen.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KeysPipe } from '../common/pipes/keys.pipe';
+import { AlertComponent } from '../common/components/alert/alert.component';
 
 @NgModule({
-	declarations: [MensaCreationScreenComponent, KeysPipe],
+	declarations: [MensaCreationScreenComponent, KeysPipe, AlertComponent],
 	imports: [MensaRoutingModule, CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class MensaModule {}
