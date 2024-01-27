@@ -76,12 +76,12 @@
                             <div class="input-group">
                                 <span class="input-group-text">{{i + 1}}</span>
                                 <input formControlName="text" class="form-control" placeholder="Type hier je gerecht" [ngClass]="{
-                                    'invalid-input': error.isError && !isValid('menu', i)
+                                    'invalid-input': error.isError && !isValid('menuItems', i)
                                 }" />
                             </div>
                         </div>
                         <div class="col-4 col-sm-2">
-                            <span class="btn btn-danger form-control" (click)="deleteOption(i, 'menu')"><i class="bi bi-trash3-fill"></i></span>
+                            <span class="btn btn-danger form-control" (click)="deleteOption(i, 'menuItems')"><i class="bi bi-trash3-fill"></i></span>
                         </div>
                     </div>
                 </div>

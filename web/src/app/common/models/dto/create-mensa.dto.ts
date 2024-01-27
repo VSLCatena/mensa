@@ -8,7 +8,7 @@ export class CreateMensaDto {
     public closingTime: string = '';
     public maxUsers: string = '';
     public price: string = '';
-    public menu: MenuItem[] = [];
+    public menuItems: MenuItem[] = [];
     public extraOptions: MensaExtraOption[] = [];
 
     public mapForm(form: FormGroup) {
@@ -17,7 +17,7 @@ export class CreateMensaDto {
         this.closingTime = form.get('closingTime')!.value;
         this.maxUsers = form.get('maxUsers')!.value;
         this.price = form.get('price')!.value;
-        this.menu = this.mapMenuItems(form.get('menu')! as FormArray);
+        this.menuItems = this.mapMenuItems(form.get('menuItems')! as FormArray);
         this.extraOptions = this.mapExtraOptions(form.get('extraOptions')! as FormArray);
     }
 

@@ -21,7 +21,7 @@ export class MensaCreationScreenComponent {
 	public datepickerConfig: Partial<BsDatepickerConfig>;
 
 	get menuControls() {
-		return (this.mensaForm.get('menu') as FormArray).controls;
+		return (this.mensaForm.get('menuItems') as FormArray).controls;
 	}
 
 	get extraOptionsControls() {
@@ -57,7 +57,7 @@ export class MensaCreationScreenComponent {
 			closingTime: new FormControl(this.setDateAndTime(new Date(), 15, 0), [Validators.required, fullDateValidator]),
 			maxUsers: new FormControl('', [Validators.required, integerValidator]),
 			price: new FormControl(4, [Validators.required, Validators.pattern(/^\d+(\.\d{1,2})?$/)]),
-			menu: this.formBuilder.array([]),
+			menuItems: this.formBuilder.array([]),
 			extraOptions: this.formBuilder.array([]),
 		});
 	}
@@ -108,7 +108,7 @@ export class MensaCreationScreenComponent {
 			text: ['', Validators.required],
 		});
 
-		(this.mensaForm.get('menu') as FormArray).push(menuItem);
+		(this.mensaForm.get('menuItems') as FormArray).push(menuItem);
 	}
 
 	public addExtraOption(): void {
