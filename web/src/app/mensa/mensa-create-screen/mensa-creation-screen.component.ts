@@ -103,7 +103,7 @@ export class MensaCreationScreenComponent {
 	public addMenuItem(): void {
 		const menuItem = this.formBuilder.group({
 			order: [(this.menuControls.length + 1), Validators.required],
-			text: ['', Validators.required],
+			text: ['', [Validators.required, Validators.minLength(3)]],
 		});
 
 		(this.mensaForm.get('menuItems') as FormArray).push(menuItem);
