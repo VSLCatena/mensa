@@ -35,7 +35,9 @@ export class Log extends Model<Log> {
 	membershipNumber?: string;
 
 	@IsString()
-	@MaxLength(191, { message: 'The description can be at most 191 characters long' })
+	@MaxLength(191, {
+		message: 'The description can be at most 191 characters long'
+	})
 	@Column({ type: DataType.STRING(191), allowNull: false })
 	description: string;
 

@@ -9,6 +9,12 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
 	declarations: [MensaCreationScreenComponent, KeysPipe, AlertComponent],
-	imports: [MensaRoutingModule, CommonModule, FormsModule, ReactiveFormsModule, BsDatepickerModule.forRoot()]
+	imports: [
+		MensaRoutingModule,
+		CommonModule,
+		FormsModule,
+		ReactiveFormsModule,
+		BsDatepickerModule.forRoot()
+	]
 })
 export class MensaModule {}

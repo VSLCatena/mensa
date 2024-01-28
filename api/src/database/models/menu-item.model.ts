@@ -37,4 +37,3 @@ export class MenuItem extends Model<MenuItem> {
 	@Column({ type: DataType.STRING(191), allowNull: false })
 	text: string;
 }
-

@@ -23,8 +23,12 @@ export class Faq extends Model<Faq> {
 	id: number;
 
 	@IsString()
-	@MinLength(3, { message: 'The question must be at least 3 characters long' })
-	@MaxLength(191, { message: 'The question can be at most 191 characters long' })
+	@MinLength(3, {
+		message: 'The question must be at least 3 characters long'
+	})
+	@MaxLength(191, {
+		message: 'The question can be at most 191 characters long'
+	})
 	@Column({ type: DataType.STRING(191), allowNull: false })
 	question: string;
 

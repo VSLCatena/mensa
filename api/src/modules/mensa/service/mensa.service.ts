@@ -74,7 +74,9 @@ export class MensaService {
 	}
 
 	async saveMensaDto(createMensaDto: CreateMensaDto): Promise<void> {
-		var mensa = await this.mensaRepository.create(createMensaDto.getMensa());
+		var mensa = await this.mensaRepository.create(
+			createMensaDto.getMensa()
+		);
 		createMensaDto.menuItems.map(menuItem => {
 			menuItem.mensaId = mensa.id;
 			this.menuItemRepository.create(menuItem);

@@ -1,38 +1,46 @@
-import { IsString, IsDate, IsInt, IsArray, ValidateNested, Matches, IsNumber } from 'class-validator';
+import {
+	IsString,
+	IsDate,
+	IsInt,
+	IsArray,
+	ValidateNested,
+	Matches,
+	IsNumber
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { MensaExtraOption } from 'src/database/models/mensa-extra-option.model';
 import { MenuItem } from 'src/database/models/menu-item.model';
 import { Mensa } from 'src/database/models/mensa.model';
 
 export class CreateMensaDto {
-    @IsString()
-    title: string;
+	@IsString()
+	title: string;
 
 	@Type(() => Date)
-    @IsDate()
-    date: Date;
+	@IsDate()
+	date: Date;
 
 	@Type(() => Date)
-    @IsDate()
-    closingTime: Date;
+	@IsDate()
+	closingTime: Date;
 
-    @IsInt()
-    maxUsers: number;
+	@IsInt()
+	maxUsers: number;
 
 	@Type(() => String)
 	@IsString()
 	@Matches(/^\d+(\.\d{1,2})?$/)
-    price: number;
+	price: number;
 
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => MenuItem)
-    menuItems: MenuItem[];
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => MenuItem)
+	menuItems: MenuItem[];
 
-    @IsArray()
-    @ValidateNested({ each: true })
-    @Type(() => MensaExtraOption)
-    extraOptions: MensaExtraOption[];
+	@IsArray()
+	@ValidateNested({ each: true })
+	@Type(() => MensaExtraOption)
+	extraOptions: MensaExtraOption[];
 
 	public getMensa(): Mensa {
 		var mensa = new Mensa();

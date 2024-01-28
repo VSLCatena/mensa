@@ -16,7 +16,7 @@ import { AuthService } from 'src/app/common/services/auth/auth.service';
 export class HomeScreenComponent implements OnInit {
 	private calledPages: number[] = [0];
 	public page: number = 0;
-	public mensaeDtoList: { [page: string]: MensaDto[] } = {"0": []};
+	public mensaeDtoList: { [page: string]: MensaDto[] } = { '0': [] };
 
 	public tableNavigate = TableNavigate;
 	public dayOfWeek = DayOfWeek;

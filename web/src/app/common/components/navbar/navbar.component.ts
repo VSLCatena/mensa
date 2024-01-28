@@ -12,5 +12,5 @@ export class NavbarComponent {
 	public isServiceUser: boolean = this.authService.isServiceUser();
 	public username: string = 'fgdfg ';
 
-	constructor(private readonly authService : AuthService) {}
+	constructor(private readonly authService: AuthService) {}
 }

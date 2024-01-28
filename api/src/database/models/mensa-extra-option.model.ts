@@ -30,8 +30,12 @@ export class MensaExtraOption extends Model<MensaExtraOption> {
 	mensa: Mensa;
 
 	@IsString()
-	@MinLength(3, { message: 'The description must be at least 3 characters long' })
-	@MaxLength(191, { message: 'The description can be at most 191 characters long' })
+	@MinLength(3, {
+		message: 'The description must be at least 3 characters long'
+	})
+	@MaxLength(191, {
+		message: 'The description can be at most 191 characters long'
+	})
 	@Column({ type: DataType.STRING(191), allowNull: false })
 	description: string;
 

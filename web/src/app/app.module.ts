@@ -9,7 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
 import { MensaModule } from './mensa/mensa.module';
 
-
 @NgModule({
 	declarations: [AppComponent, NavbarComponent],
 	imports: [

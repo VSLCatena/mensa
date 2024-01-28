@@ -9,7 +9,11 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { MensaButtonComponent } from './mensa-button/mensa-button.component';
 
 @NgModule({
-	declarations: [HomeScreenComponent, MenuCollapseComponent, MensaButtonComponent],
+	declarations: [
+		HomeScreenComponent,
+		MenuCollapseComponent,
+		MensaButtonComponent
+	],
 	imports: [HomeRoutingModule, CommonModule, CollapseModule.forRoot()],
 	providers: [MensaService, AuthService]
 })
