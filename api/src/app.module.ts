@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MensaModule } from './modules/mensa/mensa.module';
 import { CommonModule } from './common/common.module';
 import { models } from './database/models.database';
+import { FaqModule } from './modules/faq/faq.module';
 
 @Module({
 	imports: [
@@ -27,7 +28,8 @@ import { models } from './database/models.database';
 		}),
 		SequelizeModule.forFeature(models),
 		MensaModule,
-		CommonModule
+		CommonModule,
+		FaqModule
 	]
 })
 export class AppModule {}
