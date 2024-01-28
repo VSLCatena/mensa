@@ -1,0 +1,8 @@
+<button onclick="buttonClick()" class="btn btn-primary" [ngClass]="{
+    'btn-secondary': buttonState !== 'Uitschrijven' && buttonState !== 'Inschrijven',
+    'btn-primary': buttonState === 'Inschrijven',
+    'btn-danger': buttonState === 'Uitschrijven',
+    'disabled': isDisabled,
+}">
+    {{ buttonState }}
+</button>

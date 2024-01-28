@@ -23,7 +23,6 @@ export class HomeScreenComponent implements OnInit {
 	isLoading: boolean = true;
 
 	constructor(
-		private readonly router: Router,
 		private readonly mensaService: MensaService,
 		private readonly authService: AuthService
 	) {}
@@ -53,24 +52,6 @@ export class HomeScreenComponent implements OnInit {
 
 	public isServiceUser(): boolean {
 		return this.authService.isServiceUser();
-	}
-
-	public signoutFormSubmit(mensa: Mensa): void {
-		this.router.navigate(['/signout', mensa.id]);
-	}
-
-	public shouldShowCancelledBlock(mensa: Mensa): boolean {
-		return (
-			mensa.maxUsers <= 0 && (!this.isLoggedIn() || !this.isServiceUser())
-		);
-	}
-
-	public shouldShowSignOutForm(mensa: Mensa): boolean {
-		return this.authService.isLoggedIn();
-	}
-
-	public shouldShowSignUpBlock(mensaDto: MensaDto): boolean {
-		return mensaDto.mensa.maxUsers > mensaDto.enrollments;
 	}
 
 	public getPage(navigate: TableNavigate): void {

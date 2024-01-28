@@ -2,19 +2,15 @@ tr.cancelled {
     color: #ccc;
 }
 
-.menu-toggle {
-    display: none;
-
-    h4 {
-        margin-bottom: 0;
-    }
-}
-
 .card-footer {
     a {
         cursor: pointer;
         text-decoration: none;
     }
+}
+
+.admin-button {
+    margin-top: 10px !important;
 }
 
 @media (max-width: 767px) {

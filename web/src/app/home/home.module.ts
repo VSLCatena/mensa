@@ -6,9 +6,10 @@ import { MensaService } from '../common/services/mensa/mensa.service';
 import { AuthService } from '../common/services/auth/auth.service';
 import { MenuCollapseComponent } from './menu-collapse/menu-collapse.component';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { MensaButtonComponent } from './mensa-button/mensa-button.component';
 
 @NgModule({
-	declarations: [HomeScreenComponent, MenuCollapseComponent],
+	declarations: [HomeScreenComponent, MenuCollapseComponent, MensaButtonComponent],
 	imports: [HomeRoutingModule, CommonModule, CollapseModule.forRoot()],
 	providers: [MensaService, AuthService]
 })

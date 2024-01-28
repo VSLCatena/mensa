@@ -63,33 +63,8 @@
                         </td>
                         <td>
                             <div class="btn-group-vertical">
-                                <ng-container *ngIf="shouldShowCancelledBlock(mensaDto.mensa); else signInOrClosedBlock">
-                                    <span class="btn btn-primary disabled">Geannuleerd</span>
-                                </ng-container>
-
-                                <ng-template #signInOrClosedBlock>
-                                    <ng-container *ngIf="shouldShowSignOutForm(mensaDto.mensa); else notSignedUpBlock">
-                                        <form method="POST" class="btn-group-vertical" (ngSubmit)="signoutFormSubmit(mensaDto.mensa)" >
-                                            <input type="submit" class="btn btn-danger" [class.disabled]="mensaDto.mensa.closed" value="Uitschrijven" [disabled]="mensaDto.mensa.closed" />
-                                            <input type="hidden" name="id" [value]="mensaDto.mensa.id" />
-                                        </form>
-                                    </ng-container>
-
-                                    <ng-template #notSignedUpBlock>
-                                        <ng-container *ngIf="shouldShowSignUpBlock(mensaDto); else closedBlock">
-                                            <a [routerLink]="['/signin', mensaDto.mensa.id, '']" class="btn btn-primary">Inschrijven</a>
-                                        </ng-container>
-
-                                        <ng-template #closedBlock>
-                                            <span class="btn btn-primary disabled">Gesloten</span>
-                                        </ng-template>
-                                    </ng-template>
-                                </ng-template>
-
-                                <ng-template #notSignedUpBlock>
-                                    <a [routerLink]="['/mensa-details', mensaDto.mensa.id, '']" class="btn btn-primary">Bekijken</a>
-                                </ng-template>
-
+                                <app-mensa-button [mensa]="mensaDto.mensa" [enrollments]="mensaDto.enrollments"></app-mensa-button>
+                                <a *ngIf="isServiceUser()" [routerLink]="['/mensa-details', mensaDto.mensa.id, '']" class="btn btn-info admin-button">Bekijken</a>
                             </div>
                         </td>
                         </tr>
