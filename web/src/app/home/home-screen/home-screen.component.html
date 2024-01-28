@@ -29,16 +29,8 @@
                       <td>{{mensaDto.mensa.date | date:'EEEE d MMM HH:mm'}}</td>
                       <td>
                           {{mensaDto.mensa.title}}
-                          <ng-container *ngIf="mensaDto.menuItems.length <= 0">
-                              <small class="menu-toggler text-nowrap"><a href="#">(Klik voor het menu)</a></small>
-                              <div class="menu-toggle">
-                                  <h4>Menu:</h4>
-                                  <ul>
-                                      <li *ngFor="let menuItem of getMenuItems(mensaDto.menuItems)">
-                                          {{menuItem.text}}
-                                      </li>
-                                  </ul>
-                              </div>
+                          <ng-container *ngIf="mensaDto.menuItems.length > 0">
+                            <app-menu-collapse class="ms-1" [menuItems]="getMenuItems(mensaDto.menuItems)"></app-menu-collapse>
                           </ng-container>
                           <ng-container *ngFor="let option of mensaDto.extraOptions">
                               <div>

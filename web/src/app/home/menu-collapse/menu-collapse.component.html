@@ -1,1 +1,15 @@
-<p>menu-collapse works!</p>
+
+<a type="button" class="btn btn-info collapse-btn" (click)="isCollapsed = !isCollapsed"
+    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseBasic">
+    <span>Toon menu</span>
+</a>
+
+<div id="collapseBasic" [collapse]="isCollapsed" [isAnimated]="true" class="collapse-menu">
+    <hr>
+    <ul>
+        <li *ngFor="let menuItem of menuItems">
+            {{menuItem.text}}
+        </li>
+    </ul>
+    <hr>
+</div>

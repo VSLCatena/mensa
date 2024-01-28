@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { MenuItem } from 'src/app/common/models/menu-item.model';
 
 @Component({
   selector: 'app-menu-collapse',
@@ -6,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './menu-collapse.component.scss'
 })
 export class MenuCollapseComponent {
-
+  @Input() isCollapsed = true;
+  @Input({ required: true }) menuItems: MenuItem[] = [];
 }
