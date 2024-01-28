@@ -4,9 +4,10 @@ import { HomeRoutingModule } from './home-routing.module';
 import { HomeScreenComponent } from './home-screen/home-screen.component';
 import { MensaService } from '../common/services/mensa/mensa.service';
 import { AuthService } from '../common/services/auth/auth.service';
+import { MenuCollapseComponent } from './menu-collapse/menu-collapse.component';
 
 @NgModule({
-	declarations: [HomeScreenComponent],
+	declarations: [HomeScreenComponent, MenuCollapseComponent],
 	imports: [HomeRoutingModule, CommonModule],
 	providers: [MensaService, AuthService]
 })
