@@ -31,7 +31,8 @@ export class MensaService {
 				date: {
 					[Op.between]: [currentWeek, nextWeek]
 				}
-			}
+			},
+			order: [['date', 'ASC']]
 		});
 
 		return await this.createMensaDto(mensae);
