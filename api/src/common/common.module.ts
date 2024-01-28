@@ -7,6 +7,7 @@ import { MensaUserExtraOptionRepository } from './repositories/mensa-user-extra-
 import { MensaExtraOptionRepository } from './repositories/mensa-extra-option.repository';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { models } from 'src/database/models.database';
+import { FaqRepository } from './repositories/faq.repository';
 
 const repositories = [
 	MensaExtraOptionRepository,
@@ -14,7 +15,8 @@ const repositories = [
 	MensaUserRepository,
 	MensaRepository,
 	MenuItemRepository,
-	UserRepository
+	UserRepository,
+	FaqRepository
 ];
 
 @Module({
