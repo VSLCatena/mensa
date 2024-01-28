@@ -16,10 +16,11 @@ import { AuthService } from 'src/app/common/services/auth/auth.service';
 export class HomeScreenComponent implements OnInit {
 	private calledPages: number[] = [0];
 	public page: number = 0;
-	public mensaeDtoList: { [page: string]: MensaDto[] } = {};
+	public mensaeDtoList: { [page: string]: MensaDto[] } = {"0": []};
 
 	public tableNavigate = TableNavigate;
 	public dayOfWeek = DayOfWeek;
+	isLoading: boolean = true;
 
 	constructor(
 		private readonly router: Router,
@@ -30,6 +31,7 @@ export class HomeScreenComponent implements OnInit {
 	ngOnInit(): void {
 		this.mensaService.getMensae().subscribe(mensaeDto => {
 			this.mensaeDtoList[this.page.toString()] = mensaeDto;
+			this.isLoading = false;
 		});
 	}
 
