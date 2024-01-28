@@ -13,4 +13,8 @@ export class NavbarComponent {
 	public username: string = 'fgdfg ';
 
 	constructor(private readonly authService: AuthService) {}
+
+	logout(): void {
+		this.authService.logout();
+	}
 }
