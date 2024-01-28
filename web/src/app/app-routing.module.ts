@@ -11,6 +11,11 @@ const routes: Routes = [
 		path: 'mensa',
 		loadChildren: () =>
 			import('./modules/mensa/mensa.module').then(m => m.MensaModule)
+	},
+	{
+		path: 'faq',
+		loadChildren: () =>
+			import('./modules/faq/faq.module').then(m => m.FaqModule)
 	}
 ];
 

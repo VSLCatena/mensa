@@ -8,6 +8,7 @@ import { HomeModule } from './modules/home/home.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
 import { MensaModule } from './modules/mensa/mensa.module';
+import { FaqModule } from './modules/faq/faq.module';
 
 @NgModule({
 	declarations: [AppComponent, NavbarComponent],
@@ -17,7 +18,8 @@ import { MensaModule } from './modules/mensa/mensa.module';
 		AppRoutingModule,
 		HttpClientModule,
 		HomeModule,
-		MensaModule
+		MensaModule,
+		FaqModule
 	],
 	providers: [],
 	bootstrap: [AppComponent]

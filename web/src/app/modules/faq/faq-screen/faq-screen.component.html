@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">FAQ - Frequently Asked Questions</div>
+                <div class="card-body">
+                    <div *ngIf="isLoading" class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <ng-container *ngFor="let faq of faqs">
+                        <div class="faq-item">
+                            <strong>{{ faq.question }}</strong>
+                            <p>{{ faq.answer }}</p>
+                        </div>
+                    </ng-container>
+                    <span *ngIf="faqs.length === 0">Er zijn geen Frequent Asked Questions beschikbaar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
