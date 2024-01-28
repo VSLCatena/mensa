@@ -13,6 +13,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Mensa } from './mensa.model';
+import { IsBoolean } from 'class-validator';
 
 @Table({
 	paranoid: true

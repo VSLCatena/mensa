@@ -11,6 +11,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from './user.model';
 import { Mensa } from './mensa.model';
+import { IsString, MinLength, MaxLength } from 'class-validator';
 
 @Table
 export class Log extends Model<Log> {
@@ -33,6 +34,8 @@ export class Log extends Model<Log> {
 	@Column({ type: DataType.STRING(191) })
 	membershipNumber?: string;
 
+	@IsString()
+	@MaxLength(191, { message: 'The description can be at most 191 characters long' })
 	@Column({ type: DataType.STRING(191), allowNull: false })
 	description: string;
 

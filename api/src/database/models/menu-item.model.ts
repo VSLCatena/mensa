@@ -9,6 +9,7 @@ import {
 	DataType
 } from 'sequelize-typescript';
 import { Mensa } from './mensa.model';
+import { Min, Max, IsInt } from 'class-validator';
 
 @Table
 export class MenuItem extends Model<MenuItem> {
@@ -27,9 +28,13 @@ export class MenuItem extends Model<MenuItem> {
 	@BelongsTo(() => Mensa)
 	mensa: Mensa;
 
+	@IsInt()
+	@Min(0)
+	@Max(10)
 	@Column({ type: DataType.SMALLINT, allowNull: false })
 	order: number;
 
 	@Column({ type: DataType.STRING(191), allowNull: false })
 	text: string;
 }
+
