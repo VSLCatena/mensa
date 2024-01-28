@@ -40,6 +40,8 @@ module.exports = {
       generateMensae(1, 'Pastadag', today),
       generateMensae(2, 'Pizzadag', new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000)), // 2 days from now
       generateMensae(3, 'Soepdag', new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000)), // 2 days ago
+      generateMensae(4, 'Mensa dag', new Date(today.getTime() - 10 * 24 * 60 * 60 * 1000)), // 10 days ago
+      generateMensae(5, 'Wijn mensa', new Date(today.getTime() + 10 * 24 * 60 * 60 * 1000)), // 10 days from now
     ], {});
   },
 
