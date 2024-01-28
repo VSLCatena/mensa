@@ -107,3 +107,15 @@ The structure of a module looks like this:
  - mymodule.module.ts
 
 To use the injectable services from the common module (like the **repositories**) you need to add the **CommonModule** to the imports of the module.
+
+## Validation
+Validation is done with the class-validator package, this is a package that allows you to validate objects.
+See the documentation for more information here: https://www.npmjs.com/package/class-validator
+
+The validation properties is used on the models see the DTO's and models in the database.
+
+### Use validation
+If you're controller needs to validate a request be sure to add this above the function:
+```typescript
+@UsePipes(new ValidationPipe())
+```
