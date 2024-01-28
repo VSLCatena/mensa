@@ -12,5 +12,49 @@ Environment variables can be found in the **src/environments** directory.
 
 The root html file is **src/app/app.component.html**. The <router-outlet></router-outlet> output the correct screen component based on the current route.
 
-## Structure
+### Screens / Webpages
+The main screens of routes are defined with the -screen suffix. For example: **src/app/modules/home/home-screen.component.ts**.
 
+### Modules
+The web application is built with modules, this is a way of structuring the code.
+A module is placed inside the **src/app/modules** directory, and can be created by running the following command: ```ng generate module modules/mymodulename```.
+
+### Components
+Modules can contain components, these are small parts of the screen that can be reused.
+A component contains 4 files:
+ - .component.ts
+ - .component.html
+ - .component.scss
+ - .component.spec.ts
+
+The .component.ts file contains the logic of the component, the .component.html file contains the html of the component, the .component.scss contains the styling of the component and the .component.spec.ts contains the tests for the component.
+
+### Routes
+All the global routes are defined in the **src/app/app-routing.module.ts** file.
+Then in the routing.module of the modules are the specific routes defined.
+
+The app-routing.module only knows what main route goes to what module.
+
+### Common
+The common directory contains all the shared code between modules.
+Here you put code that is or can be used in multiple modules, if it is only used in one module you put it in the module directory.
+It contains (and maybe more in the future):
+ - Components
+ - Pipes
+ - Services
+ - Helpers
+ - Types
+ - Models
+
+## Documentation
+Angular documentation can be found here: https://angular.io/docs
+
+### Bootstrap components
+For bootstrap components for angular the project uses ngx-bootstrap.
+Documentation can be found here: https://valor-software.com/ngx-bootstrap/#/
+
+Be sure to update the module imports you try to use a component.
+
+### Styling
+Each component has its own styling file, this is to keep the styling of the components separated.
+Global styling can be found in the **src/styles.scss** file, which also includes the bootstrap styling.
