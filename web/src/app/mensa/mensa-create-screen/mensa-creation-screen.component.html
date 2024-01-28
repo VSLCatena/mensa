@@ -17,8 +17,6 @@
                 <input id="title" type="text" class="form-control" formControlName="title" placeholder="Titel" required autofocus [ngClass]="{
 						'invalid-input': error.isError && !isValid('title')
 					}">
-                <div class="form-text">Prefix je titel met r| of m| voor de label <span class="badge bg-primary">r| Reservering</span> of <span class="badge bg-success">m| Mensa</span></div>
-                <div class="form-text">Bijvoorbeeld: "m|Mensa met betaalde afwas"</div>
             </div>
             <div class="mb-3">
                 <label for="date">Datum</label>

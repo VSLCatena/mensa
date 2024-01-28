@@ -49,8 +49,7 @@ export class MensaCreationScreenComponent {
 			title: new FormControl('', [
 				Validators.required,
 				Validators.minLength(3),
-				Validators.maxLength(190),
-				Validators.pattern(/^(m\||p\|)(.*)$/)
+				Validators.maxLength(190)
 			]),
 			date: new FormControl(this.setDateAndTime(new Date(), 18, 30), [Validators.required, fullDateValidator]),
 			closingTime: new FormControl(this.setDateAndTime(new Date(), 15, 0), [Validators.required, fullDateValidator]),
