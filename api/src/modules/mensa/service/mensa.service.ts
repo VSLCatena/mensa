@@ -22,6 +22,7 @@ export class MensaService {
 	) {}
 
 	async findAll(page: number): Promise<MensaDto[]> {
+		page = page < 0 ? page - 1 : page;
 		const currentWeek = getWeekDate(DayOfWeek.Monday, page);
 		let nextWeekPage = page === 0 ? page + 2 : page + 1;
 		const nextWeek = getWeekDate(DayOfWeek.Monday, nextWeekPage);

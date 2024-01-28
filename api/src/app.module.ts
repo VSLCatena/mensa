@@ -22,7 +22,8 @@ import { models } from './database/models.database';
 			synchronize: Boolean(process.env.DEV_ENVIRONMENT).valueOf(), // Only synchronise when in dev environment
 			define: {
 				underscored: true
-			}
+			},
+			logging: false
 		}),
 		SequelizeModule.forFeature(models),
 		MensaModule,
