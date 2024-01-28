@@ -35,7 +35,7 @@ export class HomeScreenComponent implements OnInit {
 		});
 	}
 
-	public getDateForPage(day: DayOfWeek, page: number): Date {
+	public getDateForPage(page: number, day: DayOfWeek): Date {
 		const today = new Date();
 		const distance = day - today.getDay() + 7 * page;
 		today.setDate(today.getDate() + distance);

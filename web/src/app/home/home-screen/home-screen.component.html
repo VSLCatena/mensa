@@ -7,7 +7,7 @@
             Mensae in de komende 2 weken
           </ng-container>
           <ng-template #dateRange>
-            Mensae tussen {{ getDateForPage(page * 2, dayOfWeek.Monday) | date:'EEEE d MMM HH:mm' }} en {{ getDateForPage((page * 2) + 2, dayOfWeek.Sunday) | date:'EEEE d MMM HH:mm'}}
+            Mensae tussen {{ getDateForPage((page * 2), dayOfWeek.Monday) | date:'EEEE d MMM' }} en {{ getDateForPage((page * 2) + 2, dayOfWeek.Sunday) | date:'EEEE d MMM'}}
           </ng-template>
         </div>
 
