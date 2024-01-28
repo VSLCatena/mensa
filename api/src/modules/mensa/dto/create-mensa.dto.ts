@@ -22,7 +22,7 @@ export class CreateMensaDto {
 	@Type(() => String)
 	@IsString()
 	@Matches(/^\d+(\.\d{1,2})?$/)
-    price: string;
+    price: number;
 
     @IsArray()
     @ValidateNested({ each: true })
@@ -40,7 +40,7 @@ export class CreateMensaDto {
 		mensa.date = this.date;
 		mensa.closingTime = this.closingTime;
 		mensa.maxUsers = this.maxUsers;
-		mensa.price = parseFloat(this.price);
+		mensa.price = this.price;
 		return mensa;
 	}
 }
