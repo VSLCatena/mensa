@@ -4,10 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeModule } from './home/home.module';
+import { HomeModule } from './modules/home/home.module';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
-import { MensaModule } from './mensa/mensa.module';
+import { MensaModule } from './modules/mensa/mensa.module';
 
 @NgModule({
 	declarations: [AppComponent, NavbarComponent],
