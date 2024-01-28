@@ -4,8 +4,7 @@ import {
 	IsInt,
 	IsArray,
 	ValidateNested,
-	Matches,
-	IsNumber
+	Matches
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { MensaExtraOption } from 'src/database/models/mensa-extra-option.model';
