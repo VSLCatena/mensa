@@ -9,9 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
 import { MensaModule } from './modules/mensa/mensa.module';
 import { FaqModule } from './modules/faq/faq.module';
+import { MensaOverviewScreenComponent } from './modules/mensa/mensa-overview-screen/mensa-overview-screen.component';
 
 @NgModule({
-	declarations: [AppComponent, NavbarComponent],
+	declarations: [AppComponent, NavbarComponent, MensaOverviewScreenComponent],
 	imports: [
 		BrowserModule,
 		BrowserAnimationsModule,
