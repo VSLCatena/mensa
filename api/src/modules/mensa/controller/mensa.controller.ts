@@ -7,12 +7,14 @@ import {
 	Body,
 	UsePipes,
 	ValidationPipe,
-	UseFilters
+	UseFilters,
+	Param
 } from '@nestjs/common';
-import { ApiBody, ApiQuery, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiQuery, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { MensaService } from '../service/mensa.service';
 import { MensaDto } from '../dto/mensa.dto';
 import { CreateMensaDto } from '../dto/create-mensa.dto';
+import { Mensa } from 'src/database/models/mensa.model';
 
 @Controller('mensa')
 export class MensaController {
@@ -38,5 +40,13 @@ export class MensaController {
 	): Promise<{ message: string }> {
 		await this.mensaService.saveMensaDto(createMensa);
 		return { message: 'Data received successfully!' };
+	}
+
+	@Get()
+	@ApiOperation({ summary: 'Gets mensa by id' })
+	@ApiParam({ name: 'id', type: Number, required: true })
+	@ApiResponse({ status: 200, type: MensaDto })
+	async findById(@Param('id') id: number): Promise<Mensa> {
+		return await this.mensaService.findById(id);
 	}
 }

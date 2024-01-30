@@ -39,6 +39,10 @@ export class MensaService {
 		return await this.createMensaDto(mensae);
 	}
 
+	async findById(id: number): Promise<Mensa> {
+		return await this.mensaRepository.findById(id)
+	}
+
 	private async createMensaDto(mensae: Mensa[]) {
 		const mensaDtoList: MensaDto[] = [];
 		for (const mensa of mensae) {
