@@ -42,11 +42,11 @@ export class MensaController {
 		return { message: 'Data received successfully!' };
 	}
 
-	@Get()
+	@Get(':id')
 	@ApiOperation({ summary: 'Gets mensa by id' })
 	@ApiParam({ name: 'id', type: Number, required: true })
-	@ApiResponse({ status: 200, type: MensaDto })
-	async findById(@Param('id') id: number): Promise<Mensa> {
+	@ApiResponse({ status: 200, type: Mensa })
+	async findById(@Param('id', ParseIntPipe) id: number): Promise<Mensa> {
 		return await this.mensaService.findById(id);
 	}
 }
