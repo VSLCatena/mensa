@@ -23,6 +23,10 @@ This will start up all the needed services for the project.
  - API -> http://localhost:3000
  - Database -> http://localhost:3306 (Need to use a database client to connect to it)
 
+#### Seeding the database
+To populate the database with some initial data, you can run the following command:
+```npm run seed```, inside the **api** directory.
+
 ## Techstack
 This section will provide a brief overview of the techstack used within the project.
  - Web -> Angular (V17)
