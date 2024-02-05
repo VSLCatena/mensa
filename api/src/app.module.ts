@@ -5,6 +5,7 @@ import { MensaModule } from './modules/mensa/mensa.module';
 import { CommonModule } from './common/common.module';
 import { models } from './database/models.database';
 import { FaqModule } from './modules/faq/faq.module';
+import { MensaUserModule } from './modules/mensa-user/mensa-user.module';
 
 @Module({
 	imports: [
@@ -29,7 +30,8 @@ import { FaqModule } from './modules/faq/faq.module';
 		SequelizeModule.forFeature(models),
 		MensaModule,
 		CommonModule,
-		FaqModule
+		FaqModule,
+		MensaUserModule
 	]
 })
 export class AppModule {}
