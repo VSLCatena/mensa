@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { BaseService } from '../base.service';
 import { Observable } from 'rxjs';
 import { CreateMensaDto } from '../../models/dto/create-mensa.dto';
+import { Mensa } from '../../models/mensa.model';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,5 +16,9 @@ export class MensaService extends BaseService {
 
 	createMensa(mensa: CreateMensaDto): Observable<void> {
 		return this.post<void>(`${environment.apiUrl}/mensa`, mensa);
+	}
+
+	getMensa(id: number): Observable<Mensa> {
+		return this.get<Mensa>(`${environment.apiUrl}/mensa/${id}`);
 	}
 }
