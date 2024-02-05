@@ -64,7 +64,7 @@
                         <td>
                             <div class="btn-group-vertical">
                                 <app-mensa-button [mensa]="mensaDto.mensa" [enrollments]="mensaDto.enrollments"></app-mensa-button>
-                                <a *ngIf="isServiceUser()" [routerLink]="['/mensa-details', mensaDto.mensa.id, '']" class="btn btn-info admin-button">Bekijken</a>
+                                <a *ngIf="isServiceUser()" [routerLink]="['/mensa', mensaDto.mensa.id]" class="btn btn-info admin-button">Bekijken</a>
                             </div>
                         </td>
                         </tr>
