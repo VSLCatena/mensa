@@ -1,0 +1,53 @@
+name: Docker
+
+on:
+  push:
+    # Publish `main` as Docker `latest` image.
+    tags: [ 'v*.*.*' ]
+  workflow_dispatch:
+
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy .env
+        run: |
+           if [[ ! -f '.env' ]];then
+               cp '.env.example' '.env'
+           fi
+      - name: Install Dependencies
+        run: composer require laravel/sail -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+    
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      # Build and push Docker image
+      - name: Build image
+        run: docker compose build
+
+      - name: Push image
+        run: docker compose push
+
