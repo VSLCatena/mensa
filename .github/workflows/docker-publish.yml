@@ -30,7 +30,9 @@ jobs:
                cp '.env.example' '.env'
            fi
       - name: Install Dependencies
-        run: composer require laravel/sail -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+        run: |
+           composer update --lock
+           composer require laravel/sail -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     
 
       # Login against a Docker registry except on PR
