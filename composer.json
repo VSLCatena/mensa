@@ -24,7 +24,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.8.1",
-        "filp/whoops": "^2.15.2"    
+        "filp/whoops": "^2.15.2",
         "fakerphp/faker": "^1.23",
         "mockery/mockery": "^1.6.2",
         "laravel/pint": "^1.10.3",
