@@ -8,9 +8,10 @@ import { AlertComponent } from '../../common/components/alert/alert.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { MensaOverviewScreenComponent } from './mensa-overview-screen/mensa-overview-screen.component';
 import { MensaSummaryComponent } from './mensa-overview-screen/mensa-summary/mensa-summary.component';
+import { MensaRegisterScreenComponent } from './mensa-register-screen/mensa-register-screen.component';
 
 @NgModule({
-	declarations: [MensaCreationScreenComponent, KeysPipe, AlertComponent, MensaOverviewScreenComponent, MensaSummaryComponent],
+	declarations: [MensaCreationScreenComponent, KeysPipe, AlertComponent, MensaOverviewScreenComponent, MensaSummaryComponent, MensaRegisterScreenComponent],
 	imports: [
 		MensaRoutingModule,
 		CommonModule,
