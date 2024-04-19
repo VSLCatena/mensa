@@ -1,1 +1,71 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+            Inschrijven voor de mensa op woensdag 10-04-1999 18:30
+        </div>
+        <app-alert [isVisible]="error.isError" [alertType]="'danger'" [iconClass]="'bi bi-exclamation-triangle-fill'">
+          {{ error.message }}
+        </app-alert>
+        <app-alert [isVisible]="isSuccess" [alertType]="'success'" [iconClass]="'bi bi-check-lg'">
+          Succesvol ingeschreven!
+        </app-alert>
+        <div class="card-body">
+          <form [formGroup]="mensaRegisterForm" (ngSubmit)="onSubmit()" class="ng-pristine ng-valid">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" type="text" class="form-control" formControlName="email" placeholder="Email" required autofocus [ngClass]="{
+						'invalid-input': error.isError && !isValid('email')
+					}">
+            </div>
 
+            <div class="form-check">
+                <input class="form-check-input" formControlName="isVegetarian" type="checkbox" value="" id="isVegetarian">
+                <label class="form-check-label" for="isVegetarian">
+                    Vegetarisch
+                </label>
+            </div>
+
+            <div class="mb-3">
+                <label for="allergies" class="form-label">Allergieën</label>
+                <input id="allergies" type="text" class="form-control" formControlName="allergies" placeholder="Allergieën" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="extraInfo" class="form-label">Extra informatie</label>
+                <input id="extraInfo" type="text" class="form-control" formControlName="extraInfo" placeholder="Extra informatie" required>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" formControlName="withIntro" type="checkbox" value="" id="withIntro">
+                <label class="form-check-label" for="withIntro">
+                    Met 1 intro
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" formControlName="volunteerDishwasher" type="checkbox" value="" id="volunteerDishwasher">
+                <label class="form-check-label" for="volunteerDishwasher">
+                    Vrijwillig afwassen
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" formControlName="volunteerCook" type="checkbox" value="" id="volunteerCook">
+                <label class="form-check-label" for="volunteerCook">
+                    Koker
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                </span>
+                Inschrijven
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
