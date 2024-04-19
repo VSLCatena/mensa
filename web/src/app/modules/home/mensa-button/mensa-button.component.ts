@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Mensa } from 'src/app/common/models/mensa.model';
 import { AuthService } from 'src/app/common/services/auth/auth.service';
 
@@ -19,7 +20,10 @@ export class MensaButtonComponent implements OnInit {
 		| 'Vol' = 'Inschrijven';
 	isDisabled: boolean = true;
 
-	constructor(private authService: AuthService) {}
+	constructor(
+		private authService: AuthService,
+		private router: Router
+	) {}
 
 	ngOnInit(): void {
 		if (this.mensa.maxUsers <= 0) {
@@ -55,11 +59,11 @@ export class MensaButtonComponent implements OnInit {
 		return this.mensa.maxUsers === this.enrollments;
 	}
 
-	buttonClick(): void {
+	onButtonClick(): void {
 		if (this.buttonState === 'Inschrijven') {
-			// TODO Inschrijven mensa
+			this.router.navigate(['register', this.mensa.id]);
 		} else if (this.buttonState === 'Uitschrijven') {
-			// TODO Uitschrijven mensa
+			// TODO Uitschrijven mensa en een alert?
 		}
 	}
 }
