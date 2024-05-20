@@ -55,7 +55,7 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=edge
-            type=ref
+            type=ref,event=workflow_dispatch
             type=semver,pattern={{raw}}
             type=raw,value={{date 'YYYYMMDD-hhmmss' tz='Europe/Amsterdam'}}
             type=sha
