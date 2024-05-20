@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Copy .env
         run: |
            if [[ ! -f '.env' ]];then
@@ -61,8 +63,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context:  ${GITHUB_WORKSPACE}/vendor/laravel/sail/runtimes/${SAIL_VERSION:-8.1}/Dockerfile
-          build-args: WWWGROUP=${WWWGROUP:-1000}
+          context:  ${{ GITHUB_WORKSPACE }}/vendor/laravel/sail/runtimes/${{ SAIL_VERSION }}/Dockerfile
+          build-args: WWWGROUP=${{ WWWGROUP }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
