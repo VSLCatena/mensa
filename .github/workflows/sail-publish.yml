@@ -5,15 +5,11 @@ on:
 
 
 env:
-  # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Run tests.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  test:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -26,6 +22,12 @@ jobs:
            if [[ ! -f '.env' ]];then
                cp '.env.example' '.env'
            fi
+              
+      - name: Dotenv Action           
+        uses: falti/dotenv-action@v1
+        with: 
+          export-variables: true
+
       - name: Install Dependencies
         run: |
            composer update --lock
@@ -43,6 +45,7 @@ jobs:
 
       - name: build image based on docker-compose.yml
         run: docker compose build mensa.php
+   
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -62,7 +65,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./vendor/laravel/sail/runtimes/${SAIL_VERSION:-8.1}/Dockerfile
+          build-args: WWWGROUP=${WWWGROUP:-1000}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max          
