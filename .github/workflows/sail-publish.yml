@@ -29,6 +29,7 @@ jobs:
         uses: falti/dotenv-action@v1
         with: 
           export-variables: true
+          keys-case: upper
 
       - name: Install Dependencies
         run: |
@@ -63,7 +64,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context:  ${{ github.workspace }}/vendor/laravel/sail/runtimes/${{  env.sail_version }}
+          context:  ${{ github.workspace }}/vendor/laravel/sail/runtimes/${{  env.SAIL_VERSION }}
           build-args: WWWGROUP=${{ env.WWWGROUP }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
