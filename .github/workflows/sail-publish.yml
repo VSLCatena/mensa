@@ -63,7 +63,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context:  ${{ github.workspace }}/vendor/laravel/sail/runtimes/${{  env.SAIL_VERSION }}/Dockerfile
+          context:  ${{ github.workspace }}/vendor/laravel/sail/runtimes/${{  env.sail_version }}/Dockerfile
           build-args: WWWGROUP=${{ env.WWWGROUP }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
