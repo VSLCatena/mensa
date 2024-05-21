@@ -2,7 +2,7 @@ FROM composer:latest as build
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
 
-FROM php:8.3-apache as production
+FROM php:8.2-apache as production
 
 ENV APP_ENV=production
 ENV APP_DEBUG=false
