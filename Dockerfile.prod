@@ -1,14 +1,21 @@
 FROM composer:latest as build
 COPY . /app/
-RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction --ignore-platform-req=ext-ldap
 
 FROM php:8.2-apache as production
 
 ENV APP_ENV=production
 ENV APP_DEBUG=false
 
+RUN apt-get update && \
+    apt-get install -y \ 
+    libldap2-dev \ 
+    libldb-dev && \
+    ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so && \
+    ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so
+
 RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql
+    docker-php-ext-install pdo pdo_mysql ldap
 COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
