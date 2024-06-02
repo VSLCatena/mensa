@@ -1,5 +1,23 @@
 # For more information: https://laravel.com/
 services:
+    mensa.php.prod:
+        container_name: mensa.php.prod
+        pull_policy: missing
+        image: ghcr.io/vslcatena/mensa:prod
+        extra_hosts:
+            - 'host.docker.internal:host-gateway'
+        ports:
+            - '${APP_PORT:-80}:80'
+        env_file:
+            - .env
+        networks:
+            - net
+        depends_on:
+            - mensa.db
+        profiles:
+          - prod
+
+
     mensa.php:
         container_name: mensa.php
         pull_policy: missing
@@ -11,6 +29,8 @@ services:
         image: ghcr.io/vslcatena/mensa:sail-${SAIL_VERSION:-8.1}-app
         extra_hosts:
             - 'host.docker.internal:host-gateway'
+        profiles:
+          - dev
         ports:
             - '${APP_PORT:-80}:80'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
@@ -25,6 +45,13 @@ services:
             - net
         depends_on:
             - mensa.db
+
+
+
+
+
+
+
     mensa.db:
         hostname: db
         container_name: mensa.db
