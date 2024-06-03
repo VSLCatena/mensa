@@ -1,2 +1,6 @@
 .git
-.env
+.env*
+bootstrap/cache/*
+storage/framework/cache/data/*
+storage/logs/*
+vendor/
