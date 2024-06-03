@@ -50,10 +50,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=raw,priority=1001,value=prod
-            type=semver,pattern={{raw}}
-            type=raw,value={{date 'YYYYMMDD-hhmmss' tz='Europe/Amsterdam'}}
-            type=sha
+            type=semver,pattern=prod-{{raw}}
+            type=raw,value=prod-{{date 'YYYYMMDD-hhmmss' tz='Europe/Amsterdam'}}
+            type=raw,value=prod-{{branch}}-{{sha}}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
