@@ -21,10 +21,19 @@ COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY --from=build /app /var/www/html
 COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN chmod 777 -R /var/www/html/storage/ && \
+VOLUME ["/var/www/html/conf.d"]
+
+RUN mkdir /var/www/html/conf.d && \
+    cp /var/www/html/.env.example /var/www/html/conf.d/.env && \
+    ln -s /var/www/html/conf.d/.env /var/www/html/.env && \
+    chmod 777 -R /var/www/html/storage/ && \
     chown -R www-data:www-data /var/www/ && \
     a2enmod rewrite
 
-CMD php artisan config:cache && \
+
+CMD if [ $(cat /var/www/html/conf.d/.env | grep -Po '(?<=APP_KEY=).*' | wc -c) -eq 0 ]; then \
+        php artisan key:generate; \
+    fi && \
+    php artisan config:cache && \
     php artisan route:cache && \
     apache2-foreground

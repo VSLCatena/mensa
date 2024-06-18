@@ -1,5 +1,6 @@
 .git
 .env*
+!.env.example
 bootstrap/cache/*
 storage/framework/cache/data/*
 storage/logs/*
