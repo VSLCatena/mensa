@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Adldap\Models\ModelNotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Models\Faq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -7,18 +7,20 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
-        "adldap2/adldap2-laravel": "^6.1.7",
         "barryvdh/laravel-ide-helper": "^2.15.1",
         "doctrine/dbal": "^3.8.4",
         "guzzlehttp/guzzle": "^7.8.1",
         "laravel/framework": "^10.48.12",
         "laravel/helpers": "^1.7",
         "laravel/sanctum": "^3.3.3",
+        "laravel/socialite": "^5.9",
+
         "laravel/tinker": "^2.9.0",
         "laravel/ui": "^4.5.2",
+        "microsoft/microsoft-graph": "^1.108",
         "nesbot/carbon": "^2.72.3",
-        "nunomaduro/collision": "^7.10",
+        "php": ">=8.2",
+        "socialiteproviders/microsoft-azure": "^5.1",
         "spatie/laravel-ignition": "^2.7"
     },
     "require-dev": {
@@ -31,6 +33,7 @@
         "nunomaduro/collision": "^7.10",
         "phpunit/phpunit": "^10.5.20",
         "spatie/laravel-ignition": "^2.7"
+
     },
     "autoload": {
         "classmap": [
