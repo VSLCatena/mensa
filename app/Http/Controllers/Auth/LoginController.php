@@ -38,8 +38,8 @@ class LoginController extends Controller
             } else {
             return Socialite::driver('azure')->with([
                 'prompt'        => 'select_account',
-                'whr'           =>'vslcatena.nl',
-                'domain_hint'   =>'vslcatena.nl'
+                'whr'           =>config('service.azure.tenant_domain'),
+                'domain_hint'   =>config('service.azure.tenant_domain')
                 ])->redirect(route('home'));
             }
         }
