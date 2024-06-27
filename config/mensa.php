@@ -40,12 +40,6 @@ return [
         'price' => env('MENSA_CONSUMPTIONS_PRICE'),
     ],
 
-    'ldap' => [
-        'admin_group' => env('MENSA_LDAP_ADMIN_GROUP'),
-        'allowed_group' => env('MENSA_LDAP_ALLOWED_GROUP'),
-        'user_base' => env('MENSA_LDAP_USER_BASEDN'),
-    ],
-
     'url' => [
         'forgot_password' => env('MENSA_URL_FORGOT_PASSWORD'),
     ],
