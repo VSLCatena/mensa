@@ -64,8 +64,7 @@ class LoginController extends Controller
         } catch (Exception $e) {
             return view('login', ['msg' => 'Something went wrong, contact '.config('mensa.contact.mail').' for more information']);
         }
-        
-        return redirect('/home');
+        return redirect(route('home'));
     }
 
     public function loginByToken($token){
