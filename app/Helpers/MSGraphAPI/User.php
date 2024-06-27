@@ -30,7 +30,7 @@ class User {
 
     public function __construct()
     {
-        $extension_app_id = Str::remove('-', env('AZURE_EXTENSION_APP_ID'));
+        $extension_app_id = Str::remove('-', config('service.azure.extension_app_id'));
         $this->employeeNumberProperty = 'extension_' . $extension_app_id . '_employeeNumber';
         $this->descriptionProperty = 'extension_' . $extension_app_id . '_description';
         $this->mailProperty = 'extension_' . $extension_app_id . '_mail';
@@ -115,7 +115,7 @@ class User {
             # This is the unique ID of the service principal object associated with this application. This ID can be useful when performing management operations against this application using PowerShell or other programmatic interfaces.    
             # https://graph.microsoft.com/v1.0/servicePrincipals/12345/appRoleAssignedTo            
             # https://graph.microsoft.com/v1.0/servicePrincipals/12345?$select=appRoles
-            $endpoint = '/servicePrincipals/' . env('AZURE_SERVICEPRINCIPAL_ID'); 
+            $endpoint = '/servicePrincipals/' . config('service.azure.serviceprincipal_id'); 
             $url = $endpoint . '?$select=appRoles';
 
             //prepare request
@@ -129,9 +129,9 @@ class User {
             foreach ($content['appRoles'] as $key => $val) {
                 if($val['isEnabled'] == 'true'){
                     switch($val['value']){
-                        case env('AZURE_ROLE_ADMIN_VALUE'):
+                        case config('service.azure.role.admin'):
                             $this->RoleAdminId = $val['id']; break;
-                        case env('AZURE_ROLE_USER_VALUE'):
+                        case config('service.azure.role.user'):
                             $this->RoleUserId = $val['id']; break;
                     }
                 }
@@ -159,7 +159,7 @@ class User {
 
             //loop over content
             foreach ($content['value'] as $key => $val) {
-                if($val['resourceId'] == env('AZURE_SERVICEPRINCIPAL_ID')) {
+                if($val['resourceId'] == config('service.azure.serviceprincipal_id')) {
                     switch($val['appRoleId']){
                         case $this->RoleUserId:
                             $this->isAdmin=False;break;
