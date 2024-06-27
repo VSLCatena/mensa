@@ -38,6 +38,19 @@ return [
          'client_secret' => env('AZURE_CLIENT_SECRET'),
          'redirect' => env('AZURE_REDIRECT_URI'),
          'tenant'  => env('AZURE_TENANT_ID'),
-         'proxy' => env('PROXY') // optionally];
-    ],
+         'proxy' => env('PROXY'),
+         'tenant_domain'  => env('AZURE_TENANT_DOMAIN'),
+         'serviceprincipal_id'  => env('AZURE_SERVICEPRINCIPAL_ID'),
+         'extension_app_id'  => env('AZURE_EXTENSION_APP_ID'),
+         'search_filter'  =>[
+             'group'  => [
+                 'commissies' => env('AZURE_SEARCH_FILTER_GROUP_COMMISSIES'),
+                 'leden' => env('AZURE_SEARCH_FILTER_GROUP_LEDEN')
+             ]
+         ],
+         'role' => [
+             'admin'  => env('AZURE_ROLE_ADMIN_VALUE'),
+             'user'  => env('AZURE_ROLE_USER_VALUE')
+         ]
+    ]
 ];
