@@ -9,7 +9,6 @@ use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
 use App\Models\User;
-use App\Traits\AzureHelpers;
 use App\Traits\Logger;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Mail;
 
 class SigninController extends Controller
 {
-    use AzureHelpers, Logger;
+    use Logger;
 
     public function mailSignin(Request $request, $userToken){
         try {

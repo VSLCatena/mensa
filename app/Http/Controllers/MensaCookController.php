@@ -7,7 +7,6 @@ use App\Mail\MensaPriceChanged;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MenuItem;
-use App\Traits\AzureHelpers;
 use App\Traits\Logger;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -17,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class MensaCookController extends Controller
 {
-    use AzureHelpers, Logger;
+    use Logger;
 
     public function __construct(){
         $this->middleware('auth');
