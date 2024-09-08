@@ -28,11 +28,11 @@ class CookieLoginListener
      */
     public function handle($event)
     {
-        // Grab the ldap info by description
+        // Grab the Azure info by description
         // We don't want a service user to login with a cookie so we block that
-         if(($event->remember || !$event->user->service_user) && !$this->getAzureUserBy('description', $event->user->lidnummer)){
+        // if(($event->remember || !$event->user->service_user) && !$this->getAzureUserBy('id', $event->user->id)){
             // If for some reason the user couldn't be found, we log out.
-            Auth::logout();
-        }
+          //  Auth::logout();
+        //}
     }
 }
