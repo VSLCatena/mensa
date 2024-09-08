@@ -7,6 +7,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use App\Helpers\MSGraphAPI\User as AzureUserInfo;
+use App\Helpers\MSGraphAPI\Application as AzureAppInfo;
+
 
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -48,9 +50,31 @@ class LoginController extends Controller
 
     public function callback() {
         $azureUser = Socialite::driver('azure')->user();
-        Try {
+        try {
             $azureUserInfo =  new AzureUserInfo;
             $azureUserInfo->GetUserInfo($azureUser->token);
+            /*
+            App\Helpers\MSGraphAPI\User Object
+            (
+                [id] => USER_GUID
+                [displayName] => FirstName LastName
+                [surname] => LastName
+                [givenName] => FirstName
+                [description] => xx-yyy
+                [userPrincipalName] => shortname@domain.nl
+                [email] => real_email
+                [onPremisesSamAccountName] => shortname
+                [employeeId] => 123123123
+                [employeeNumber] => xx-yyy
+                [isAdmin] => //to be determined
+                [isUser] =>  //to be determined
+            )
+            */      
+            $azureAppInfo = new AzureAppInfo;
+            $roles = $azureAppInfo->getAssignedRoles($azureUserInfo->id);
+            $azureUserInfo->isUser=$roles['isUser'];
+            $azureUserInfo->isAdmin=$roles['isAdmin'];
+            
             User::upsert(
                 [   'lidnummer' => $azureUserInfo->employeeNumber,
                     'email'     => $azureUserInfo->email,
