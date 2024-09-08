@@ -64,7 +64,8 @@ class SigninController extends Controller
         // If the user is a mensa admin, we allow him to sign someone else in with his lidnummer
         if($lidnummer != null && Auth::check() && Auth::user()->mensa_admin){
             try {
-                $user = $this->getAzureUserBy('description', $lidnummer);
+                $azureAppInfo = new azureAppInfo;
+                $user = $AzureAppInfo->getAzureUserBy('description', $lidnummer);
                 $request->session()->flash('extra_lidnummer', $lidnummer);
             } catch(ModelNotFoundException $e){
                 return redirect(route('home'))->with('error', 'Persoon niet gevonden!');
@@ -95,7 +96,8 @@ class SigninController extends Controller
             // If we already got POST data, we want to process some stuff
             // If we didn't provide a lidnummer but an email is provided, we want to check Azure
             if($lidnummer == null && $request->has('email')){
-                $user = $this->getAzureUserBy('email', $request->input('email'));
+                $azureAppInfo = new azureAppInfo;
+                $user = $azureAppInfo->getAzureUserBy('email', $request->input('email'));
                 // We check if the user can be found in Azure, and if not, we return back to the form with an error message
                 if($user == null){
                     $mensaUser->user()->associate(new User());
