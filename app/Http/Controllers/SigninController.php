@@ -188,7 +188,7 @@ class SigninController extends Controller
         // We check if the Mensa isn't closed yet
         if($mensa->closed || $mensa->isClosed() && !(Auth::check() && Auth::user()->mensa_admin)){
             $route = (Auth::check() && Auth::user()->mensa_admin) ?
-                route('mensa.signins', ['id' => $mensa->id]) :
+                route('mensa.signins', ['mensaId' => $mensa->id]) :
                 route('home');
             return redirect($route)->with('error', 'Deze mensa is al gesloten!');
         }
@@ -277,7 +277,7 @@ class SigninController extends Controller
         }
 
         $route = (Auth::check() && Auth::user()->mensa_admin) ?
-            route('mensa.signins', ['id' => $mensa->id]) :
+            route('mensa.signins', ['mensaId' => $mensa->id]) :
             route('home');
         return redirect($route);
     }

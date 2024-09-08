@@ -201,7 +201,7 @@ class MensaCookController extends Controller
                 if (isset($menu[$i]['id'])) {
                     $menuItem = MenuItem::find($menu[$i]['id']);
                     if ($mensa->id != $menuItem->mensa->id) {
-                        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
+                        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
                     }
                 } else {
                     $menuItem = new MenuItem();
