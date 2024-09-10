@@ -24,23 +24,23 @@ class Application {
         $this->allUserProperties = '$select=id,displayName,surname,givenName,userPrincipalName,mail,businessPhones,onPremisesSamAccountName,employeeId,' . $this->descriptionProperty . ',' . $this->employeeNumberProperty  . ',' . $this->mailProperty;
     }
 
-    public function getToken(){
+    public function getToken() {
         return $this->_token();
     }
-    
-    private function _token(){
-         # https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
-         $guzzle = new \GuzzleHttp\Client();
-         $url = 'https://login.microsoftonline.com/' . config('services.azure.tenant') . '/oauth2/v2.0/token';
-         $token = json_decode($guzzle->post($url, [
-             'form_params' => [
-                 'client_id' => config('services.azure.client_id'),
-                 'client_secret' => config('services.azure.client_secret'),
-                 'scope' => 'https://graph.microsoft.com/.default',
-                 'grant_type' => 'client_credentials',
-             ],
-         ])->getBody()->getContents());
-         return $token->access_token;
+
+    private function _token() {
+        # https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token
+        $guzzle = new \GuzzleHttp\Client();
+        $url = 'https://login.microsoftonline.com/' . config('services.azure.tenant') . '/oauth2/v2.0/token';
+        $token = json_decode($guzzle->post($url, [
+            'form_params' => [
+                'client_id' => config('services.azure.client_id'),
+                'client_secret' => config('services.azure.client_secret'),
+                'scope' => 'https://graph.microsoft.com/.default',
+                'grant_type' => 'client_credentials',
+            ],
+        ])->getBody()->getContents());
+        return $token->access_token;
     }
 
     public function getUsers($topN=null,$searchProperty=null,$searchValue=null,$checkAdmin=False) {
