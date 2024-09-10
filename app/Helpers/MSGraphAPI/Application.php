@@ -9,13 +9,19 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
 
 class Application {
-    protected $RoleAdminId;
-    protected $RoleUserId;
+
     protected $accessToken;
+    public $employeeNumberProperty;
+    public $descriptionProperty;
+    public $mailProperty;
+    private $allUserProperties;
 
-    public function __construct()
-    {
-
+    public function __construct() {
+        $extension_app_id = Str::remove('-', config('services.azure.extension_app_id'));
+        $this->employeeNumberProperty = 'extension_' . $extension_app_id . '_employeeNumber';
+        $this->descriptionProperty = 'extension_' . $extension_app_id . '_description';
+        $this->mailProperty = 'extension_' . $extension_app_id . '_mail';
+        $this->allUserProperties = '$select=id,displayName,surname,givenName,userPrincipalName,mail,businessPhones,onPremisesSamAccountName,employeeId,' . $this->descriptionProperty . ',' . $this->employeeNumberProperty  . ',' . $this->mailProperty;
     }
 
     public function getToken(){
