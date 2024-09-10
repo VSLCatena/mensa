@@ -326,23 +326,25 @@ class Application {
     }
 
 
-    private  function findRoleById($appRoles, $roleId) {
-        foreach ($appRoles as $role) {
-            if ($role['id'] === $roleId) {
-                return $role['value'];
-            }
+
+    function cleanUserObject($userObj, $key = null) {
+        $cleanObj = new \stdClass();
+        $cleanObj->id = $userObj->getId();
+        $cleanObj->name = $userObj->getDisplayName();
+        $cleanObj->surname = $userObj->getSurname();
+        $cleanObj->givenName = $userObj->getGivenName();
+        $cleanObj->userPrincipalName = $userObj->getUserPrincipalName();
+        $cleanObj->email = $userObj->getMail();
+        $cleanObj->phonenumber = $userObj->getBusinessPhones()[0] ?? null;
+        $cleanObj->onPremisesSamAccountName = $userObj->getOnPremisesSamAccountName();
+        $cleanObj->employeeId = $userObj->getEmployeeId();
+        $cleanObj->email = $userObj->getProperties()[$this->mailProperty];
+        $cleanObj->description = $userObj->getProperties()[$this->descriptionProperty][0];
+        $cleanObj->lidnummer  = $userObj->getProperties()[$this->employeeNumberProperty] ?? null;
+        if ($key !== null) {
+            return $cleanObj->$key;
         }
-        return null;
+        else {
+            return $cleanObj;
+             }
     }
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-}
