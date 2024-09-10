@@ -1,9 +1,7 @@
 <?php
+
 namespace App\Helpers\MSGraphAPI;
 
-use Microsoft\Graph\Graph;
-use Microsoft\Graph\Model\ServicePrincipal;
-use Microsoft\Graph\Model\AppRole;
 use GuzzleHttp;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -43,34 +41,29 @@ class Application {
         return $token->access_token;
     }
 
-    public function getUsers($topN=null,$searchProperty=null,$searchValue=null,$checkAdmin=False) {
-        $token = $this->_token();
+    public function getUsers($topN = null, $searchProperty = null, $searchValue = null, $checkAdmin = False) {
+        $token = $this->getToken();
         if ($token) {
-            $graph = new Graph();
+            $graph = new \Microsoft\Graph\Graph;
             $graph
-                ->setApiVersion("v1.0")
-                ->setAccessToken($token);
+            ->setApiVersion("v1.0")
+            ->setAccessToken($token);
 
-            $extension_app_id = Str::remove('-', config('services.azure.extension_app_id'));
-            $employeeNumberProperty = 'extension_' . $extension_app_id . '_employeeNumber';
-            $descriptionProperty = 'extension_' . $extension_app_id . '_description';
-            $mailProperty = 'extension_' . $extension_app_id . '_mail'; 
-                        
             // if request for max items then append to query
-            $topN=$topN ? '&$top=' . $topN : null;
+            $topN = $topN ? '&$top=' . $topN : null;
             // if request for extensionProperty then translate the propertyName
-            switch($searchProperty){
+            switch ($searchProperty) {
                 case 'employeeNumber':
-                    $searchProperty = $employeeNumberProperty;
-                    $search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
+                    $searchProperty = $this->employeeNumberProperty;
+                    $search = $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
                     break;
                 case 'description':
-                    $searchProperty = $descriptionProperty;
-                    $search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
+                    $searchProperty = $this->descriptionProperty;
+                    $search = $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
                     break;
                 case 'email':
-                    $searchProperty = $mailProperty; 
-                    $search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
+                    $searchProperty = $this->mailProperty;
+                    $search = $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
                     break;
                 default:
                     $search = $searchProperty && $searchValue ? '&$search="'. $searchProperty . ':' . $searchValue . '"' : null;
@@ -80,99 +73,93 @@ class Application {
             //$search = $searchProperty && $searchValue ? '&$search="'. $searchProperty . ':' . $searchValue . '"' : null;
             //$search= $searchProperty && $searchValue ? '&$filter='. $searchProperty . ' eq \'' . $searchValue . '\'' : null;
             $endpoint = '/users';
-            $url = $endpoint . '?$count=true&$orderBy=displayName' . $topN . $search . ' &$select=id,displayName,surname,givenName,userPrincipalName,mail,businessPhones,onPremisesSamAccountName,employeeId,' . $descriptionProperty . ',' . $employeeNumberProperty  . ',' . $mailProperty ;
+            $url = $endpoint . '?$count=true' . $topN . $search ;
             # https://graph.microsoft.com/v1.0/users?$search="displayName:MyName"&$count=true&$orderBy=displayName&$select=id,displayName,surname,givenName,userPrincipalName,mail,businessPhones,onPremisesSamAccountName,employeeId,extension_e1fd504a055643d5b9d370b8b24b45ee_description,extension_e1fd504a055643d5b9d370b8b24b45ee_employeeNumber,extension_e1fd504a055643d5b9d370b8b24b45ee_mail
-            $request = $graph
-                ->createRequest("GET", $url)
-                ->addHeaders(["ConsistencyLevel"=> "eventual"]);
-            $data=$request->execute();
-            $content = $data->getBody();
-            $users = collect(json_decode(json_encode($content['value']), FALSE));
-            if(empty($users) || count($users) >= 50 ) { 
-                return null; 
+            $users = $graph
+                ->createCollectionRequest("GET", $url . '&' . $this->allUserProperties)
+                ->addHeaders(["ConsistencyLevel" => "eventual"])
+                ->execute();
+                
+            $userCollection = collect([]);
+                
+            $body = $users->getBody();
+            foreach ($body['value'] as $userData) {
+                $userCollection->push(new \Microsoft\Graph\Model\User($userData));
+            }
+            if ($body['@odata.count'] == 0) {
+                return null;
             }
             // if nextLink then loop
-            while(array_key_exists('@odata.nextLink',$content)){
-                $url = $content['@odata.nextLink'];
-                $request = $graph->createRequest("GET", $url);
-                $request->addHeaders(["ConsistencyLevel"=> "eventual"]);
-                $data=$request->execute();
-                $content = $data->getBody();
-                $newusers = collect(json_decode(json_encode($content['value']), FALSE));
-                $users = $users->merge($newusers);
+            while ($url = $users->getNextLink()) {
+                $users = $graph
+                    ->createCollectionRequest("GET", $url)
+                    ->addHeaders(["ConsistencyLevel" => "eventual"])
+                    ->execute();
+                    $body = $users->getBody();
+                foreach ($body['value'] as $userData) {
+                    $userCollection->push(new \Microsoft\Graph\Model\User($userData));
+                }
             }
-            
-            $cleanupUsers = $users->map(function ($user) use($checkAdmin,$mailProperty,$employeeNumberProperty,$descriptionProperty){
-                if($checkAdmin){
+           
+            $cleanupUsers = $userCollection->map(function ($user) use($checkAdmin) {
+                $user =  $this->cleanUserObject($user);
+                if ($checkAdmin) {
                     $roles = $this->getAssignedRoles($user->id);
                     $user->mensa_admin = $roles['isAdmin'];
                 }
-                $user->name = $user->displayName;
-                $user->email = $user->{$mailProperty} ?? null;
-                $user->phonenumber = $user->businessPhones[0] ?? null;
-                $user->description = isset($user->{$descriptionProperty}) ? Arr::join( $user->{$descriptionProperty} , ',' ) : null;
-                $user->lidnummer = $user->{$employeeNumberProperty} ?? null;
-                
-                //cleanup object
-                unset($user->id);
-                unset($user->displayName);
-                unset($user->surname);
-                unset($user->givenName);
-                unset($user->employeeId);
-                unset($user->userPrincipalName);
-                unset($user->onPremisesSamAccountName);
-                unset($user->mail);
-                unset($user->businessPhones);
-                unset($user->{$employeeNumberProperty});
-                unset($user->{$descriptionProperty});
-                unset($user->{$descriptionProperty . '@odata.type'});
-                unset($user->{$mailProperty});
                 return $user;
-            }, $users);
-            return $cleanupUsers;
+            }, $userCollection);
+            
+            $filteredUsers = $cleanupUsers->whereIn('id', $this->getAllAppUsers() );
+            
+            return $filteredUsers;
         }
-    }
-    
-    
-    private function getAzureInfoBy($field, $value){
-        return $this->getUsers(null,$field, $value,False)->first();
     }
 
-    public function searchAzureUsers($name){
-        if(!preg_match('/^[a-zA-Z0-9 _]+$/', $name) ){
+
+    private function getAzureInfoBy($field,
+        $value) {
+        return $this->getUsers(null,
+            $field,
+            $value,
+            False)->first();
+    }
+
+    public function searchAzureUsers($name) {
+        if (!preg_match('/^[a-zA-Z0-9 _]+$/', $name)) {
             return '';
         }
-        $users = $this->getUsers(50,'displayName',$name,False);
-        if(!empty($users)) { 
-            return $users->map(function ($user){
+        $users = $this->getUsers(50, 'displayName', $name, False);
+        if (!empty($users)) {
+            return $users->map(function ($user) {
                 return [
                     'name' => $user->name,
                     'lidnummer' => $user->lidnummer,
-                    'id' => $user->id
+                    //'id' => $user->id
                 ];
             }, $users);
         }
     }
 
-    public function saveAzureUser($user){
+    public function saveAzureUser($user) {
         $dbUser = null;
         try {
             // We first check if we already have this user in our database
-            $dbUser = User::findOrFail($user->id);
-        } catch(ModelNotFoundException $e){
+            $dbUser = \App\Models\User::findOrFail($user->description);
+        } catch(\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             // If not, we create a new user
-            $dbUser = new User();
-            $dbUser->id =  $user->id;
+            $dbUser = new \App\Models\User;
+            //$dbUser->id =  $user->id;
+            $dbUser->lidnummer = $user->lidnummer;
         }
 
         // We update all the information of the user
-        $dbUser->lidnummer = $user->description;
         $dbUser->name = $user->name;
         $dbUser->email = $user->email;
-        $dbUser->phonenumber = $user->phonenumber;
+        //$dbUser->phonenumber = $user->businessPhones; //temp offline
 
         // Check if the user is a mensa admin
-        $checkUser = $this->getUsers(10,'id',$user->id,$checkAdmin=true)->first();
+        $checkUser = $this->getUsers(10, 'description', $user->description, $checkAdmin = true)->first();
         $dbUser->mensa_admin = $checkUser->mensa_admin;
         // Save it back to the database
         $dbUser->save();
@@ -180,11 +167,11 @@ class Application {
         // And return it so we can use it
         return $dbUser;
     }
- 
 
-    public function getAzureUserBy($field, $value){
+
+    public function getAzureUserBy($field, $value) {
         $AzureInfo = $this->getAzureInfoBy($field, $value);
-        if($AzureInfo == null)
+        if ($AzureInfo == null)
             return null;
 
         return $this->saveAzureUser($AzureInfo);
@@ -241,73 +228,77 @@ class Application {
         }
     }
 
+    public function getAssignedRoles($userId) {
+        /*
         Array
         (
-            [isAdmin] => 
+            [isAdmin] =>
             [isUser] => 1
-        )   
+        )
         */
-        $token = $this->_token();
+        $token = $this->getToken();
         if ($token) {
-            $graph = new Graph();
+            $graph = new \Microsoft\Graph\Graph;
             $graph
-                ->setApiVersion("beta")
-                ->setAccessToken($token);
-            $servicePrincipalId=config('services.azure.serviceprincipal_id');
+            ->setApiVersion("beta")
+            ->setAccessToken($token);
+            $servicePrincipalId = config('services.azure.serviceprincipal_id');
             # AppRole should be cached.
-            $appRoles = $this->getAppRoles($graph,$servicePrincipalId); 
+            $appRoles = $this->getAppRoles($graph, $servicePrincipalId);
             /*
                 appRoles from servicePrincipals/$servicePrincipalId: [{"value": "mensa.user",  "id": "GUID"},  {"value": "mensa.user",  "id": "GUID"}]
             */
-            $roleAssignments = $this->getAppRoleAssignedTo($graph,$servicePrincipalId); // "principalType": "Group",  "principalId":  "GUID", "appRoleId": "GUID"
-            $roleMappings = [];        
+            $roleAssignments = $this->getAppRoleAssignedTo($graph, $servicePrincipalId); // "principalType": "Group",  "principalId":  "GUID", "appRoleId": "GUID"
+            $roleMappings = [];
             foreach ($roleAssignments as $assignment) {
                 $principalId = $assignment->getProperties()['principalId'];
-                    $roleId = $assignment->getProperties()['appRoleId'];
-                    $principalType = $assignment->getProperties()['principalType'];
-                    if ($principalType === 'Group') {
-                        $groupMembers = $this->getGroupTransitiveMembers($graph,$principalId,$userId);   
-                        foreach ($groupMembers as $member) {
-                            $roleMappings[] = [
-                                'id' => $member->getProperties()['id'],
-                                'source' => $principalType,
-                                'role' => $this->findRoleById($appRoles, $roleId)
-                            ];
-                        }
-                    } elseif ($principalType === 'User') {
-                        if ($principalId === $userId) {
-                            $roleMappings[] = [
-                                'id' => $principalId,
-                                'source' => $principalType,
-                                'role' => $this->findRoleById($appRoles, $roleId)
-                            ];
-                        }
-                    } else {
-                        return;
+                $roleId = $assignment->getProperties()['appRoleId'];
+                $principalType = $assignment->getProperties()['principalType'];
+                if ($principalType === 'Group') {
+                    $groupMembers = $this->getGroupTransitiveMembers($graph, $principalId, $userId);
+                    foreach ($groupMembers as $member) {
+                        $roleMappings[] = [
+                            'id' => $member->getProperties()['id'],
+                            'source' => $principalType,
+                            'role' => $this->findRoleById($appRoles, $roleId),
+                            'memberObject' => $member
+                        ];
                     }
+                } elseif ($principalType === 'User') {
+                    if ($principalId === $userId) {
+                        $roleMappings[] = [
+                            'id' => $principalId,
+                            'source' => $principalType,
+                            'role' => $this->findRoleById($appRoles, $roleId),
+                            'memberObject' => null
+                        ];
+                    }
+                } else {
+                    return;
+                }
             }
             //default value, not an user and not an admin
-            $userRoleAssignment=array(
-                "isAdmin"=>false,
-                "isUser"=>false
+            $userRoleAssignment = array(
+                "isAdmin" => false,
+                "isUser" => false
             );
             //check for each user assigned role if it matches the configured app role
             foreach ($roleMappings as $assignedRole) {
-                switch($assignedRole['role']){
+                switch ($assignedRole['role']) {
                     case config('services.azure.role.admin'):
-                        $userRoleAssignment['isAdmin']=true;
-                        $userRoleAssignment['isAdmin']=true; //if someone is admin, then it is definitely an user..
-                    case config('services.azure.role.user'):
-                        $userRoleAssignment['isUser']=true;
+                        $userRoleAssignment['isAdmin'] = true;
+                        $userRoleAssignment['isAdmin'] = true; //if someone is admin, then it is definitely an user..
+                        case config('services.azure.role.user'):
+                            $userRoleAssignment['isUser'] = true;
+                    }
                 }
+                return $userRoleAssignment;
             }
-            return $userRoleAssignment;
         }
-    }
 
-    private function getAppRoles($graph,$servicePrincipalId) {
-        # https://graph.microsoft.com/beta/servicePrincipals/${servicePrincipalId}?$select=appRoles
-        /* 
+        private function getAppRoles($graph, $servicePrincipalId) {
+            # https://graph.microsoft.com/beta/servicePrincipals/${servicePrincipalId}?$select=appRoles
+            /*
         [allowedMemberTypes] => [
             "User
         ],
@@ -320,20 +311,20 @@ class Application {
         [isPreAuthorizationRequired] => false,
         [isPrivate] => false
         */
-        $response = $graph->createRequest('GET', "/servicePrincipals/$servicePrincipalId" . '?$select=appRoles')
+            $response = $graph->createRequest('GET', "/servicePrincipals/$servicePrincipalId" . '?$select=appRoles')
             ->addHeaders(["Content-Type" => "application/json"])
             ->setReturnType(\Microsoft\Graph\Model\ServicePrincipal::class)
             ->execute();
-        $appRoles = $response->getProperties()['appRoles'];
-        $enabledAppRoles = array_filter($appRoles, function ($role) {
-            return $role['isEnabled'] === true;
-        });
-        return $enabledAppRoles;
-    }
+            $appRoles = $response->getProperties()['appRoles'];
+            $enabledAppRoles = array_filter($appRoles, function ($role) {
+                return $role['isEnabled'] === true;
+            });
+            return $enabledAppRoles;
+        }
 
-    private  function getAppRoleAssignedTo($graph,$servicePrincipalId) {
-        # https://graph.microsoft.com/beta/servicePrincipals/${servicePrincipalId}/appRoleAssignedTo
-        /*
+        private function getAppRoleAssignedTo($graph, $servicePrincipalId) {
+            # https://graph.microsoft.com/beta/servicePrincipals/${servicePrincipalId}/appRoleAssignedTo
+            /*
         [id] => SOMEID,
         [creationTimestamp] => 2021-03-20T18:06:09.6874997Z,
         [appRoleId] => GUID_ROLE,
@@ -343,16 +334,16 @@ class Application {
         [resourceDisplayName] => Mensa,
         [resourceId] => GUID_APP,
         */
-        $response = $graph->createRequest('GET', "/servicePrincipals/$servicePrincipalId/appRoleAssignedTo")
+            $response = $graph->createRequest('GET', "/servicePrincipals/$servicePrincipalId/appRoleAssignedTo")
             ->addHeaders(["Content-Type" => "application/json"])
             ->setReturnType(\Microsoft\Graph\Model\AppRoleAssignment::class)
             ->execute();
-        return $response;
-    }
+            return $response;
+        }
 
-    private  function getGroupTransitiveMembers($graph,$groupId,$UserId=null) {
-        # https://graph.microsoft.com/v1.0/groups/${groupId}/transitiveMembers
-        /* 
+        private function getGroupTransitiveMembers($graph, $groupId, $UserId = null) {
+            # https://graph.microsoft.com/v1.0/groups/${groupId}/transitiveMembers
+            /*
         [id] => "SOME_GUID",
         [businessPhones] => ,
         [displayName] => "",
@@ -363,16 +354,25 @@ class Application {
         [officeLocation] => null,
         [preferredLanguage] => null,
         [surname] => "SOME_LASTNAME",
-        [userPrincipalName] => "USER_UPN" 
+        [userPrincipalName] => "USER_UPN"
         */
-        $endpoint = "/groups/$groupId/transitiveMembers" . '?$select=id' . ( $UserId ? "&filter=id eq '" . $UserId . "'" : "" );
-        $response = $graph->createRequest('GET', $endpoint)
+            $endpoint = "/groups/$groupId/transitiveMembers" . '?$count=true&' . $this->allUserProperties . ($UserId ? "&filter=id eq '" . $UserId . "'" : "");
+            $response = $graph->createRequest('GET', $endpoint)
             ->addHeaders(["Content-Type" => "application/json"])
-            ->setReturnType(\Microsoft\Graph\Model\DirectoryObject::class)
+            ->setReturnType(\Microsoft\Graph\Model\User::class)
             ->execute();
-        return $response;    
-    }
+            return $response;
+        }
 
+
+        private function findRoleById($appRoles, $roleId) {
+            foreach ($appRoles as $role) {
+                if ($role['id'] === $roleId) {
+                    return $role['value'];
+                }
+            }
+            return null;
+        }
 
 
     function cleanUserObject($userObj, $key = null) {
@@ -396,3 +396,4 @@ class Application {
             return $cleanObj;
              }
     }
+}
