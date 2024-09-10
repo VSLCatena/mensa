@@ -189,10 +189,58 @@ class Application {
 
         return $this->saveAzureUser($AzureInfo);
     }
-    
-    
-   public function getAssignedRoles($userId) {
-        /* 
+
+
+    public function getAllAppUsers() {
+        $token = $this->getToken();
+        if ($token) {
+            $graph = new \Microsoft\Graph\Graph;
+            $graph
+            ->setApiVersion("beta")
+            ->setAccessToken($token);
+            $servicePrincipalId = config('services.azure.serviceprincipal_id');
+            $appRoles = $this->getAppRoles($graph, $servicePrincipalId);
+            /*
+                appRoles from servicePrincipals/$servicePrincipalId: [{"value": "mensa.user",  "id": "GUID"},  {"value": "mensa.user",  "id": "GUID"}]
+            */
+            $roleAssignments = $this->getAppRoleAssignedTo($graph, $servicePrincipalId);
+
+
+            // Step 3: Iterate over the role assignments and collect users and groups
+            foreach ($roleAssignments as $assignment) {
+                $principalType = $assignment->getPrincipalType();
+                $principalId = $assignment->getPrincipalId();
+                if ($principalType === 'User') {
+                    // Add the user to the list
+                    $endpoint = '/users/' . $principalId .'?$count=true&' . $this->allUserProperties;
+                    $user = $graph->createRequest("GET", $endpoint)
+                    ->addHeaders(["ConsistencyLevel" => "eventual"])
+                    ->setReturnType(\Microsoft\Graph\Model\User::class)
+                    ->execute();
+                    $userList[] = $this->cleanUserObject($user,'id');
+                } elseif ($principalType === 'Group') {
+                    // Add group ID to the group list for later fetching members
+                    $groupList[] = $principalId;
+                }
+
+            }
+
+            // Step 4: Get all group members and add them to the user list
+            foreach ($groupList as $groupId) {
+                $groupMembers = $this->getGroupTransitiveMembers($graph, $groupId);
+                //$endpoint = '/groups/' . $groupId . '/members?$count=true&' . $this->allUserProperties;
+                //$groupMembers = $graph->createRequest("GET", $endpoint)
+                //->addHeaders(["ConsistencyLevel" => "eventual"])
+                //->setReturnType(\Microsoft\Graph\Model\User::class)
+                //->execute();
+                foreach ($groupMembers as $member) {
+                    $userList[] = $this->cleanUserObject($member,'id');
+                }
+            }
+            return $userList;
+        }
+    }
+
         Array
         (
             [isAdmin] => 
