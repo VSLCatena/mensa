@@ -16,8 +16,8 @@ services:
             - net
         depends_on:
             - mensa.db
-        profiles:
-          - prod
+#        profiles:
+#          - prod
 
 
     mensa.php:
