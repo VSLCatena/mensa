@@ -96,7 +96,7 @@ networks:
         config:
           - subnet: ${APP_NET_SUBNET:-192.168.8.224}/29
      driver_opts:
-       com.docker.network.bridge.name: mensa_net
+       com.docker.network.bridge.name: ${APP_NET_NANE:-mensa_net}
        
 volumes:
     db_data:
