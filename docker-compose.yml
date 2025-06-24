@@ -94,7 +94,7 @@ networks:
      ipam:
         driver: default
         config:
-          - subnet: ${APP_NET_SUBNET:-192.168.8.224}/29
+          - subnet: ${APP_NET_SUBNET:-192.168.8.224/29}
      driver_opts:
        com.docker.network.bridge.name: ${APP_NET_NAME:-mensa_net}
        
