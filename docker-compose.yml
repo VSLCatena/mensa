@@ -1,6 +1,6 @@
 # For more information: https://laravel.com/
 services:
-    "${PROJECT:-mensa}.php.prod":
+    mensa.php.prod:
         container_name: "${PROJECT:-mensa}.php.prod"
         pull_policy: always
         #build: 
@@ -24,7 +24,7 @@ services:
 #          - prod
 
 
-    "${PROJECT:-mensa}.php":
+    mensa.php:
         container_name: "${PROJECT:-mensa}.php"
         pull_policy: missing
         build:
@@ -52,7 +52,7 @@ services:
         depends_on:
             - "${PROJECT:-mensa}.db"
 
-    "${PROJECT:-mensa}.db":
+    mensa.db:
         hostname: db
         container_name: "${PROJECT:-mensa}.db"
         image: 'mariadb:10'
@@ -75,7 +75,7 @@ services:
             timeout: 5s
   
     #phpmyadmin
-    "${PROJECT:-mensa}.phpmyadmin":
+    mensa.phpmyadmin:
         image: ghcr.io/linuxserver/phpmyadmin
         hostname: phpmyadmin
         container_name: "${PROJECT:-mensa}.phpmyadmin"
