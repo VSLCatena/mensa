@@ -1,7 +1,7 @@
 # For more information: https://laravel.com/
 services:
     "${PROJECT:-mensa}.php.prod":
-        container_name: ${PROJECT:-mensa}.php.prod
+        container_name: "${PROJECT:-mensa}.php.prod"
         pull_policy: always
         #build: 
         #  dockerfile: Dockerfile.prod
