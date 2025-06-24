@@ -1,11 +1,15 @@
 # For more information: https://laravel.com/
 services:
-    mensa.php.prod:
-        container_name: mensa.php.prod
+    ${PROJECT:-mensa}.php.prod:
+        container_name: ${PROJECT:-mensa}.php.prod
         pull_policy: always
         #build: 
         #  dockerfile: Dockerfile.prod
         image: ghcr.io/vslcatena/mensa:prod
+        labels:
+          - "traefik.enable=true"
+          - "traefik.http.routers.${PROJECT}.rule=Host(`${PROJECT_FQDN}`)"
+          - "traefik.http.routers.${PROJECT}.entrypoints=${PROJECT_ENTRYPOINT}"  
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
@@ -20,8 +24,8 @@ services:
 #          - prod
 
 
-    mensa.php:
-        container_name: mensa.php
+    ${PROJECT:-mensa}.php:
+        container_name: ${PROJECT:-mensa}.php
         pull_policy: missing
         build:
             context: ./vendor/laravel/sail/runtimes/${SAIL_VERSION:-8.1}
@@ -46,13 +50,13 @@ services:
         networks:
             - net
         depends_on:
-            - mensa.db
+            - ${PROJECT:-mensa}.db
 
 
 
-    mensa.db:
+    ${PROJECT:-mensa}.db:
         hostname: db
-        container_name: mensa.db
+        container_name: ${PROJECT:-mensa}.db
         image: 'mariadb:10'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -73,10 +77,10 @@ services:
             timeout: 5s
   
     #phpmyadmin
-    mensa.phpmyadmin:
+    ${PROJECT:-mensa}.phpmyadmin:
         image: ghcr.io/linuxserver/phpmyadmin
         hostname: phpmyadmin
-        container_name: mensa.phpmyadmin
+        container_name: ${PROJECT:-mensa}.phpmyadmin
         profiles:
           - dev
         environment:
