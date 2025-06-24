@@ -75,7 +75,7 @@ services:
             timeout: 5s
   
     #phpmyadmin
-    "${PROJECT:-mensa}.phpmyadmin:"
+    "${PROJECT:-mensa}.phpmyadmin":
         image: ghcr.io/linuxserver/phpmyadmin
         hostname: phpmyadmin
         container_name: ${PROJECT:-mensa}.phpmyadmin
