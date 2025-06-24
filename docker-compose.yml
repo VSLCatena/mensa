@@ -19,13 +19,13 @@ services:
         networks:
             - net
         depends_on:
-            - ${PROJECT:-mensa}.db
+            - "${PROJECT:-mensa}.db"
 #        profiles:
 #          - prod
 
 
     "${PROJECT:-mensa}.php":
-        container_name: ${PROJECT:-mensa}.php
+        container_name: "${PROJECT:-mensa}.php"
         pull_policy: missing
         build:
             context: ./vendor/laravel/sail/runtimes/${SAIL_VERSION:-8.1}
@@ -50,11 +50,11 @@ services:
         networks:
             - net
         depends_on:
-            - ${PROJECT:-mensa}.db
+            - "${PROJECT:-mensa}.db"
 
     "${PROJECT:-mensa}.db":
         hostname: db
-        container_name: ${PROJECT:-mensa}.db
+        container_name: "${PROJECT:-mensa}.db"
         image: 'mariadb:10'
         ports:
             - '${FORWARD_DB_PORT:-3306}:3306'
@@ -78,7 +78,7 @@ services:
     "${PROJECT:-mensa}.phpmyadmin":
         image: ghcr.io/linuxserver/phpmyadmin
         hostname: phpmyadmin
-        container_name: ${PROJECT:-mensa}.phpmyadmin
+        container_name: "${PROJECT:-mensa}.phpmyadmin"
         profiles:
           - dev
         environment:
