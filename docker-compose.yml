@@ -19,7 +19,7 @@ services:
         networks:
             - net
         depends_on:
-            - mensa.db
+            - ${PROJECT:-mensa}.db
 #        profiles:
 #          - prod
 
