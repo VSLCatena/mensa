@@ -31,4 +31,26 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+
+
+    'azure' => [
+         'client_id' => env('MS_GRAPH_CLIENT_ID'),
+         'client_secret' => env('MS_GRAPH_CLIENT_SECRET'),
+         'redirect' => env('MS_GRAPH_REDIRECT_URI'),
+         'tenant'  => env('MS_GRAPH_TENANT_ID'),
+         'proxy' => env('PROXY'),
+         'tenant_domain'  => env('MS_GRAPH_TENANT_DOMAIN'),
+         'serviceprincipal_id'  => env('MS_GRAPH_SERVICEPRINCIPAL_ID'),
+         'extension_app_id'  => env('MS_GRAPH_EXTENSION_APP_ID'),
+         'search_filter'  =>[
+             'group'  => [
+                 'commissies' => env('MS_GRAPH_SEARCH_FILTER_GROUP_COMMISSIES'),
+                 'leden' => env('MS_GRAPH_SEARCH_FILTER_GROUP_LEDEN')
+             ]
+         ],
+         'role' => [
+             'admin'  => env('MS_GRAPH_ROLE_ADMIN_VALUE'),
+             'user'  => env('MS_GRAPH_ROLE_USER_VALUE')
+         ]
+    ]
 ];

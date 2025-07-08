@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Adldap\Laravel\Facades\Adldap;
 use App\Mail\SigninCancelled;
 use App\Mail\SigninConfirmed;
 use App\Mail\SigninConformation;
@@ -10,8 +9,8 @@ use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MensaUser;
 use App\Models\User;
-use App\Traits\LdapHelpers;
 use App\Traits\Logger;
+use App\Helpers\MSGraphAPI\Application as AzureAppInfo;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -21,7 +20,7 @@ use Illuminate\Support\Facades\Mail;
 
 class SigninController extends Controller
 {
-    use LdapHelpers, Logger;
+    use Logger;
 
     public function mailSignin(Request $request, $userToken){
         try {
@@ -66,7 +65,8 @@ class SigninController extends Controller
         // If the user is a mensa admin, we allow him to sign someone else in with his lidnummer
         if($lidnummer != null && Auth::check() && Auth::user()->mensa_admin){
             try {
-                $user = $this->getLdapUserBy('description', $lidnummer);
+                $azureAppInfo = new AzureAppInfo;
+                $user = $azureAppInfo->getAzureUserBy('description', $lidnummer);
                 $request->session()->flash('extra_lidnummer', $lidnummer);
             } catch(ModelNotFoundException $e){
                 return redirect(route('home'))->with('error', 'Persoon niet gevonden!');
@@ -95,10 +95,11 @@ class SigninController extends Controller
 
         if($request->isMethod('post')) {
             // If we already got POST data, we want to process some stuff
-            // If we didn't provide a lidnummer but an email is provided, we want to check LDAP
+            // If we didn't provide a lidnummer but an email is provided, we want to check Azure
             if($lidnummer == null && $request->has('email')){
-                $user = $this->getLdapUserBy('mail', $request->input('email'));
-                // We check if the user can be found in LDAP, and if not, we return back to the form with an error message
+                $azureAppInfo = new AzureAppInfo;
+                $user = $azureAppInfo->getAzureUserBy('email', $request->input('email'));
+                // We check if the user can be found in Azure, and if not, we return back to the form with an error message
                 if($user == null){
                     $mensaUser->user()->associate(new User());
                     $request->session()->flash('error', 'Deze email is niet gevonden! Als je denkt dat dit een fout is, neem dan contact op met '.config('mensa.contact.mail').'.');
@@ -189,7 +190,7 @@ class SigninController extends Controller
         // We check if the Mensa isn't closed yet
         if($mensa->closed || $mensa->isClosed() && !(Auth::check() && Auth::user()->mensa_admin)){
             $route = (Auth::check() && Auth::user()->mensa_admin) ?
-                route('mensa.signins', ['id' => $mensa->id]) :
+                route('mensa.signins', ['mensaId' => $mensa->id]) :
                 route('home');
             return redirect($route)->with('error', 'Deze mensa is al gesloten!');
         }
@@ -278,7 +279,7 @@ class SigninController extends Controller
         }
 
         $route = (Auth::check() && Auth::user()->mensa_admin) ?
-            route('mensa.signins', ['id' => $mensa->id]) :
+            route('mensa.signins', ['mensaId' => $mensa->id]) :
             route('home');
         return redirect($route);
     }
