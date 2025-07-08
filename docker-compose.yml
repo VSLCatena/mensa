@@ -3,13 +3,18 @@ services:
     mensa.php.prod:
         container_name: "${PROJECT:-mensa}.php.prod"
         pull_policy: always
-        #build: 
+        #profiles:
+        #  - prod
+        # build:
         #  dockerfile: Dockerfile.prod
+        
         image: ghcr.io/vslcatena/mensa:prod
         labels:
           - "traefik.enable=true"
           - "traefik.http.routers.${PROJECT}.rule=Host(`${PROJECT_FQDN}`)"
-          - "traefik.http.routers.${PROJECT}.entrypoints=${PROJECT_ENTRYPOINT}"  
+          - "traefik.http.routers.${PROJECT}.entrypoints=${PROJECT_ENTRYPOINT}"
+          - "traefik.http.routers.${PROJECT}.tls=true"
+          - "traefik.http.services.${PROJECT}.loadbalancer.server.port=80"
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
