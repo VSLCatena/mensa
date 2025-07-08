@@ -3,8 +3,8 @@ services:
     mensa.php.prod:
         container_name: "${PROJECT:-mensa}.php.prod"
         pull_policy: always
-        #profiles:
-        #  - prod
+        profiles:
+          - prod
         # build:
         #  dockerfile: Dockerfile.prod
         
