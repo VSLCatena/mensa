@@ -12,6 +12,7 @@ use App\Mail\MensaState;
 use App\Mail\SigninCancelled;
 use App\Models\Mensa;
 use App\Models\MensaUser;
+use App\Helpers\MSGraphAPI\Application as AzureAppInfo;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -22,7 +23,7 @@ class MensaAdminController extends MensaCookController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('isAdmin');
+        $this->middleware('IsAdmin');
     }
 
     public function showLogs(Request $request, $mensaId){
@@ -118,7 +119,8 @@ class MensaAdminController extends MensaCookController
 
     public function requestUserLookup(Request $request){
         $request->validate(['name' => 'regex:/^[a-zA-Z _]+$/']);
-        return response()->json($this->searchLdapUsers($request->get('name')));
+        $azureAppInfo = new AzureAppInfo();
+        return response()->json($azureAppInfo->searchAzureUsers($request->get('name')));
     }
 
     public function printState(Request $request, $mensaId){
@@ -205,8 +207,8 @@ class MensaAdminController extends MensaCookController
         } catch(ModelNotFoundException $e){
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
-
-        $user = $this->getLdapUserBy('description', $lidnummer);
+        $azureAppInfo = new azureAppInfo;
+        $user = $azureAppInfo->getAzureUserBy('description', $lidnummer);
         if($user == null){
             return redirect()->back()->with('error', 'Inschrijving niet gevonden! Als je denkt dat dit een fout is neem dan contact op met ' . config('mensa.contact.mail') . '.');
         }
