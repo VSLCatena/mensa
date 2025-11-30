@@ -69,17 +69,18 @@ class LoginController extends Controller
                 [isAdmin] => //to be determined
                 [isUser] =>  //to be determined
             )
-            */      
+            */
             $azureAppInfo = new AzureAppInfo;
             $roles = $azureAppInfo->getAssignedRoles($azureUserInfo->id);
             $azureUserInfo->isUser=$roles['isUser'];
             $azureUserInfo->isAdmin=$roles['isAdmin'];
-            
+
             User::upsert(
-                [   'lidnummer' => $azureUserInfo->employeeNumber,
+                [  'id' => $azureUserInfo->id,
+                   'lidnummer' => $azureUserInfo->employeeNumber,
                     'email'     => $azureUserInfo->email,
                     'name'      => $azureUserInfo->displayName,
-                ], ['lidnummer']
+                ], ['lidnummer','email']
             );
             $user = User::where('lidnummer', $azureUserInfo->employeeNumber)->first();
             $user->mensa_admin = $azureUserInfo->isAdmin;
