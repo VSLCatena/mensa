@@ -1,8 +1,8 @@
-FROM composer:latest as build
+FROM composer:latest AS build
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction --ignore-platform-req=ext-ldap
 
-FROM php:${PHP_VERSION:-8.5}-apache as production
+FROM php:${PHP_VERSION:-8.5}-apache AS production
 
 ENV APP_ENV=production
 ENV APP_DEBUG=false
