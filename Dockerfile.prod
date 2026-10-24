@@ -14,8 +14,7 @@ RUN apt-get update && \
     ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so && \
     ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so
 
-RUN docker-php-ext-configure opcache --enable-opcache && \
-    docker-php-ext-install pdo pdo_mysql ldap
+RUN docker-php-ext-install pdo pdo_mysql ldap
 COPY docker/php/conf.d/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY --from=build /app /var/www/html
