@@ -134,6 +134,9 @@ class MensaAdminController extends MensaCookController
             return view('mensae.confirmprintstate', compact('mensa'));
         }
         Mail::to(config('mensa.contact.printer'))->send(new MensaState($mensa));
+        
+        // Delete all unconfirmed users
+        $mensa->users()->where('confirmed', '0')->delete();
 
         $mensa->closed = true;
         $mensa->save();
@@ -153,8 +156,6 @@ class MensaAdminController extends MensaCookController
             return redirect(route('home'))->with('error', 'Mensa niet gevonden!');
         }
 
-        // Delete all unconfirmed users
-        $mensa->users()->where('confirmed', '0')->delete();
 
         return new MensaState($mensa);
     }

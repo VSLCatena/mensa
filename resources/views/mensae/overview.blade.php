@@ -14,7 +14,8 @@
 
         <br />
         @if($payingUsers < config('mensa.minimum.paying_signins'))
-            Minimaal {{ config('mensa.minimum.paying_signins') }} (betalende) gasten zijn nodig om de mensa mogelijk te maken. Op dit moment {{ $payingUsers==1?'is':'zijn' }} het er {{ $payingUsers }}.
+            Minimaal {{ config('mensa.minimum.paying_signins') }} (betalende) gasten zijn nodig om de mensa mogelijk te maken. Op dit moment {{ $payingUsers==1?'is':'zijn' }} het er {{ $payingUsers }} ({{ $users }} eters min {{ $cooks }} kokers en {{ $dishwashers }} afwassers).
+            
         @elseif($dishwashers > 1 || $payingUsers < config('mensa.minimum.second_dishwasher'))
             Het budget bedraagt &euro;{{ number_format($budget, 2) }}.
         @else
