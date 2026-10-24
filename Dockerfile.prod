@@ -2,7 +2,7 @@ FROM composer:latest as build
 COPY . /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction --ignore-platform-req=ext-ldap
 
-FROM php:8.2-apache as production
+FROM php:${PHP_VERSION:-8.5}-apache as production
 
 ENV APP_ENV=production
 ENV APP_DEBUG=false
