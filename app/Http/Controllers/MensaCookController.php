@@ -7,7 +7,6 @@ use App\Mail\MensaPriceChanged;
 use App\Models\Mensa;
 use App\Models\MensaExtraOption;
 use App\Models\MenuItem;
-use App\Traits\LdapHelpers;
 use App\Traits\Logger;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -17,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class MensaCookController extends Controller
 {
-    use LdapHelpers, Logger;
+    use Logger;
 
     public function __construct(){
         $this->middleware('auth');
@@ -201,7 +200,7 @@ class MensaCookController extends Controller
                 if (isset($menu[$i]['id'])) {
                     $menuItem = MenuItem::find($menu[$i]['id']);
                     if ($mensa->id != $menuItem->mensa->id) {
-                        return redirect(route('mensa.overview', ['id' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
+                        return redirect(route('mensa.overview', ['mensaId' => $mensa->id]))->with('error', 'Whoops! Er ging iets fout.');
                     }
                 } else {
                     $menuItem = new MenuItem();

@@ -20,15 +20,15 @@ class MensaUser extends Model
     }
 
     public function intros(){
-        return $this->hasMany('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '1');
+        return $this->hasMany('App\Models\MensaUser', 'user_id', 'user_id')->where('mensa_id', $this->mensa->id)->where('is_intro', '1');
     }
 
     public function mainUser(){
-        return $this->hasOne('App\Models\MensaUser', 'lidnummer', 'lidnummer')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
+        return $this->hasOne('App\Models\MensaUser', 'user_id', 'user_id')->where('mensa_id', $this->mensa->id)->where('is_intro', '0');
     }
 
     public function user(){
-        return $this->belongsTo('App\Models\User', 'lidnummer');
+        return $this->belongsTo('App\Models\User', 'user_id');
     }
 
     public function price(){
